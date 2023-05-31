@@ -1,16 +1,14 @@
 <?php
 
-use App\Events\AlertColdMachineHistoryEvent;
-use App\Http\Controllers\Exports\Pdf\liquidacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::post('register', 'AuthController@register');
-Route::post('login', 'AuthController@login');
+Route::post('register', [App\Http\Controllers\AuthController::class, 'register']);
+Route::post('login', [App\Http\Controllers\AuthController::class, 'login']);
 
 
 Route::middleware('auth:api')->group(function() {
-    Route::post('logout', 'AuthController@logout');
+    Route::post('logout', [App\Http\Controllers\AuthController::class, 'logout']);
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -51,25 +49,25 @@ Route::get('time',function(){
 
 
 include 'Modules/coldMachine.php';
-include 'Modules/vehicleTicketing.php';
-include 'Modules/dashboard.php';
-include 'Modules/auth.php';
-include 'Modules/despacho.php';
-include 'Modules/general.php';
-include 'Modules/administracion.php';
-//include 'Modules/coldMachine.php';
-include 'Modules/transportePersonal.php';
+//include 'Modules/vehicleTicketing.php';
+//include 'Modules/dashboard.php';
+//include 'Modules/auth.php';
+//include 'Modules/despacho.php';
+//include 'Modules/general.php';
+//include 'Modules/administracion.php';
+////include 'Modules/coldMachine.php';
+//include 'Modules/transportePersonal.php';
 
 
-Route::get('v1/erts', function(){
-    $all = \App\Models\Older\ErtUbicacion::all();
-    return response()->json($all);
-});
-
-Route::namespace('Older')->group( function () {
-    Route::post('v1/ert_state', 'RegisterErtStateController');
-});
-
-Route::get('websocket', function(){
-    broadcast(new AlertColdMachineHistoryEvent('ded'));
-});
+//Route::get('v1/erts', function(){
+//    $all = \App\Models\Older\ErtUbicacion::all();
+//    return response()->json($all);
+//});
+//
+//Route::prefix('App')->namespace('/Older')->group( function () {
+//    Route::post('v1/ert_state', 'RegisterErtStateController');
+//});
+//
+//Route::get('websocket', function(){
+//    broadcast(new AlertColdMachineHistoryEvent('ded'));
+//});

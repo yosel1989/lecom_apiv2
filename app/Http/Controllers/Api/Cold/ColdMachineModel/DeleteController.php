@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Controllers\Api\Cold\ColdMachineModel;
-
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Cold\ColdMachineModel\ColdMachineModelResource;
@@ -18,7 +16,7 @@ class DeleteController extends Controller
     /**
     * @var \Src\Cold\ColdMachineModel\Infrastructure\DeleteController
      */
-    private $deleteController;
+    private \Src\Cold\ColdMachineModel\Infrastructure\DeleteController $deleteController;
 
     public function __construct(\Src\Cold\ColdMachineModel\Infrastructure\DeleteController $deleteController )
     {
