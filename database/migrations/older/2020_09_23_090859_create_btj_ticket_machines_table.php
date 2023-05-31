@@ -19,8 +19,11 @@ class CreateBtjTicketMachinesTable extends Migration
             $table->integer('deleted');
             $table->uuid('id_client');
             $table->uuid('id_vehicle');
+<<<<<<< HEAD
 
             $table->timestamps();
+=======
+>>>>>>> a258fd9e965f7803e9af9a064bea820c21360515
         });
     }
 
