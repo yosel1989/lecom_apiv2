@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\IdEliminado;
+use App\Enums\IdEstado;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\User;
 use App\Helpers;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-
 
     public function register(Request $request)
     {
@@ -27,60 +28,59 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $User = User::where('username',$request->input('username') )
-                    ->where('actived',1)
-                    ->where('deleted',0)
+        $User = User::where('usuario',$request->input('usuario') )
+                    ->where('idEstado', IdEstado::Habilitado)
+                    ->where('idEliminado',IdEliminado::NoEliminado)
                     ->get();
 
         if( !$User->isEmpty() ){
 
-            if( !Hash::check( $request->input('password'),$User->first()->password ) ){
+            if( !Hash::check( $request->input('clave'),$User->first()->clave ) ){
                 return response()->json([
-                    'body'=>[],
-                    'errors' => [
-                        'message'=>'Username or Password incorrect.'
-                    ],
+                    'data'=>[],
+                    'message' => 'Contraseña incorrectas',
                     'status' => Response::HTTP_BAD_REQUEST
                 ]);
             }
 
             if( Auth::loginUsingId( $User->first()->id ) ) {
                 $user = Auth::user();
-                $token = $user->createToken($user->username.'-'.now());
+//                dd($user);
+                $token = $user->createToken($user->usuario.'-'.now())->plainTextToken;
 
                 return response()->json([
-                    'body'=>[
-                        'token' => $token->accessToken,
-                        'user' => [
-                            'username' => $user->username,
-                            'firstname' => $user->first_name,
-                            'lastname' => $user->last_name,
-                            'email' => $user->email,
-                            'level' => $user->level
+                    'data'=>[
+                        'token' => [
+                            'access' => $user->tokens,
+                            'token' => $token,
+                            'type' => 'Bearer'
                         ],
-                        'client' => $user->client ? $user->client()->first(['id','bussiness_name', 'first_name', 'last_name']) : null,
-                        'permissions' => $user->modules()->pluck('short_name')
+                        'usuario' => [
+                            'usuario' => $user->usuario,
+                            'nombres' => $user->nombres,
+                            'apellidos' => $user->apellidos,
+                            'correo' => $user->correo,
+                            'idNivel' => $user->idNivel
+                        ],
+//                        'client' => $user->client ? $user->client()->first(['id','bussiness_name', 'first_name', 'last_name']) : null,
+//                        'permissions' => $user->modules()->pluck('short_name')
                     ],
-                    'errors' => [],
+                    'message' => null,
                     'status' => Response::HTTP_OK
                 ]);
             }else{
                 return response()->json([
-                    'body'=>[],
-                    'errors' => [
-                        'msg'=>'User not found'
-                    ],
-                    'status' => Response::HTTP_NOT_FOUND
+                    'data'      => null,
+                    'message'   => 'Usuario o contraseña incorrecta',
+                    'status'    => Response::HTTP_NOT_FOUND
                 ]);
             }
 
         }else{
 
             return response()->json([
-                'body'=>[],
-                'errors' => [
-                    'msg'=>'User not found'
-                ],
+                'data'      => null,
+                'message' => 'Usuario o contraseña incorrecta',
                 'status' => Response::HTTP_NOT_FOUND
             ]);
 
@@ -91,18 +91,17 @@ class AuthController extends Controller
     public function logout()
     {
         if (Auth::check()) {
-            Auth::user()->token()->revoke();
+            // Revoke all tokens...
+            Auth::user()->tokens()->delete();
             return response()->json([
-                'body'=>[],
-                'errors' => [],
+                'data'      => null,
+                'message'   => null,
                 'status' => Response::HTTP_OK
             ]);
         }else{
             return response()->json([
-                'body'=>[],
-                'errors' => [
-                    'msg'=>'User Unauthorized'
-                ],
+                'data'      => null,
+                'message'   => 'No tiene autorización para realizar dicho evento.',
                 'status' => Response::HTTP_UNAUTHORIZED
             ]);
         }

@@ -3,26 +3,30 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+//use App\Enums\IdEliminado;
+//use App\Enums\IdEstado;
+use App\Enums\IdEliminado;
+use App\Enums\IdEstado;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 use App\Traits\UUID;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
     use UUID;
 
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $table = "users";
 
-    /**
-     *  Level User:
-     *  0 => Super    Usuario
-     *  1 => Reseller Usuario
-     *  2 => Cliente  Usuario
-     */
+    const CREATED_AT = 'fechaRegistro';
+    const UPDATED_AT = 'fechaModifico';
 
+    const USER_EMAIL_FIELD  = "correo";
 
     /**
      * The attributes that are mass assignable.
@@ -31,17 +35,21 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'id',
-        'username',
-        'password',
-        'first_name',
-        'last_name',
-        'email',
-        'phone',
-        'level',
-        'actived',
-        'deleted',
-        'id_client',
-        'id_role',
+        'nombres',
+        'apellidos',
+        'idPerfil',
+        'correo',
+        'telefono',
+        'usuario',
+        'clave',
+        'idNivel',
+        'idEstado',
+        'idUsuarioRegistro',
+        'idUsuarioModifico',
+        'fechaEmailVerifico',
+        'idEliminado',
+        'fechaRegistro',
+        'fechaModifico',
     ];
 
     /**
@@ -50,8 +58,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'clave',
+//        'remember_token',
     ];
 
     /**
@@ -60,7 +68,12 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'fechaEmailVerifico' => 'datetime',
+        'fechaRegistro' => 'datetime',
+        'fechaModifico' => 'datetime',
+        'clave' => 'hashed',
+        'idEstado' => IdEstado::class,
+        'idEliminado' => IdEliminado::class,
     ];
+
 }

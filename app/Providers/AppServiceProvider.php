@@ -4,6 +4,10 @@ namespace App\Providers;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
+//use Laravel\Sanctum\Sanctum;
+
+//use Laravel\Sanctum\Sanctum;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -12,6 +16,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        Passport::ignoreRoutes();
+//        Sanctum::ignoreMigrations();
         //
     }
 

@@ -15,12 +15,12 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            ClientSeeder::class,
-            TicketTypeSeeder::class,
-            VehicleCategorySeeder::class,
-            VehicleSeeder::class,
-            TicketMachineSeeder::class,
-            TicketPriceSeeder::class
+//            ClientSeeder::class,
+//            TicketTypeSeeder::class,
+//            VehicleCategorySeeder::class,
+//            VehicleSeeder::class,
+//            TicketMachineSeeder::class,
+//            TicketPriceSeeder::class
         ]);
         // $this->call(UsersSantaCruzSeeder::class);
         // $this->call(UserVehiclesSantaCruzSeeder::class);
