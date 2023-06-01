@@ -48,7 +48,7 @@ Route::get('time',function(){
 
 
 
-include 'Modules/coldMachine.php';
+//include 'Modules/coldMachine.php';
 //include 'Modules/vehicleTicketing.php';
 //include 'Modules/dashboard.php';
 //include 'Modules/auth.php';
