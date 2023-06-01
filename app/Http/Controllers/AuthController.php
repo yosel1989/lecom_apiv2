@@ -51,8 +51,7 @@ class AuthController extends Controller
                 return response()->json([
                     'data'=>[
                         'token' => [
-                            'access' => $user->tokens,
-                            'token' => $token,
+                            'access' => $token,
                             'type' => 'Bearer'
                         ],
                         'usuario' => [
@@ -91,8 +90,7 @@ class AuthController extends Controller
     public function logout()
     {
         if (Auth::check()) {
-            // Revoke all tokens...
-            Auth::user()->tokens()->delete();
+            Auth::user()->token()->revoke();
             return response()->json([
                 'data'      => null,
                 'message'   => null,
