@@ -4,7 +4,7 @@
 namespace Src\Admin\User\Infraestructure\Repositories;
 
 
-use App\User as EloquentUserModel;
+use App\Models\User as EloquentUserModel;
 use App\Models\Admin\UserVehicle as EloquentUserVehicleModel;
 use Src\Admin\Client\Domain\ValueObjects\ClientId;
 use Src\Admin\Module\Domain\Module;

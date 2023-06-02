@@ -2,7 +2,7 @@
 use Illuminate\Support\Facades\Route;
 
 
-Route::namespace('Api\VehicleTicketing\Ticket')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\VehicleTicketing\Ticket')->middleware('auth:api')->group( function (){
     Route::get('vehicle/{id}/tickets', 'GetTicketsTodayByVehicleController');
     Route::get('ticket/{id}', 'GetTicketController');
     Route::get('ticket/code/date', 'GetTicketByCodeAndDateController');
@@ -14,37 +14,37 @@ Route::namespace('Api\VehicleTicketing\Ticket')->middleware('auth:api')->group( 
     Route::get('user/production-rancking/tickets/type', 'GetTicketProductionRanckingOfFleetByDateByTypeController');
 });
 
-Route::namespace('Api\VehicleTicketing\Ticket')->group( function (){
+Route::namespace('App\Http\Controllers\Api\VehicleTicketing\Ticket')->group( function (){
     Route::get('report/tickets/export', 'ExportTicketsReportByVehicleDateController');
 });
 
-Route::middleware('auth:api')->namespace('Api\VehicleTicketing\TicketType')->group( function (){
+Route::middleware('auth:api')->namespace('App\Http\Controllers\Api\VehicleTicketing\TicketType')->group( function (){
     Route::get('ticket/type/{id}', 'GetTicketTypeController');
     Route::get('ticket/type/code/{code}', 'GetTicketTypeByCodeController');
     Route::get('ticket/types/list', 'GetTicketTypeCollectionController');
 });
 
-Route::namespace('Api\VehicleTicketing\TicketPrice')->group( function (){
+Route::namespace('App\Http\Controllers\Api\VehicleTicketing\TicketPrice')->group( function (){
     Route::get('ticket/price/{id}', 'GetTicketPriceController');
     Route::get('ticket/price/{code}/{idClient}', 'GetTicketPriceByCriteriaController');
 });
 
-Route::namespace('Api\VehicleTicketing\TicketMachine')->group( function (){
+Route::namespace('App\Http\Controllers\Api\VehicleTicketing\TicketMachine')->group( function (){
     Route::get('ticket/machine/{id}', 'GetTicketMachineController');
     Route::get('ticket/machine/imei/{imei}', 'GetTicketMachineByImeiController');
 });
 
-Route::namespace('Api\VehicleTicketing\Ticket')->group( function (){
+Route::namespace('App\Http\Controllers\Api\VehicleTicketing\Ticket')->group( function (){
     Route::post('ticket/save', 'CreateTicketController');
 });
 
-Route::namespace('Api\VehicleTicketing\TicketMachine')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\VehicleTicketing\TicketMachine')->middleware('auth:api')->group( function (){
     Route::post('ticket-machine', 'CreateController');
     Route::put('ticket-machine/{id}', 'UpdateController');
     Route::get('client/{id}/ticket-machines', 'GetCollectionByClientController');
 });
 
-Route::namespace('Api\VehicleTicketing\Report')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\VehicleTicketing\Report')->middleware('auth:api')->group( function (){
     Route::get('v1/ticket-report/recaudo-total-por-vuelta/vehiculo/{idVehicle}/{date}', 'GetTotalByVehicleByTurnController');
     Route::get('v1/ticket-report/recaudo-total/{start}/{end}/{idVehicle}', 'GetTotalByVehicleByClientController');
     Route::get('v1/ticket-report/recaudo-top-total/{start}/{end}/{idClient}', 'GetTotalTopByVehicleByClientController');
@@ -64,6 +64,6 @@ Route::namespace('Api\VehicleTicketing\Report')->middleware('auth:api')->group( 
     Route::get('v1/tickets/flota/cliente/{idClient}/{dateStart}/{dateEnd}/{hourStart}/{hourEnd}', 'TicketsByClientFleetRangeHourController');
 });
 
-Route::namespace('Api\VehicleTicketing\Zbus\Ticket')->group( function (){
+Route::namespace('App\Http\Controllers\Api\VehicleTicketing\Zbus\Ticket')->group( function (){
     Route::post('app/boletaje/registrar-boleto', 'RegistrarBoletoPorPlacaController');
 });

@@ -1,5 +1,7 @@
 <?php
 
+use App\Events\AlertColdMachineHistoryEvent;
+use App\Http\Controllers\Older\RegisterErtStateController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -47,27 +49,27 @@ Route::get('time',function(){
 });
 
 
-
-//include 'Modules/coldMachine.php';
-//include 'Modules/vehicleTicketing.php';
-//include 'Modules/dashboard.php';
-//include 'Modules/auth.php';
-//include 'Modules/despacho.php';
-//include 'Modules/general.php';
-//include 'Modules/administracion.php';
-////include 'Modules/coldMachine.php';
-//include 'Modules/transportePersonal.php';
-
-
-//Route::get('v1/erts', function(){
-//    $all = \App\Models\Older\ErtUbicacion::all();
-//    return response()->json($all);
-//});
 //
-//Route::prefix('App')->namespace('/Older')->group( function () {
-//    Route::post('v1/ert_state', 'RegisterErtStateController');
-//});
-//
-//Route::get('websocket', function(){
-//    broadcast(new AlertColdMachineHistoryEvent('ded'));
-//});
+include 'Modules/coldMachine.php';
+include 'Modules/vehicleTicketing.php';
+include 'Modules/dashboard.php';
+include 'Modules/auth.php';
+include 'Modules/despacho.php';
+include 'Modules/general.php';
+include 'Modules/administracion.php';
+include 'Modules/coldMachine.php';
+include 'Modules/transportePersonal.php';
+
+
+Route::get('v1/erts', function(){
+    $all = \App\Models\Older\ErtUbicacion::all();
+    return response()->json($all);
+});
+
+Route::prefix('App')->namespace('/Older')->group( function () {
+    Route::post('v1/ert_state', [RegisterErtStateController::class]);
+});
+
+Route::get('websocket', function(){
+    broadcast(new AlertColdMachineHistoryEvent("ded"));
+});

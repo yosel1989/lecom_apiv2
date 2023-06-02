@@ -29,6 +29,7 @@
     },
     "autoload": {
         "psr-4": {
+            "Api\\": "app/Http/Controllers/Api",
             "App\\": "app/",
             "Src\\" : "src/",
             "Database\\Factories\\": "database/factories/",
