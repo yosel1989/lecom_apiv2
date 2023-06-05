@@ -58,36 +58,36 @@ final class EloquentUserRepository implements UserRepositoryContract
     {
         $this->eloquentUserModel->create([
             'id'=>$id->value(),
-            'username'=>$username->value(),
-            'password'=>$password->value(),
-            'first_name'=>$firstName->value(),
-            'last_name'=>$lastName->value(),
-            'email'=>$email->value(),
-            'phone'=>$phone->value(),
-            'level'=>$level->value(),
-            'actived'=>$actived->value(),
-            'deleted'=>0,
-            'id_client'=>$idClient->value(),
-            'id_role'=>$idRole->value()
+            'usuario'=>$username->value(),
+            'clave'=>$password->value(),
+            'nombres'=>$firstName->value(),
+            'apellidos'=>$lastName->value(),
+            'correo'=>$email->value(),
+            'telefono'=>$phone->value(),
+            'idNivel'=>$level->value(),
+            'idEstado'=>$actived->value(),
+            'idEliminado'=>0,
+            'idCliente'=>$idClient->value(),
+            'idRol'=>$idRole->value()
         ]);
 
-        $OUser = $this->eloquentUserModel->with('modules')->findOrFail($id->value());
+        $OUser = $this->eloquentUserModel->with('modulos')->findOrFail($id->value());
 
         $user = new User(
             new UserId( $OUser->id ),
-            new UserUserName( $OUser->username ),
-            new UserFirstName( $OUser->first_name ),
-            new UserLastName( $OUser->last_name ),
-            new UserEmail( $OUser->email ),
-            new UserPhone( $OUser->phone ),
-            new UserLevel( $OUser->level ),
-            new UserActived( $OUser->actived ),
-            new UserDeleted( $OUser->deleted ),
-            new UserIdClient( $OUser->id_client ),
-            new UserIdRole( $OUser->id_role )
+            new UserUserName( $OUser->usuario ),
+            new UserFirstName( $OUser->nombres ),
+            new UserLastName( $OUser->apellidos ),
+            new UserEmail( $OUser->correo ),
+            new UserPhone( $OUser->telefono ),
+            new UserLevel( $OUser->idNivel ),
+            new UserActived( $OUser->idEstado ),
+            new UserDeleted( $OUser->idEliminado ),
+            new UserIdClient( $OUser->idCliente ),
+            new UserIdRole( $OUser->idRol )
         );
 
-        $modulos = is_null($OUser->modules) ? null : $OUser->modules;
+        $modulos = is_null($OUser->modulos) ? null : $OUser->modulos;
         $arrModulos = [];
 
         if( $modulos ){
@@ -112,31 +112,31 @@ final class EloquentUserRepository implements UserRepositoryContract
     ): ?User
     {
         $this->eloquentUserModel->findOrFail($id->value())->update([
-            'first_name'=>$firstName->value(),
-            'last_name'=>$lastName->value(),
-            'email'=>$email->value(),
-            'phone'=>$phone->value(),
-            'actived'=>$actived->value(),
-            'id_role'=>$idRole->value()
+            'nombres'=>$firstName->value(),
+            'apellidos'=>$lastName->value(),
+            'correo'=>$email->value(),
+            'telefono'=>$phone->value(),
+            'idEstado'=>$actived->value(),
+            'idRol'=>$idRole->value()
         ]);
 
-        $OUser = $this->eloquentUserModel->with('modules')->findOrFail($id->value());
+        $OUser = $this->eloquentUserModel->with('modulos')->findOrFail($id->value());
 
         $user = new User(
             new UserId( $OUser->id ),
-            new UserUserName( $OUser->username ),
-            new UserFirstName( $OUser->first_name ),
-            new UserLastName( $OUser->last_name ),
-            new UserEmail( $OUser->email ),
-            new UserPhone( $OUser->phone ),
-            new UserLevel( $OUser->level ),
-            new UserActived( $OUser->actived ),
-            new UserDeleted( $OUser->deleted ),
-            new UserIdClient( $OUser->id_client ),
-            new UserIdRole( $OUser->id_role )
+            new UserUserName( $OUser->usuario ),
+            new UserFirstName( $OUser->nombres ),
+            new UserLastName( $OUser->apellidos ),
+            new UserEmail( $OUser->correo ),
+            new UserPhone( $OUser->telefono ),
+            new UserLevel( $OUser->idNivel ),
+            new UserActived( $OUser->idEstado ),
+            new UserDeleted( $OUser->idEliminado ),
+            new UserIdClient( $OUser->idCliente ),
+            new UserIdRole( $OUser->idRol )
         );
 
-        $modulos = is_null($OUser->modules) ? null : $OUser->modules;
+        $modulos = is_null($OUser->modulos) ? null : $OUser->modulos;
         $arrModulos = [];
 
         if( $modulos ){
@@ -152,23 +152,23 @@ final class EloquentUserRepository implements UserRepositoryContract
 
     public function find(UserId $id): ?User
     {
-        $OUser = $this->eloquentUserModel->with('modules')->findOrFail($id->value());
+        $OUser = $this->eloquentUserModel->with('modulos')->findOrFail($id->value());
 
         $user = new User(
             new UserId( $OUser->id ),
-            new UserUserName( $OUser->username ),
-            new UserFirstName( $OUser->first_name ),
-            new UserLastName( $OUser->last_name ),
-            new UserEmail( $OUser->email ),
-            new UserPhone( $OUser->phone ),
-            new UserLevel( $OUser->level ),
-            new UserActived( $OUser->actived ),
-            new UserDeleted( $OUser->deleted ),
-            new UserIdClient( $OUser->id_client ),
-            new UserIdRole( $OUser->id_role )
+            new UserUserName( $OUser->usuario ),
+            new UserFirstName( $OUser->nombres ),
+            new UserLastName( $OUser->apellidos ),
+            new UserEmail( $OUser->correo ),
+            new UserPhone( $OUser->telefono ),
+            new UserLevel( $OUser->idNivel ),
+            new UserActived( $OUser->idEstado ),
+            new UserDeleted( $OUser->idEliminado ),
+            new UserIdClient( $OUser->idCliente ),
+            new UserIdRole( $OUser->idRol )
         );
 
-        $modulos = is_null($OUser->modules) ? null : $OUser->modules;
+        $modulos = is_null($OUser->modulos) ? null : $OUser->modulos;
         $arrModulos = [];
 
         if( $modulos ){
@@ -200,32 +200,32 @@ final class EloquentUserRepository implements UserRepositoryContract
     public function updatePassword( UserId $id, UserPassword $password ): void
     {
         $this->eloquentUserModel->findOrFail( $id->value())->update([
-            'password' => $password->value(),
+            'clave' => $password->value(),
         ]);
     }
 
     public function assignModules( UserId $id, array $modules ): User
     {
         $user = $this->eloquentUserModel->findOrFail( $id->value());
-        $user->modules()->sync($modules, ['id_user' => $id->value()]);
+        $user->modulos()->sync($modules, ['id_user' => $id->value()]);
 
-        $OUser = $this->eloquentUserModel->with('modules')->findOrFail($id->value());
+        $OUser = $this->eloquentUserModel->with('modulos')->findOrFail($id->value());
 
         $User = new User(
             new UserId( $OUser->id ),
-            new UserUserName( $OUser->username ),
-            new UserFirstName( $OUser->first_name ),
-            new UserLastName( $OUser->last_name ),
-            new UserEmail( $OUser->email ),
-            new UserPhone( $OUser->phone ),
-            new UserLevel( $OUser->level ),
-            new UserActived( $OUser->actived ),
-            new UserDeleted( $OUser->deleted ),
-            new UserIdClient( $OUser->id_client ),
-            new UserIdRole( $OUser->id_role )
+            new UserUserName( $OUser->usuario ),
+            new UserFirstName( $OUser->nombres ),
+            new UserLastName( $OUser->apellidos ),
+            new UserEmail( $OUser->correo ),
+            new UserPhone( $OUser->telefono ),
+            new UserLevel( $OUser->idNivel ),
+            new UserActived( $OUser->idEstado ),
+            new UserDeleted( $OUser->idEliminado ),
+            new UserIdClient( $OUser->idCliente ),
+            new UserIdRole( $OUser->idRol )
         );
 
-        $modulos = is_null($OUser->modules) ? null : $OUser->modules;
+        $modulos = is_null($OUser->modulos) ? null : $OUser->modulos;
         $arrModulos = [];
 
         if( $modulos ){
@@ -260,7 +260,7 @@ final class EloquentUserRepository implements UserRepositoryContract
     public function updateActived( UserId $id, UserActived $actived ): void
     {
         $this->eloquentUserModel->findOrFail( $id->value())->update([
-            'actived' => $actived->value(),
+            'idEstado' => $actived->value(),
         ]);
     }
 
@@ -268,25 +268,25 @@ final class EloquentUserRepository implements UserRepositoryContract
     {
         $collection = [];
 
-        $users = $this->eloquentUserModel->with('modules')->where('id_client',$clientId->value())->get();
+        $users = $this->eloquentUserModel->with('modulos')->where('idCliente',$clientId->value())->get();
 
         foreach( $users as $user ){
 
             $OUser = new User(
                 new UserId( $user->id ),
-                new UserUserName( $user->username ),
-                new UserFirstName( $user->first_name ),
-                new UserLastName( $user->last_name ),
-                new UserEmail( $user->email ),
-                new UserPhone( $user->phone ),
-                new UserLevel( $user->level ),
-                new UserActived( $user->actived ),
-                new UserDeleted( $user->deleted ),
-                new UserIdClient( $user->id_client ),
-                new UserIdRole( $user->id_role )
+                new UserUserName( $user->usuario ),
+                new UserFirstName( $user->nombres ),
+                new UserLastName( $user->apellidos ),
+                new UserEmail( $user->correo ),
+                new UserPhone( $user->telefono ),
+                new UserLevel( $user->idNivel ),
+                new UserActived( $user->idEstado ),
+                new UserDeleted( $user->idEliminado ),
+                new UserIdClient( $user->idCliente ),
+                new UserIdRole( $user->idRol )
             );
 
-            $modulos = is_null($user->modules) ? null : $user->modules;
+            $modulos = is_null($user->modulos) ? null : $user->modulos;
             $arrModulos = [];
 
             if( $modulos ){
@@ -307,24 +307,24 @@ final class EloquentUserRepository implements UserRepositoryContract
     {
         $collection = [];
 
-        $users = $this->eloquentUserModel->onlyTrashed()->where('id_client',$clientId->value())->get();
+        $users = $this->eloquentUserModel->onlyTrashed()->where('idCliente',$clientId->value())->get();
 
         foreach( $users as $user ){
             $OUser = new User(
                 new UserId( $user->id ),
-                new UserUserName( $user->username ),
-                new UserFirstName( $user->first_name ),
-                new UserLastName( $user->last_name ),
-                new UserEmail( $user->email ),
-                new UserPhone( $user->phone ),
-                new UserLevel( $user->level ),
-                new UserActived( $user->actived ),
-                new UserDeleted( $user->deleted ),
-                new UserIdClient( $user->id_client ),
-                new UserIdRole( $user->id_role )
+                new UserUserName( $user->usuario ),
+                new UserFirstName( $user->nombres ),
+                new UserLastName( $user->apellidos ),
+                new UserEmail( $user->correo ),
+                new UserPhone( $user->telefono ),
+                new UserLevel( $user->idNivel ),
+                new UserActived( $user->idEstado ),
+                new UserDeleted( $user->idEliminado ),
+                new UserIdClient( $user->idCliente ),
+                new UserIdRole( $user->idRol )
             );
 
-            $modulos = is_null($user->modules) ? null : $user->modules;
+            $modulos = is_null($user->modulos) ? null : $user->modulos;
             $arrModulos = [];
 
             if( $modulos ){

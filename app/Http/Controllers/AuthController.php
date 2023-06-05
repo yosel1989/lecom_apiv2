@@ -90,7 +90,7 @@ class AuthController extends Controller
     public function logout()
     {
         if (Auth::check()) {
-            Auth::user()->token()->revoke();
+            Auth::user()->tokens()->revoke();
             return response()->json([
                 'data'      => null,
                 'message'   => null,

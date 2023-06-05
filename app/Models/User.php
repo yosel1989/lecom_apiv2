@@ -38,6 +38,8 @@ class User extends Authenticatable
         'nombres',
         'apellidos',
         'idPerfil',
+        'idRol',
+        'idCliente',
         'correo',
         'telefono',
         'usuario',
@@ -75,5 +77,9 @@ class User extends Authenticatable
         'idEstado' => IdEstado::class,
         'idEliminado' => IdEliminado::class,
     ];
+
+    public function modulos(){
+        return $this->belongsToMany('App\Models\Admin\Module','user_modules','id_user','id_module','id','id');
+    }
 
 }
