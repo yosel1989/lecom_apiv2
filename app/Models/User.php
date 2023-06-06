@@ -82,4 +82,8 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Models\Admin\Module','user_modules','id_user','id_module','id','id');
     }
 
+    public function client(){
+        return $this->hasOne('App\Models\Auth\Client','id','idCliente');
+    }
+
 }

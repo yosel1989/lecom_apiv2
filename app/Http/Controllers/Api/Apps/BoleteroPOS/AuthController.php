@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Apps\BoleteroPOS;
 
 use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,23 +16,12 @@ use Symfony\Component\HttpFoundation\Response;
 class AuthController extends Controller
 {
 
-    public function register(Request $request)
-    {
-
-        $user = User::create([
-            'usuario_user' => $request->username,
-            'usuario_passwd' => Helpers::encryptPass($request->password)
-        ]);
-
-        return response()->json($user);
-    }
-
     public function login(Request $request)
     {
         $User = User::where('usuario',$request->input('usuario') )
-                    ->where('idEstado', IdEstado::Habilitado)
-                    ->where('idEliminado',IdEliminado::NoEliminado)
-                    ->get();
+            ->where('idEstado', IdEstado::Habilitado)
+            ->where('idEliminado',IdEliminado::NoEliminado)
+            ->get();
 
         if( !$User->isEmpty() ){
 
@@ -60,9 +50,11 @@ class AuthController extends Controller
                             'nombres' => $user->nombres,
                             'apellidos' => $user->apellidos,
                             'correo' => $user->correo,
-                            'idNivel' => $user->idNivel
+                            'idNivel' => $user->idNivel,
+                            'idCliente' => $user->idCliente,
+                            'nombreCliente' =>  $user->client ? $user->client()->first(['id']) : null
                         ],
-//                        'client' => $user->client ? $user->client()->first(['id','bussiness_name', 'first_name', 'last_name']) : null,
+//                        '' => $user->client ? $user->client()->first(['id','bussiness_name', 'first_name', 'last_name']) : null,
 //                        'permissions' => $user->modules()->pluck('short_name')
                     ],
                     'message' => null,
@@ -91,7 +83,7 @@ class AuthController extends Controller
     public function logout()
     {
         if (Auth::check()) {
-            Auth::user()->tokens()->revoke();
+            Auth::user()->tokens()->delete();
             return response()->json([
                 'data'      => null,
                 'message'   => null,

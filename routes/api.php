@@ -9,6 +9,9 @@ Route::post('register', [App\Http\Controllers\AuthController::class, 'register']
 Route::post('login', [App\Http\Controllers\AuthController::class, 'login']);
 
 
+Route::post('app/login', [App\Http\Controllers\Api\Apps\BoleteroPOS\AuthController::class, 'login']);
+
+
 Route::middleware('auth:sanctum')->group(function() {
     Route::post('logout', [App\Http\Controllers\AuthController::class, 'logout']);
 });
