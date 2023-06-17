@@ -1,13 +1,46 @@
 <?php
 
-use App\Events\AlertColdMachineHistoryEvent;
+//use App\Events\AlertColdMachineHistoryEvent;
 use App\Http\Controllers\Older\RegisterErtStateController;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 
 Route::post('register', [App\Http\Controllers\AuthController::class, 'register']);
 Route::post('login', [App\Http\Controllers\AuthController::class, 'login']);
 
+
+Route::middleware('auth:sanctum')->group(function() {
+    Route::get('app/database', function(){
+        $user = Auth::user();
+
+        if (!Schema::hasTable('btj_boletos_' . $user->idCliente)) {
+            Schema::create('btj_boletos_' . $user->idCliente, function (Blueprint $table) {
+                $table->uuid('id')->unique()->primary();
+                $table->string('bussiness_name',50);
+                $table->string('first_name',50);
+                $table->string('last_name',50);
+                $table->string('ruc',15);
+                $table->string('dni',8);
+                $table->string('email',50);
+                $table->string('address',100);
+                $table->string('phone',15);
+                $table->integer('type');
+                $table->integer('deleted')->default(0);
+                $table->uuid('id_parent_client')->nullable();
+            });
+        }
+
+        $code = 'aA1bB2cC3dD4eE5fF6gG7hH8iI9jJ0kK1lL2mM3nN4oO5pP6qQ7rR8sS9tT0uU1vV2wW3xX4yY5zZ6';
+        $
+        echo strlen($code);
+
+        echo substr($code,100,1);
+
+    });
+});
 
 Route::post('app/login', [App\Http\Controllers\Api\Apps\BoleteroPOS\AuthController::class, 'login']);
 

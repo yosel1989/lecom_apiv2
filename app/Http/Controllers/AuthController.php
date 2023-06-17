@@ -61,6 +61,7 @@ class AuthController extends Controller
                             'apellidos' => $user->apellidos,
                             'correo' => $user->correo,
                             'idNivel' => $user->idNivel
+
                         ],
 //                        'client' => $user->client ? $user->client()->first(['id','bussiness_name', 'first_name', 'last_name']) : null,
 //                        'permissions' => $user->modules()->pluck('short_name')
