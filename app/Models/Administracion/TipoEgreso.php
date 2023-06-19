@@ -42,11 +42,11 @@ class TipoEgreso extends Model
 
 
     public function userCreated(){
-        return $this->hasOne('App\User','id','id_user_created');
+        return $this->hasOne('App\Models\User','id','id_user_created');
     }
 
     public function userUpdated(){
-        return $this->hasOne('App\User','id','id_user_updated');
+        return $this->hasOne('App\Models\User','id','id_user_updated');
     }
 
 }

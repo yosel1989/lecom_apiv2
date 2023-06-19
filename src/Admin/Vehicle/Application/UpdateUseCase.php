@@ -14,6 +14,7 @@ use Src\Admin\Vehicle\Domain\ValueObjects\VehicleIdModel;
 use Src\Admin\Vehicle\Domain\ValueObjects\VehiclePlate;
 use Src\Admin\Vehicle\Domain\ValueObjects\VehicleUnit;
 use Src\Admin\Vehicle\Domain\Vehicle;
+use Src\Core\Domain\ValueObjects\Id;
 
 
 final class UpdateUseCase
@@ -30,24 +31,24 @@ final class UpdateUseCase
 
     public function __invoke(
         string $id,
-        string $plate,
-        string $unit,
-        ?string $categoria,
-        ?string $brand,
-        ?string $model,
-        ?string $class,
-        ?string $fleet
+        string $placa,
+        string $unidad,
+        ?string $idCategoria,
+        ?string $idMarca,
+        ?string $idModelo,
+        ?string $idClase,
+        ?string $idFlota
     ): ?Vehicle
     {
         return $this->repository->update(
-            new VehicleId( $id ),
-            new VehiclePlate( $plate ),
-            new VehicleUnit( $unit ),
-            new VehicleIdCategory( $categoria ),
-            new VehicleIdBrand( $brand ),
-            new VehicleIdModel( $model ),
-            new VehicleIdClass( $class ),
-            new VehicleIdFleet( $fleet )
+            new Id( $id ),
+            new VehiclePlate( $placa ),
+            new VehicleUnit( $unidad ),
+            new Id( $idCategoria, true ),
+            new Id( $idMarca, true ),
+            new Id( $idModelo, true ),
+            new Id( $idClase, true ),
+            new Id( $idFlota, true )
         );
     }
 }

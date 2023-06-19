@@ -34,7 +34,7 @@ Route::middleware('auth:sanctum')->group(function() {
         }
 
         $code = 'aA1bB2cC3dD4eE5fF6gG7hH8iI9jJ0kK1lL2mM3nN4oO5pP6qQ7rR8sS9tT0uU1vV2wW3xX4yY5zZ6';
-        $
+
         echo strlen($code);
 
         echo substr($code,100,1);
@@ -49,7 +49,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('logout', [App\Http\Controllers\AuthController::class, 'logout']);
 });
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 

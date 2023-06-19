@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Api\VehicleTicketing\TicketMachine;
 
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\VehicleTicketing\TicketMachine\TicketMachineResource;
 use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InvalidArgumentException;

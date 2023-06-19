@@ -56,7 +56,7 @@ class ColdMachineAlertHistory extends Model
     }
 
     public function userUpdated(){
-        return $this->hasOne('App\User','id','id_user_updated');
+        return $this->hasOne('App\Models\User','id','id_user_updated');
     }
 
 }

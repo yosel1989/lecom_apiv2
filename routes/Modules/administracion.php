@@ -172,14 +172,14 @@ Route::namespace('App\Http\Controllers\Api\Admin\TypePay')->group( function (){
 
 
 // Administracion
-Route::namespace('App\Http\Controllers\Api\Administracion\PersonalCategoria')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\Administracion\PersonalCategoria')->middleware('auth:sanctum')->group( function (){
     Route::post('personal-categoria', 'CreateController');
     Route::put('personal-categoria/{id}', 'UpdateController');
     Route::get('personal-categoria', 'GetCollectionController');
     Route::get('personal-categoria/estado/activo', 'GetCollectionActivedController');
 });
 
-Route::namespace('App\Http\Controllers\Api\Administracion\Personal')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\Administracion\Personal')->middleware('auth:sanctum')->group( function (){
     Route::post('personal', 'CreateController');
     Route::put('personal/{id}', 'UpdateController');
     Route::get('personal/cliente/{id}', 'GetCollectionByClientController');
@@ -187,27 +187,27 @@ Route::namespace('App\Http\Controllers\Api\Administracion\Personal')->middleware
 });
 
 
-Route::namespace('App\Http\Controllers\Api\Administracion\Ruta')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\Administracion\Ruta')->middleware('auth:sanctum')->group( function (){
     Route::post('ruta', 'CreateController');
     Route::put('ruta/{id}', 'UpdateController');
     Route::get('ruta/cliente/{id}', 'GetCollectionByClientController');
     Route::get('ruta/cliente/{id}/activo', 'GetCollectionActivedByClientController');
 });
-Route::namespace('App\Http\Controllers\Api\Administracion\HojaRuta')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\Administracion\HojaRuta')->middleware('auth:sanctum')->group( function (){
     Route::post('hoja-ruta', 'CreateController');
     Route::put('hoja-ruta/{id}', 'UpdateController');
     Route::get('hoja-ruta/cliente/{id}', 'GetCollectionByClientController');
     Route::get('hoja-ruta/cliente/{id}/fecha/{fecha}', 'GetCollectionByClientByDateController');
 });
 
-Route::namespace('App\Http\Controllers\Api\Administracion\TipoIngreso')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\Administracion\TipoIngreso')->middleware('auth:sanctum')->group( function (){
     Route::post('tipo-ingreso', 'CreateController');
     Route::put('tipo-ingreso/{id}', 'UpdateController');
     Route::get('tipo-ingreso/cliente/{id}', 'GetCollectionByClientController');
     Route::get('tipo-ingreso/cliente/{id}/lista', 'GetListByClientController');
 });
 
-Route::namespace('App\Http\Controllers\Api\Administracion\TipoEgreso')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\Administracion\TipoEgreso')->middleware('auth:sanctum')->group( function (){
     Route::post('tipo-egreso', 'CreateController');
     Route::put('tipo-egreso/{id}', 'UpdateController');
     Route::get('tipo-egreso/cliente/{id}', 'GetCollectionByClientController');
@@ -218,7 +218,7 @@ Route::namespace('App\Http\Controllers\Api\Administracion\Ruta')->group( functio
     Route::get('app/ruta/cliente/{id}/codigo/{codigo}', 'FindByClientByCodeController');
 });
 
-Route::namespace('App\Http\Controllers\Api\Administracion\Ingreso')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\Administracion\Ingreso')->middleware('auth:sanctum')->group( function (){
     Route::post('ingreso', 'CreateController');
     Route::put('ingreso/{id}', 'UpdateController');
     Route::get('ingreso/cliente/{id}', 'GetCollectionByClientController');
@@ -228,7 +228,7 @@ Route::namespace('App\Http\Controllers\Api\Administracion\Ingreso')->middleware(
     Route::put('ingreso/{id}/anular', 'AnularController');
 });
 
-Route::namespace('App\Http\Controllers\Api\Administracion\Egreso')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\Administracion\Egreso')->middleware('auth:sanctum')->group( function (){
     Route::post('egreso', 'CreateController');
     Route::put('egreso/{id}', 'UpdateController');
     Route::get('egreso/cliente/{id}', 'GetCollectionByClientController');
@@ -239,20 +239,20 @@ Route::namespace('App\Http\Controllers\Api\Administracion\Egreso')->middleware('
 
 });
 
-Route::namespace('App\Http\Controllers\Api\Administracion\MotivoAnulacion')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\Administracion\MotivoAnulacion')->middleware('auth:sanctum')->group( function (){
     Route::post('motivo-anulacion', 'CreateController');
     Route::put('motivo-anulacion/{id}', 'UpdateController');
     Route::get('motivos-anulacion', 'GetCollectionController');
     Route::get('motivos-anulacion/list', 'GetListController');
 });
 
-Route::namespace('App\Http\Controllers\Api\Administracion\Liquidacion')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\Administracion\Liquidacion')->middleware('auth:sanctum')->group( function (){
     Route::post('liquidacion', 'CreateController');
     Route::get('liquidacion/cliente/{id}', 'GetCollectionByClientController');
 });
 
 
-//Route::namespace('Api\Administracion\HojaRuta')->middleware('auth:api')->group( function (){
+//Route::namespace('Api\Administracion\HojaRuta')->middleware('auth:sanctum')->group( function (){
 //    Route::post('hoja-ruta', 'CreateController');
 //});
 

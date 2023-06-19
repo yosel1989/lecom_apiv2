@@ -7,6 +7,7 @@ namespace Src\Admin\Vehicle\Application;
 use Src\Admin\Vehicle\Domain\Contracts\VehicleRepositoryContract;
 use Src\Admin\Vehicle\Domain\ValueObjects\VehicleId;
 use Src\Admin\Vehicle\Domain\Vehicle;
+use Src\Core\Domain\ValueObjects\Id;
 
 final class FindUseCase
 {
@@ -21,11 +22,11 @@ final class FindUseCase
     }
 
     public function __invoke(
-        string $id
+        string $idVehiculo
     ): ?Vehicle
     {
         return $this->repository->find(
-            new VehicleId( $id )
+            new Id( $idVehiculo )
         );
     }
 }

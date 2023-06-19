@@ -16,7 +16,7 @@ class CreateBtjTicketMachinesTable extends Migration
         Schema::create('btj_ticket_machines', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->string('imei',30);
-            $table->integer('deleted');
+            $table->integer('deleted')->default(0);
             $table->uuid('id_client');
             $table->uuid('id_vehicle');
             $table->timestamps();

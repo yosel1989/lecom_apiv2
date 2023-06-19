@@ -3,45 +3,39 @@
 
 namespace Src\Admin\Vehicle\Domain\Contracts;
 
-use Src\Admin\Client\Domain\ValueObjects\ClientId;
-use Src\Admin\Vehicle\Domain\ValueObjects\VehicleId;
-use Src\Admin\Vehicle\Domain\ValueObjects\VehicleIdBrand;
-use Src\Admin\Vehicle\Domain\ValueObjects\VehicleIdCategory;
-use Src\Admin\Vehicle\Domain\ValueObjects\VehicleIdClass;
-use Src\Admin\Vehicle\Domain\ValueObjects\VehicleIdFleet;
-use Src\Admin\Vehicle\Domain\ValueObjects\VehicleIdModel;
 use Src\Admin\Vehicle\Domain\ValueObjects\VehiclePlate;
 use Src\Admin\Vehicle\Domain\ValueObjects\VehicleUnit;
 use Src\Admin\Vehicle\Domain\Vehicle;
+use Src\Core\Domain\ValueObjects\Id;
 
 interface VehicleRepositoryContract
 {
     public function create(
-        VehicleId $id,
-        VehiclePlate $plate,
-        VehicleUnit $unit,
-        ClientId $idClient,
-        VehicleIdCategory $idCategory,
-        VehicleIdBrand $idBrand,
-        VehicleIdModel $idModel,
-        VehicleIdClass $idClass,
-        VehicleIdFleet $idFleet ): ?Vehicle;
+        Id $id,
+        VehiclePlate $placa,
+        VehicleUnit $unidad,
+        Id $idCliente,
+        Id $idCategoria,
+        Id $idMarca,
+        Id $idModelo,
+        Id $idClase,
+        Id $idFlota ): ?Vehicle;
     public function update(
-        VehicleId $id,
-        VehiclePlate $plate,
-        VehicleUnit $unit,
-        VehicleIdCategory $idCategory,
-        VehicleIdBrand $idBrand,
-        VehicleIdModel $idModel,
-        VehicleIdClass $idClass,
-        VehicleIdFleet $idFleet
+        Id $id,
+        VehiclePlate $placa,
+        VehicleUnit $unidad,
+        Id $idCategoria,
+        Id $idMarca,
+        Id $idModelo,
+        Id $idClase,
+        Id $idFlota
     ): ?Vehicle;
     public function find(
-        VehicleId $id
+        Id $idVehiculo
     ): ?Vehicle;
-    public function trash( VehicleId $id ): void;
-    public function delete( VehicleId $id ): void;
-    public function restore( VehicleId $id ): void;
-    public function collectionByClient(ClientId $idClient): array;
-    public function collectionActivedByClient(ClientId $idClient): array;
+    public function trash( Id $idVehiculo ): void;
+    public function delete( Id $idVehiculo ): void;
+    public function restore( Id $idVehiculo ): void;
+    public function collectionByClient(Id $idCliente): array;
+    public function collectionActivedByClient(Id $idCliente): array;
 }

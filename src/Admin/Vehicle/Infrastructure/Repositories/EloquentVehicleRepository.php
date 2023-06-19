@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Admin\Vehicle\Infrastructure\Repositories;
 
-use App\Models\General\Vehicle as EloquentVehicleModel;
-use Src\Admin\Client\Domain\ValueObjects\ClientId;
+use App\Models\Administracion\Vehiculo as EloquentModelVehiculo;
 use Src\Admin\Vehicle\Domain\SmallVehicle;
 use Src\Admin\Vehicle\Domain\ValueObjects\VehicleIdBrand;
 use Src\Admin\Vehicle\Domain\ValueObjects\VehicleIdFleet;
@@ -23,56 +22,56 @@ use Src\Admin\Vehicle\Domain\ValueObjects\VehicleIdModel;
 use Src\Admin\Vehicle\Domain\ValueObjects\VehiclePlate;
 use Src\Admin\Vehicle\Domain\ValueObjects\VehicleUnit;
 use Src\Admin\Vehicle\Domain\Vehicle;
+use Src\Core\Domain\ValueObjects\Id;
 
 final class EloquentVehicleRepository implements VehicleRepositoryContract
 {
     /**
-     * @var EloquentVehicleModel
+     * @var EloquentModelVehiculo
      */
     private $eloquentVehicleModel;
 
     public function __construct()
     {
-        $this->eloquentVehicleModel = new EloquentVehicleModel;
+        $this->EloquentModelVehiculo = new EloquentModelVehiculo;
     }
 
     public function create(
-        VehicleId $id,
-        VehiclePlate $plate,
-        VehicleUnit $unit,
-        ClientId $idClient,
-        VehicleIdCategory $idCategory,
-        VehicleIdBrand $idBrand,
-        VehicleIdModel $idModel,
-        VehicleIdClass $idClass,
-        VehicleIdFleet $idFleet ): ?Vehicle
+        Id $id,
+        VehiclePlate $placa,
+        VehicleUnit $unidad,
+        Id $idCliente,
+        Id $idCategoria,
+        Id $idMarca,
+        Id $idModelo,
+        Id $idClase,
+        Id $idFlota ): ?Vehicle
     {
-        $this->eloquentVehicleModel->create([
+        $nuevoVehiculo = $this->EloquentModelVehiculo->create([
             'id' => $id->value(),
-            'plate' => $plate->value(),
-            'unit' => $unit->value(),
-            'deleted' => 0,
-            'id_client' => $idClient->value(),
-            'id_category' => $idCategory->value(),
-            'id_model' => $idModel->value(),
-            'id_class' => $idClass->value(),
-            'id_brand' => $idBrand->value(),
-            'id_fleet' => $idFleet->value()
+            'placa' => $placa->value(),
+            'unidad' => $unidad->value(),
+            'idCliente' => $idCliente->value(),
+            'idCategoria' => $idCategoria->value(),
+            'idModelo' => $idModelo->value(),
+            'idClase' => $idClase->value(),
+            'idMarca' => $idMarca->value(),
+            'idFlota' => $idFlota->value()
         ]);
 
-        $vehicle = $this->eloquentVehicleModel->with(['idBrand_pk','idFleet_pk','idModel_pk','idClass_pk'])->findOrFail($id->value());
+        $vehicle = $this->EloquentModelVehiculo->with(['idBrand_pk','idFleet_pk','idModel_pk','idClass_pk'])->findOrFail($nuevoVehiculo->id);
 
         $OVehicle = new Vehicle(
             new VehicleId( $vehicle->id ),
-            new VehiclePlate( $vehicle->plate ),
-            new VehicleUnit( $vehicle->unit ),
-            new VehicleDeleted( $vehicle->deleted ),
-            new VehicleIdClient( $vehicle->id_client ),
-            new VehicleIdCategory( $vehicle->id_category ),
-            new VehicleIdModel( $vehicle->id_model ),
-            new VehicleIdClass( $vehicle->id_class ),
-            new VehicleIdFleet( $vehicle->id_fleet ),
-            new VehicleIdBrand( $vehicle->id_brand )
+            new VehiclePlate( $vehicle->placa ),
+            new VehicleUnit( $vehicle->unidad ),
+            new VehicleDeleted( $vehicle->idEliminado->value ),
+            new VehicleIdClient( $vehicle->idCliente ),
+            new VehicleIdCategory( $vehicle->idCategoria ),
+            new VehicleIdModel( $vehicle->idModelo ),
+            new VehicleIdClass( $vehicle->idClase ),
+            new VehicleIdFleet( $vehicle->idFlota ),
+            new VehicleIdBrand( $vehicle->idMarca )
         );
         $brand = is_null($vehicle->idBrand_pk) ? null : VehicleBrand::createEntity($vehicle->idBrand_pk);
         $model = is_null($vehicle->idModel_pk) ? null : VehicleModel::createEntity($vehicle->idModel_pk);
@@ -89,39 +88,39 @@ final class EloquentVehicleRepository implements VehicleRepositoryContract
 
 
     public function update(
-        VehicleId $id,
-        VehiclePlate $plate,
-        VehicleUnit $unit,
-        VehicleIdCategory $idCategory,
-        VehicleIdBrand $idBrand,
-        VehicleIdModel $idModel,
-        VehicleIdClass $idClass,
-        VehicleIdFleet $idFleet
+        Id $id,
+        VehiclePlate $placa,
+        VehicleUnit $unidad,
+        Id $idCategoria,
+        Id $idMarca,
+        Id $idModelo,
+        Id $idClase,
+        Id $idFlota
     ): ?Vehicle
     {
-        $this->eloquentVehicleModel->findOrFail($id->value())->update([
-            'plate' => $plate->value(),
-            'unit' => $unit->value(),
-            'id_category' => $idCategory->value(),
-            'id_model' => $idModel->value(),
-            'id_class' => $idClass->value(),
-            'id_brand' => $idBrand->value(),
-            'id_fleet' => $idFleet->value()
+        $this->EloquentModelVehiculo->findOrFail($id->value())->update([
+            'placa' => $placa->value(),
+            'unidad' => $unidad->value(),
+            'idCategoria' => $idCategoria->value(),
+            'idModelo' => $idModelo->value(),
+            'idClase' => $idClase->value(),
+            'idMarca' => $idMarca->value(),
+            'idFlota' => $idFlota->value()
         ]);
 
-        $vehicle = $this->eloquentVehicleModel->with(['idBrand_pk','idFleet_pk','idModel_pk','idClass_pk'])->findOrFail($id->value());
+        $vehicle = $this->EloquentModelVehiculo->with(['idBrand_pk','idFleet_pk','idModel_pk','idClass_pk'])->findOrFail($id->value());
 
         $OVehicle = new Vehicle(
             new VehicleId( $vehicle->id ),
-            new VehiclePlate( $vehicle->plate ),
-            new VehicleUnit( $vehicle->unit ),
-            new VehicleDeleted( $vehicle->deleted ),
-            new VehicleIdClient( $vehicle->id_client ),
-            new VehicleIdCategory( $vehicle->id_category ),
-            new VehicleIdModel( $vehicle->id_model ),
-            new VehicleIdClass( $vehicle->id_class ),
-            new VehicleIdFleet( $vehicle->id_fleet ),
-            new VehicleIdBrand( $vehicle->id_brand )
+            new VehiclePlate( $vehicle->placa ),
+            new VehicleUnit( $vehicle->unidad ),
+            new VehicleDeleted( $vehicle->idEliminado->value ),
+            new VehicleIdClient( $vehicle->idCliente ),
+            new VehicleIdCategory( $vehicle->idCategoria ),
+            new VehicleIdModel( $vehicle->idModelo ),
+            new VehicleIdClass( $vehicle->idClase ),
+            new VehicleIdFleet( $vehicle->idFlota ),
+            new VehicleIdBrand( $vehicle->idMarca )
         );
         $brand = is_null($vehicle->idBrand_pk) ? null : VehicleBrand::createEntity($vehicle->idBrand_pk);
         $model = is_null($vehicle->idModel_pk) ? null : VehicleModel::createEntity($vehicle->idModel_pk);
@@ -137,22 +136,22 @@ final class EloquentVehicleRepository implements VehicleRepositoryContract
     }
 
     public function find(
-        VehicleId $id
+        Id $idVehiculo
     ): ?Vehicle
     {
-        $vehicle = $this->eloquentVehicleModel->with(['idBrand_pk','idFleet_pk','idModel_pk','idClass_pk'])->findOrFail($id->value());
+        $vehicle = $this->EloquentModelVehiculo->with(['idBrand_pk','idFleet_pk','idModel_pk','idClass_pk'])->findOrFail($idVehiculo->value());
 
         $OVehicle = new Vehicle(
             new VehicleId( $vehicle->id ),
-            new VehiclePlate( $vehicle->plate ),
-            new VehicleUnit( $vehicle->unit ),
-            new VehicleDeleted( $vehicle->deleted ),
-            new VehicleIdClient( $vehicle->id_client ),
-            new VehicleIdCategory( $vehicle->id_category ),
-            new VehicleIdModel( $vehicle->id_model ),
-            new VehicleIdClass( $vehicle->id_class ),
-            new VehicleIdFleet( $vehicle->id_fleet ),
-            new VehicleIdBrand( $vehicle->id_brand )
+            new VehiclePlate( $vehicle->placa ),
+            new VehicleUnit( $vehicle->unidad ),
+            new VehicleDeleted( $vehicle->idEliminado->value ),
+            new VehicleIdClient( $vehicle->idCliente ),
+            new VehicleIdCategory( $vehicle->idCategoria ),
+            new VehicleIdModel( $vehicle->idModelo ),
+            new VehicleIdClass( $vehicle->idClase ),
+            new VehicleIdFleet( $vehicle->idFlota ),
+            new VehicleIdBrand( $vehicle->idMarca )
         );
         $brand = is_null($vehicle->idBrand_pk) ? null : VehicleBrand::createEntity($vehicle->idBrand_pk);
         $model = is_null($vehicle->idModel_pk) ? null : VehicleModel::createEntity($vehicle->idModel_pk);
@@ -167,37 +166,37 @@ final class EloquentVehicleRepository implements VehicleRepositoryContract
         return $OVehicle;
     }
 
-    public function trash( VehicleId $id ): void
+    public function trash( Id $idVehiculo ): void
     {
-        $this->eloquentVehicleModel->findOrFail( $id->value() )->delete();
+        $this->EloquentModelVehiculo->findOrFail( $idVehiculo->value() )->delete();
     }
-    public function delete( VehicleId $id ): void
+    public function delete( Id $idVehiculo ): void
     {
-        $this->eloquentVehicleModel->withTrashed()->findOrFail( $id->value() )->forceDelete();
+        $this->EloquentModelVehiculo->withTrashed()->findOrFail( $idVehiculo->value() )->forceDelete();
     }
-    public function restore( VehicleId $id ): void
+    public function restore( Id $idVehiculo ): void
     {
-        $this->eloquentVehicleModel->withTrashed()->findOrFail( $id->value() )->restore();
+        $this->EloquentModelVehiculo->withTrashed()->findOrFail( $idVehiculo->value() )->restore();
     }
 
-    public function collectionByClient(ClientId $idClient): array
+    public function collectionByClient(Id $idCliente): array
     {
-        $vehicles = $this->eloquentVehicleModel->with(['idBrand_pk','idFleet_pk','idModel_pk','idClass_pk'])->where('id_client',$idClient->value())->get();
+        $vehicles = $this->EloquentModelVehiculo->with(['idBrand_pk','idFleet_pk','idModel_pk','idClass_pk'])->where('idCliente',$idCliente->value())->get();
 
         $arrVehicles = array();
 
         foreach ( $vehicles as $vehicle ){
             $OVehicle = new Vehicle(
                 new VehicleId( $vehicle->id ),
-                new VehiclePlate( $vehicle->plate ),
-                new VehicleUnit( $vehicle->unit ),
-                new VehicleDeleted( $vehicle->deleted ),
-                new VehicleIdClient( $vehicle->id_client ),
-                new VehicleIdCategory( $vehicle->id_category ),
-                new VehicleIdModel( $vehicle->id_model ),
-                new VehicleIdClass( $vehicle->id_class ),
-                new VehicleIdFleet( $vehicle->id_fleet ),
-                new VehicleIdBrand( $vehicle->id_brand )
+                new VehiclePlate( $vehicle->placa ),
+                new VehicleUnit( $vehicle->unidad ),
+                new VehicleDeleted( $vehicle->idEliminado->value ),
+                new VehicleIdClient( $vehicle->idCliente ),
+                new VehicleIdCategory( $vehicle->idCategoria ),
+                new VehicleIdModel( $vehicle->idModelo ),
+                new VehicleIdClass( $vehicle->idClase ),
+                new VehicleIdFleet( $vehicle->idFlota ),
+                new VehicleIdBrand( $vehicle->idMarca )
             );
             $brand = is_null($vehicle->idBrand_pk) ? null : VehicleBrand::createEntity($vehicle->idBrand_pk);
             $model = is_null($vehicle->idModel_pk) ? null : VehicleModel::createEntity($vehicle->idModel_pk);
@@ -214,17 +213,17 @@ final class EloquentVehicleRepository implements VehicleRepositoryContract
         return $arrVehicles;
     }
 
-    public function collectionActivedByClient(ClientId $idClient): array
+    public function collectionActivedByClient(Id $idCliente): array
     {
-        $vehicles = $this->eloquentVehicleModel->where('id_client',$idClient->value())->where('id_status',1)->get();
+        $vehicles = $this->EloquentModelVehiculo->where('idCliente',$idCliente->value())->where('idEstado',1)->get();
 
         $arrVehicles = array();
 
         foreach ( $vehicles as $vehicle ){
             $OVehicle = new SmallVehicle(
                 new VehicleId( $vehicle->id ),
-                new VehiclePlate( $vehicle->plate ),
-                new VehicleUnit( $vehicle->unit )
+                new VehiclePlate( $vehicle->placa ),
+                new VehicleUnit( $vehicle->unidad )
             );
             $arrVehicles[] = $OVehicle;
         }

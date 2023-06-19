@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Src\Admin\Vehicle\Application;
 
 use Src\Admin\Vehicle\Domain\Contracts\VehicleRepositoryContract;
-use Src\Admin\Vehicle\Domain\ValueObjects\VehicleId;
+use Src\Core\Domain\ValueObjects\Id;
 
 final class RestoreUseCase
 {
@@ -25,13 +25,13 @@ final class RestoreUseCase
 
             $ids = explode(',', $id);
             foreach ( $ids as $value) {
-                $g_id = new VehicleId($value);
+                $g_id = new Id($value);
                 $this->repository->restore($g_id);
             }
 
         }else{
 
-            $g_id = new VehicleId($id);
+            $g_id = new Id($id);
             $this->repository->restore($g_id);
 
         }

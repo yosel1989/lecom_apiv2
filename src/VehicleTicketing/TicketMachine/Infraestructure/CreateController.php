@@ -39,7 +39,7 @@ final class CreateController
              $imei,
              $vehicle->getIdClient()->value(),
              $idVehicle,
-             $user->getId()
+             $user->id
         );
     }
 }

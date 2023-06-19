@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 
-Route::namespace('App\Http\Controllers\Api\General\Vehicle')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\General\Vehicle')->middleware('auth:sanctum')->group( function (){
     Route::get('user/vehicles', 'GetVehiclesByUserController');
     Route::get('vehicle/{id}', 'GetVehicleController');
 });

@@ -16,7 +16,8 @@ class CreateVehicleBrandsTable extends Migration
         Schema::create('vehicle_brands', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->string('name',50);
-            $table->integer('delete');
+
+            $table->integer('deleted');
         });
     }
 

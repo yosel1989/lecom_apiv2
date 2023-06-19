@@ -2,7 +2,7 @@
 use Illuminate\Support\Facades\Route;
 
 
-Route::namespace('App\Http\Controllers\Api\VehicleTicketing\Ticket')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\VehicleTicketing\Ticket')->middleware('auth:sanctum')->group( function (){
     Route::get('vehicle/{id}/tickets', 'GetTicketsTodayByVehicleController');
     Route::get('ticket/{id}', 'GetTicketController');
     Route::get('ticket/code/date', 'GetTicketByCodeAndDateController');
@@ -18,7 +18,7 @@ Route::namespace('App\Http\Controllers\Api\VehicleTicketing\Ticket')->group( fun
     Route::get('report/tickets/export', 'ExportTicketsReportByVehicleDateController');
 });
 
-Route::middleware('auth:api')->namespace('App\Http\Controllers\Api\VehicleTicketing\TicketType')->group( function (){
+Route::middleware('auth:sanctum')->namespace('App\Http\Controllers\Api\VehicleTicketing\TicketType')->group( function (){
     Route::get('ticket/type/{id}', 'GetTicketTypeController');
     Route::get('ticket/type/code/{code}', 'GetTicketTypeByCodeController');
     Route::get('ticket/types/list', 'GetTicketTypeCollectionController');
@@ -38,13 +38,13 @@ Route::namespace('App\Http\Controllers\Api\VehicleTicketing\Ticket')->group( fun
     Route::post('ticket/save', 'CreateTicketController');
 });
 
-Route::namespace('App\Http\Controllers\Api\VehicleTicketing\TicketMachine')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\VehicleTicketing\TicketMachine')->middleware('auth:sanctum')->group( function (){
     Route::post('ticket-machine', 'CreateController');
     Route::put('ticket-machine/{id}', 'UpdateController');
     Route::get('client/{id}/ticket-machines', 'GetCollectionByClientController');
 });
 
-Route::namespace('App\Http\Controllers\Api\VehicleTicketing\Report')->middleware('auth:api')->group( function (){
+Route::namespace('App\Http\Controllers\Api\VehicleTicketing\Report')->middleware('auth:sanctum')->group( function (){
     Route::get('v1/ticket-report/recaudo-total-por-vuelta/vehiculo/{idVehicle}/{date}', 'GetTotalByVehicleByTurnController');
     Route::get('v1/ticket-report/recaudo-total/{start}/{end}/{idVehicle}', 'GetTotalByVehicleByClientController');
     Route::get('v1/ticket-report/recaudo-top-total/{start}/{end}/{idClient}', 'GetTotalTopByVehicleByClientController');

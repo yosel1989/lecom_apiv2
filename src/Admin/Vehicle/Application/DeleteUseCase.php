@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Src\Admin\Vehicle\Application;
 
 use Src\Admin\Vehicle\Domain\Contracts\VehicleRepositoryContract;
-use Src\Admin\Vehicle\Domain\ValueObjects\VehicleId;
+use Src\Core\Domain\ValueObjects\Id;
 
 final class DeleteUseCase
 {
@@ -25,13 +25,13 @@ final class DeleteUseCase
 
             $ids = explode(',', $id);
             foreach ( $ids as $value) {
-                $g_id = new VehicleId($value);
+                $g_id = new Id($value);
                 $this->repository->delete($g_id);
             }
 
         }else{
 
-            $g_id = new VehicleId($id);
+            $g_id = new Id($id);
             $this->repository->delete($g_id);
 
         }
