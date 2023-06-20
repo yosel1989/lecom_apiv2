@@ -11,23 +11,23 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
 
-class GetDestinoCollectionByClientController extends Controller
+class GetCollectionByClientController extends Controller
 {
 
     /**
-    * @var \Src\TransporteInterprovincial\Destino\Infrastructure\GetDestinoCollectionByClientController
+    * @var \Src\TransporteInterprovincial\Destino\Infrastructure\GetCollectionByClientController
      */
-    private $getDestinoCollectionByClientController;
+    private $GetCollectionByClientController;
 
-    public function __construct(\Src\TransporteInterprovincial\Destino\Infrastructure\GetDestinoCollectionByClientController $getDestinoCollectionByClientController )
+    public function __construct(\Src\TransporteInterprovincial\Destino\Infrastructure\GetCollectionByClientController $GetCollectionByClientController )
     {
-        $this->getDestinoCollectionByClientController = $getDestinoCollectionByClientController;
+        $this->GetCollectionByClientController = $GetCollectionByClientController;
     }
 
     public function __invoke( Request $request )
     {
         try {
-            $Destinos = DestinoResource::collection( $this->getDestinoCollectionByClientController->__invoke( $request ) );
+            $Destinos = DestinoResource::collection( $this->GetCollectionByClientController->__invoke( $request ) );
             return response()->json([
                 'data' => $Destinos,
                 'error' => null,

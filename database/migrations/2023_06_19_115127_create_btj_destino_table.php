@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tpi_destino', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->string('nombre',7);
+            $table->string('nombre',250);
             $table->uuid('idCliente');
             $table->decimal('precioBase',5,2)->default(0.00);
             $table->tinyInteger('idEstado')->default(1);

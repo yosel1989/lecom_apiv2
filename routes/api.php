@@ -19,25 +19,18 @@ Route::middleware('auth:sanctum')->group(function() {
         if (!Schema::hasTable('btj_boletos_' . $user->idCliente)) {
             Schema::create('btj_boletos_' . $user->idCliente, function (Blueprint $table) {
                 $table->uuid('id')->unique()->primary();
-                $table->string('bussiness_name',50);
-                $table->string('first_name',50);
-                $table->string('last_name',50);
-                $table->string('ruc',15);
-                $table->string('dni',8);
-                $table->string('email',50);
-                $table->string('address',100);
-                $table->string('phone',15);
-                $table->integer('type');
-                $table->integer('deleted')->default(0);
-                $table->uuid('id_parent_client')->nullable();
+                $table->uuid('idDestino')->nullable();
+                $table->uuid('idVehiculo')->nullable();
+                $table->uuid('idCliente')->nullable();
+                $table->uuid('numeroDocumento')->nullable();
+                $table->string('serie')->nullable();
+                $table->int('numeroBoleto')->nullable();
+                $table->decimal('latitud',10,8)->nullable();
+                $table->decimal('longitud',10,8)->nullable();
+                $table->decimal('precio',5,2);
+                $table->dateTime('fechaRegistro');
             });
         }
-
-        $code = 'aA1bB2cC3dD4eE5fF6gG7hH8iI9jJ0kK1lL2mM3nN4oO5pP6qQ7rR8sS9tT0uU1vV2wW3xX4yY5zZ6';
-
-        echo strlen($code);
-
-        echo substr($code,100,1);
 
     });
 });

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\TransporteInterprovincial\Destino\Application;
 
+use Src\Core\Domain\ValueObjects\Text;
 use Src\TransporteInterprovincial\Destino\Domain\Contracts\DestinoRepositoryContract;
 use Src\TransporteInterprovincial\Destino\Domain\ValueObjects\DestinoPlate;
 use Src\TransporteInterprovincial\Destino\Domain\ValueObjects\DestinoUnit;
@@ -26,12 +27,12 @@ final class CreateUseCase
         string $id,
         string $nombre,
         string $idCliente,
-        ?string $idCategoria,
+        string $idUsuarioRegistro
     ): ?Destino
     {
         return $this->repository->create(
             new Id( $id ),
-            new DestinoPlate( $placa ),
+            new Text( $nombre, false, 250,"" ),
             new DestinoUnit( $unidad ),
             new Id( $idCliente, true ),
             new Id( $idCategoria, true ),

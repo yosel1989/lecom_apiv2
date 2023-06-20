@@ -6,16 +6,14 @@ namespace Src\Core\Domain\ValueObjects;
 
 final class Numeric
 {
-    private int | float | null $value;
+      private int | float  $value;
 //    private bool $nullable;
 //    private string $messageError;
 
     /**
      * @param int|float|null $value
-//     * @param bool $nullable
-//     * @param string $messageError
      */
-    public function __construct(int | float | null $value /*, bool $nullable = false, string $messageError = ""*/ )
+    public function __construct(?int $value)
     {
 //        $this->nullable = $nullable;
 //        $this->messageError = $messageError;

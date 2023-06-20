@@ -7,7 +7,7 @@ namespace Src\TransporteInterprovincial\Destino\Application;
 use Src\TransporteInterprovincial\Destino\Domain\Contracts\DestinoRepositoryContract;
 use Src\Core\Domain\ValueObjects\Id;
 
-final class GetDestinoCollectionByClientUseCase
+final class GetCollectionByClientUseCase
 {
     /**
      * @var DestinoRepositoryContract
