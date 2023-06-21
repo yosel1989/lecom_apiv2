@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Src\TransporteInterprovincial\Destino\Application;
 
 use Src\TransporteInterprovincial\Destino\Domain\Contracts\DestinoRepositoryContract;
-use Src\TransporteInterprovincial\Destino\Domain\ValueObjects\DestinoId;
 use Src\TransporteInterprovincial\Destino\Domain\Destino;
 use Src\Core\Domain\ValueObjects\Id;
 

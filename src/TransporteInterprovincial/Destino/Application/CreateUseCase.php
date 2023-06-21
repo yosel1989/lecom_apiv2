@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Src\TransporteInterprovincial\Destino\Application;
 
+use Src\Core\Domain\ValueObjects\NumericFloat;
+use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\TransporteInterprovincial\Destino\Domain\Contracts\DestinoRepositoryContract;
-use Src\TransporteInterprovincial\Destino\Domain\ValueObjects\DestinoPlate;
-use Src\TransporteInterprovincial\Destino\Domain\ValueObjects\DestinoUnit;
-use Src\TransporteInterprovincial\Destino\Domain\Destino;
 use Src\Core\Domain\ValueObjects\Id;
 
 final class CreateUseCase
@@ -16,7 +15,7 @@ final class CreateUseCase
     /**
      * @var DestinoRepositoryContract
      */
-    private $repository;
+    private DestinoRepositoryContract $repository;
 
     public function __construct( DestinoRepositoryContract $repository )
     {
@@ -24,22 +23,19 @@ final class CreateUseCase
     }
 
     public function __invoke(
-        string $id,
         string $nombre,
+        float $precioBase,
         string $idCliente,
+        int $idEstado,
         string $idUsuarioRegistro
-    ): ?Destino
+    ): void
     {
-        return $this->repository->create(
-            new Id( $id ),
-            new Text( $nombre, false, 250,"" ),
-            new DestinoUnit( $unidad ),
-            new Id( $idCliente, true ),
-            new Id( $idCategoria, true ),
-            new Id( $idMarca, true ),
-            new Id( $idModelo, true ),
-            new Id( $idClase, true ),
-            new Id( $idFlota, true )
+        $this->repository->create(
+            new Text($nombre,false,250, 'El nombre del destino excede los 250 caracteres'),
+            new NumericFloat($precioBase),
+            new NumericInteger($idEstado),
+            new Id($idCliente,false,'El formato del id del cliente no es valido'),
+            new Id($idUsuarioRegistro, false, 'El formato del id del cliente no es valido')
         );
     }
 }

@@ -12,7 +12,7 @@ final class GetCollectionActivedByClientUseCase
     /**
      * @var DestinoRepositoryContract
      */
-    private $repository;
+    private DestinoRepositoryContract $repository;
 
     public function __construct(DestinoRepositoryContract $repository)
     {

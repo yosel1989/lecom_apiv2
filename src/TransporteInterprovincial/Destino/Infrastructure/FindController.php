@@ -5,15 +5,17 @@ namespace Src\TransporteInterprovincial\Destino\Infrastructure;
 
 
 use Illuminate\Http\Request;
-use Ramsey\Uuid\Uuid;
 use Src\TransporteInterprovincial\Destino\Application\FindUseCase;
 use Src\TransporteInterprovincial\Destino\Domain\Destino;
 use Src\TransporteInterprovincial\Destino\Infrastructure\Repositories\EloquentDestinoRepository;
 
 final class FindController
 {
-    private $repository;
+    private EloquentDestinoRepository $repository;
 
+    /**
+     * @param EloquentDestinoRepository $repository
+     */
     public function __construct(EloquentDestinoRepository $repository)
     {
         $this->repository = $repository;

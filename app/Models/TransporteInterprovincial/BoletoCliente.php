@@ -2,22 +2,22 @@
 
 namespace App\Models\TransporteInterprovincial;
 
-use App\Enums\IdEliminado;
-use App\Enums\IdEstado;
+use App\Traits\TableNameDynamic;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
-class Destino extends Model
+class BoletoCliente extends Model
 {
     use UUID;
+    use TableNameDynamic;
 
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $table = "tpi_destino";
-
     const CREATED_AT = 'fechaRegistro';
     const UPDATED_AT = 'fechaModifico';
+
+
     /**
      * The attributes that are mass assignable.
      *
@@ -25,12 +25,16 @@ class Destino extends Model
      */
     protected $fillable = [
         'id',
-        'nombre',
-        'precioBase',
-        'precio',
+        'idDestino',
+        'idVehiculo',
         'idCliente',
-        'idEstado',
-        'idEliminado',
+        'numeroDocumento',
+        'serie',
+        'numeroBoleto',
+        'latitud',
+        'longitud',
+        'precio',
+        'fecha',
         'fechaRegistro',
         'fechaModifico',
         'idUsuarioRegistro',
@@ -43,13 +47,12 @@ class Destino extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'precioBase' => 'float',
-        'fechaRegistro' => 'datetime',
-        'fechaModifico' => 'datetime',
-        'idEstado' => IdEstado::class,
-        'idEliminado' => IdEliminado::class,
-
         'precio' => 'float',
+        'latitud' => 'float',
+        'longitud' => 'float',
+        'fecha' => 'datetime',
+        'fechaRegistro' => 'datetime',
+        'fechaModifico' => 'datetime'
     ];
 
 }

@@ -16,9 +16,10 @@ class ShortDestinoResource extends JsonResource
     {
 
         return [
-            'id'                    => $this->getId()->value(),
-            'plate'                  => $this->getPlate()->value(),
-            'unit'                  => $this->getUnit()->value()
+            'id'                  => $this->getId()->value(),
+            'nombre'              => $this->getNombre()->value(),
+            'precioBase'          => $this->getPrecioBase()->value(),
+            'idEstado'            => $this->getIdEstado()->value(),
         ];
     }
 }

@@ -1,13 +1,12 @@
 <?php
 
-
 namespace Src\TransporteInterprovincial\Destino\Infrastructure;
 
 use Illuminate\Http\Request;
-use Src\TransporteInterprovincial\Destino\Application\GetDestinoCollectionByClientUseCase;
+use Src\TransporteInterprovincial\Destino\Application\GetListByClientUseCase;
 use Src\TransporteInterprovincial\Destino\Infrastructure\Repositories\EloquentDestinoRepository;
 
-final class GetDestinoCollectionByClientController
+final class GetListByClientController
 {
     private $repository;
 
@@ -23,7 +22,7 @@ final class GetDestinoCollectionByClientController
     public function __invoke( Request $request ): array
     {
         $idClient = $request->id;
-        $getDestinoCollectionByClientUseCase = new GetDestinoCollectionByClientUseCase($this->repository);
+        $getDestinoCollectionByClientUseCase = new GetListByClientUseCase($this->repository);
         return $getDestinoCollectionByClientUseCase->__invoke($idClient);
     }
 

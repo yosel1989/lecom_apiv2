@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\TransporteInterprovincial\Destino;
 
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TransporteInterprovincial\Destino\DestinoResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,9 +26,9 @@ class CreateController extends Controller
     public function __invoke( Request $request )
     {
         try {
-            $Destino = DestinoResource::make( $this->createController->__invoke( $request ) );
+            $this->createController->__invoke( $request );
             return response()->json([
-                'data' => $Destino,
+                'data' => null,
                 'error' => null,
                 'status' => Response::HTTP_CREATED
             ]);

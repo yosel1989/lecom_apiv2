@@ -5,39 +5,38 @@ namespace Src\TransporteInterprovincial\Destino\Domain;
 
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
-use Src\Core\Domain\ValueObjects\Numeric;
+use Src\Core\Domain\ValueObjects\NumericFloat;
+use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 
 final class Destino
 {
 
+
+    /**
+     * @var Text
+     */
+    private Text $usuarioRegistro;
+    private Text $usuarioModifico;
     private Id $id;
     private Text $nombre;
-    private Numeric $precioBase;
+    private NumericFloat $precioBase;
     private Id $idCliente;
+    private NumericInteger $idEliminado;
+    private NumericInteger $idEstado;
     private Id $idUsuarioRegistro;
     private DateTimeFormat $fechaRegistro;
     private Id $idUsuarioModifico;
     private DateTimeFormat $fechaModifico;
 
-    private Text $usuarioRegistro;
-    private Text $usuarioModifico;
 
-    /**
-     * @param Id $id
-     * @param Text $nombre
-     * @param Numeric $precioBase
-     * @param Id $idCliente
-     * @param Id $idUsuarioRegistro
-     * @param DateTimeFormat $fechaRegistro
-     * @param Id $idUsuarioModifico
-     * @param DateTimeFormat $fechaModifico
-     */
     public function __construct(
         Id $id,
         Text $nombre,
-        Numeric $precioBase,
+        NumericFloat $precioBase,
         Id $idCliente,
+        NumericInteger $idEliminado,
+        NumericInteger $idEstado,
         Id $idUsuarioRegistro,
         DateTimeFormat $fechaRegistro,
         Id $idUsuarioModifico,
@@ -49,10 +48,44 @@ final class Destino
         $this->nombre = $nombre;
         $this->precioBase = $precioBase;
         $this->idCliente = $idCliente;
+        $this->idEliminado = $idEliminado;
+        $this->idEstado = $idEstado;
         $this->idUsuarioRegistro = $idUsuarioRegistro;
         $this->fechaRegistro = $fechaRegistro;
         $this->idUsuarioModifico = $idUsuarioModifico;
         $this->fechaModifico = $fechaModifico;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getUsuarioRegistro(): Text
+    {
+        return $this->usuarioRegistro;
+    }
+
+    /**
+     * @param Text $usuarioRegistro
+     */
+    public function setUsuarioRegistro(Text $usuarioRegistro): void
+    {
+        $this->usuarioRegistro = $usuarioRegistro;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getUsuarioModifico(): Text
+    {
+        return $this->usuarioModifico;
+    }
+
+    /**
+     * @param Text $usuarioModifico
+     */
+    public function setUsuarioModifico(Text $usuarioModifico): void
+    {
+        $this->usuarioModifico = $usuarioModifico;
     }
 
     /**
@@ -88,17 +121,17 @@ final class Destino
     }
 
     /**
-     * @return float|int|Numeric|string
+     * @return NumericFloat
      */
-    public function getPrecioBase(): float|int|string|Numeric
+    public function getPrecioBase(): NumericFloat
     {
         return $this->precioBase;
     }
 
     /**
-     * @param float|int|Numeric|string $precioBase
+     * @param NumericFloat $precioBase
      */
-    public function setPrecioBase(float|int|string|Numeric $precioBase): void
+    public function setPrecioBase(NumericFloat $precioBase): void
     {
         $this->precioBase = $precioBase;
     }
@@ -117,6 +150,38 @@ final class Destino
     public function setIdCliente(Id $idCliente): void
     {
         $this->idCliente = $idCliente;
+    }
+
+    /**
+     * @return NumericInteger
+     */
+    public function getIdEliminado(): NumericInteger
+    {
+        return $this->idEliminado;
+    }
+
+    /**
+     * @param NumericInteger $idEliminado
+     */
+    public function setIdEliminado(NumericInteger $idEliminado): void
+    {
+        $this->idEliminado = $idEliminado;
+    }
+
+    /**
+     * @return NumericInteger
+     */
+    public function getIdEstado(): NumericInteger
+    {
+        return $this->idEstado;
+    }
+
+    /**
+     * @param NumericInteger $idEstado
+     */
+    public function setIdEstado(NumericInteger $idEstado): void
+    {
+        $this->idEstado = $idEstado;
     }
 
     /**
@@ -182,39 +247,6 @@ final class Destino
     {
         $this->fechaModifico = $fechaModifico;
     }
-
-    /**
-     * @return Text
-     */
-    public function getUsuarioRegistro(): Text
-    {
-        return $this->usuarioRegistro;
-    }
-
-    /**
-     * @param Text $usuarioRegistro
-     */
-    public function setUsuarioRegistro(Text $usuarioRegistro): void
-    {
-        $this->usuarioRegistro = $usuarioRegistro;
-    }
-
-    /**
-     * @return Text
-     */
-    public function getUsuarioModifico(): Text
-    {
-        return $this->usuarioModifico;
-    }
-
-    /**
-     * @param Text $usuarioModifico
-     */
-    public function setUsuarioModifico(Text $usuarioModifico): void
-    {
-        $this->usuarioModifico = $usuarioModifico;
-    }
-
 
 
 }

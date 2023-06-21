@@ -64,6 +64,10 @@ class User extends Authenticatable
 //        'remember_token',
     ];
 
+    public function getId(): string{
+        return $this->id;
+    }
+
     /**
      * The attributes that should be cast.
      *

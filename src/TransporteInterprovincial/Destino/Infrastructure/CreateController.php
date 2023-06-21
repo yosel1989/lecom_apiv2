@@ -5,9 +5,8 @@ namespace Src\TransporteInterprovincial\Destino\Infrastructure;
 
 
 use Illuminate\Http\Request;
-use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Facades\Auth;
 use Src\TransporteInterprovincial\Destino\Application\CreateUseCase;
-use Src\TransporteInterprovincial\Destino\Domain\Destino;
 use Src\TransporteInterprovincial\Destino\Infrastructure\Repositories\EloquentDestinoRepository;
 
 final class CreateController
@@ -23,27 +22,21 @@ final class CreateController
      * @param Request $request
      * @return mixed
      */
-    public function __invoke(Request $request): ?Destino
+    public function __invoke(Request $request): void
     {
-        $id = Uuid::uuid4();
-        $v_client = $request->input('client');
-        $v_plate = $request->input('plate');
-        $v_unit = $request->input('unit');
-        $v_category = $request->input('category');
-        $v_brand = $request->input('brand');
-        $v_model = $request->input('model');
-        $v_class = $request->input('class');
+        $_nombre = $request->input('nombre');
+        $_precioBase = $request->input('precioBase');
+        $_idCliente = $request->input('idCliente');
+        $_idEstado = $request->input('idEstado');
+        $_idUsuario = Auth::user()->getId();
+
         $createUseCase = new CreateUseCase($this->repository);
-        return $createUseCase->__invoke(
-            $id,
-            $v_plate,
-            $v_unit,
-            $v_client,
-            $v_category,
-            $v_brand,
-            $v_model,
-            $v_class,
-            null
+        $createUseCase->__invoke(
+            $_nombre,
+            $_precioBase,
+            $_idCliente,
+            $_idEstado,
+            $_idUsuario
         );
     }
 }

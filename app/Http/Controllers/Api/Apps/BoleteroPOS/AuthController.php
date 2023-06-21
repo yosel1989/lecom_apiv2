@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Apps\BoleteroPOS;
 
 use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
+use App\Models\TransporteInterprovincial\Destino;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -105,23 +106,13 @@ class AuthController extends Controller
                             'idCliente' => $usuario->idCliente,
                             'nombreCliente' =>  $usuario->client ? $usuario->client()->first(['bussiness_name'])->bussiness_name : null
                         ],
-                        'precios' => [
-                            [
-                                'idDestino' => '5bd1ce18-2e25-4410-9796-1383fdf62990',
-                                'destino' => 'Huacho',
-                                'costo' => 20.00
-                            ],
-                            [
-                                'idDestino' => '5bd1ce18-2e25-4410-9796-1383fdf62990',
-                                'destino' => 'Hural',
-                                'costo' => 14.00
-                            ],
-                            [
-                                'idDestino' => '5bd1ce18-2e25-4410-9796-1383fdf62990',
-                                'destino' => 'Canta',
-                                'costo' => 28.00
-                            ]
-                        ]
+                        'precios' => Destino::select(
+                                                'id as idDestino',
+                                                'nombre as destino',
+                                                'precioBase as precio'
+                                            )
+                                            ->where('idCliente', $usuario->idCliente)
+                                            ->where('idEstado',1)->get()
 //                        '' => $Ousuario->client ? $Ousuario->client()->first(['id','bussiness_name', 'first_name', 'last_name']) : null,
 //                        'permissions' => $Ousuario->modules()->pluck('short_name')
                     ],

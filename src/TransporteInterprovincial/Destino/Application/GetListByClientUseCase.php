@@ -7,7 +7,7 @@ namespace Src\TransporteInterprovincial\Destino\Application;
 use Src\TransporteInterprovincial\Destino\Domain\Contracts\DestinoRepositoryContract;
 use Src\Core\Domain\ValueObjects\Id;
 
-final class GetCollectionByClientUseCase
+final class GetListByClientUseCase
 {
     /**
      * @var DestinoRepositoryContract
@@ -22,6 +22,6 @@ final class GetCollectionByClientUseCase
     public function __invoke(string $idCliente): array
     {
         $_idCliente = new Id($idCliente);
-        return $this->repository->collectionByClient($_idCliente);
+        return $this->repository->listByClient($_idCliente);
     }
 }

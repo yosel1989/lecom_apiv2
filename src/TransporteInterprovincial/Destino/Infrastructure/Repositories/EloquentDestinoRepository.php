@@ -5,22 +5,14 @@ declare(strict_types=1);
 namespace Src\TransporteInterprovincial\Destino\Infrastructure\Repositories;
 
 use App\Models\TransporteInterprovincial\Destino as EloquentModel;
-use Src\Core\Domain\ValueObjects\Numeric;
+use Src\Core\Domain\ValueObjects\DateTimeFormat;
+use Src\Core\Domain\ValueObjects\NumericFloat;
+use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
-use Src\TransporteInterprovincial\Destino\Domain\SmallDestino;
-use Src\TransporteInterprovincial\Destino\Domain\ValueObjects\DestinoIdBrand;
-use Src\TransporteInterprovincial\Destino\Domain\ValueObjects\DestinoIdFleet;
 use Src\TransporteInterprovincial\Destino\Domain\Contracts\DestinoRepositoryContract;
-use Src\TransporteInterprovincial\Destino\Domain\ValueObjects\DestinoDeleted;
-use Src\TransporteInterprovincial\Destino\Domain\ValueObjects\DestinoId;
-use Src\TransporteInterprovincial\Destino\Domain\ValueObjects\DestinoIdCategory;
-use Src\TransporteInterprovincial\Destino\Domain\ValueObjects\DestinoIdClass;
-use Src\TransporteInterprovincial\Destino\Domain\ValueObjects\DestinoIdClient;
-use Src\TransporteInterprovincial\Destino\Domain\ValueObjects\DestinoIdModel;
-use Src\TransporteInterprovincial\Destino\Domain\ValueObjects\DestinoPlate;
-use Src\TransporteInterprovincial\Destino\Domain\ValueObjects\DestinoUnit;
 use Src\TransporteInterprovincial\Destino\Domain\Destino;
 use Src\Core\Domain\ValueObjects\Id;
+use Src\TransporteInterprovincial\Destino\Domain\SmallDestino;
 
 final class EloquentDestinoRepository implements DestinoRepositoryContract
 {
@@ -34,72 +26,15 @@ final class EloquentDestinoRepository implements DestinoRepositoryContract
         $this->eloquentModel = new EloquentModel;
     }
 
-
-    public function collectionByClient(Id $idCliente): array
-    {
-        $Destinos = $this->EloquentModelVehiculo->with(['idBrand_pk','idFleet_pk','idModel_pk','idClass_pk'])->where('idCliente',$idCliente->value())->get();
-
-        $arrDestinos = array();
-
-        foreach ( $Destinos as $Destino ){
-            $ODestino = new Destino(
-                new DestinoId( $Destino->id ),
-                new DestinoPlate( $Destino->placa ),
-                new DestinoUnit( $Destino->unidad ),
-                new DestinoDeleted( $Destino->idEliminado->value ),
-                new DestinoIdClient( $Destino->idCliente ),
-                new DestinoIdCategory( $Destino->idCategoria ),
-                new DestinoIdModel( $Destino->idModelo ),
-                new DestinoIdClass( $Destino->idClase ),
-                new DestinoIdFleet( $Destino->idFlota ),
-                new DestinoIdBrand( $Destino->idMarca )
-            );
-            $brand = is_null($Destino->idBrand_pk) ? null : DestinoBrand::createEntity($Destino->idBrand_pk);
-            $model = is_null($Destino->idModel_pk) ? null : DestinoModel::createEntity($Destino->idModel_pk);
-            $class = is_null($Destino->idClass_pk) ? null : DestinoClass::createEntity($Destino->idClass_pk);
-            $fleet = is_null($Destino->idFleet_pk) ? null : DestinoFleet::createEntity($Destino->idFleet_pk);
-
-            $ODestino->setBrand($brand);
-            $ODestino->setModel($model);
-            $ODestino->setClass($class);
-            $ODestino->setFleet($fleet);
-            $arrDestinos[] = $ODestino;
-        }
-
-        return $arrDestinos;
-    }
-
-    public function collectionActivedByClient(Id $idCliente): array
-    {
-        $Destinos = $this->EloquentModelVehiculo->where('idCliente',$idCliente->value())->where('idEstado',1)->get();
-
-        $arrDestinos = array();
-
-        foreach ( $Destinos as $Destino ){
-            $ODestino = new SmallDestino(
-                new DestinoId( $Destino->id ),
-                new DestinoPlate( $Destino->placa ),
-                new DestinoUnit( $Destino->unidad )
-            );
-            $arrDestinos[] = $ODestino;
-        }
-
-        return $arrDestinos;
-    }
-
-
-
     public function create(
-        Id $id,
         Text $nombre,
-        Numeric $precioBase,
-        Numeric $idCliente,
-        Numeric $idEstado,
+        NumericFloat $precioBase,
+        NumericInteger $idEstado,
+        Id $idCliente,
         Id $idUsuarioRegistro
     ): void
     {
         $this->eloquentModel->create([
-            'id' => $id->value(),
             'nombre' => $nombre->value(),
             'precioBase' => $precioBase->value(),
             'idCliente' => $idCliente->value(),
@@ -111,8 +46,8 @@ final class EloquentDestinoRepository implements DestinoRepositoryContract
     public function update(
         Id $id,
         Text $nombre,
-        Numeric $precioBase,
-        Numeric $idEstado,
+        NumericFloat $precioBase,
+        NumericInteger $idEstado,
         Id $idCliente,
         Id $idUsuarioModifico
     ): void
@@ -129,25 +64,94 @@ final class EloquentDestinoRepository implements DestinoRepositoryContract
 
     public function find( Id $idDestino ): ?Destino
     {
-        $Destino = $this->eloquentModel->findOrFail($idDestino->value());
+        $item = $this->eloquentModel->findOrFail($idDestino->value());
 
         $ODestino = new Destino(
-            new DestinoId( $Destino->id ),
-            new DestinoPlate( $Destino->placa ),
-            new DestinoUnit( $Destino->unidad ),
-            new DestinoDeleted( $Destino->idEliminado->value ),
-            new DestinoIdClient( $Destino->idCliente ),
-            new DestinoIdCategory( $Destino->idCategoria ),
-            new DestinoIdModel( $Destino->idModelo ),
-            new DestinoIdClass( $Destino->idClase ),
-            new DestinoIdFleet( $Destino->idFlota ),
-            new DestinoIdBrand( $Destino->idMarca )
+            new Id($item->id,false,'El formato del id no es valido'),
+            new Text($item->nombre,false,250, 'El nombre del destino excede los 250 caracteres'),
+            new NumericFloat($item->precioBase),
+            new Id($item->idCliente,false,'El formato del id del cliente no es valido'),
+            new NumericInteger($item->idEliminado->value),
+            new NumericInteger($item->idEstado->value),
+            new Id($item->idUsuarioRegistro,false,'El formato del id del usuario que registro no es valido'),
+            new DateTimeFormat($item->fechaRegistro,false,'El formato de la fecha de registro no es valido'),
+            new Id($item->idUsuarioModifico,false,'El formato del id del usuario que modifico no es valido'),
+            new DateTimeFormat($item->fechaModifico,false,'El formato de la fecha de modifico no es valido')
         );
 
+        return $ODestino;
     }
 
-    public function collectionByClient(Id $idCliente): array;
+    public function collectionByClient(Id $idCliente): array
+    {
+        $Destinos = $this->eloquentModel->where('idCliente', $idCliente->value());
 
-    public function collectionActivedByClient(Id $idCliente): array;
+        $arrDestinos = array();
+
+        foreach ( $Destinos as $item ){
+            $ODestino = new Destino(
+                new Id($item->id,false,'El formato del id no es valido'),
+                new Text($item->nombre,false,250, 'El nombre del destino excede los 250 caracteres'),
+                new NumericFloat($item->precioBase),
+                new Id($item->idCliente,false,'El formato del id del cliente no es valido'),
+                new NumericInteger($item->idEliminado->value),
+                new NumericInteger($item->idEstado->value),
+                new Id($item->idUsuarioRegistro,false,'El formato del id del usuario que registro no es valido'),
+                new DateTimeFormat($item->fechaRegistro,false,'El formato de la fecha de registro no es valido'),
+                new Id($item->idUsuarioModifico,false,'El formato del id del usuario que modifico no es valido'),
+                new DateTimeFormat($item->fechaModifico,false,'El formato de la fecha de modifico no es valido')
+            );
+
+            $arrDestinos[] = $ODestino;
+        }
+
+        return $arrDestinos;
+    }
+
+    public function collectionActivedByClient(Id $idCliente): array
+    {
+        $Destinos = $this->eloquentModel->where('idCliente',$idCliente->value())->where('idEstado',1)->get();
+
+        $arrDestinos = array();
+
+        foreach ( $Destinos as $item ){
+            $ODestino = new Destino(
+                new Id($item->id,false,'El formato del id no es valido'),
+                new Text($item->nombre,false,250, 'El nombre del destino excede los 250 caracteres'),
+                new NumericFloat($item->precioBase),
+                new Id($item->idCliente,false,'El formato del id del cliente no es valido'),
+                new NumericInteger($item->idEliminado->value),
+                new NumericInteger($item->idEstado->value),
+                new Id($item->idUsuarioRegistro,false,'El formato del id del usuario que registro no es valido'),
+                new DateTimeFormat($item->fechaRegistro,false,'El formato de la fecha de registro no es valido'),
+                new Id($item->idUsuarioModifico,false,'El formato del id del usuario que modifico no es valido'),
+                new DateTimeFormat($item->fechaModifico,false,'El formato de la fecha de modifico no es valido')
+            );
+
+            $arrDestinos[] = $ODestino;
+        }
+
+        return $arrDestinos;
+    }
+
+    public function listByClient(Id $idCliente): array
+    {
+        $Destinos = $this->eloquentModel->where('idCliente',$idCliente->value())->where('idEstado',1)->get();
+
+        $arrDestinos = array();
+
+        foreach ( $Destinos as $item ){
+            $ODestino = new SmallDestino(
+                new Id($item->id,false,'El formato del id no es valido'),
+                new Text($item->nombre,false,250, 'El nombre del destino excede los 250 caracteres'),
+                new NumericFloat($item->precioBase),
+                new NumericInteger($item->idEstado->value)
+            );
+
+            $arrDestinos[] = $ODestino;
+        }
+
+        return $arrDestinos;
+    }
 
 }
