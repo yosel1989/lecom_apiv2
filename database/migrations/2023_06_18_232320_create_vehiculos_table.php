@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('vehiculos', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->string('placa',7);
+            $table->string('placa',10);
             $table->string('unidad',10);
             $table->uuid('idCliente');
             $table->uuid('idMarca')->nullable();

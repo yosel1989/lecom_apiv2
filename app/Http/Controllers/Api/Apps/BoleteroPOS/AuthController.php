@@ -104,9 +104,11 @@ class AuthController extends Controller
                             'correo' => $usuario->correo,
                             'idNivel' => $usuario->idNivel,
                             'idCliente' => $usuario->idCliente,
-                            'nombreCliente' =>  $usuario->client ? $usuario->client()->first(['bussiness_name'])->bussiness_name : null
+                            'nombreCliente' =>  $usuario->client ? $usuario->client()->first(['bussiness_name'])->bussiness_name : null,
+                            'idVehiculo' => $_vehiculo->id,
+                            'placaVehiculo' => $_vehiculo->placa,
                         ],
-                        'precios' => Destino::select(
+                        'destinos' => Destino::select(
                                                 'id as idDestino',
                                                 'nombre as destino',
                                                 'precioBase as precio'

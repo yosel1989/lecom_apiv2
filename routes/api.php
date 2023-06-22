@@ -2,6 +2,7 @@
 
 //use App\Events\AlertColdMachineHistoryEvent;
 use App\Http\Controllers\Older\RegisterErtStateController;
+use App\Models\TransporteInterprovincial\Destino;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -19,6 +20,35 @@ Route::middleware('auth:sanctum')->group(function() {
         try {
             $user = Auth::user();
 
+            $Vehiculo = \App\Models\Administracion\Vehiculo::where('id', $request->input('idVehiculo'))->where('idEstado',1)->get();
+            $Destino = Destino::where('id', $request->input('idDestino'))->where('idEstado',1)->get();
+            $Cliente = \App\Models\Admin\Client::where('id', $request->input('idCliente'))->where('deleted',0)->get();
+
+            if( $Vehiculo->isEmpty() ){
+                return response()->json([
+                    'data'      => null,
+                    'message' => 'El vehiculo no se encuentra registrado en el sistema.',
+                    'status' => \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
+                ]);
+            }
+
+            if( $Destino->isEmpty() ){
+                return response()->json([
+                    'data'      => null,
+                    'message' => 'El destino no se encuentra registrado en el sistema.',
+                    'status' => \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
+                ]);
+            }
+
+            if( $Cliente->isEmpty() ){
+                return response()->json([
+                    'data'      => null,
+                    'message' => 'El cliente no se encuentra registrado en el sistema.',
+                    'status' => \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
+                ]);
+            }
+
+
             if (!Schema::hasTable('btj_boletos_' . $user->idCliente)) {
                 Schema::create('btj_boletos_' . $user->idCliente, function (Blueprint $table) {
                     $table->uuid('id')->unique()->primary();
@@ -27,11 +57,12 @@ Route::middleware('auth:sanctum')->group(function() {
                     $table->uuid('idCliente')->nullable();
                     $table->string('numeroDocumento',20)->nullable();
                     $table->string('serie')->nullable();
-                    $table->int('numeroBoleto')->nullable();
+                    $table->integer('numeroBoleto')->nullable();
                     $table->decimal('latitud',10,8)->nullable();
                     $table->decimal('longitud',10,8)->nullable();
                     $table->decimal('precio',5,2);
                     $table->dateTime('fecha',5,2);
+                    $table->string('placa',10);
                     $table->uuid('idUsuarioRegistro');
                     $table->uuid('idUsuarioModifico')->nullable();
                     $table->timestamp('fechaRegistro');
@@ -44,8 +75,8 @@ Route::middleware('auth:sanctum')->group(function() {
 
             $model->create([
                 'idCliente' => $request->input('idCliente'),
-                'idVehiculo' => $request->input('eb7a3a8b-9bb2-44ad-bef6-70b416ad93b4'),
-                'idDestino' => $request->input('0ce64dd6-2937-434e-ba8a-7257228847c5'),
+                'idVehiculo' => $request->input('idVehiculo'),
+                'idDestino' => $request->input('idDestino'),
                 'numeroDocumento' => $request->input('numeroDocumento'),
                 'precio' => $request->input('precio'),
                 'fecha' => $request->input('fecha'),
