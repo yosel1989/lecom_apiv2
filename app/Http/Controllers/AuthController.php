@@ -38,7 +38,7 @@ class AuthController extends Controller
             if( !Hash::check( $request->input('clave'),$User->first()->clave ) ){
                 return response()->json([
                     'data'=>[],
-                    'message' => 'Contraseña incorrectas',
+                    'message' => 'Contraseña incorrecta.',
                     'status' => Response::HTTP_BAD_REQUEST
                 ]);
             }
@@ -61,6 +61,9 @@ class AuthController extends Controller
                             'apellidos' => $user->apellidos,
                             'correo' => $user->correo,
                             'idNivel' => $user->idNivel,
+                            'idPerfil' => $user->idPerfil,
+                            'perfil' => '',
+                            'idEstado' => $user->idEstado,
                             'idCliente' => $user->idCliente,
                             'cliente' => $user->idCliente ? $user->client()->first(['bussiness_name'])->bussiness_name : null,
                         ],
@@ -82,7 +85,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'data'      => null,
-                'message' => 'Usuario o contraseña incorrecta',
+                'message' => 'El usuario no se encuentra registrado en el sistema.',
                 'status' => Response::HTTP_NOT_FOUND
             ]);
 
