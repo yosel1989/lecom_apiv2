@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V2\Vehiculo;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V2\Vehiculo\VehiculoResource;
+use App\Models\Administracion\Vehiculo;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -22,6 +23,9 @@ class GetCollectionByClienteController extends Controller
     public function __invoke(Request $request)
     {
         try {
+
+            //return response()->json(Vehiculo::all());
+
             $collection = VehiculoResource::collection($this->controller->__invoke($request));
             return response()->json([
                 'data' => $collection,

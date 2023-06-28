@@ -16,6 +16,7 @@ class Vehiculo extends Model
     public $incrementing = false;
 
     protected $table = "vehiculos";
+    public $timestamps = true;
 
     const CREATED_AT = 'fechaRegistro';
     const UPDATED_AT = 'fechaModifico';
@@ -48,18 +49,12 @@ class Vehiculo extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'fechaRegistro' =>  'datetime:d/m/Y',
-        'fechaModifico' =>  'datetime:d/m/Y',
+        'fechaRegistro' =>  'string',
+        'fechaModifico' =>  'string',
         'idEstado' => IdEstado::class,
         'idEliminado' => IdEliminado::class,
     ];
 
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['fechaRegistro', 'fechaModifico'];
 
     // Marca del vehiculo
     public function idBrand_pk(){
