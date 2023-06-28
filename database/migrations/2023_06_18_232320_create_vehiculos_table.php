@@ -23,6 +23,8 @@ return new class extends Migration
             $table->uuid('idFlota')->nullable();
             $table->tinyInteger('idEstado')->default(1);
             $table->tinyInteger('idEliminado')->default(0);
+            $table->uuid('idUsuarioRegistro')->nullable();
+            $table->uuid('idUsuarioModifico')->nullable();
             $table->timestamp('fechaRegistro');
             $table->timestamp('fechaModifico')->nullable();
         });

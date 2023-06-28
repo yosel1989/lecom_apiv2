@@ -36,6 +36,8 @@ class Vehiculo extends Model
         'idFlota',
         'idEstado',
         'idEliminado',
+        'idUsuarioRegistro',
+        'idUsuarioModifico',
         'fechaRegistro',
         'fechaModifico',
     ];
@@ -46,11 +48,18 @@ class Vehiculo extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'fechaRegistro' => 'datetime',
-        'fechaModifico' => 'datetime',
+        'fechaRegistro' =>  'datetime:d/m/Y',
+        'fechaModifico' =>  'datetime:d/m/Y',
         'idEstado' => IdEstado::class,
         'idEliminado' => IdEliminado::class,
     ];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['fechaRegistro', 'fechaModifico'];
 
     // Marca del vehiculo
     public function idBrand_pk(){

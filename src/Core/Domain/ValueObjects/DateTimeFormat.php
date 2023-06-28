@@ -9,7 +9,7 @@ use InvalidArgumentException;
 
 final class DateTimeFormat
 {
-    private string |null $value;
+    private ?string $value;
     private bool $nullable;
     private string $messageError;
 
@@ -19,7 +19,7 @@ final class DateTimeFormat
      * @param bool $nullable
      * @param string $messageError
      */
-    public function __construct(string | null $value, bool $nullable = false, string $messageError = "" )
+    public function __construct(?string $value, bool $nullable = false, string $messageError = "" )
     {
         $this->nullable = $nullable;
         $this->messageError = $messageError;
@@ -30,7 +30,7 @@ final class DateTimeFormat
     /**
      * @return string|null
      */
-    public function value() : string | null
+    public function value() : ?string
     {
         return $this->value;
     }
@@ -38,7 +38,7 @@ final class DateTimeFormat
     /**
      * @param string|null $value
      */
-    private function validation( string | null $value ): void
+    private function validation( ?string $value ): void
     {
         if($this->nullable){
             if(!is_null($value)){
