@@ -88,4 +88,42 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
 
     }
 
+    public function changeState(
+        Id $idVehiculo,
+        NumericInteger $idEstado,
+        Id $idUsuarioModifico
+    ): void
+    {
+        $this->eloquentModelVehiculo->findOrFail($idVehiculo->value())->update([
+           'idEstado' => $idEstado->value(),
+           'idUsuarioModifico' => $idUsuarioModifico->value()
+        ]);
+    }
+
+    public function find(
+        Id $idVehiculo,
+    ): Vehiculo
+    {
+        $model = $this->eloquentModelVehiculo->findOrFail($idVehiculo->value());
+        $OVehicle = new Vehiculo(
+            new Id($model->id , false, 'El id del vehiculo no tiene el formato correcto'),
+            new Text($model->placa, false, 7, 'La placa excede los 7 caracteres'),
+            new Text($model->unidad, false, 10, 'La unidad excede los 10 caracteres'),
+            new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
+            new Id($model->idMarca, true, 'El id de la marca del vehiculo no tiene el formato correcto'),
+            new Id($model->idModelo, true, 'El id del modelo del vehiculo no tiene el formato correcto'),
+            new Id($model->idClase, true, 'El id de la clase del vehiculo no tiene el formato correcto'),
+            new Id($model->idFlota, true, 'El id de la flota del vehiculo no tiene el formato correcto'),
+            new Id($model->idCategoria, true, 'El id de la categoria del vehiculo no tiene el formato correcto'),
+            new NumericInteger($model->idEstado->value),
+            new NumericInteger($model->idEliminado->value),
+            new Id($model->idUsurioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
+            new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+            new DateTimeFormat($model->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
+            new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+        );
+
+        return $OVehicle;
+    }
+
 }

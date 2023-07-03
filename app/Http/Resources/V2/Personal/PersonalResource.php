@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\V2\Vehiculo;
+namespace App\Http\Resources\V2\Personal;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class VehiculoResource extends JsonResource
+class PersonalResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,14 +17,13 @@ class VehiculoResource extends JsonResource
         // Map Domain User model values
         return [
             'id'            => $this->getId()->value(),
-            'placa'          => $this->getPlaca()->value(),
-            'unidad'       => $this->getUnidad()->value(),
+            'foto'          => $this->getFoto()->value(),
+            'nombre'          => $this->getNombre()->value(),
+            'apellido'       => $this->getApellido()->value(),
             'idCliente'       => $this->getIdCliente()->value(),
-            'idMarca'       => $this->getIdMarca()->value(),
-            'idCategoria'       => $this->getIdCategoria()->value(),
-            'idModelo'       => $this->getIdModelo()->value(),
-            'idClase'       => $this->getIdClase()->value(),
-            'idFlota'       => $this->getIdFlota()->value(),
+            'correo'       => $this->getCorreo()->value(),
+            'idTipoDocumento'       => $this->getIdTipoDocumento()->value(),
+            'numeroDocumento'       => $this->getNumeroDocumento()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),
             'fechaRegistro'       => $this->getFechaRegistro()->value(),

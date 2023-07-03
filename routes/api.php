@@ -153,7 +153,9 @@ include 'Modules/administracion.php';
 include 'Modules/coldMachine.php';
 include 'Modules/transportePersonal.php';
 include 'Modules/transporteInterprovincial.php';
+
 include 'V2/vehiculo-route.php';
+include 'V2/personal-route.php';
 
 
 Route::get('v1/erts', function(){

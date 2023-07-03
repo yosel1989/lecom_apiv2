@@ -1,17 +1,21 @@
 <?php
 
-namespace Src\V2\Vehiculo\Domain\Contracts;
+namespace Src\V2\Personal\Domain\Contracts;
 
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
-use Src\V2\Vehiculo\Domain\Vehiculo;
+use Src\V2\Personal\Domain\Personal;
 
-interface VehiculoRepositoryContract
+interface PersonalRepositoryContract
 {
     public function create(
-        Text $placa,
-        Text $unidad,
+        Text $foto,
+        Text $nombre,
+        Text $apellido,
+        Id $idTipoDocumento,
+        Text $numeroDocumento,
+        Text $correo,
         Id $idCliente,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
@@ -20,20 +24,24 @@ interface VehiculoRepositoryContract
 
     public function update(
         Id $id,
-        Text $placa,
-        Text $unidad,
+        Text $foto,
+        Text $nombre,
+        Text $apellido,
+        Id $idTipoDocumento,
+        Text $numeroDocumento,
+        Text $correo,
         Id $idCliente,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;
 
     public function changeState(
-        Id $idVehiculo,
+        Id $idPersonal,
         NumericInteger $idEstado,
         Id $idUsuarioModifico
     ): void;
 
     public function find(
-        Id $idVehiculo,
-    ): Vehiculo;
+        Id $idPersonal,
+    ): Personal;
 }
