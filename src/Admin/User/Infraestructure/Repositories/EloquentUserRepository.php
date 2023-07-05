@@ -59,7 +59,7 @@ final class EloquentUserRepository implements UserRepositoryContract
         $this->eloquentUserModel->create([
             'id'=>$id->value(),
             'usuario'=>$username->value(),
-            'clave'=>$password->value(),
+            'clave'=> $password->value(),
             'nombres'=>$firstName->value(),
             'apellidos'=>$lastName->value(),
             'correo'=>$email->value(),

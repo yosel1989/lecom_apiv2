@@ -74,9 +74,9 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'fechaEmailVerifico' => 'datetime',
-        'fechaRegistro' => 'datetime',
-        'fechaModifico' => 'datetime',
+        'fechaEmailVerifico' => 'string',
+        'fechaRegistro' => 'string',
+        'fechaModifico' => 'string',
         'clave' => 'hashed',
         'idEstado' => IdEstado::class,
         'idEliminado' => IdEliminado::class,

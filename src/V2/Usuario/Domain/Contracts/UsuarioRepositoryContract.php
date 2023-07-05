@@ -1,35 +1,34 @@
 <?php
 
-namespace Src\V2\Personal\Domain\Contracts;
+namespace Src\V2\Usuario\Domain\Contracts;
 
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
-use Src\V2\Personal\Domain\Personal;
+use Src\V2\Usuario\Domain\Usuario;
 
-interface PersonalRepositoryContract
+interface UsuarioRepositoryContract
 {
     public function create(
-        Text $foto,
+        Text $usuario,
+        Text $clave,
         Text $nombre,
         Text $apellido,
-        Id $idTipoDocumento,
-        Text $numeroDocumento,
+        Id $idPersonal,
+        Id $idPerfil,
         Text $correo,
         Id $idCliente,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;
     public function collectionByCliente(Id $idCliente): array;
-    public function listByCliente(Id $idCliente): array;
 
     public function update(
-        Id $id,
-        Text $foto,
+        Id $idUsuario,
         Text $nombre,
         Text $apellido,
-        Id $idTipoDocumento,
-        Text $numeroDocumento,
+        Id $idPersonal,
+        Id $idPerfil,
         Text $correo,
         Id $idCliente,
         NumericInteger $idEstado,
@@ -37,12 +36,18 @@ interface PersonalRepositoryContract
     ): void;
 
     public function changeState(
-        Id $idPersonal,
+        Id $idUsuario,
         NumericInteger $idEstado,
         Id $idUsuarioModifico
     ): void;
 
+    public function changePassword(
+        Id $idUsuario,
+        Text $clave,
+        Id $idUsuarioModifico
+    ): void;
+
     public function find(
-        Id $idPersonal,
-    ): Personal;
+        Id $idUsuario,
+    ): Usuario;
 }

@@ -156,6 +156,7 @@ include 'Modules/transporteInterprovincial.php';
 
 include 'V2/vehiculo-route.php';
 include 'V2/personal-route.php';
+include 'V2/usuario-route.php';
 
 
 Route::get('v1/erts', function(){

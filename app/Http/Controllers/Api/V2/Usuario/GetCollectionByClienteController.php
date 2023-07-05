@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Api\V2\Personal;
+namespace App\Http\Controllers\Api\V2\Usuario;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V2\Personal\PersonalResource;
+use App\Http\Resources\V2\Usuario\UsuarioResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -11,9 +11,9 @@ use InvalidArgumentException;
 
 class GetCollectionByClienteController extends Controller
 {
-    private \Src\V2\Personal\Infrastructure\GetCollectionByClienteController $controller;
+    private \Src\V2\Usuario\Infrastructure\GetCollectionByClienteController $controller;
 
-    public function __construct(\Src\V2\Personal\Infrastructure\GetCollectionByClienteController $controller)
+    public function __construct(\Src\V2\Usuario\Infrastructure\GetCollectionByClienteController $controller)
     {
         $this->controller = $controller;
     }
@@ -23,9 +23,9 @@ class GetCollectionByClienteController extends Controller
     {
         try {
 
-            //return response()->json(Personal::all());
+            //return response()->json(Usuario::all());
 
-            $collection = PersonalResource::collection($this->controller->__invoke($request));
+            $collection = UsuarioResource::collection($this->controller->__invoke($request));
             return response()->json([
                 'data' => $collection,
                 'error' =>  null,

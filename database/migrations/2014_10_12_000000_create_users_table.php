@@ -15,12 +15,13 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('nombres', 100);
             $table->string('apellidos', 100);
+            $table->uuid('idPersonal')->nullable()->unique();
             $table->uuid('idPerfil')->nullable();
             $table->uuid('idRol')->nullable();
             $table->uuid('idCliente')->nullable();
             $table->string('correo')->unique()->nullable();
             $table->string('telefono', 150)->nullable();
-            $table->string('usuario', 20);
+            $table->string('usuario', 20)->unique();
             $table->string('clave');
             $table->smallInteger('idNivel');
             $table->tinyInteger('idEstado')->default(1);

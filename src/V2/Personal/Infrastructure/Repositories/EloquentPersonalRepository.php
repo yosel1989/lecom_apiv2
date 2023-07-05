@@ -11,6 +11,7 @@ use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\V2\Personal\Domain\Contracts\PersonalRepositoryContract;
 use Src\V2\Personal\Domain\Personal;
+use Src\V2\Personal\Domain\PersonalShort;
 
 final class EloquentPersonalRepository implements PersonalRepositoryContract
 {
@@ -50,6 +51,29 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
 
             $OVehicle->setUsuarioRegistro(new Text(""));
             $OVehicle->setUsuarioModifico(new Text(""));
+
+            $arrVehicles[] = $OVehicle;
+        }
+
+        return $arrVehicles;
+    }
+
+    public function ListByCliente(Id $idCliente): array
+    {
+        $personal = $this->eloquentModelPersonal->where('idCliente',$idCliente->value())->get();
+
+        $arrVehicles = array();
+
+        foreach ( $personal as $model ){
+
+            $OVehicle = new PersonalShort(
+                new Id($model->id , false, 'El id del personal no tiene el formato correcto'),
+                new Text($model->nombre,false, 150,'El nombre excede los 150 caracteres'),
+                new Text($model->apellido,false, 150,'El apellido excede los 150 caracteres'),
+                new Id($model->idCliente,false,'El id del cliente no tiene el formato correcto'),
+                new NumericInteger($model->idEstado->value),
+                new NumericInteger($model->idEliminado->value),
+            );
 
             $arrVehicles[] = $OVehicle;
         }

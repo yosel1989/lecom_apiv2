@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Api\V2\Personal;
+namespace App\Http\Controllers\Api\V2\Perfil;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V2\Personal\PersonalResource;
+use App\Http\Resources\V2\Perfil\PerfilListResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
 
-class GetCollectionByClienteController extends Controller
+class GetListByClienteController extends Controller
 {
-    private \Src\V2\Personal\Infrastructure\GetCollectionByClienteController $controller;
+    private \Src\V2\Perfil\Infrastructure\GetListByClienteController $controller;
 
-    public function __construct(\Src\V2\Personal\Infrastructure\GetCollectionByClienteController $controller)
+    public function __construct(\Src\V2\Perfil\Infrastructure\GetListByClienteController $controller)
     {
         $this->controller = $controller;
     }
@@ -23,9 +23,9 @@ class GetCollectionByClienteController extends Controller
     {
         try {
 
-            //return response()->json(Personal::all());
+            //return response()->json(Perfil::all());
 
-            $collection = PersonalResource::collection($this->controller->__invoke($request));
+            $collection = PerfilListResource::collection($this->controller->__invoke($request));
             return response()->json([
                 'data' => $collection,
                 'error' =>  null,
