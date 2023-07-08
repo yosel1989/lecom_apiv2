@@ -68,6 +68,7 @@ final class EloquentUsuarioRepository implements UsuarioRepositoryContract
         Id $idPerfil,
         Text $correo,
         Id $idCliente,
+        NumericInteger $idNivelUsuario,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -81,6 +82,7 @@ final class EloquentUsuarioRepository implements UsuarioRepositoryContract
             'idPersonal' => $idPersonal->value(),
             'idPerfil' => $idPerfil->value(),
             'idCliente' => $idCliente->value(),
+            'idNivel' => $idNivelUsuario->value(),
             'idEstado' => $idEstado->value(),
             'idUsuarioRegistro' => $idUsuarioRegistro->value()
         ]);

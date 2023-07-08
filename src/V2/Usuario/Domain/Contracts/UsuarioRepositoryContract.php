@@ -18,6 +18,7 @@ interface UsuarioRepositoryContract
         Id $idPerfil,
         Text $correo,
         Id $idCliente,
+        NumericInteger $idNivelUsuario,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;

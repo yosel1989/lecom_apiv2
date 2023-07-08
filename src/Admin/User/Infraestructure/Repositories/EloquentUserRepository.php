@@ -280,7 +280,7 @@ final class EloquentUserRepository implements UserRepositoryContract
                 new UserEmail( $user->correo ),
                 new UserPhone( $user->telefono ),
                 new UserLevel( $user->idNivel ),
-                new UserActived( $user->idEstado ),
+                new UserActived( $user->idEstado->value ),
                 new UserDeleted( $user->idEliminado ),
                 new UserIdClient( $user->idCliente ),
                 new UserIdRole( $user->idRol )

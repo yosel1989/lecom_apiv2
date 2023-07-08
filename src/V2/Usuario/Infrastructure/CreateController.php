@@ -28,6 +28,7 @@ final class CreateController
         $idPerfil          = $request->input('idPerfil');
         $idCliente       = $request->idCliente;
         $idEstado        = $request->input('idEstado');
+        $idNivelUsuario        = $request->input('idNivelUsuario');
 
         $useCase = new CreateUseCase( $this->repository );
         $useCase->__invoke(
@@ -39,6 +40,7 @@ final class CreateController
             $idPersonal,
             $idPerfil,
             $idCliente,
+            $idNivelUsuario,
             $idEstado,
             $user->getId()
         );

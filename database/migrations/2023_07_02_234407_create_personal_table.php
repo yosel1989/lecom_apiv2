@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('correo',150)->nullable();
             $table->uuid('idCliente');
             $table->uuid('idTipoDocumento')->nullable();
-            $table->uuid('numeroDocumento')->nullable();
+            $table->string('numeroDocumento',20)->nullable();
             $table->tinyInteger('idEstado')->default(1);
             $table->tinyInteger('idEliminado')->default(0);
             $table->uuid('idUsuarioRegistro')->nullable();
