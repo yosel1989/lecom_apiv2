@@ -108,19 +108,27 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
 
 
     public function update(
-        Id $id,
+        Id $idPersonal,
         Text $foto,
         Text $nombre,
         Text $apellido,
         Id $idTipoDocumento,
         Text $numeroDocumento,
         Text $correo,
-        Id $idCliente,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
     {
-
+        $this->eloquentModelPersonal->findOrFail($idPersonal->value())->update([
+            'foto' => $foto->value(),
+            'nombre' => $nombre->value(),
+            'apellido' => $apellido->value(),
+            'idTipoDocumento' => $idTipoDocumento->value(),
+            'numeroDocumento' => $numeroDocumento->value(),
+            'correo' => $correo->value(),
+            'idEstado' => $idEstado->value(),
+            'idUsuarioModifico' => $idUsuarioRegistro->value()
+        ]);
     }
 
     public function changeState(

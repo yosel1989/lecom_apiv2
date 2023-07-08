@@ -11,11 +11,11 @@ use Illuminate\Http\Request;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class CreateController extends Controller
+class UpdateController extends Controller
 {
-    private \Src\V2\Perfil\Infrastructure\CreateController $controller;
+    private \Src\V2\Perfil\Infrastructure\UpdateController $controller;
 
-    public function __construct(\Src\V2\Perfil\Infrastructure\CreateController $controller)
+    public function __construct(\Src\V2\Perfil\Infrastructure\UpdateController $controller)
     {
         $this->controller = $controller;
     }
@@ -25,13 +25,11 @@ class CreateController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function __invoke(Request $request, string $id): \Illuminate\Http\JsonResponse
+    public function __invoke(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
 
-//            return response()->json($id);
-
-            $this->controller->__invoke($request, $id);
+            $this->controller->__invoke($request);
             return response()->json([
                 'data' => null,
                 'error' =>  null,

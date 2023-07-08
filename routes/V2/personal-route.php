@@ -8,4 +8,5 @@ Route::namespace('App\Http\Controllers\Api\V2\Personal')->middleware('auth:sanct
     Route::post('cliente/{idCliente}/personal', 'CreateController');
     Route::post('personal/{id}/cambiar-estado', 'ChangeStateController');
     Route::get('personal/{id}', 'FindByIdController');
+    Route::put('personal/{id}', 'UpdateController');
 });

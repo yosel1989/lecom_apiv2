@@ -29,6 +29,7 @@ class Perfil extends Model
         'id',
         'nombre',
         'idNivelUsuario',
+        'idCliente',
         'idEstado',
         'idEliminado',
         'idUsuarioRegistro',

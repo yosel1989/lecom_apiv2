@@ -37,6 +37,7 @@ class User extends Authenticatable
         'id',
         'nombres',
         'apellidos',
+        'idPersonal',
         'idPerfil',
         'idRol',
         'idCliente',
@@ -88,6 +89,10 @@ class User extends Authenticatable
 
     public function client(){
         return $this->hasOne('App\Models\Auth\Client','id','idCliente');
+    }
+
+    public function perfil(){
+        return $this->hasOne('App\Models\V2\Perfil','id','idPerfil');
     }
 
 }

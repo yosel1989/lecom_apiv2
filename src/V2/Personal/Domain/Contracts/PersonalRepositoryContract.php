@@ -24,14 +24,13 @@ interface PersonalRepositoryContract
     public function listByCliente(Id $idCliente): array;
 
     public function update(
-        Id $id,
+        Id $idPersonal,
         Text $foto,
         Text $nombre,
         Text $apellido,
         Id $idTipoDocumento,
         Text $numeroDocumento,
         Text $correo,
-        Id $idCliente,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;

@@ -1,45 +1,35 @@
 <?php
 declare(strict_types=1);
 
-namespace Src\V2\Usuario\Domain;
+namespace Src\V2\Perfil\Domain;
 
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 
-/**
- * @property Id idPersonalModifico
- */
-final class Usuario
+final class Perfil
 {
+
+
+    private Text $usuarioModifico;
+    private Text $usuarioRegistro;
+    private Text $nivelUsuario;
     private Id $id;
-    private Text $usuario;
     private Text $nombre;
-    private Text $apellido;
-    private Id $idPersonal;
-    private Id $idPerfil;
-    private Text $perfil;
-    private Text $correo;
+    private NumericInteger $idNivelUsuario;
     private Id $idCliente;
     private NumericInteger $idEstado;
     private NumericInteger $idEliminado;
     private Id $idUsurioRegistro;
+    private Id $idUsuarioModifico;
     private DateTimeFormat $fechaRegistro;
     private DateTimeFormat $fechaModifico;
 
-    private Text $usuarioRegistro;
-    private Text $usuarioModifico;
-
-
     /**
      * @param Id $id
-     * @param Text $usuario
      * @param Text $nombre
-     * @param Text $apellido
-     * @param Id $idPersonal
-     * @param Id $idPerfil
-     * @param Text $correo
+     * @param NumericInteger $idNivelUsuario
      * @param Id $idCliente
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
@@ -50,12 +40,8 @@ final class Usuario
      */
     public function __construct(
         Id $id,
-        Text $usuario,
         Text $nombre,
-        Text $apellido,
-        Id $idPersonal,
-        Id $idPerfil,
-        Text $correo,
+        NumericInteger $idNivelUsuario,
         Id $idCliente,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
@@ -65,20 +51,65 @@ final class Usuario
         DateTimeFormat $fechaModifico
     )
     {
+
         $this->id = $id;
-        $this->usuario = $usuario;
         $this->nombre = $nombre;
-        $this->apellido = $apellido;
-        $this->idPersonal = $idPersonal;
-        $this->idPerfil = $idPerfil;
-        $this->correo = $correo;
+        $this->idNivelUsuario = $idNivelUsuario;
         $this->idCliente = $idCliente;
         $this->idEstado = $idEstado;
         $this->idEliminado = $idEliminado;
         $this->idUsurioRegistro = $idUsurioRegistro;
-        $this->idPersonalModifico = $idUsuarioModifico;
+        $this->idUsuarioModifico = $idUsuarioModifico;
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getUsuarioModifico(): Text
+    {
+        return $this->usuarioModifico;
+    }
+
+    /**
+     * @param Text $usuarioModifico
+     */
+    public function setUsuarioModifico(Text $usuarioModifico): void
+    {
+        $this->usuarioModifico = $usuarioModifico;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getUsuarioRegistro(): Text
+    {
+        return $this->usuarioRegistro;
+    }
+
+    /**
+     * @param Text $usuarioRegistro
+     */
+    public function setUsuarioRegistro(Text $usuarioRegistro): void
+    {
+        $this->usuarioRegistro = $usuarioRegistro;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getNivelUsuario(): Text
+    {
+        return $this->nivelUsuario;
+    }
+
+    /**
+     * @param Text $nivelUsuario
+     */
+    public function setNivelUsuario(Text $nivelUsuario): void
+    {
+        $this->nivelUsuario = $nivelUsuario;
     }
 
     /**
@@ -100,22 +131,6 @@ final class Usuario
     /**
      * @return Text
      */
-    public function getUsuario(): Text
-    {
-        return $this->usuario;
-    }
-
-    /**
-     * @param Text $usuario
-     */
-    public function setUsuario(Text $usuario): void
-    {
-        $this->usuario = $usuario;
-    }
-
-    /**
-     * @return Text
-     */
     public function getNombre(): Text
     {
         return $this->nombre;
@@ -130,83 +145,19 @@ final class Usuario
     }
 
     /**
-     * @return Text
+     * @return NumericInteger
      */
-    public function getApellido(): Text
+    public function getIdNivelUsuario(): NumericInteger
     {
-        return $this->apellido;
+        return $this->idNivelUsuario;
     }
 
     /**
-     * @param Text $apellido
+     * @param NumericInteger $idNivelUsuario
      */
-    public function setApellido(Text $apellido): void
+    public function setIdNivelUsuario(NumericInteger $idNivelUsuario): void
     {
-        $this->apellido = $apellido;
-    }
-
-    /**
-     * @return Id
-     */
-    public function getIdPersonal(): Id
-    {
-        return $this->idPersonal;
-    }
-
-    /**
-     * @param Id $idPersonal
-     */
-    public function setIdPersonal(Id $idPersonal): void
-    {
-        $this->idPersonal = $idPersonal;
-    }
-
-    /**
-     * @return Id
-     */
-    public function getIdPerfil(): Id
-    {
-        return $this->idPerfil;
-    }
-
-    /**
-     * @param Id $idPerfil
-     */
-    public function setIdPerfil(Id $idPerfil): void
-    {
-        $this->idPerfil = $idPerfil;
-    }
-
-    /**
-     * @return Text
-     */
-    public function getPerfil(): Text
-    {
-        return $this->perfil;
-    }
-
-    /**
-     * @param Text $perfil
-     */
-    public function setPerfil(Text $perfil): void
-    {
-        $this->perfil = $perfil;
-    }
-
-    /**
-     * @return Text
-     */
-    public function getCorreo(): Text
-    {
-        return $this->correo;
-    }
-
-    /**
-     * @param Text $correo
-     */
-    public function setCorreo(Text $correo): void
-    {
-        $this->correo = $correo;
+        $this->idNivelUsuario = $idNivelUsuario;
     }
 
     /**
@@ -278,7 +229,7 @@ final class Usuario
      */
     public function getIdUsuarioModifico(): Id
     {
-        return $this->idPersonalModifico;
+        return $this->idUsuarioModifico;
     }
 
     /**
@@ -286,7 +237,7 @@ final class Usuario
      */
     public function setIdUsuarioModifico(Id $idUsuarioModifico): void
     {
-        $this->idPersonalModifico = $idUsuarioModifico;
+        $this->idUsuarioModifico = $idUsuarioModifico;
     }
 
     /**
@@ -321,36 +272,5 @@ final class Usuario
         $this->fechaModifico = $fechaModifico;
     }
 
-    /**
-     * @return Text
-     */
-    public function getUsuarioRegistro(): Text
-    {
-        return $this->usuarioRegistro;
-    }
-
-    /**
-     * @param Text $usuarioRegistro
-     */
-    public function setUsuarioRegistro(Text $usuarioRegistro): void
-    {
-        $this->usuarioRegistro = $usuarioRegistro;
-    }
-
-    /**
-     * @return Text
-     */
-    public function getUsuarioModifico(): Text
-    {
-        return $this->usuarioModifico;
-    }
-
-    /**
-     * @param Text $usuarioModifico
-     */
-    public function setUsuarioModifico(Text $usuarioModifico): void
-    {
-        $this->usuarioModifico = $usuarioModifico;
-    }
 
 }

@@ -31,7 +31,6 @@ interface UsuarioRepositoryContract
         Id $idPersonal,
         Id $idPerfil,
         Text $correo,
-        Id $idCliente,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;

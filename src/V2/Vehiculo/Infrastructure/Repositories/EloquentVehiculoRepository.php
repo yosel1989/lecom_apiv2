@@ -80,12 +80,16 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
         Id $id,
         Text $placa,
         Text $unidad,
-        Id $idCliente,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
     {
-
+        $this->eloquentModelVehiculo->findOrFail($id->value())->update([
+            'placa' => $placa->value(),
+            'unidad' => $unidad->value(),
+            'idEstado' => $idEstado->value(),
+            'idUsuarioModifico' => $idUsuarioRegistro->value()
+        ]);
     }
 
     public function changeState(
