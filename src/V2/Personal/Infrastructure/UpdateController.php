@@ -4,7 +4,6 @@ namespace Src\V2\Personal\Infrastructure;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Src\V2\Personal\Application\CreateUseCase;
 use Src\V2\Personal\Application\UpdateUseCase;
 use Src\V2\Personal\Infrastructure\Repositories\EloquentPersonalRepository;
 
@@ -27,6 +26,7 @@ final class UpdateController
         $idTipoDocumento = $request->input('idTipoDocumento');
         $numeroDocumento = $request->input('numeroDocumento');
         $correo          = $request->input('correo');
+        $idSede          = $request->input('idSede');
         $idEstado        = $request->input('idEstado');
 
         $useCase = new UpdateUseCase( $this->repository );
@@ -38,6 +38,7 @@ final class UpdateController
             $idTipoDocumento,
             $numeroDocumento,
             $correo,
+            $idSede,
             $idEstado,
             $user->getId()
         );

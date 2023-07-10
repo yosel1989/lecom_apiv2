@@ -33,7 +33,7 @@ class UpdateController extends Controller
             return response()->json([
                 'data' => null,
                 'error' =>  null,
-                'status' => ResponseAlias::HTTP_CREATED
+                'status' => ResponseAlias::HTTP_OK
             ]);
 
         }catch ( InvalidArgumentException $e ){

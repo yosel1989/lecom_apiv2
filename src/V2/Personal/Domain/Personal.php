@@ -11,8 +11,6 @@ use Src\Core\Domain\ValueObjects\Text;
 final class Personal
 {
 
-    private Text $usuarioModifico;
-    private Text $usuarioRegistro;
     private Id $id;
     private Text $foto;
     private Text $nombre;
@@ -27,6 +25,12 @@ final class Personal
     private Id $idUsuarioModifico;
     private DateTimeFormat $fechaRegistro;
     private DateTimeFormat $fechaModifico;
+    private Id $idSede;
+
+
+    private Text $usuarioModifico;
+    private Text $usuarioRegistro;
+    private Text $sede;
 
     /**
      * @param Id $id
@@ -37,6 +41,7 @@ final class Personal
      * @param Text $numeroDocumento
      * @param Text $correo
      * @param Id $idCliente
+     * @param Id $idSede
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      * @param Id $idUsurioRegistro
@@ -53,6 +58,7 @@ final class Personal
         Text $numeroDocumento,
         Text $correo,
         Id $idCliente,
+        Id $idSede,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
         Id $idUsurioRegistro,
@@ -76,6 +82,7 @@ final class Personal
         $this->idUsuarioModifico = $idUsuarioModifico;
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
+        $this->idSede = $idSede;
     }
 
     /**
@@ -333,6 +340,39 @@ final class Personal
     {
         $this->fechaModifico = $fechaModifico;
     }
+
+    /**
+     * @return Id
+     */
+    public function getIdSede(): Id
+    {
+        return $this->idSede;
+    }
+
+    /**
+     * @param Id $idSede
+     */
+    public function setIdSede(Id $idSede): void
+    {
+        $this->idSede = $idSede;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getSede(): Text
+    {
+        return $this->sede;
+    }
+
+    /**
+     * @param Text $sede
+     */
+    public function setSede(Text $sede): void
+    {
+        $this->sede = $sede;
+    }
+
 
 
 

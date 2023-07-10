@@ -26,13 +26,13 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
 
     public function collectionByCliente(Id $idCliente): array
     {
-        $personal = $this->eloquentModelPersonal->where('idCliente',$idCliente->value())->get();
+        $personal = $this->eloquentModelPersonal->with('sede:id,nombre')->where('idCliente',$idCliente->value())->get();
 
         $arrVehicles = array();
 
         foreach ( $personal as $model ){
 
-            $OVehicle = new Personal(
+            $OModel = new Personal(
                 new Id($model->id , false, 'El id del personal no tiene el formato correcto'),
                 new Text($model->foto,true, 99999,'La foto excede el maximo de caracteres'),
                 new Text($model->nombre,false, 150,'El nombre excede los 150 caracteres'),
@@ -41,6 +41,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
                 new Text($model->numeroDocumento,true, 150,'El numero de documento excede los 150 caracteres'),
                 new Text($model->correo,true, 150,'El correo excede los 150 caracteres'),
                 new Id($model->idCliente,false,'El id del cliente no tiene el formato correcto'),
+                new Id($model->idSede,true,'El id de la sede no tiene el formato correcto'),
                 new NumericInteger($model->idEstado->value),
                 new NumericInteger($model->idEliminado->value),
                 new Id($model->idUsurioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
@@ -49,10 +50,12 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
                 new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
             );
 
-            $OVehicle->setUsuarioRegistro(new Text(""));
-            $OVehicle->setUsuarioModifico(new Text(""));
+            $OModel->setUsuarioRegistro(new Text(""));
+            $OModel->setUsuarioModifico(new Text(""));
+            $OModel->setSede( new Text( !is_null($model->sede) ? $model->sede->nombre : null,true, -1 ) );
 
-            $arrVehicles[] = $OVehicle;
+
+            $arrVehicles[] = $OModel;
         }
 
         return $arrVehicles;
@@ -66,16 +69,17 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
 
         foreach ( $personal as $model ){
 
-            $OVehicle = new PersonalShort(
+            $OModel = new PersonalShort(
                 new Id($model->id , false, 'El id del personal no tiene el formato correcto'),
                 new Text($model->nombre,false, 150,'El nombre excede los 150 caracteres'),
                 new Text($model->apellido,false, 150,'El apellido excede los 150 caracteres'),
                 new Id($model->idCliente,false,'El id del cliente no tiene el formato correcto'),
+                new Id($model->idSede,true,'El id de la sede no tiene el formato correcto'),
                 new NumericInteger($model->idEstado->value),
                 new NumericInteger($model->idEliminado->value),
             );
 
-            $arrVehicles[] = $OVehicle;
+            $arrVehicles[] = $OModel;
         }
 
         return $arrVehicles;
@@ -89,6 +93,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
         Text $numeroDocumento,
         Text $correo,
         Id $idCliente,
+        Id $idSede,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -101,6 +106,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             'numeroDocumento' => $numeroDocumento->value(),
             'correo' => $correo->value(),
             'idCliente' => $idCliente->value(),
+            'idSede' => $idSede->value(),
             'idEstado' => $idEstado->value(),
             'idUsuarioRegistro' => $idUsuarioRegistro->value()
         ]);
@@ -115,6 +121,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
         Id $idTipoDocumento,
         Text $numeroDocumento,
         Text $correo,
+        Id $idSede,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -126,6 +133,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             'idTipoDocumento' => $idTipoDocumento->value(),
             'numeroDocumento' => $numeroDocumento->value(),
             'correo' => $correo->value(),
+            'idSede' => $idSede->value(),
             'idEstado' => $idEstado->value(),
             'idUsuarioModifico' => $idUsuarioRegistro->value()
         ]);
@@ -147,7 +155,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
         Id $idPersonal,
     ): Personal
     {
-        $model = $this->eloquentModelPersonal->findOrFail($idPersonal->value());
+        $model = $this->eloquentModelPersonal->with('sede:id,nombre')->findOrFail($idPersonal->value());
         $OModel = new Personal(
             new Id($model->id , false, 'El id del personal no tiene el formato correcto'),
             new Text($model->foto,true, 99999,'La foto excede el maximo de caracteres'),
@@ -157,6 +165,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             new Text($model->numeroDocumento,true, 150,'El numero de documento excede los 150 caracteres'),
             new Text($model->correo,true, 150,'El correo excede los 150 caracteres'),
             new Id($model->idCliente,false,'El id del cliente no tiene el formato correcto'),
+            new Id($model->idSede,true,'El id de la sede no tiene el formato correcto'),
             new NumericInteger($model->idEstado->value),
             new NumericInteger($model->idEliminado->value),
             new Id($model->idUsurioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
@@ -164,6 +173,11 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             new DateTimeFormat($model->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
             new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
         );
+
+
+        $OModel->setUsuarioRegistro(new Text(""));
+        $OModel->setUsuarioModifico(new Text(""));
+        $OModel->setSede( new Text( !is_null($model->sede) ? $model->sede->nombre : null,true, -1 ) );
 
         return $OModel;
     }

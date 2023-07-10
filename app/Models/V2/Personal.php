@@ -31,6 +31,7 @@ class Personal extends Model
         'apellido',
         'correo',
         'idCliente',
+        'idSede',
         'idTipoDocumento',
         'numeroDocumento',
         'idEstado',
@@ -52,5 +53,9 @@ class Personal extends Model
         'idEstado' => IdEstado::class,
         'idEliminado' => IdEliminado::class,
     ];
+
+    public function sede(){
+        return $this->hasOne('App\Models\V2\Sede','id','idSede');
+    }
 
 }

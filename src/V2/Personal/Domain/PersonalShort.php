@@ -15,12 +15,14 @@ final class PersonalShort
     private Id $idCliente;
     private NumericInteger $idEstado;
     private NumericInteger $idEliminado;
+    private Id $idSede;
 
     /**
      * @param Id $id
      * @param Text $nombre
      * @param Text $apellido
      * @param Id $idCliente
+     * @param Id $idSede
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      */
@@ -29,6 +31,7 @@ final class PersonalShort
         Text $nombre,
         Text $apellido,
         Id $idCliente,
+        Id $idSede,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
     )
@@ -40,6 +43,7 @@ final class PersonalShort
         $this->idCliente = $idCliente;
         $this->idEstado = $idEstado;
         $this->idEliminado = $idEliminado;
+        $this->idSede = $idSede;
     }
 
     /**
@@ -136,6 +140,22 @@ final class PersonalShort
     public function setIdEliminado(NumericInteger $idEliminado): void
     {
         $this->idEliminado = $idEliminado;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdSede(): Id
+    {
+        return $this->idSede;
+    }
+
+    /**
+     * @param Id $idSede
+     */
+    public function setIdSede(Id $idSede): void
+    {
+        $this->idSede = $idSede;
     }
 
 

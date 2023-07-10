@@ -43,6 +43,9 @@ final class Text
 
         if($this->nullable){
             if(!is_null($value)){
+                if($this->length < 0){
+                    return;
+                }
                 if( strlen( $value ) > $this->length  ){
                     throw new InvalidArgumentException( $this->messageError . $value );
                 }
