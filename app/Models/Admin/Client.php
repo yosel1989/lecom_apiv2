@@ -28,6 +28,7 @@ class Client extends Model
      */
     protected $fillable = [
         'id',
+        'codigo',
         'bussiness_name',
         'first_name',
         'last_name',
@@ -42,6 +43,7 @@ class Client extends Model
     ];
 
     protected $casts = [
+        'codigo'   => 'integer',
         'deleted'   => 'integer',
         'type'      => 'integer',
     ];

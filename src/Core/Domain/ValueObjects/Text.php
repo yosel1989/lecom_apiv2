@@ -51,6 +51,9 @@ final class Text
                 }
             }
         }else{
+            if($this->length < 0){
+                return;
+            }
             if( strlen( $value ) > $this->length  ){
                 throw new InvalidArgumentException( $this->messageError . $value );
             }

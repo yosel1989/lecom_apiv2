@@ -2,7 +2,7 @@
 
 //use App\Events\AlertColdMachineHistoryEvent;
 use App\Http\Controllers\Older\RegisterErtStateController;
-use App\Models\TransporteInterprovincial\Destino;
+use App\Models\V2\Destino;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->group(function() {
             if( $Vehiculo->isEmpty() ){
                 return response()->json([
                     'data'      => null,
-                    'message' => 'El vehiculo no se encuentra registrado en el sistema.',
+                    'error' => 'El vehiculo no se encuentra registrado en el sistema.',
                     'status' => \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
                 ]);
             }
@@ -35,7 +35,7 @@ Route::middleware('auth:sanctum')->group(function() {
             if( $Destino->isEmpty() ){
                 return response()->json([
                     'data'      => null,
-                    'message' => 'El destino no se encuentra registrado en el sistema.',
+                    'error' => 'El destino no se encuentra registrado en el sistema.',
                     'status' => \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
                 ]);
             }
@@ -43,26 +43,26 @@ Route::middleware('auth:sanctum')->group(function() {
             if( $Cliente->isEmpty() ){
                 return response()->json([
                     'data'      => null,
-                    'message' => 'El cliente no se encuentra registrado en el sistema.',
+                    'error' => 'El cliente no se encuentra registrado en el sistema.',
                     'status' => \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
                 ]);
             }
 
 
-            if (!Schema::hasTable('btj_boletos_' . $user->idCliente)) {
-                Schema::create('btj_boletos_' . $user->idCliente, function (Blueprint $table) {
+            if (!Schema::hasTable('boleto_interprovincial_' . $Cliente->first()->codigo)) {
+                Schema::create('boleto_interprovincial_' . $Cliente->first()->codigo, function (Blueprint $table) {
                     $table->uuid('id')->unique()->primary();
                     $table->uuid('idDestino')->nullable();
                     $table->uuid('idVehiculo')->nullable();
                     $table->uuid('idCliente')->nullable();
                     $table->string('numeroDocumento',20)->nullable();
-                    $table->string('serie')->nullable();
-                    $table->integer('numeroBoleto')->nullable();
+                    $table->string('codigoBoleto',30)->nullable();
                     $table->decimal('latitud',10,8)->nullable();
                     $table->decimal('longitud',10,8)->nullable();
                     $table->decimal('precio',5,2);
-                    $table->dateTime('fecha',5,2);
-                    $table->string('placa',10);
+                    $table->dateTime('fecha');
+                    $table->tinyInteger('idEstado')->default(1);
+                    $table->tinyInteger('idEliminado')->default(0);
                     $table->uuid('idUsuarioRegistro');
                     $table->uuid('idUsuarioModifico')->nullable();
                     $table->timestamp('fechaRegistro');
@@ -70,8 +70,8 @@ Route::middleware('auth:sanctum')->group(function() {
                 });
             }
 
-            $model = new \App\Models\TransporteInterprovincial\BoletoCliente();
-            $model->setTable('btj_boletos_' . $user->idCliente);
+            $model = new \App\Models\V2\BoletoInterprovincial();
+            $model->setTable('boleto_interprovincial_' . $Cliente->first()->codigo);
 
             $model->create([
                 'idCliente' => $request->input('idCliente'),
@@ -80,6 +80,9 @@ Route::middleware('auth:sanctum')->group(function() {
                 'numeroDocumento' => $request->input('numeroDocumento'),
                 'precio' => $request->input('precio'),
                 'fecha' => $request->input('fecha'),
+                'codigoBoleto' => $request->input('codigoBoleto'),
+                'latitud' => $request->input('latitud'),
+                'longitud' => $request->input('longitud'),
                 'idUsuarioRegistro' => $user->getId()
             ]);
 
@@ -163,6 +166,8 @@ include 'V2/sede-route.php';
 include 'V2/caja-route.php';
 include 'V2/modulo-route.php';
 include 'V2/pos-route.php';
+include 'V2/destino-route.php';
+include 'V2/boleto-interprovincial-route.php';
 
 
 Route::get('v1/erts', function(){

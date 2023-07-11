@@ -5,6 +5,8 @@ namespace Src\Admin\Client\Infraestructure\Repositories;
 
 
 use App\Models\Admin\Client as EloquentClientModel;
+use App\Models\V2\Cliente as EloquentClienteModel;
+use Illuminate\Support\Facades\DB;
 use Src\Admin\Client\Domain\Client;
 use Src\Admin\Client\Domain\Contracts\ClientRepositoryContract;
 use Src\Admin\Client\Domain\ValueObjects\ClientAddress;
@@ -26,9 +28,15 @@ final class EloquentClientRepository implements ClientRepositoryContract
      */
     private $eloquentClientModel;
 
+    /**
+     * @var EloquentClienteModel
+     */
+    private $eloquentClienteModel;
+
     public function __construct()
     {
         $this->eloquentClientModel = new EloquentClientModel;
+        $this->eloquentClienteModel = new EloquentClienteModel;
     }
 
     public function create(
@@ -45,8 +53,10 @@ final class EloquentClientRepository implements ClientRepositoryContract
         ClientIdParent $idParent
     ): ?Client
     {
+        $count = DB::table('clients')->count();
         $OClient = $this->eloquentClientModel->create([
             'id'=>$id->value(),
+            'codigo' => ($count + 1),
             'bussiness_name'=>$bussinessName->value(),
             'first_name'=>$firstName->value(),
             'last_name'=>$lastName->value(),
@@ -57,6 +67,19 @@ final class EloquentClientRepository implements ClientRepositoryContract
             'phone'=>$phone->value(),
             'type'=>$type->value(),
             'id_parent_client'=>$idParent->value()
+        ]);
+
+        $count = DB::table('clientes')->count();
+        $this->eloquentClienteModel->create([
+            'codigo' => ($count + 1),
+            'nombre'=>$bussinessName->value(),
+            'nombreContacto'=>$firstName->value() . ' ' . $lastName->value() ,
+            'numeroDocumento'=> ($ruc->value() ? $ruc->value() :  $dni->value()),
+            'correo'=>$email->value(),
+            'direccion'=>$address->value(),
+            'telefono1'=>$phone->value(),
+            'idTipo'=>$type->value(),
+            'idClientePadre'=>$idParent->value()
         ]);
 
         return new Client(

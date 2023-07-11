@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Src\V2\Vehiculo\Infrastructure\Repositories;
 
 use App\Models\Administracion\Vehiculo as EloquentModelVehiculo;
+use Illuminate\Support\Facades\DB;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
@@ -66,8 +67,10 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
         Id $idUsuarioRegistro
     ): void
     {
+        $count = DB::table('vehiculos')->count();
         $this->eloquentModelVehiculo->create([
            'placa' => $placa->value(),
+           'codigo' => ($count + 1) ,
            'unidad' => $unidad->value(),
            'idCliente' => $idCliente->value(),
            'idEstado' => $idEstado->value(),

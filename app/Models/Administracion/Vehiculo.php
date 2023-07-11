@@ -27,6 +27,7 @@ class Vehiculo extends Model
      */
     protected $fillable = [
         'id',
+        'codigo',
         'placa',
         'unidad',
         'idCliente',
@@ -49,6 +50,8 @@ class Vehiculo extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'codigo' =>  'integer',
+        'total' =>  'integer',
         'fechaRegistro' =>  'string',
         'fechaModifico' =>  'string',
         'idEstado' => IdEstado::class,

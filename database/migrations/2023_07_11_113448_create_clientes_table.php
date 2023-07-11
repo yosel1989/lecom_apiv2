@@ -11,19 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vehiculos', function (Blueprint $table) {
+        Schema::create('clientes', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->smallInteger("codigo")->unique();
-            $table->string('placa',10);
-            $table->string('unidad',10);
-            $table->uuid('idCliente');
-            $table->uuid('idMarca')->nullable();
-            $table->uuid('idCategoria')->nullable();
-            $table->uuid('idModelo')->nullable();
-            $table->uuid('idClase')->nullable();
-            $table->uuid('idFlota')->nullable();
+            $table->smallInteger('idTipoDocumento')->nullable();
+            $table->string('numeroDocumento',25);
+            $table->string('nombre',150);
+            $table->string('nombreContacto',150)->nullable();
+            $table->string('correo',150)->nullable();
+            $table->string('dirección', 150)->nullable();
+            $table->string('telefono1', 15)->nullable();
+            $table->string('telefono2', 15)->nullable();
+            $table->smallInteger('idTipo')->default(0);
             $table->tinyInteger('idEstado')->default(1);
             $table->tinyInteger('idEliminado')->default(0);
+            $table->uuid('idClientePadre')->nullable();
             $table->uuid('idUsuarioRegistro')->nullable();
             $table->uuid('idUsuarioModifico')->nullable();
             $table->timestamp('fechaRegistro');
@@ -36,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vehiculos');
+        Schema::dropIfExists('clientes');
     }
 };

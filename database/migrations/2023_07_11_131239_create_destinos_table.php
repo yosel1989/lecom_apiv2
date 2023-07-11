@@ -11,17 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vehiculos', function (Blueprint $table) {
+        Schema::create('destinos', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->smallInteger("codigo")->unique();
-            $table->string('placa',10);
-            $table->string('unidad',10);
+            $table->string('nombre',100);
+            $table->decimal('precioBase', 5 ,2);
             $table->uuid('idCliente');
-            $table->uuid('idMarca')->nullable();
-            $table->uuid('idCategoria')->nullable();
-            $table->uuid('idModelo')->nullable();
-            $table->uuid('idClase')->nullable();
-            $table->uuid('idFlota')->nullable();
             $table->tinyInteger('idEstado')->default(1);
             $table->tinyInteger('idEliminado')->default(0);
             $table->uuid('idUsuarioRegistro')->nullable();
@@ -36,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vehiculos');
+        Schema::dropIfExists('destinos');
     }
 };

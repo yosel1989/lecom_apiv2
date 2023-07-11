@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\Apps\BoleteroPOS;
 
 use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
-use App\Models\TransporteInterprovincial\Destino;
 use App\Models\User;
+use App\Models\V2\Destino;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -23,21 +23,21 @@ class AuthController extends Controller
             if( !$request->has('usuario') ){
                 return response()->json([
                     'data'      => null,
-                    'message' => 'Debe ingresar el usuario',
+                    'error' => 'Debe ingresar el usuario',
                     'status' => Response::HTTP_BAD_REQUEST
                 ]);
             }
             if( !$request->has('clave') ){
                 return response()->json([
                     'data'      => null,
-                    'message' => 'Debe ingresar la clave',
+                    'error' => 'Debe ingresar la clave',
                     'status' => Response::HTTP_BAD_REQUEST
                 ]);
             }
             if( !$request->has('placa') ){
                 return response()->json([
                     'data'      => null,
-                    'message' => 'Debe ingresar la placa',
+                    'error' => 'Debe ingresar la placa',
                     'status' => Response::HTTP_BAD_REQUEST
                 ]);
             }
@@ -47,12 +47,15 @@ class AuthController extends Controller
                 ->where('idEliminado',IdEliminado::NoEliminado)
                 ->get();
 
-            $Vehiculo = \App\Models\Administracion\Vehiculo::where('placa',$request->input('placa'))->get();
+            $Vehiculo = \App\Models\Administracion\Vehiculo::where('placa',$request->input('placa'))
+                ->where('idEstado', IdEstado::Habilitado)
+                ->where('idEliminado',IdEliminado::NoEliminado)
+                ->get();
 
             if( $Vehiculo->isEmpty() ){
                 return response()->json([
                     'data'      => null,
-                    'message' => 'El vehiculo con la placa '. $request->input('placa') . ' no se encuentra registrado en el sistema.',
+                    'error' => 'El vehiculo con la placa '. $request->input('placa') . ' no se encuentra registrado en el sistema o se encuentra inhabilitado.',
                     'status' => Response::HTTP_NOT_FOUND
                 ]);
             }
@@ -60,7 +63,7 @@ class AuthController extends Controller
             if( $Ousuario->isEmpty() ){
                 return response()->json([
                     'data'      => null,
-                    'message' => 'El usuario no se encuentra registrado en el sistema o se encuentra inhabilitado.',
+                    'error' => 'El usuario no se encuentra registrado en el sistema o se encuentra inhabilitado.',
                     'status' => Response::HTTP_NOT_FOUND
                 ]);
             }
@@ -71,7 +74,7 @@ class AuthController extends Controller
             if( $_usuario->idCliente !== $_vehiculo->idCliente ){
                 return response()->json([
                     'data'      => null,
-                    'message' => 'El usuario y el vehiculo no se encuentran registrados en la misma empresa.',
+                    'error' => 'El usuario y el vehiculo no se encuentran registrados en la misma empresa.',
                     'status' => Response::HTTP_NOT_FOUND
                 ]);
             }
@@ -80,7 +83,7 @@ class AuthController extends Controller
             if( !Hash::check( $request->input('clave'),$_usuario->clave ) ){
                 return response()->json([
                     'data'=>[],
-                    'message' => 'Contraseña incorrectas',
+                    'error' => 'Contraseña incorrectas',
                     'status' => Response::HTTP_BAD_REQUEST
                 ]);
             }
@@ -104,8 +107,10 @@ class AuthController extends Controller
                             'correo' => $usuario->correo,
                             'idNivel' => $usuario->idNivel,
                             'idCliente' => $usuario->idCliente,
+                            'codigoCliente' => str_pad($usuario->client()->first(['codigo'])->codigo,2,'0',STR_PAD_LEFT),
                             'nombreCliente' =>  $usuario->client ? $usuario->client()->first(['bussiness_name'])->bussiness_name : null,
                             'idVehiculo' => $_vehiculo->id,
+                            'codigoVehiculo' => str_pad($_vehiculo->codigo,3,'0',STR_PAD_LEFT),
                             'placaVehiculo' => $_vehiculo->placa,
                         ],
                         'destinos' => Destino::select(
@@ -118,20 +123,20 @@ class AuthController extends Controller
 //                        '' => $Ousuario->client ? $Ousuario->client()->first(['id','bussiness_name', 'first_name', 'last_name']) : null,
 //                        'permissions' => $Ousuario->modules()->pluck('short_name')
                     ],
-                    'message' => null,
+                    'error' => null,
                     'status' => Response::HTTP_OK
                 ]);
             }else{
                 return response()->json([
                     'data'      => null,
-                    'message'   => 'Usuario o contraseña incorrecta',
+                    'error'   => 'Usuario o contraseña incorrecta',
                     'status'    => Response::HTTP_NOT_FOUND
                 ]);
             }
         }catch(\Exception $e){
             return response()->json([
                 'data'      => null,
-                'message'   => $e->getMessage() . $e->getTraceAsString(),
+                'error'   => $e->getMessage() . $e->getTraceAsString(),
                 'status'    => Response::HTTP_BAD_REQUEST
             ]);
         }
@@ -143,13 +148,13 @@ class AuthController extends Controller
             Auth::user()->tokens()->delete();
             return response()->json([
                 'data'      => null,
-                'message'   => null,
+                'error'   => null,
                 'status' => Response::HTTP_OK
             ]);
         }else{
             return response()->json([
                 'data'      => null,
-                'message'   => 'No tiene autorización para realizar dicho evento.',
+                'error'   => 'No tiene autorización para realizar dicho evento.',
                 'status' => Response::HTTP_UNAUTHORIZED
             ]);
         }
