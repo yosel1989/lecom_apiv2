@@ -26,7 +26,7 @@ final class EloquentDestinoRepository implements DestinoRepositoryContract
 
     public function collectionByCliente(Id $idCliente): array
     {
-        $models = $this->eloquentModelDestino->where('idCliente',$idCliente->value())->get();
+        $models = $this->eloquentModelDestino->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos')->where('idCliente',$idCliente->value())->get();
 
         $arrVehicles = array();
 
@@ -39,14 +39,14 @@ final class EloquentDestinoRepository implements DestinoRepositoryContract
                 new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
                 new NumericInteger($model->idEstado->value),
                 new NumericInteger($model->idEliminado->value),
-                new Id($model->idUsurioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
+                new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
                 new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
-                new DateTimeFormat($model->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
+                new DateTimeFormat($model->fechaRegistro, true, 'El formato de la fecha de registro no tiene el formato correcto'),
                 new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
             );
 
-            $OModel->setUsuarioRegistro(new Text(""));
-            $OModel->setUsuarioModifico(new Text(""));
+            $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
+            $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
 
             $arrVehicles[] = $OModel;
         }
@@ -127,7 +127,7 @@ final class EloquentDestinoRepository implements DestinoRepositoryContract
         Id $idDestino,
     ): Destino
     {
-        $model = $this->eloquentModelDestino->findOrFail($idDestino->value());
+        $model = $this->eloquentModelDestino->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos')->findOrFail($idDestino->value());
         $OModel = new Destino(
             new Id($model->id , false, 'El id del destino no tiene el formato correcto'),
             new Text($model->nombre, false, 100, 'El nombre del destino excede los 100 caracteres'),
@@ -135,13 +135,13 @@ final class EloquentDestinoRepository implements DestinoRepositoryContract
             new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
             new NumericInteger($model->idEstado->value),
             new NumericInteger($model->idEliminado->value),
-            new Id($model->idUsurioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
+            new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
             new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
             new DateTimeFormat($model->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
             new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
         );
-        $OModel->setUsuarioRegistro(new Text(""));
-        $OModel->setUsuarioModifico(new Text(""));
+        $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
+        $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
 
         return $OModel;
     }

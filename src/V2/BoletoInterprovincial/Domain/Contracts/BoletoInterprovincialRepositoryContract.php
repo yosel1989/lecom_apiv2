@@ -2,6 +2,7 @@
 
 namespace Src\V2\BoletoInterprovincial\Domain\Contracts;
 
+use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincial;
@@ -10,6 +11,7 @@ interface BoletoInterprovincialRepositoryContract
 {
 
     public function collectionByCliente(Id $idCliente): array;
+    public function reportByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): array;
 
     public function changeState(
         Id $idBoletoInterprovincial,

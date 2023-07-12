@@ -62,4 +62,20 @@ class BoletoInterprovincial extends Model
         'fechaModifico' => 'string'
     ];
 
+    public function usuarioRegistro(){
+        return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
+    }
+
+    public function usuarioModifico(){
+        return $this->hasOne('App\Models\User','id','idUsuarioModifico');
+    }
+
+    public function vehiculo(){
+        return $this->hasOne('App\Models\V2\Vehiculo','id','idUsuarioRegistro');
+    }
+
+    public function destino(){
+        return $this->hasOne('App\Models\V2\Destino','id','idUsuarioRegistro');
+    }
+
 }

@@ -25,7 +25,7 @@ final class EloquentModuloRepository implements ModuloRepositoryContract
 
     public function collection(): array
     {
-        $models = $this->eloquentModelModulo->all();
+        $models = $this->eloquentModelModulo->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos')->all();
 
         $arrVehicles = array();
 
@@ -38,14 +38,14 @@ final class EloquentModuloRepository implements ModuloRepositoryContract
                 new Text($model->codigo, false, -1),
                 new NumericInteger($model->idEstado->value),
                 new NumericInteger($model->idEliminado->value),
-                new Id($model->idUsurioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
+                new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
                 new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
                 new DateTimeFormat($model->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
                 new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
             );
 
-            $OModel->setUsuarioRegistro(new Text(""));
-            $OModel->setUsuarioModifico(new Text(""));
+            $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
+            $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
 
             $arrVehicles[] = $OModel;
         }
@@ -134,7 +134,7 @@ final class EloquentModuloRepository implements ModuloRepositoryContract
         Id $idModulo,
     ): Modulo
     {
-        $model = $this->eloquentModelModulo->findOrFail($idModulo->value());
+        $model = $this->eloquentModelModulo->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos')->findOrFail($idModulo->value());
         $OModel = new Modulo(
             new Id($model->id , false, 'El id del modulo no tiene el formato correcto'),
             new Text($model->nombre, false, 100, 'El nombre del modulo excede los 100 caracteres'),
@@ -142,13 +142,13 @@ final class EloquentModuloRepository implements ModuloRepositoryContract
             new Text($model->icono, false, -1),
             new NumericInteger($model->idEstado->value),
             new NumericInteger($model->idEliminado->value),
-            new Id($model->idUsurioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
+            new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
             new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
             new DateTimeFormat($model->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
             new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
         );
-        $OModel->setUsuarioRegistro(new Text(""));
-        $OModel->setUsuarioModifico(new Text(""));
+        $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
+        $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
 
         return $OModel;
     }

@@ -7,14 +7,14 @@ use App\Enums\IdEstado;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
-class Pos extends Model
+class Vehiculo extends Model
 {
     use UUID;
 
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $table = "pos";
+    protected $table = "vehiculos";
     public $timestamps = true;
 
     const CREATED_AT = 'fechaRegistro';
@@ -26,10 +26,15 @@ class Pos extends Model
      */
     protected $fillable = [
         'id',
-        'nombre',
-        'imei',
+        'codigo',
+        'placa',
+        'unidad',
         'idCliente',
-        'idSede',
+        'idCategoria',
+        'idModelo',
+        'idClass',
+        'idMarca',
+        'idFlota',
         'idEstado',
         'idEliminado',
         'idUsuarioRegistro',
@@ -44,14 +49,30 @@ class Pos extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'codigo' =>  'integer',
+        'total' =>  'integer',
         'fechaRegistro' =>  'string',
         'fechaModifico' =>  'string',
         'idEstado' => IdEstado::class,
-        'idEliminado' => IdEliminado::class
+        'idEliminado' => IdEliminado::class,
     ];
 
-    public function sede(){
-        return $this->hasOne('App\Models\V2\Sede','id','idSede');
+
+    // Marca del vehiculo
+    public function idBrand_pk(){
+        return $this->belongsTo('App\Models\General\VehicleBrand','idMarca');
+    }
+    // Flota del vehiculo
+    public function idFleet_pk(){
+        return $this->belongsTo('App\Models\General\VehicleFleet','idFlota');
+    }
+    // Modelo del vehiculo
+    public function idModel_pk(){
+        return $this->belongsTo('App\Models\General\VehicleModel','idModelo');
+    }
+    // Clase del vehiculo
+    public function idClass_pk(){
+        return $this->belongsTo('App\Models\General\VehicleClass','idClase');
     }
 
     public function usuarioRegistro(){
@@ -61,5 +82,4 @@ class Pos extends Model
     public function usuarioModifico(){
         return $this->hasOne('App\Models\User','id','idUsuarioModifico');
     }
-
 }

@@ -23,7 +23,10 @@ class DestinoResource extends JsonResource
             'idUsuarioRegistro'   => $this->getIdUsuarioRegistro()->value(),
             'idUsuarioModifico'   => $this->getIdUsuarioModifico()->value(),
             'fechaRegistro'       => $this->getFechaRegistro()->value(),
-            'fechaModifico'       => $this->getFechaModifico()->value()
+            'fechaModifico'       => $this->getFechaModifico()->value(),
+
+            'usuarioRegistro'   => $this->getUsuarioRegistro()->value(),
+            'usuarioModifico'   => $this->getUsuarioModifico()->value(),
         ];
     }
 }

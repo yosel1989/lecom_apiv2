@@ -24,9 +24,9 @@ class SedeResource extends JsonResource
             'fechaRegistro'       => $this->getFechaRegistro()->value(),
             'fechaModifico'     => $this->getFechaModifico()->value(),
             'idUsuarioRegistro'     => $this->getIdUsuarioModifico()->value(),
-            //'usuarioRegistro'     => $this->getUsuarioRegistro()->value(),
+            'usuarioRegistro'     => $this->getUsuarioRegistro()->value(),
             'idUsuarioModifico'     => $this->getIdUsuarioModifico()->value(),
-            //'usuarioModifico'     => $this->getUsuarioModifico()->value(),
+            'usuarioModifico'     => $this->getUsuarioModifico()->value(),
         ];
 
     }

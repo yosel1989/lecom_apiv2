@@ -49,8 +49,12 @@ class Modulo extends Model
         'idEliminado' => IdEliminado::class
     ];
 
-    public function sede(){
-        return $this->hasOne('App\Models\V2\Sede','id','idSede');
+    public function usuarioRegistro(){
+        return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
+    }
+
+    public function usuarioModifico(){
+        return $this->hasOne('App\Models\User','id','idUsuarioModifico');
     }
 
 }

@@ -51,4 +51,12 @@ class Perfil extends Model
         'idNivelUsuario' => IdNivelUsuario::class,
     ];
 
+    public function usuarioRegistro(){
+        return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
+    }
+
+    public function usuarioModifico(){
+        return $this->hasOne('App\Models\User','id','idUsuarioModifico');
+    }
+
 }

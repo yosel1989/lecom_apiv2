@@ -12,8 +12,6 @@ use Src\Core\Domain\ValueObjects\Text;
 final class Destino
 {
 
-    private Text $usuarioRegistro;
-    private Text $usuarioModifico;
     private Id $id;
     private Text $nombre;
     private NumericFloat $precioBase;
@@ -24,6 +22,9 @@ final class Destino
     private Id $idUsuarioModifico;
     private DateTimeFormat $fechaRegistro;
     private DateTimeFormat $fechaModifico;
+
+    private Text $usuarioRegistro;
+    private Text $usuarioModifico;
 
 
     /**

@@ -20,7 +20,7 @@ final class Vehiculo
     private Id $idFlota;
     private NumericInteger $idEstado;
     private NumericInteger $idEliminado;
-    private Id $idUsurioRegistro;
+    private Id $idUsuarioRegistro;
     private Id $idUsuarioModifico;
     private DateTimeFormat $fechaRegistro;
     private DateTimeFormat $fechaModifico;
@@ -40,7 +40,7 @@ final class Vehiculo
      * @param Id $idCategoria
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
-     * @param Id $idUsurioRegistro
+     * @param Id $idUsuarioRegistro
      * @param Id $idUsuarioModifico
      * @param DateTimeFormat $fechaRegistro
      * @param DateTimeFormat $fechaModifico
@@ -57,7 +57,7 @@ final class Vehiculo
         Id $idCategoria,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
-        Id $idUsurioRegistro,
+        Id $idUsuarioRegistro,
         Id $idUsuarioModifico,
         DateTimeFormat $fechaRegistro,
         DateTimeFormat $fechaModifico
@@ -74,7 +74,7 @@ final class Vehiculo
         $this->idFlota = $idFlota;
         $this->idEstado = $idEstado;
         $this->idEliminado = $idEliminado;
-        $this->idUsurioRegistro = $idUsurioRegistro;
+        $this->idUsuarioRegistro = $idUsuarioRegistro;
         $this->idUsuarioModifico = $idUsuarioModifico;
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
@@ -244,17 +244,17 @@ final class Vehiculo
     /**
      * @return Id
      */
-    public function getIdUsurioRegistro(): Id
+    public function getIdUsuarioRegistro(): Id
     {
-        return $this->idUsurioRegistro;
+        return $this->idUsuarioRegistro;
     }
 
     /**
-     * @param Id $idUsurioRegistro
+     * @param Id $idUsuarioRegistro
      */
-    public function setIdUsurioRegistro(Id $idUsurioRegistro): void
+    public function setIdUsuarioRegistro(Id $idUsuarioRegistro): void
     {
-        $this->idUsurioRegistro = $idUsurioRegistro;
+        $this->idUsuarioRegistro = $idUsuarioRegistro;
     }
 
     /**

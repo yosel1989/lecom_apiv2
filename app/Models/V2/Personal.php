@@ -58,4 +58,12 @@ class Personal extends Model
         return $this->hasOne('App\Models\V2\Sede','id','idSede');
     }
 
+    public function usuarioRegistro(){
+        return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
+    }
+
+    public function usuarioModifico(){
+        return $this->hasOne('App\Models\User','id','idUsuarioModifico');
+    }
+
 }
