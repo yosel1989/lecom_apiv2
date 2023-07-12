@@ -57,9 +57,9 @@ class BoletoInterprovincial extends Model
         'precio' => 'float',
         'latitud' => 'float',
         'longitud' => 'float',
-        'fecha' => 'datetime',
-        'fechaRegistro' => 'datetime',
-        'fechaModifico' => 'datetime'
+        'fecha' => 'string',
+        'fechaRegistro' => 'string',
+        'fechaModifico' => 'string'
     ];
 
 }

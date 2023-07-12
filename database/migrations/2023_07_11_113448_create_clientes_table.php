@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('clientes', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->smallInteger("codigo")->unique();
+            $table->smallInteger('codigo')->unique();
             $table->smallInteger('idTipoDocumento')->nullable();
             $table->string('numeroDocumento',25);
             $table->string('nombre',150);
             $table->string('nombreContacto',150)->nullable();
             $table->string('correo',150)->nullable();
-            $table->string('dirección', 150)->nullable();
+            $table->string('direccion', 150)->nullable();
             $table->string('telefono1', 15)->nullable();
             $table->string('telefono2', 15)->nullable();
             $table->smallInteger('idTipo')->default(0);

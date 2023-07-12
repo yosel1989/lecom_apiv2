@@ -6,7 +6,9 @@ namespace Src\Admin\Client\Infraestructure\Repositories;
 
 use App\Models\Admin\Client as EloquentClientModel;
 use App\Models\V2\Cliente as EloquentClienteModel;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Src\Admin\Client\Domain\Client;
 use Src\Admin\Client\Domain\Contracts\ClientRepositoryContract;
 use Src\Admin\Client\Domain\ValueObjects\ClientAddress;
@@ -68,6 +70,25 @@ final class EloquentClientRepository implements ClientRepositoryContract
             'type'=>$type->value(),
             'id_parent_client'=>$idParent->value()
         ]);
+
+        Schema::create('boleto_interprovincial_' . ($count + 1), function (Blueprint $table) {
+            $table->uuid('id')->unique()->primary();
+            $table->uuid('idDestino')->nullable();
+            $table->uuid('idVehiculo')->nullable();
+            $table->uuid('idCliente')->nullable();
+            $table->string('numeroDocumento',20)->nullable();
+            $table->string('codigoBoleto',30)->nullable();
+            $table->decimal('latitud',10,8)->nullable();
+            $table->decimal('longitud',10,8)->nullable();
+            $table->decimal('precio',5,2);
+            $table->dateTime('fecha');
+            $table->tinyInteger('idEstado')->default(1);
+            $table->tinyInteger('idEliminado')->default(0);
+            $table->uuid('idUsuarioRegistro');
+            $table->uuid('idUsuarioModifico')->nullable();
+            $table->timestamp('fechaRegistro');
+            $table->timestamp('fechaModifico')->nullable();
+        });
 
         $count = DB::table('clientes')->count();
         $this->eloquentClienteModel->create([

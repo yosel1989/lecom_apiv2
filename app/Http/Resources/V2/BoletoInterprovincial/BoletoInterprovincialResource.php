@@ -30,7 +30,7 @@ class BoletoInterprovincialResource extends JsonResource
             'idEliminado'       => $this->getIdEliminado()->value(),
             'fechaRegistro'       => $this->getFechaRegistro()->value(),
             'fechaModifico'     => $this->getFechaModifico()->value(),
-            'idUsuarioRegistro'     => $this->getIdUsuarioModifico()->value(),
+            'idUsuarioRegistro'     => $this->getIdUsuarioRegistro()->value(),
             //'usuarioRegistro'     => $this->getUsuarioRegistro()->value(),
             'idUsuarioModifico'     => $this->getIdUsuarioModifico()->value(),
             //'usuarioModifico'     => $this->getUsuarioModifico()->value(),

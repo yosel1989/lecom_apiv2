@@ -19,72 +19,72 @@ Route::middleware('auth:sanctum')->group(function() {
 
         try {
             $user = Auth::user();
+//
+//            $Vehiculo = \App\Models\Administracion\Vehiculo::where('id', $request->input('idVehiculo'))->where('idEstado',1)->get();
+//            $Destino = Destino::where('id', $request->input('idDestino'))->where('idEstado',1)->get();
+//            $Cliente = \App\Models\Admin\Client::where('id', $request->input('idCliente'))->where('deleted',0)->get();
+//
+//            if( $Vehiculo->isEmpty() ){
+//                return response()->json([
+//                    'data'      => null,
+//                    'error' => 'El vehiculo no se encuentra registrado en el sistema.',
+//                    'status' => \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
+//                ]);
+//            }
+//
+//            if( $Destino->isEmpty() ){
+//                return response()->json([
+//                    'data'      => null,
+//                    'error' => 'El destino no se encuentra registrado en el sistema.',
+//                    'status' => \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
+//                ]);
+//            }
+//
+//            if( $Cliente->isEmpty() ){
+//                return response()->json([
+//                    'data'      => null,
+//                    'error' => 'El cliente no se encuentra registrado en el sistema.',
+//                    'status' => \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
+//                ]);
+//            }
 
-            $Vehiculo = \App\Models\Administracion\Vehiculo::where('id', $request->input('idVehiculo'))->where('idEstado',1)->get();
-            $Destino = Destino::where('id', $request->input('idDestino'))->where('idEstado',1)->get();
-            $Cliente = \App\Models\Admin\Client::where('id', $request->input('idCliente'))->where('deleted',0)->get();
 
-            if( $Vehiculo->isEmpty() ){
-                return response()->json([
-                    'data'      => null,
-                    'error' => 'El vehiculo no se encuentra registrado en el sistema.',
-                    'status' => \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
-                ]);
-            }
-
-            if( $Destino->isEmpty() ){
-                return response()->json([
-                    'data'      => null,
-                    'error' => 'El destino no se encuentra registrado en el sistema.',
-                    'status' => \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
-                ]);
-            }
-
-            if( $Cliente->isEmpty() ){
-                return response()->json([
-                    'data'      => null,
-                    'error' => 'El cliente no se encuentra registrado en el sistema.',
-                    'status' => \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
-                ]);
-            }
-
-
-            if (!Schema::hasTable('boleto_interprovincial_' . $Cliente->first()->codigo)) {
-                Schema::create('boleto_interprovincial_' . $Cliente->first()->codigo, function (Blueprint $table) {
-                    $table->uuid('id')->unique()->primary();
-                    $table->uuid('idDestino')->nullable();
-                    $table->uuid('idVehiculo')->nullable();
-                    $table->uuid('idCliente')->nullable();
-                    $table->string('numeroDocumento',20)->nullable();
-                    $table->string('codigoBoleto',30)->nullable();
-                    $table->decimal('latitud',10,8)->nullable();
-                    $table->decimal('longitud',10,8)->nullable();
-                    $table->decimal('precio',5,2);
-                    $table->dateTime('fecha');
-                    $table->tinyInteger('idEstado')->default(1);
-                    $table->tinyInteger('idEliminado')->default(0);
-                    $table->uuid('idUsuarioRegistro');
-                    $table->uuid('idUsuarioModifico')->nullable();
-                    $table->timestamp('fechaRegistro');
-                    $table->timestamp('fechaModifico')->nullable();
-                });
-            }
-
-            $model = new \App\Models\V2\BoletoInterprovincial();
-            $model->setTable('boleto_interprovincial_' . $Cliente->first()->codigo);
-
-            $model->create([
-                'idCliente' => $request->input('idCliente'),
-                'idVehiculo' => $request->input('idVehiculo'),
-                'idDestino' => $request->input('idDestino'),
-                'numeroDocumento' => $request->input('numeroDocumento'),
-                'precio' => $request->input('precio'),
-                'fecha' => $request->input('fecha'),
-                'codigoBoleto' => $request->input('codigoBoleto'),
-                'latitud' => $request->input('latitud'),
-                'longitud' => $request->input('longitud'),
-                'idUsuarioRegistro' => $user->getId()
-            ]);
+//            if (!Schema::hasTable('boleto_interprovincial_' . $Cliente->first()->codigo)) {
+//                Schema::create('boleto_interprovincial_' . $Cliente->first()->codigo, function (Blueprint $table) {
+//                    $table->uuid('id')->unique()->primary();
+//                    $table->uuid('idDestino')->nullable();
+//                    $table->uuid('idVehiculo')->nullable();
+//                    $table->uuid('idCliente')->nullable();
+//                    $table->string('numeroDocumento',20)->nullable();
+//                    $table->string('codigoBoleto',30)->nullable();
+//                    $table->decimal('latitud',10,8)->nullable();
+//                    $table->decimal('longitud',10,8)->nullable();
+//                    $table->decimal('precio',5,2);
+//                    $table->dateTime('fecha');
+//                    $table->tinyInteger('idEstado')->default(1);
+//                    $table->tinyInteger('idEliminado')->default(0);
+//                    $table->uuid('idUsuarioRegistro');
+//                    $table->uuid('idUsuarioModifico')->nullable();
+//                    $table->timestamp('fechaRegistro');
+//                    $table->timestamp('fechaModifico')->nullable();
+//                });
+//            }
+//
+//            $model = new \App\Models\V2\BoletoInterprovincial();
+//            $model->setTable('boleto_interprovincial_' . $Cliente->first()->codigo);
+//
+//            $model->create([
+//                'idCliente' => $request->input('idCliente'),
+//                'idVehiculo' => $request->input('idVehiculo'),
+//                'idDestino' => $request->input('idDestino'),
+//                'numeroDocumento' => $request->input('numeroDocumento'),
+//                'precio' => $request->input('precio'),
+//                'fecha' => $request->input('fecha'),
+//                'codigoBoleto' => $request->input('codigoBoleto'),
+//                'latitud' => $request->input('latitud'),
+//                'longitud' => $request->input('longitud'),
+//                'idUsuarioRegistro' => $user->getId()
+//            ]);
 
             return response()->json([
                 'data' => null,
