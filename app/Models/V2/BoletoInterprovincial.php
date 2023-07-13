@@ -7,19 +7,39 @@ use App\Enums\IdEstado;
 use App\Traits\TableNameDynamic;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 
 class BoletoInterprovincial extends Model
 {
     use UUID;
-    use TableNameDynamic;
+//    use TableNameDynamic;
 
     protected $keyType = 'string';
     public $incrementing = false;
 
     public $timestamps = true;
 
+    protected $dynamicTableName;
+
     const CREATED_AT = 'fechaRegistro';
     const UPDATED_AT = 'fechaModifico';
+
+
+    public function setDynamicTableName($tableName)
+    {
+        $this->dynamicTableName = $tableName;
+    }
+
+    public function getTable()
+    {
+        if ($this->dynamicTableName) {
+            return $this->dynamicTableName;
+        }
+
+        return parent::getTable();
+    }
+
 
 
     /**
@@ -62,20 +82,24 @@ class BoletoInterprovincial extends Model
         'fechaModifico' => 'string'
     ];
 
-    public function usuarioRegistro(){
+    public function usuarioRegistro(): HasOne{
+        $this->setTable('boleto_interprovincial_' . $this->getTable());
         return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
     }
 
-    public function usuarioModifico(){
+    public function usuarioModifico(): HasOne{
+        $this->setTable('boleto_interprovincial_' . $this->getTable());
         return $this->hasOne('App\Models\User','id','idUsuarioModifico');
     }
 
-    public function vehiculo(){
-        return $this->hasOne('App\Models\V2\Vehiculo','id','idUsuarioRegistro');
+    public function vehiculo(): HasOne{
+        $this->setTable('boleto_interprovincial_' . $this->getTable());
+        return $this->hasOne('App\Models\V2\Vehiculo','id','idVehiculo');
     }
 
-    public function destino(){
-        return $this->hasOne('App\Models\V2\Destino','id','idUsuarioRegistro');
+    public function destino(): HasOne{
+        $this->setTable('boleto_interprovincial_' . $this->getTable());
+        return $this->hasOne('App\Models\V2\Destino','id','idDestino');
     }
 
 }

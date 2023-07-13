@@ -7,13 +7,13 @@ trait TableNameDynamic
     protected $connection = null;
     protected $table = null;
 
-    public function bind(string $connection, string $table)
+    public function bind(string $table)
     {
-        $this->setConnection($connection);
+        $this->setConnection(env('DB_CONNECTION', 'pgsql'));
         $this->setTable($table);
     }
 
-    public function newInstance($attributes = [], $exists = false)
+    public function newInstance($attributes = [], $exists = false): self
     {
         // Overridden in order to allow for late table binding.
 
