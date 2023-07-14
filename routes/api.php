@@ -158,6 +158,7 @@ include 'Modules/transportePersonal.php';
 include 'Modules/transporteInterprovincial.php';
 
 
+include 'V2/auth-route.php';
 include 'V2/vehiculo-route.php';
 include 'V2/personal-route.php';
 include 'V2/usuario-route.php';

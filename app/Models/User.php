@@ -95,4 +95,10 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\V2\Perfil','id','idPerfil');
     }
 
+
+
+    public function cliente(){
+        return $this->hasOne('App\Models\V2\Cliente','id','idCliente');
+    }
+
 }
