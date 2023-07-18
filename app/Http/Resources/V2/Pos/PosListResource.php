@@ -20,7 +20,7 @@ class PosListResource extends JsonResource
             'nombre'          => $this->getNombre()->value(),
             'imei'          => $this->getImei()->value(),
             'idSede'          => $this->getIdSede()->value(),
-            'idCliente'          => $this->getIdCliente()->value(),
+//            'idCliente'          => $this->getIdCliente()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),
 

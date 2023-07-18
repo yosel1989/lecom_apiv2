@@ -14,7 +14,11 @@ final class BoletoInterprovincial
     private Id $id;
     private Id $idCliente;
     private Id $idVehiculo;
-    private Id $idDestino;
+    private Id $idRuta;
+    private Id $idParadero;
+    private Id $idCaja;
+    private Id $idPos;
+    private Text $idTipoDocumento;
     private Text $numeroDocumento;
     private Text $codigoBoleto;
     private NumericFloat $latitud;
@@ -28,17 +32,23 @@ final class BoletoInterprovincial
     private DateTimeFormat $fechaRegistro;
     private DateTimeFormat $fechaModifico;
 
+    private Text $vehiculo;
+    private Text $ruta;
+    private Text $paradero;
+    private Text $caja;
+    private Text $pos;
+    private Text $tipoDocumento;
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
-    private Text $vehiculo;
-    private Text $destino;
-
 
     /**
      * @param Id $id
      * @param Id $idCliente
      * @param Id $idVehiculo
-     * @param Id $idDestino
+     * @param Id $idRuta
+     * @param Id $idParadero
+     * @param Id $idCaja
+     * @param Id $idPos
      * @param Text $numeroDocumento
      * @param Text $codigoBoleto
      * @param NumericFloat $latitud
@@ -56,7 +66,10 @@ final class BoletoInterprovincial
         Id $id,
         Id $idCliente,
         Id $idVehiculo,
-        Id $idDestino,
+        Id $idRuta,
+        Id $idParadero,
+        Id $idCaja,
+        Id $idPos,
         Text $numeroDocumento,
         Text $codigoBoleto,
         NumericFloat $latitud,
@@ -75,7 +88,10 @@ final class BoletoInterprovincial
         $this->id = $id;
         $this->idCliente = $idCliente;
         $this->idVehiculo = $idVehiculo;
-        $this->idDestino = $idDestino;
+        $this->idRuta = $idRuta;
+        $this->idParadero = $idParadero;
+        $this->idCaja = $idCaja;
+        $this->idPos = $idPos;
         $this->numeroDocumento = $numeroDocumento;
         $this->codigoBoleto = $codigoBoleto;
         $this->latitud = $latitud;
@@ -141,17 +157,81 @@ final class BoletoInterprovincial
     /**
      * @return Id
      */
-    public function getIdDestino(): Id
+    public function getIdRuta(): Id
     {
-        return $this->idDestino;
+        return $this->idRuta;
     }
 
     /**
-     * @param Id $idDestino
+     * @param Id $idRuta
      */
-    public function setIdDestino(Id $idDestino): void
+    public function setIdRuta(Id $idRuta): void
     {
-        $this->idDestino = $idDestino;
+        $this->idRuta = $idRuta;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdParadero(): Id
+    {
+        return $this->idParadero;
+    }
+
+    /**
+     * @param Id $idParadero
+     */
+    public function setIdParadero(Id $idParadero): void
+    {
+        $this->idParadero = $idParadero;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdCaja(): Id
+    {
+        return $this->idCaja;
+    }
+
+    /**
+     * @param Id $idCaja
+     */
+    public function setIdCaja(Id $idCaja): void
+    {
+        $this->idCaja = $idCaja;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdPos(): Id
+    {
+        return $this->idPos;
+    }
+
+    /**
+     * @param Id $idPos
+     */
+    public function setIdPos(Id $idPos): void
+    {
+        $this->idPos = $idPos;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getIdTipoDocumento(): Text
+    {
+        return $this->idTipoDocumento;
+    }
+
+    /**
+     * @param Text $idTipoDocumento
+     */
+    public function setIdTipoDocumento(Text $idTipoDocumento): void
+    {
+        $this->idTipoDocumento = $idTipoDocumento;
     }
 
     /**
@@ -349,6 +429,102 @@ final class BoletoInterprovincial
     /**
      * @return Text
      */
+    public function getVehiculo(): Text
+    {
+        return $this->vehiculo;
+    }
+
+    /**
+     * @param Text $vehiculo
+     */
+    public function setVehiculo(Text $vehiculo): void
+    {
+        $this->vehiculo = $vehiculo;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getRuta(): Text
+    {
+        return $this->ruta;
+    }
+
+    /**
+     * @param Text $ruta
+     */
+    public function setRuta(Text $ruta): void
+    {
+        $this->ruta = $ruta;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getParadero(): Text
+    {
+        return $this->paradero;
+    }
+
+    /**
+     * @param Text $paradero
+     */
+    public function setParadero(Text $paradero): void
+    {
+        $this->paradero = $paradero;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getCaja(): Text
+    {
+        return $this->caja;
+    }
+
+    /**
+     * @param Text $caja
+     */
+    public function setCaja(Text $caja): void
+    {
+        $this->caja = $caja;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getPos(): Text
+    {
+        return $this->pos;
+    }
+
+    /**
+     * @param Text $pos
+     */
+    public function setPos(Text $pos): void
+    {
+        $this->pos = $pos;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getTipoDocumento(): Text
+    {
+        return $this->tipoDocumento;
+    }
+
+    /**
+     * @param Text $tipoDocumento
+     */
+    public function setTipoDocumento(Text $tipoDocumento): void
+    {
+        $this->tipoDocumento = $tipoDocumento;
+    }
+
+    /**
+     * @return Text
+     */
     public function getUsuarioRegistro(): Text
     {
         return $this->usuarioRegistro;
@@ -378,36 +554,6 @@ final class BoletoInterprovincial
         $this->usuarioModifico = $usuarioModifico;
     }
 
-    /**
-     * @return Text
-     */
-    public function getVehiculo(): Text
-    {
-        return $this->vehiculo;
-    }
 
-    /**
-     * @param Text $vehiculo
-     */
-    public function setVehiculo(Text $vehiculo): void
-    {
-        $this->vehiculo = $vehiculo;
-    }
-
-    /**
-     * @return Text
-     */
-    public function getDestino(): Text
-    {
-        return $this->destino;
-    }
-
-    /**
-     * @param Text $destino
-     */
-    public function setDestino(Text $destino): void
-    {
-        $this->destino = $destino;
-    }
 
 }

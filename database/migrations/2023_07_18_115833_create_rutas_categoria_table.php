@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('caja', function (Blueprint $table) {
+        Schema::create('rutas_categoria', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->string('nombre',100);
-            $table->uuid('idSede')->nullable();
-            $table->uuid('idPos')->nullable();
             $table->uuid('idCliente');
             $table->tinyInteger('idEstado')->default(1);
             $table->tinyInteger('idEliminado')->default(0);
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('caja');
+        Schema::dropIfExists('rutas_categoria');
     }
 };

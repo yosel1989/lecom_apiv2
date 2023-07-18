@@ -23,7 +23,7 @@ final class CreateUseCase
         string $nombre,
         string $imei,
         string $idCliente,
-        string $idSede,
+        string | null $idSede,
         int $idEstado,
         string $idUsuarioRegistro
     ): void
@@ -31,7 +31,7 @@ final class CreateUseCase
         $_nombre = new Text($nombre,false, 100,'El nombre de la pos excede los 100 caracteres');
         $_imei = new Text($imei,false, 25,'El imei excede los 25 caracteres');
         $_idCliente = new Id($idCliente,false,'El id del cliente no tiene el formato correcto');
-        $_idSede = new Id($idSede,false,'El id de la sede no tiene el formato correcto');
+        $_idSede = new Id($idSede,true,'El id de la sede no tiene el formato correcto');
         $_idEstado = new NumericInteger($idEstado);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 

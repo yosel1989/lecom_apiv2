@@ -21,6 +21,7 @@ final class CreateController
         $user = Auth::user();
         $nombre             = $request->input('nombre');
         $idSede             = $request->input('idSede');
+        $idPos             = $request->input('idPos');
         $idCliente          = $id;
         $idEstado           = $request->input('idEstado');
 
@@ -29,6 +30,7 @@ final class CreateController
             $nombre,
             $idCliente,
             $idSede,
+            $idPos,
             $idEstado,
             $user->getId()
         );

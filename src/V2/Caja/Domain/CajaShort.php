@@ -14,10 +14,13 @@ final class CajaShort
     private NumericInteger $idEstado;
     private NumericInteger $idEliminado;
     private Id $idSede;
+    private Id $idPos;
 
     /**
      * @param Id $id
      * @param Text $nombre
+     * @param Id $idSede
+     * @param Id $idPos
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      */
@@ -25,6 +28,7 @@ final class CajaShort
         Id $id,
         Text $nombre,
         Id $idSede,
+        Id $idPos,
         NumericInteger $idEstado,
         NumericInteger $idEliminado
     )
@@ -34,6 +38,7 @@ final class CajaShort
         $this->idEstado = $idEstado;
         $this->idEliminado = $idEliminado;
         $this->idSede = $idSede;
+        $this->idPos = $idPos;
     }
 
     /**

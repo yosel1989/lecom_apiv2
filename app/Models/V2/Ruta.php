@@ -4,17 +4,18 @@ namespace App\Models\V2;
 
 use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
+use App\Enums\IdTipoRuta;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
-class Caja extends Model
+class Ruta extends Model
 {
     use UUID;
 
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $table = "caja";
+    protected $table = "rutas";
     public $timestamps = true;
 
     const CREATED_AT = 'fechaRegistro';
@@ -27,9 +28,9 @@ class Caja extends Model
     protected $fillable = [
         'id',
         'nombre',
+        'idTipo',
+        'idCategoria',
         'idCliente',
-        'idSede',
-        'idPos',
         'idEstado',
         'idEliminado',
         'idUsuarioRegistro',
@@ -46,17 +47,10 @@ class Caja extends Model
     protected $casts = [
         'fechaRegistro' =>  'string',
         'fechaModifico' =>  'string',
+        'idTipo' => IdTipoRuta::class,
         'idEstado' => IdEstado::class,
-        'idEliminado' => IdEliminado::class
+        'idEliminado' => IdEliminado::class,
     ];
-
-    public function sede(){
-        return $this->hasOne('App\Models\V2\Sede','id','idSede');
-    }
-
-    public function pos(){
-        return $this->hasOne('App\Models\V2\Pos','id','idPos');
-    }
 
     public function usuarioRegistro(){
         return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
@@ -65,4 +59,9 @@ class Caja extends Model
     public function usuarioModifico(){
         return $this->hasOne('App\Models\User','id','idUsuarioModifico');
     }
+
+    public function paraderos(){
+        return $this->hasMany('App\Models\V2\Paradero','idRuta','id');
+    }
+
 }

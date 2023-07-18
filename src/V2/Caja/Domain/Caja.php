@@ -20,6 +20,7 @@ final class Caja
     private DateTimeFormat $fechaRegistro;
     private DateTimeFormat $fechaModifico;
 
+    private Text $pos;
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
     private Text $sede;
@@ -31,6 +32,7 @@ final class Caja
      * @param Text $nombre
      * @param Id $idCliente
      * @param Id $idSede
+     * @param Id $idPos
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      * @param Id $idUsuarioRegistro
@@ -43,6 +45,7 @@ final class Caja
         Text $nombre,
         Id $idCliente,
         Id $idSede,
+        Id $idPos,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
         Id $idUsuarioRegistro,
@@ -55,6 +58,7 @@ final class Caja
         $this->id = $id;
         $this->nombre = $nombre;
         $this->idCliente = $idCliente;
+        $this->idPos = $idPos;
         $this->idEstado = $idEstado;
         $this->idEliminado = $idEliminado;
         $this->idUsuarioRegistro = $idUsuarioRegistro;
@@ -270,6 +274,38 @@ final class Caja
     public function setIdSede(Id $idSede): void
     {
         $this->idSede = $idSede;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdPos(): Id
+    {
+        return $this->idPos;
+    }
+
+    /**
+     * @param Id $idPos
+     */
+    public function setIdPos(Id $idPos): void
+    {
+        $this->idPos = $idPos;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getPos(): Text
+    {
+        return $this->pos;
+    }
+
+    /**
+     * @param Text $pos
+     */
+    public function setPos(Text $pos): void
+    {
+        $this->pos = $pos;
     }
 
 

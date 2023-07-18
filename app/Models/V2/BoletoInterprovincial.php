@@ -4,6 +4,7 @@ namespace App\Models\V2;
 
 use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
+use App\Enums\IdTipoDocumento;
 use App\Traits\TableNameDynamic;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
@@ -33,13 +34,17 @@ class BoletoInterprovincial extends Model
      */
     protected $fillable = [
         'id',
-        'idDestino',
+        'idRuta',
+        'idParadero',
         'idVehiculo',
         'idCliente',
+        'idTipoDocumento',
         'numeroDocumento',
         'codigoBoleto',
         'latitud',
         'longitud',
+        'idCaja',
+        'idPos',
         'precio',
         'fecha',
         'idEstado',
@@ -56,6 +61,7 @@ class BoletoInterprovincial extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'idTipoDocumento' => IdTipoDocumento::class,
         'idEstado' => IdEstado::class,
         'idEliminado' => IdEliminado::class,
         'precio' => 'float',
@@ -106,9 +112,24 @@ class BoletoInterprovincial extends Model
         return $this->hasOne('App\Models\V2\Vehiculo','id','idVehiculo');
     }
 
-    public function destino(): HasOne{
+    public function paradero(): HasOne{
         parent::setTable('boleto_interprovincial_' . $this->getTable());
-        return $this->hasOne('App\Models\V2\Destino','id','idDestino');
+        return $this->hasOne('App\Models\V2\Paradero','id','idParadero');
+    }
+
+    public function ruta(): HasOne{
+        parent::setTable('boleto_interprovincial_' . $this->getTable());
+        return $this->hasOne('App\Models\V2\Ruta','id','idRuta');
+    }
+
+    public function caja(): HasOne{
+        parent::setTable('boleto_interprovincial_' . $this->getTable());
+        return $this->hasOne('App\Models\V2\Caja','id','idCaja');
+    }
+
+    public function pos(): HasOne{
+        parent::setTable('boleto_interprovincial_' . $this->getTable());
+        return $this->hasOne('App\Models\V2\Pos','id','idPos');
     }
 
 }

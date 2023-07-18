@@ -23,7 +23,7 @@ final class UpdateUseCase
         string $idPos,
         string $nombre,
         string $imei,
-        string $idSede,
+        string | null $idSede,
         int $idEstado,
         string $idUsuarioRegistro
     ): void
@@ -31,7 +31,7 @@ final class UpdateUseCase
         $_idPos = new Id($idPos,false,'El id del pos no tiene el formato correcto');
         $_nombre = new Text($nombre, false,100,'El nombre del pos excede los 100 caracteres');
         $_imei = new Text($imei, true,100,'El imei excede los 25 caracteres');
-        $_idSede = new Id($idSede,false,'El id de la sede no tiene el formato correcto');
+        $_idSede = new Id($idSede,true,'El id de la sede no tiene el formato correcto');
         $_idEstado = new NumericInteger($idEstado);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 

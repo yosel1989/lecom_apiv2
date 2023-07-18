@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('caja', function (Blueprint $table) {
+        Schema::create('paraderos', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->string('nombre',100);
-            $table->uuid('idSede')->nullable();
-            $table->uuid('idPos')->nullable();
             $table->uuid('idCliente');
+            $table->uuid('idRuta');
+            $table->decimal('precioBase',5,2)->default(0.0);
+            $table->decimal('latitud',11,9)->default(0.0);
+            $table->decimal('longitud',11,9)->default(0.0);
             $table->tinyInteger('idEstado')->default(1);
             $table->tinyInteger('idEliminado')->default(0);
             $table->uuid('idUsuarioRegistro')->nullable();
@@ -31,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('caja');
+        Schema::dropIfExists('paraderos');
     }
 };

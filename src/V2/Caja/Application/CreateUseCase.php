@@ -22,14 +22,16 @@ final class CreateUseCase
     public function __invoke(
         string $nombre,
         string $idCliente,
-        string $idSede,
+        string | null $idSede,
+        string | null $idPos,
         int $idEstado,
         string $idUsuarioRegistro
     ): void
     {
         $_nombre = new Text($nombre,false, 100,'El nombre de la caja excede los 100 caracteres');
         $_idCliente = new Id($idCliente,false,'El id del cliente no tiene el formato correcto');
-        $_idSede = new Id($idSede,false,'El id de la sede no tiene el formato correcto');
+        $_idSede = new Id($idSede,true,'El id de la sede no tiene el formato correcto');
+        $_idPos = new Id($idPos,true,'El id del pos no tiene el formato correcto');
         $_idEstado = new NumericInteger($idEstado);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
@@ -37,6 +39,7 @@ final class CreateUseCase
             $_nombre,
             $_idCliente,
             $_idSede,
+            $_idPos,
             $_idEstado,
             $_idUsuarioRegistro
         );

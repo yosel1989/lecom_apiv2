@@ -25,7 +25,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
 
     public function collectionByCliente(Id $idCliente): array
     {
-        $models = $this->eloquentModelCaja->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos', 'sede:id,nombre')->where('idCliente',$idCliente->value())->get();
+        $models = $this->eloquentModelCaja->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos', 'sede:id,nombre' , 'pos:id,nombre')->where('idCliente',$idCliente->value())->get();
 
         $arrVehicles = array();
 
@@ -35,7 +35,8 @@ final class EloquentCajaRepository implements CajaRepositoryContract
                 new Id($model->id , false, 'El id de la caja no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la caja excede los 100 caracteres'),
                 new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
-                new Id($model->idSede, false, 'El id de la sede no tiene el formato correcto'),
+                new Id($model->idSede, true, 'El id de la sede no tiene el formato correcto'),
+                new Id($model->idPos, true, 'El id del pos no tiene el formato correcto'),
                 new NumericInteger($model->idEstado->value),
                 new NumericInteger($model->idEliminado->value),
                 new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
@@ -47,6 +48,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
             $OModel->setSede(new Text(!is_null($model->sede) ? $model->sede->nombre : null, true, -1));
+            $OModel->setPos(new Text(!is_null($model->pos) ? $model->pos->nombre : null, true, -1));
 
             $arrVehicles[] = $OModel;
         }
@@ -66,7 +68,8 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             $OModel = new CajaShort(
                 new Id($model->id , false, 'El id del caja no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la caja excede los 100 caracteres'),
-                new Id($model->idSede , false, 'El id de la sede no tiene el formato correcto'),
+                new Id($model->idSede , true, 'El id de la sede no tiene el formato correcto'),
+                new Id($model->idPos , true, 'El id del pos no tiene el formato correcto'),
                 new NumericInteger($model->idEstado->value),
                 new NumericInteger($model->idEliminado->value),
             );
@@ -81,6 +84,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         Text $nombre,
         Id $idCliente,
         Id $idSede,
+        Id $idPos,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -89,6 +93,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             'nombre' => $nombre->value(),
             'idCliente' => $idCliente->value(),
             'idSede' => $idSede->value(),
+            'idPos' => $idPos->value(),
             'idEstado' => $idEstado->value(),
             'idUsuarioRegistro' => $idUsuarioRegistro->value()
         ]);
@@ -99,6 +104,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         Id $id,
         Text $nombre,
         Id $idSede,
+        Id $idPos,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -106,6 +112,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         $this->eloquentModelCaja->findOrFail($id->value())->update([
             'nombre' => $nombre->value(),
             'idSede' => $idSede->value(),
+            'idPos' => $idPos->value(),
             'idEstado' => $idEstado->value(),
             'idUsuarioModifico' => $idUsuarioRegistro->value()
         ]);
@@ -132,7 +139,8 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             new Id($model->id , false, 'El id del caja no tiene el formato correcto'),
             new Text($model->nombre, false, 100, 'El nombre del caja excede los 100 caracteres'),
             new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
-            new Id($model->idSede, false, 'El id de la sede no tiene el formato correcto'),
+            new Id($model->idSede, true, 'El id de la sede no tiene el formato correcto'),
+            new Id($model->idPos, true, 'El id del pos no tiene el formato correcto'),
             new NumericInteger($model->idEstado->value),
             new NumericInteger($model->idEliminado->value),
             new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
@@ -143,6 +151,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
         $OModel->setSede(new Text(!is_null($model->sede) ? $model->sede->nombre : null, true, -1));
+        $OModel->setPos(new Text(!is_null($model->pos) ? $model->pos->nombre : null, true, -1));
 
 
         return $OModel;

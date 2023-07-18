@@ -21,6 +21,8 @@ class CajaResource extends JsonResource
             'idEstado'       => $this->getIdEstado()->value(),
             'idCliente'       => $this->getIdCliente()->value(),
             'idSede'       => $this->getIdSede()->value(),
+            'idPos'       => $this->getIdPos()->value(),
+            'pos'       => $this->getPos()->value(),
             'sede'       => $this->getSede()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),
             'fechaRegistro'       => $this->getFechaRegistro()->value(),

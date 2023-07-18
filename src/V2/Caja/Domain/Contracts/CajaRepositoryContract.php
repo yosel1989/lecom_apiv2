@@ -13,6 +13,7 @@ interface CajaRepositoryContract
         Text $nombre,
         Id $idCliente,
         Id $idSede,
+        Id $idPos,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;
@@ -24,6 +25,7 @@ interface CajaRepositoryContract
         Id $id,
         Text $nombre,
         Id $idSede,
+        Id $idPos,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;

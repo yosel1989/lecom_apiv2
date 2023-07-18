@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->unique()->primary();
             $table->string('nombre',100);
             $table->string('imei',25);
-            $table->uuid('idSede');
+            $table->uuid('idSede')->nullable();
             $table->uuid('idCliente');
             $table->tinyInteger('idEstado')->default(1);
             $table->tinyInteger('idEliminado')->default(0);

@@ -19,6 +19,8 @@ class CajaListResource extends JsonResource
             'id'            => $this->getId()->value(),
             'nombre'          => $this->getNombre()->value(),
             'idSede'          => $this->getIdSede()->value(),
+            'pos'          => $this->getPos()->value(),
+            'idPos'          => $this->getIdPos()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),
 
