@@ -13,7 +13,7 @@ final class NumericInteger
     /**
      * @param int|null $value
      */
-    public function __construct(?int $value)
+    public function __construct(int | null $value)
     {
 //        $this->nullable = $nullable;
 //        $this->messageError = $messageError;
@@ -24,7 +24,7 @@ final class NumericInteger
     /**
      * @return int|null
      */
-    public function value() : ?int
+    public function value() : int | null
     {
         return $this->value;
     }

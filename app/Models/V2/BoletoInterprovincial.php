@@ -19,26 +19,10 @@ class BoletoInterprovincial extends Model
     public $incrementing = false;
 
     public $timestamps = true;
-
     protected $dynamicTableName;
 
     const CREATED_AT = 'fechaRegistro';
     const UPDATED_AT = 'fechaModifico';
-
-
-    public function setDynamicTableName($tableName)
-    {
-        $this->dynamicTableName = $tableName;
-    }
-
-    public function getTable()
-    {
-        if ($this->dynamicTableName) {
-            return $this->dynamicTableName;
-        }
-
-        return parent::getTable();
-    }
 
 
 
@@ -82,23 +66,48 @@ class BoletoInterprovincial extends Model
         'fechaModifico' => 'string'
     ];
 
+
+    public function setDynamicTableName($tableName)
+    {
+        $this->dynamicTableName = $tableName;
+    }
+
+    public function getTable()
+    {
+        if ($this->dynamicTableName) {
+            return $this->dynamicTableName;
+        }
+
+        return parent::getTable();
+    }
+
+
+
+
+
+
+
+
+
+
+
     public function usuarioRegistro(): HasOne{
-        $this->setTable('boleto_interprovincial_' . $this->getTable());
+        parent::setTable('boleto_interprovincial_' . $this->getTable());
         return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
     }
 
     public function usuarioModifico(): HasOne{
-        $this->setTable('boleto_interprovincial_' . $this->getTable());
+        parent::setTable('boleto_interprovincial_' . $this->getTable());
         return $this->hasOne('App\Models\User','id','idUsuarioModifico');
     }
 
     public function vehiculo(): HasOne{
-        $this->setTable('boleto_interprovincial_' . $this->getTable());
+        parent::setTable('boleto_interprovincial_' . $this->getTable());
         return $this->hasOne('App\Models\V2\Vehiculo','id','idVehiculo');
     }
 
     public function destino(): HasOne{
-        $this->setTable('boleto_interprovincial_' . $this->getTable());
+        parent::setTable('boleto_interprovincial_' . $this->getTable());
         return $this->hasOne('App\Models\V2\Destino','id','idDestino');
     }
 

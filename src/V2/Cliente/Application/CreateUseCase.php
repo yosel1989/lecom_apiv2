@@ -20,8 +20,7 @@ final class CreateUseCase
     }
 
     public function __invoke(
-        int $codigo,
-        ?string $idTipoDocumento,
+        ?int $idTipoDocumento,
         string $numeroDocumento,
         ?string $nombre,
         ?string $nombreContacto,
@@ -30,13 +29,12 @@ final class CreateUseCase
         ?string $telefono1,
         ?string $telefono2,
         int $idTipo,
-        string $idCliente,
+        ?string $idCliente,
         int $idEstado,
         string $idUsuarioRegistro
     ): void
     {
-        $_codigo = new NumericInteger($codigo);
-        $_idTipoDocumento = new Id($idTipoDocumento,true, 'El id del tipo de documento tiene un formato incorrecto');
+        $_idTipoDocumento = new NumericInteger($idTipoDocumento);
         $_numeroDocumento = new Text($numeroDocumento,false,25, 'El número de documento excede los 25 caracteres');
         $_nombre = new Text($nombre,true,150, 'El nombre del cliente excede los 150 caracteres');
         $_nombreContacto = new Text($nombreContacto,true,150, 'El nombre del contacto excede los 150 caracteres');
@@ -45,12 +43,11 @@ final class CreateUseCase
         $_telefono1 = new Text($telefono1,true,15, 'El telefono1 excede los 15 caracteres');
         $_telefono2 = new Text($telefono2,true,15, 'El telefono2 excede los 15 caracteres');
         $_idTipo = new NumericInteger($idTipo);
-        $_idCliente = new Id($idTipoDocumento,true, 'El id del cliente padre tiene un formato incorrecto');
+        $_idCliente = new Id($idCliente,true, 'El id del cliente padre tiene un formato incorrecto');
         $_idEstado = new NumericInteger($idEstado);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
         $this->repository->create(
-            $_codigo,
             $_idTipoDocumento,
             $_numeroDocumento,
             $_nombre,

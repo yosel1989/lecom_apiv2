@@ -4,6 +4,7 @@ namespace App\Models\V2;
 
 use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
+use App\Enums\IdTipoCliente;
 use App\Enums\IdTipoDocumento;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
@@ -27,6 +28,7 @@ class Cliente extends Model
      */
     protected $fillable = [
         'id',
+        'codigo',
         'idTipoDocumento',
         'numeroDocumento',
         'nombre',
@@ -54,6 +56,7 @@ class Cliente extends Model
         'idTipoDocumento' => IdTipoDocumento::class,
         'fechaRegistro' =>  'string',
         'fechaModifico' =>  'string',
+        'idTipo' => IdTipoCliente::class,
         'idEstado' => IdEstado::class,
         'idEliminado' => IdEliminado::class
     ];

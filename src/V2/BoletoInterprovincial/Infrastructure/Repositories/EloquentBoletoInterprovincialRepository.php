@@ -79,15 +79,13 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
     public function reportByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): array
     {
-        $OCliente = $this->eloquentClientModel
-            ->where('id', $idCliente->value())
-            ->get();
+        $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
+        $this->eloquentModelBoletoInterprovincial->setDynamicTableName('boleto_interprovincial_' . $OCliente->codigo);
 
-        throw new \InvalidArgumentException((string)($OCliente->first()->codigo));
-//        $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_' . $OCliente->first()->codigo );
-
-        $models = ($this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_' . $OCliente->first()->codigo))
-            ->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos', 'vehiculo:id,placa', 'destino:id,nombre')
+        $models = $this->eloquentModelBoletoInterprovincial
+//            ->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos', 'vehiculo:id,placa', 'destino:id,nombre')
+            ->whereDate('fecha','>=',$fechaDesde->value())
+            ->whereDate('fecha','<=',$fechaHasta->value())
             ->get();
 
         $arrVehicles = array();
@@ -113,11 +111,16 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
                 new DateTimeFormat($model->fechaModifico)
             );
 
-            $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
-            $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
-            $OModel->setVehiculo(new Text(!is_null($model->vehiculo) ? ( $model->vehiculo->placa . ' ' . $model->vehiculo->placa ) : null, true, -1));
-            $OModel->setDestino(new Text(!is_null($model->destino) ? ( $model->destino->nombre . ' ' . $model->destino->apellido ) : null, true, -1));
+//            $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
+//            $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
+//            $OModel->setVehiculo(new Text(!is_null($model->vehiculo) ? ( $model->vehiculo->placa . ' ' . $model->vehiculo->placa ) : null, true, -1));
+//            $OModel->setDestino(new Text(!is_null($model->destino) ? ( $model->destino->nombre . ' ' . $model->destino->apellido ) : null, true, -1));
 
+
+            $OModel->setUsuarioRegistro(new Text('', true, -1));
+            $OModel->setUsuarioModifico(new Text('', true, -1));
+            $OModel->setVehiculo(new Text('', true, -1));
+            $OModel->setDestino(new Text('', true, -1));
 
             $arrVehicles[] = $OModel;
         }

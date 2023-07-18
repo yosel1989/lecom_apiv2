@@ -19,26 +19,30 @@ final class CreateController
     public function __invoke( Request $request ): void
     {
         $user = Auth::user();
-        $foto            = $request->input('foto');
-        $apellido        = $request->input('apellido');
+        $idTipoDocumento            = $request->input('idTipoDocumento');
+        $numeroDocumento        = $request->input('numeroDocumento');
         $nombre          = $request->input('nombre');
-        $idCliente       = $request->idCliente;
-        $idTipoDocumento = $request->input('idTipoDocumento');
-        $numeroDocumento = $request->input('numeroDocumento');
-        $correo          = $request->input('correo');
-        $idSede        = $request->input('idSede');
-        $idEstado        = $request->input('idEstado');
+        $nombreContacto       = $request->input('nombreContacto');
+        $correo = $request->input('correo');
+        $direccion = $request->input('direccion');
+        $telefono1          = $request->input('telefono1');
+        $telefono2        = $request->input('telefono2');
+        $idTipo        = $request->input('idTipo');
+        $idCliente       = $request->input('idCliente');
+        $idEstado       = $request->input('idEstado');
 
         $useCase = new CreateUseCase( $this->repository );
         $useCase->__invoke(
-            $foto,
-            $nombre,
-            $apellido,
             $idTipoDocumento,
             $numeroDocumento,
+            $nombre,
+            $nombreContacto,
             $correo,
+            $direccion,
+            $telefono1,
+            $telefono2,
+            $idTipo,
             $idCliente,
-            $idSede,
             $idEstado,
             $user->getId()
         );

@@ -10,8 +10,7 @@ use Src\V2\Cliente\Domain\Cliente;
 interface ClienteRepositoryContract
 {
     public function create(
-        NumericInteger $_codigo,
-        Id $_idTipoDocumento,
+        NumericInteger $_idTipoDocumento,
         Text $_numeroDocumento,
         Text $_nombre,
         Text $_nombreContacto,
@@ -29,8 +28,7 @@ interface ClienteRepositoryContract
 
     public function update(
         Id $idCliente,
-        NumericInteger $_codigo,
-        Id $_idTipoDocumento,
+        NumericInteger $_idTipoDocumento,
         Text $_numeroDocumento,
         Text $_nombre,
         Text $_nombreContacto,
@@ -38,7 +36,6 @@ interface ClienteRepositoryContract
         Text $_direccion,
         Text $_telefono1,
         Text $_telefono2,
-        NumericInteger $_idTipo,
         NumericInteger $_idEstado,
         Id $_idUsuarioRegistro
     ): void;

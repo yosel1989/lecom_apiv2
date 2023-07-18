@@ -24,13 +24,13 @@ class UserSeeder extends Seeder
 
         \App\Models\User::create([
 //            'id'            => \Ramsey\Uuid\Uuid::uuid4(),
-            'nombres'       => 'Luis',
-            'apellidos'     => 'Alexei',
+            'nombres'       => 'Administrador',
+            'apellidos'     => 'Sistema',
 //            'idPerfil'    => null,
 //            'telefono'    => null,
-            'correo'        => 'lalexei@gmail.com',
-            'usuario'       => 'admlecomperu',
-            'clave'         => \Illuminate\Support\Facades\Hash::make('123456789'),
+            'correo'        => 'sa@lecomperu.com',
+            'usuario'       => 'sa',
+            'clave'         => \Illuminate\Support\Facades\Hash::make('fKvPt5La627WQm!H2QFt'),
             'idNivel'       => IdNivelUsuario::Super,
             'idEstado'      => IdEstado::Habilitado,
 //            'idUsuarioRegistro'      => null,
@@ -59,6 +59,45 @@ class UserSeeder extends Seeder
 //            'id_client'     => null,
 //            'id_role'       => null,
         ]);
+
+//
+//        \App\Models\User::create([
+////            'id'            => \Ramsey\Uuid\Uuid::uuid4(),
+//            'nombres'       => 'Luis',
+//            'apellidos'     => 'Alexei',
+////            'idPerfil'    => null,
+////            'telefono'    => null,
+//            'correo'        => 'lalexei@gmail.com',
+//            'usuario'       => 'admlecomperu',
+//            'clave'         => \Illuminate\Support\Facades\Hash::make('123456789'),
+//            'idNivel'       => IdNivelUsuario::Super,
+//            'idEstado'      => IdEstado::Habilitado,
+////            'idUsuarioRegistro'      => null,
+////            'idUsuarioModifico'      => null,
+////            'fechaEmailVerifico'      => null,
+////            'idEliminado'      => IdEliminado::NoEliminado,
+////            'fechaRegistro'      => null,
+////            'fechaModifico'      => null,
+//
+//
+////            'username'      => 'admlecomperu',
+////            'username'      => 'admlecomperu',
+////            'username'      => 'admlecomperu',
+////            'username'      => 'admlecomperu',
+////            'username'      => 'admlecomperu',
+////            'username'      => 'admlecomperu',
+////            'username'      => 'admlecomperu',
+////            'password'      => \Illuminate\Support\Facades\Hash::make('123456789'),
+////            'first_name'    => 'Luis Alexei',
+////            'last_name'     => 'Fuertes Valdez',
+////            'email'         => '',
+////            'phone'         => '',
+////            'level'         => NivelUsuario::Super,
+////            'actived'       => 1,
+////            'deleted'       => 0,
+////            'id_client'     => null,
+////            'id_role'       => null,
+//        ]);
 //
 //        \App\User::create([
 //            'id'            => \Ramsey\Uuid\Uuid::uuid4(),

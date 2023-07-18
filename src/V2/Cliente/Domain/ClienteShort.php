@@ -12,7 +12,7 @@ final class ClienteShort
 {
     private Id $id;
     private NumericInteger $codigo;
-    private Id $idTipoDocumento;
+    private NumericInteger $idTipoDocumento;
     private Text $numeroDocumento;
     private Text $nombre;
     private NumericInteger $idTipo;
@@ -23,7 +23,7 @@ final class ClienteShort
     /**
      * @param Id $id
      * @param NumericInteger $codigo
-     * @param Id $idTipoDocumento
+     * @param NumericInteger $idTipoDocumento
      * @param Text $numeroDocumento
      * @param Text $nombre
      * @param NumericInteger $idTipo
@@ -34,7 +34,7 @@ final class ClienteShort
     public function __construct(
         Id             $id,
         NumericInteger $codigo,
-        Id             $idTipoDocumento,
+        NumericInteger $idTipoDocumento,
         Text           $numeroDocumento,
         Text           $nombre,
         NumericInteger $idTipo,
@@ -88,17 +88,17 @@ final class ClienteShort
     }
 
     /**
-     * @return Id
+     * @return NumericInteger
      */
-    public function getIdTipoDocumento(): Id
+    public function getIdTipoDocumento(): NumericInteger
     {
         return $this->idTipoDocumento;
     }
 
     /**
-     * @param Id $idTipoDocumento
+     * @param NumericInteger $idTipoDocumento
      */
-    public function setIdTipoDocumento(Id $idTipoDocumento): void
+    public function setIdTipoDocumento(NumericInteger $idTipoDocumento): void
     {
         $this->idTipoDocumento = $idTipoDocumento;
     }

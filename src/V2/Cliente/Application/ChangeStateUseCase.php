@@ -24,7 +24,7 @@ final class ChangeStateUseCase
         string $idUsuarioModifico
     ): void
     {
-        $_idCliente = new Id($idCliente,false,'El id del vehiculo no tiene el formato correcto');
+        $_idCliente = new Id($idCliente,false,'El id del cliente no tiene el formato correcto');
         $_idUsuarioModifico = new Id($idUsuarioModifico,false,'El id del usuario que modifico no tiene el formato correcto');
         $_idEstado = new NumericInteger($idEstado);
 

@@ -20,25 +20,27 @@ final class UpdateController
     {
         $user = Auth::user();
         $idCliente      = $request->id;
-        $foto            = $request->input('foto');
-        $apellido        = $request->input('apellido');
+        $idTipoDocumento            = $request->input('idTipoDocumento');
+        $numeroDocumento        = $request->input('numeroDocumento');
         $nombre          = $request->input('nombre');
-        $idTipoDocumento = $request->input('idTipoDocumento');
-        $numeroDocumento = $request->input('numeroDocumento');
-        $correo          = $request->input('correo');
-        $idSede          = $request->input('idSede');
-        $idEstado        = $request->input('idEstado');
+        $nombreContacto       = $request->input('nombreContacto');
+        $correo = $request->input('correo');
+        $direccion = $request->input('direccion');
+        $telefono1          = $request->input('telefono1');
+        $telefono2        = $request->input('telefono2');
+        $idEstado       = $request->input('idEstado');
 
         $useCase = new UpdateUseCase( $this->repository );
         $useCase->__invoke(
             $idCliente,
-            $foto,
-            $nombre,
-            $apellido,
             $idTipoDocumento,
             $numeroDocumento,
+            $nombre,
+            $nombreContacto,
             $correo,
-            $idSede,
+            $direccion,
+            $telefono1,
+            $telefono2,
             $idEstado,
             $user->getId()
         );

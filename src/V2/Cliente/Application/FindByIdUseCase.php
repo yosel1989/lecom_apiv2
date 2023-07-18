@@ -19,7 +19,7 @@ final class FindByIdUseCase
 
     public function __invoke(string $idCliente): Cliente
     {
-        $_idCliente = new Id($idCliente,false, 'El id del vehiculo no tiene el formato correcto');
+        $_idCliente = new Id($idCliente,false, 'El id del cliente no tiene el formato correcto');
         return $this->repository->find($_idCliente);
     }
 }
