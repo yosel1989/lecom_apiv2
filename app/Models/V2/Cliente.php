@@ -65,6 +65,10 @@ class Cliente extends Model
         return $this->hasOne('App\Models\V2\Sede','id','idSede');
     }
 
+    public function tipoDocumento(){
+        return $this->hasOne('App\Models\V2\TipoDocumento','id','idTipoDocumento');
+    }
+
     public function usuarioRegistro(){
         return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
     }

@@ -169,7 +169,7 @@ final class EloquentClienteRepository implements ClienteRepositoryContract
         Id $idCliente,
     ): Cliente
     {
-        $model = $this->eloquentModelCliente->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos')->findOrFail($idCliente->value());
+        $model = $this->eloquentModelCliente->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos', 'tipoDocumento:id,nombre')->findOrFail($idCliente->value());
         $OModel = new Cliente(
             new Id($model->id , false, 'El id del personal no tiene el formato correcto'),
             new NumericInteger($model->codigo),
@@ -194,7 +194,8 @@ final class EloquentClienteRepository implements ClienteRepositoryContract
 
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
-        $OModel->setTipoDocumento( new Text( '') );
+        $OModel->setTipoDocumento(new Text(!is_null($model->tipoDocumento) ? $model->tipoDocumento->nombre : null , true, -1));
+
 
         return $OModel;
     }

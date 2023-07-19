@@ -19,7 +19,7 @@ class ClienteResource extends JsonResource
             'id'            => $this->getId()->value(),
             'codigo'          => $this->getCodigo()->value(),
             'idTipoDocumento'       => $this->getIdTipoDocumento()->value(),
-//            'tipoDocumento'       => $this->getTipoDocumento()->value(),
+            'tipoDocumento'       => $this->getTipoDocumento()->value(),
             'numeroDocumento'       => $this->getNumeroDocumento()->value(),
             'nombre'       => $this->getNombre()->value(),
             'idTipo'       => $this->getIdTipo()->value(),
