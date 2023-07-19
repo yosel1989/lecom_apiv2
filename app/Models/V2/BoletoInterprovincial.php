@@ -2,7 +2,9 @@
 
 namespace App\Models\V2;
 
+use App\Enums\IdAnulado;
 use App\Enums\IdEliminado;
+use App\Enums\IdEnBlanco;
 use App\Enums\IdEstado;
 use App\Enums\IdTipoDocumento;
 use App\Traits\TableNameDynamic;
@@ -40,6 +42,8 @@ class BoletoInterprovincial extends Model
         'idCliente',
         'idTipoDocumento',
         'numeroDocumento',
+        'nombre',
+        'direccion',
         'codigoBoleto',
         'latitud',
         'longitud',
@@ -48,6 +52,9 @@ class BoletoInterprovincial extends Model
         'precio',
         'fecha',
         'idEstado',
+        'idEliminado',
+        'anulado',
+        'enBlanco',
         'idEliminado',
         'fechaRegistro',
         'fechaModifico',
@@ -69,7 +76,9 @@ class BoletoInterprovincial extends Model
         'longitud' => 'float',
         'fecha' => 'string',
         'fechaRegistro' => 'string',
-        'fechaModifico' => 'string'
+        'fechaModifico' => 'string',
+        'anulado' => IdAnulado::class,
+        'enBlanco' => IdEnBlanco::class,
     ];
 
 

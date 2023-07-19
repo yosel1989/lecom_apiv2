@@ -9,6 +9,7 @@ use App\Models\V2\Caja;
 use App\Models\V2\Destino;
 use App\Models\V2\Pos;
 use App\Models\V2\Ruta;
+use App\Models\V2\TipoDocumento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -193,6 +194,7 @@ class AuthController extends Controller
                             'id' => $_equipopos->id,
                             'nombre' => $_equipopos->nombre
                         ],
+                        'tiposDocumento' => TipoDocumento::all()
 //                        '' => $Ousuario->client ? $Ousuario->client()->first(['id','bussiness_name', 'first_name', 'last_name']) : null,
 //                        'permissions' => $Ousuario->modules()->pluck('short_name')
                     ],

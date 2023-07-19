@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -76,7 +78,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'status' => Response::HTTP_NOT_FOUND
                 ]);
             }
-            $_ruta = $Vehiculo->first();
+            $_ruta = $Ruta->first();
 
 
 
@@ -85,49 +87,75 @@ Route::middleware('auth:sanctum')->group(function() {
                 ->where('idEliminado',0)
                 ->where('idCliente',$_cliente->id)
                 ->get();
-            if( $Ruta->isEmpty() ){
+            if( $Paradero->isEmpty() ){
                 return response()->json([
                     'data'      => null,
                     'error' => 'La ruta no se encuentra registrado en el sistema o esta inhabilitado.',
                     'status' => Response::HTTP_NOT_FOUND
                 ]);
             }
-            $_ruta = $Vehiculo->first();
+            $_paradero = $Paradero->first();
 
 
-
-            if( $Vehiculo->isEmpty() ){
+            $Caja  = \App\Models\V2\Caja::where('id', $request->input('idCaja'))
+                ->where('idEstado',1)
+                ->where('idEliminado',0)
+                ->where('idCliente',$_cliente->id)
+                ->get();
+            if( $Caja->isEmpty() ){
                 return response()->json([
                     'data'      => null,
-                    'error' => 'El vehiculo no se encuentra registrado en el sistema.',
-                    'status' => \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
+                    'error' => 'La caja no se encuentra registrado en el sistema o esta inhabilitado.',
+                    'status' => Response::HTTP_NOT_FOUND
+                ]);
+            }
+            $_caja = $Caja->first();
+
+            $Pos  = \App\Models\V2\Pos::where('id', $request->input('idPos'))
+                ->where('idEstado',1)
+                ->where('idEliminado',0)
+                ->where('idCliente',$_cliente->id)
+                ->get();
+            if( $Pos->isEmpty() ){
+                return response()->json([
+                    'data'      => null,
+                    'error' => 'El equipo POS no se encuentra registrado en el sistema o esta inhabilitado.',
+                    'status' => Response::HTTP_NOT_FOUND
+                ]);
+            }
+            $_pos = $Pos->first();
+
+            /******* Verificar que el paradero insertado pertenece a la ruta ******************/
+            if($_paradero->idRuta !== $_ruta->id){
+                return response()->json([
+                    'data'      => null,
+                    'error' => 'El paradero '. $_paradero->nombre .' no esta asignado a la ruta ' . $_ruta->nombre,
+                    'status' => Response::HTTP_NOT_FOUND
+                ]);
+            }
+            /******* Verificar que que la caja insertada pertenece al equipo POS ******************/
+            if($_caja->idPos !== $_pos->id){
+                return response()->json([
+                    'data'      => null,
+                    'error' => 'La caja ' . $_caja->nombre . ' no esta asignada al Equipo POS ' . $_pos->nombre,
+                    'status' => Response::HTTP_NOT_FOUND
                 ]);
             }
 
-            if( $Destino->isEmpty() ){
-                return response()->json([
-                    'data'      => null,
-                    'error' => 'El destino no se encuentra registrado en el sistema.',
-                    'status' => \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
-                ]);
-            }
 
-            if( $Cliente->isEmpty() ){
-                return response()->json([
-                    'data'      => null,
-                    'error' => 'El cliente no se encuentra registrado en el sistema.',
-                    'status' => \Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND
-                ]);
-            }
-
-
-            if (!Schema::hasTable('boleto_interprovincial_' . $Cliente->first()->codigo)) {
-                Schema::create('boleto_interprovincial_' . $Cliente->first()->codigo, function (Blueprint $table) {
+            if (!Schema::hasTable('boleto_interprovincial_' . $_cliente->codigo)) {
+                Schema::create('boleto_interprovincial_' . $_cliente->codigo, function (Blueprint $table) {
                     $table->uuid('id')->unique()->primary();
-                    $table->uuid('idDestino')->nullable();
+                    $table->uuid('idRuta')->nullable();
+                    $table->uuid('idParadero')->nullable();
                     $table->uuid('idVehiculo')->nullable();
+                    $table->uuid('idCaja')->nullable();
+                    $table->uuid('idPos')->nullable();
                     $table->uuid('idCliente')->nullable();
+                    $table->smallInteger('idTipoDocumento')->nullable();
                     $table->string('numeroDocumento',20)->nullable();
+                    $table->string('nombre',250)->nullable();
+                    $table->string('direccion',250)->nullable();
                     $table->string('codigoBoleto',30)->nullable();
                     $table->decimal('latitud',10,8)->nullable();
                     $table->decimal('longitud',10,8)->nullable();
@@ -135,6 +163,8 @@ Route::middleware('auth:sanctum')->group(function() {
                     $table->dateTime('fecha');
                     $table->tinyInteger('idEstado')->default(1);
                     $table->tinyInteger('idEliminado')->default(0);
+                    $table->tinyInteger('anulado')->default(0);
+                    $table->tinyInteger('enBlanco')->default(0);
                     $table->uuid('idUsuarioRegistro');
                     $table->uuid('idUsuarioModifico')->nullable();
                     $table->timestamp('fechaRegistro');
@@ -146,15 +176,22 @@ Route::middleware('auth:sanctum')->group(function() {
             $model->setTable('boleto_interprovincial_' . $Cliente->first()->codigo);
 
             $model->create([
-                'idCliente' => $request->input('idCliente'),
+                'idCliente' => $request->idCliente,
+                'idRuta' => $request->input('idRuta'),
+                'idParadero' => $request->input('idParadero'),
                 'idVehiculo' => $request->input('idVehiculo'),
-                'idDestino' => $request->input('idDestino'),
+                'idCaja' => $request->input('idCaja'),
+                'idPos' => $request->input('idPos'),
+                'idTipoDocumento' => $request->input('idTipoDocumento'),
                 'numeroDocumento' => $request->input('numeroDocumento'),
+                'nombre' => $request->input('nombre'),
+                'direccion' => $request->input('direccion'),
                 'precio' => $request->input('precio'),
                 'fecha' => $request->input('fecha'),
                 'codigoBoleto' => $request->input('codigoBoleto'),
                 'latitud' => $request->input('latitud'),
                 'longitud' => $request->input('longitud'),
+                'enBlanco' => $request->input('enBlanco'),
                 'idUsuarioRegistro' => $user->getId()
             ]);
 
