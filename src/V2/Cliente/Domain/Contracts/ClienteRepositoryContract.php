@@ -24,6 +24,7 @@ interface ClienteRepositoryContract
         Id $_idUsuarioRegistro
     ): void;
     public function collectionByCliente(Id $idCliente): array;
+    public function collection(): array;
     public function listByCliente(Id $idCliente): array;
 
     public function update(

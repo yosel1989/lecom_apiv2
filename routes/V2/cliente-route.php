@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::namespace('App\Http\Controllers\Api\V2\Cliente')->middleware('auth:sanctum')->group( function (){
+    Route::get('clientes', 'GetCollectionController');
     Route::get('cliente/{id}/cliente', 'GetCollectionByClienteController');
     Route::get('cliente/{id}/cliente/listado', 'GetListByClienteController');
     Route::post('cliente', 'CreateController');

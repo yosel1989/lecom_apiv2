@@ -31,6 +31,7 @@ final class Cliente
     private DateTimeFormat $fechaModifico;
 
     private Text $tipoDocumento;
+    private Text $tipo;
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
 
@@ -431,6 +432,22 @@ final class Cliente
     public function setUsuarioModifico(Text $usuarioModifico): void
     {
         $this->usuarioModifico = $usuarioModifico;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getTipo(): Text
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * @param Text $tipo
+     */
+    public function setTipo(Text $tipo): void
+    {
+        $this->tipo = $tipo;
     }
 
 
