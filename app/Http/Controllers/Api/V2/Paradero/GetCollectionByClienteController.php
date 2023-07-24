@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Api\V2\Sede;
+namespace App\Http\Controllers\Api\V2\Paradero;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V2\Sede\SedeListResource;
+use App\Http\Resources\V2\Paradero\ParaderoResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
 
-class GetListByClienteController extends Controller
+class GetCollectionByClienteController extends Controller
 {
-    private \Src\V2\Sede\Infrastructure\GetListByClienteController $controller;
+    private \Src\V2\Paradero\Infrastructure\GetCollectionByClienteController $controller;
 
-    public function __construct(\Src\V2\Sede\Infrastructure\GetListByClienteController $controller)
+    public function __construct(\Src\V2\Paradero\Infrastructure\GetCollectionByClienteController $controller)
     {
         $this->controller = $controller;
     }
@@ -23,9 +23,9 @@ class GetListByClienteController extends Controller
     {
         try {
 
-            //return response()->json(Sede::all());
+            //return response()->json(Paradero::all());
 
-            $collection = SedeListResource::collection($this->controller->__invoke($request));
+            $collection = ParaderoResource::collection($this->controller->__invoke($request));
             return response()->json([
                 'data' => $collection,
                 'error' =>  null,

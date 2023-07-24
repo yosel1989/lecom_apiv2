@@ -26,7 +26,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
 
     public function collectionByCliente(Id $idCliente): array
     {
-        $personal = $this->eloquentModelPersonal->with('sede:id,nombre', 'usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos')->where('idCliente',$idCliente->value())->get();
+        $personal = $this->eloquentModelPersonal->with('sede:id,nombre', 'usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos', 'tipoDocumento:id,nombre')->where('idCliente',$idCliente->value())->get();
 
         $arrVehicles = array();
 
@@ -37,7 +37,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
                 new Text($model->foto,true, 99999,'La foto excede el maximo de caracteres'),
                 new Text($model->nombre,false, 150,'El nombre excede los 150 caracteres'),
                 new Text($model->apellido,false, 150,'El apellido excede los 150 caracteres'),
-                new Id($model->idTipoDocumento,true,'El id del tipo de documento no tiene el formato correcto'),
+                new NumericInteger($model->idTipoDocumento->value),
                 new Text($model->numeroDocumento,true, 150,'El numero de documento excede los 150 caracteres'),
                 new Text($model->correo,true, 150,'El correo excede los 150 caracteres'),
                 new Id($model->idCliente,false,'El id del cliente no tiene el formato correcto'),
@@ -53,6 +53,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
             $OModel->setSede( new Text( !is_null($model->sede) ? $model->sede->nombre : null,true, -1 ) );
+            $OModel->setTipoDocumento(new Text(!is_null($model->tipoDocumento) ? $model->tipoDocumento->nombre : null, true, -1));
 
 
             $arrVehicles[] = $OModel;
@@ -89,7 +90,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
         Text $foto,
         Text $nombre,
         Text $apellido,
-        Id $idTipoDocumento,
+        NumericInteger $idTipoDocumento,
         Text $numeroDocumento,
         Text $correo,
         Id $idCliente,
@@ -118,7 +119,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
         Text $foto,
         Text $nombre,
         Text $apellido,
-        Id $idTipoDocumento,
+        NumericInteger $idTipoDocumento,
         Text $numeroDocumento,
         Text $correo,
         Id $idSede,
@@ -155,13 +156,18 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
         Id $idPersonal,
     ): Personal
     {
-        $model = $this->eloquentModelPersonal->with('sede:id,nombre', 'usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos')->findOrFail($idPersonal->value());
+        $model = $this->eloquentModelPersonal->with(
+            'sede:id,nombre',
+            'usuarioRegistro:id,nombres,apellidos',
+            'usuarioModifico:id,nombres,apellidos',
+            'tipoDocumento:id,nombre',
+        )->findOrFail($idPersonal->value());
         $OModel = new Personal(
             new Id($model->id , false, 'El id del personal no tiene el formato correcto'),
             new Text($model->foto,true, 99999,'La foto excede el maximo de caracteres'),
             new Text($model->nombre,false, 150,'El nombre excede los 150 caracteres'),
             new Text($model->apellido,false, 150,'El apellido excede los 150 caracteres'),
-            new Id($model->idTipoDocumento,true,'El id del tipo de documento no tiene el formato correcto'),
+            new NumericInteger($model->idTipoDocumento->value),
             new Text($model->numeroDocumento,true, 150,'El numero de documento excede los 150 caracteres'),
             new Text($model->correo,true, 150,'El correo excede los 150 caracteres'),
             new Id($model->idCliente,false,'El id del cliente no tiene el formato correcto'),
@@ -174,10 +180,11 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
         );
 
-
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
         $OModel->setSede( new Text( !is_null($model->sede) ? $model->sede->nombre : null,true, -1 ) );
+        $OModel->setTipoDocumento(new Text(!is_null($model->tipoDocumento) ? $model->tipoDocumento->nombre : null, true, -1));
+
 
         return $OModel;
     }

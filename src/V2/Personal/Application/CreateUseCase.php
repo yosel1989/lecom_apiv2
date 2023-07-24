@@ -23,7 +23,7 @@ final class CreateUseCase
         ?string $foto,
         string $nombre,
         string $apellido,
-        ?string $idTipoDocumento,
+        int $idTipoDocumento,
         ?string $numeroDocumento,
         ?string $correo,
         string $idCliente,
@@ -35,7 +35,7 @@ final class CreateUseCase
         $_foto = new Text($foto,true, 99999,'La foto excede el maximo de caracteres');
         $_nombre = new Text($nombre,false, 150,'El nombre excede los 150 caracteres');
         $_apellido = new Text($apellido,false, 150,'El apellido excede los 150 caracteres');
-        $_idTipoDocumento = new Id($idTipoDocumento,true,'El id del tipo de documento no tiene el formato correcto');
+        $_idTipoDocumento = new NumericInteger($idTipoDocumento);
         $_numeroDocumento = new Text($numeroDocumento,true, 150,'El numero de documento excede los 150 caracteres');
         $_correo = new Text($correo,true, 150,'El correo excede los 150 caracteres');
         $_idCliente = new Id($idCliente,false,'El id del cliente no tiene el formato correcto');

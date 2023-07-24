@@ -25,6 +25,7 @@ class PersonalResource extends JsonResource
             'sede'       => $this->getSede()->value(),
             'correo'       => $this->getCorreo()->value(),
             'idTipoDocumento'       => $this->getIdTipoDocumento()->value(),
+            'tipoDocumento'       => $this->getTipoDocumento()->value(),
             'numeroDocumento'       => $this->getNumeroDocumento()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),

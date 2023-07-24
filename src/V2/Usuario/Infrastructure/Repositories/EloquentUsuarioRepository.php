@@ -26,7 +26,11 @@ final class EloquentUsuarioRepository implements UsuarioRepositoryContract
 
     public function collectionByCliente(Id $idCliente): array
     {
-        $personal = $this->eloquentModelUsuario->with('perfil:id,nombre')->where('idCliente',$idCliente->value())->get();
+        $personal = $this->eloquentModelUsuario->with(
+            'perfil:id,nombre',
+            'usuarioRegistro:id,nombres,apellidos',
+            'usuarioModifico:id,nombres,apellidos',
+        )->where('idCliente',$idCliente->value())->get();
 
         $arrVehicles = array();
 
@@ -49,8 +53,8 @@ final class EloquentUsuarioRepository implements UsuarioRepositoryContract
                 new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
             );
 
-            $OModel->setUsuarioRegistro(new Text(""));
-            $OModel->setUsuarioModifico(new Text(""));
+            $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
+            $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
             $OModel->setPerfil(!is_null($model->perfil) ? new Text($model->perfil->nombre, false, 100,'') : new Text(""));
 
             $arrVehicles[] = $OModel;
@@ -127,7 +131,11 @@ final class EloquentUsuarioRepository implements UsuarioRepositoryContract
         Id $idUsuario,
     ): Usuario
     {
-        $model = $this->eloquentModelUsuario->with('perfil:id,nombre')->findOrFail($idUsuario->value());
+        $model = $this->eloquentModelUsuario->with(
+            'perfil:id,nombre',
+            'usuarioRegistro:id,nombres,apellidos',
+            'usuarioModifico:id,nombres,apellidos',
+        )->findOrFail($idUsuario->value());
         $OModel = new Usuario(
             new Id($model->id,true,'El id del usuario no tiene el formato correcto'),
             new Text($model->usuario,true, 20,'El nombre de usuario excede los 20 caracteres'),
@@ -145,8 +153,8 @@ final class EloquentUsuarioRepository implements UsuarioRepositoryContract
             new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
         );
         $OModel->setPerfil(!is_null($model->perfil) ? new Text($model->perfil->nombre, false, 100,'') : new Text(""));
-        $OModel->setUsuarioRegistro(new Text(''));
-        $OModel->setUsuarioModifico(new Text(''));
+        $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
+        $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
 
         return $OModel;
     }

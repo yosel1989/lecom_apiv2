@@ -87,6 +87,8 @@ include 'V2/boleto-interprovincial-route.php';
 include 'V2/sunat-route.php';
 include 'V2/ruta-route.php';
 include 'V2/tipo-documento-route.php';
+include 'V2/tipo-ruta-route.php';
+include 'V2/paradero-route.php';
 
 
 Route::get('v1/erts', function(){

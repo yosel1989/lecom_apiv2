@@ -63,4 +63,8 @@ class Paradero extends Model
         return $this->hasOne('App\Models\User','id','idUsuarioModifico');
     }
 
+    public function ruta(){
+        return $this->hasOne('App\Models\V2\Ruta','id','idRuta');
+    }
+
 }

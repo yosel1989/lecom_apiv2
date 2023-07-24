@@ -1,49 +1,47 @@
 <?php
 
-namespace Src\V2\Personal\Domain\Contracts;
+namespace Src\V2\Paradero\Domain\Contracts;
 
 use Src\Core\Domain\ValueObjects\Id;
+use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
-use Src\V2\Personal\Domain\Personal;
+use Src\V2\Paradero\Domain\Paradero;
 
-interface PersonalRepositoryContract
+interface ParaderoRepositoryContract
 {
     public function create(
-        Text $foto,
         Text $nombre,
-        Text $apellido,
-        NumericInteger $idTipoDocumento,
-        Text $numeroDocumento,
-        Text $correo,
+        NumericFloat $precioBase,
+        NumericFloat $latitud,
+        NumericFloat $longitud,
+        Id $idRuta,
         Id $idCliente,
-        Id $idSede,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;
+
     public function collectionByCliente(Id $idCliente): array;
     public function listByCliente(Id $idCliente): array;
 
     public function update(
-        Id $idPersonal,
-        Text $foto,
+        Id $id,
         Text $nombre,
-        Text $apellido,
-        NumericInteger $idTipoDocumento,
-        Text $numeroDocumento,
-        Text $correo,
-        Id $idSede,
+        NumericFloat $precioBase,
+        NumericFloat $latitud,
+        NumericFloat $longitud,
+        Id $idRuta,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;
 
     public function changeState(
-        Id $idPersonal,
+        Id $idParadero,
         NumericInteger $idEstado,
         Id $idUsuarioModifico
     ): void;
 
     public function find(
-        Id $idPersonal,
-    ): Personal;
+        Id $idParadero,
+    ): Paradero;
 }

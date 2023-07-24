@@ -1,23 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace Src\V2\Personal\Domain;
+namespace Src\V2\Paradero\Domain;
 
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
+use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 
-final class Personal
+final class Paradero
 {
 
     private Id $id;
-    private Text $foto;
     private Text $nombre;
-    private Text $apellido;
-    private NumericInteger $idTipoDocumento;
-    private Text $numeroDocumento;
-    private Text $correo;
+    private NumericFloat $precioBase;
     private Id $idCliente;
     private NumericInteger $idEstado;
     private NumericInteger $idEliminado;
@@ -25,24 +22,23 @@ final class Personal
     private Id $idUsuarioModifico;
     private DateTimeFormat $fechaRegistro;
     private DateTimeFormat $fechaModifico;
-    private Id $idSede;
 
-
-    private Text $usuarioModifico;
     private Text $usuarioRegistro;
-    private Text $sede;
-    private Text $tipoDocumento;
+    private Text $usuarioModifico;
+    private Text $ruta;
+    private NumericFloat $latitud;
+    private NumericFloat $longitud;
+    private Id $idRuta;
+
 
     /**
      * @param Id $id
-     * @param Text $foto
      * @param Text $nombre
-     * @param Text $apellido
-     * @param NumericInteger $idTipoDocumento
-     * @param Text $numeroDocumento
-     * @param Text $correo
+     * @param NumericFloat $precioBase
+     * @param NumericFloat $latitud
+     * @param NumericFloat $longitud
+     * @param Id $idRuta
      * @param Id $idCliente
-     * @param Id $idSede
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      * @param Id $idUsuarioRegistro
@@ -52,14 +48,12 @@ final class Personal
      */
     public function __construct(
         Id $id,
-        Text $foto,
         Text $nombre,
-        Text $apellido,
-        NumericInteger $idTipoDocumento,
-        Text $numeroDocumento,
-        Text $correo,
+        NumericFloat $precioBase,
+        NumericFloat $latitud,
+        NumericFloat $longitud,
+        Id $idRuta,
         Id $idCliente,
-        Id $idSede,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
         Id $idUsuarioRegistro,
@@ -70,12 +64,8 @@ final class Personal
     {
 
         $this->id = $id;
-        $this->foto = $foto;
         $this->nombre = $nombre;
-        $this->apellido = $apellido;
-        $this->idTipoDocumento = $idTipoDocumento;
-        $this->numeroDocumento = $numeroDocumento;
-        $this->correo = $correo;
+        $this->precioBase = $precioBase;
         $this->idCliente = $idCliente;
         $this->idEstado = $idEstado;
         $this->idEliminado = $idEliminado;
@@ -83,23 +73,9 @@ final class Personal
         $this->idUsuarioModifico = $idUsuarioModifico;
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
-        $this->idSede = $idSede;
-    }
-
-    /**
-     * @return Text
-     */
-    public function getUsuarioModifico(): Text
-    {
-        return $this->usuarioModifico;
-    }
-
-    /**
-     * @param Text $usuarioModifico
-     */
-    public function setUsuarioModifico(Text $usuarioModifico): void
-    {
-        $this->usuarioModifico = $usuarioModifico;
+        $this->latitud = $latitud;
+        $this->longitud = $longitud;
+        $this->idRuta = $idRuta;
     }
 
     /**
@@ -116,6 +92,22 @@ final class Personal
     public function setUsuarioRegistro(Text $usuarioRegistro): void
     {
         $this->usuarioRegistro = $usuarioRegistro;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getUsuarioModifico(): Text
+    {
+        return $this->usuarioModifico;
+    }
+
+    /**
+     * @param Text $usuarioModifico
+     */
+    public function setUsuarioModifico(Text $usuarioModifico): void
+    {
+        $this->usuarioModifico = $usuarioModifico;
     }
 
     /**
@@ -137,22 +129,6 @@ final class Personal
     /**
      * @return Text
      */
-    public function getFoto(): Text
-    {
-        return $this->foto;
-    }
-
-    /**
-     * @param Text $foto
-     */
-    public function setFoto(Text $foto): void
-    {
-        $this->foto = $foto;
-    }
-
-    /**
-     * @return Text
-     */
     public function getNombre(): Text
     {
         return $this->nombre;
@@ -167,67 +143,19 @@ final class Personal
     }
 
     /**
-     * @return Text
+     * @return NumericFloat
      */
-    public function getApellido(): Text
+    public function getPrecioBase(): NumericFloat
     {
-        return $this->apellido;
+        return $this->precioBase;
     }
 
     /**
-     * @param Text $apellido
+     * @param NumericFloat $precioBase
      */
-    public function setApellido(Text $apellido): void
+    public function setPrecioBase(NumericFloat $precioBase): void
     {
-        $this->apellido = $apellido;
-    }
-
-    /**
-     * @return NumericInteger
-     */
-    public function getIdTipoDocumento(): NumericInteger
-    {
-        return $this->idTipoDocumento;
-    }
-
-    /**
-     * @param NumericInteger $idTipoDocumento
-     */
-    public function setIdTipoDocumento(NumericInteger $idTipoDocumento): void
-    {
-        $this->idTipoDocumento = $idTipoDocumento;
-    }
-
-    /**
-     * @return Text
-     */
-    public function getNumeroDocumento(): Text
-    {
-        return $this->numeroDocumento;
-    }
-
-    /**
-     * @param Text $numeroDocumento
-     */
-    public function setNumeroDocumento(Text $numeroDocumento): void
-    {
-        $this->numeroDocumento = $numeroDocumento;
-    }
-
-    /**
-     * @return Text
-     */
-    public function getCorreo(): Text
-    {
-        return $this->correo;
-    }
-
-    /**
-     * @param Text $correo
-     */
-    public function setCorreo(Text $correo): void
-    {
-        $this->correo = $correo;
+        $this->precioBase = $precioBase;
     }
 
     /**
@@ -343,54 +271,68 @@ final class Personal
     }
 
     /**
+     * @return Text
+     */
+    public function getRuta(): Text
+    {
+        return $this->ruta;
+    }
+
+    /**
+     * @param Text $ruta
+     */
+    public function setRuta(Text $ruta): void
+    {
+        $this->ruta = $ruta;
+    }
+
+    /**
+     * @return NumericFloat
+     */
+    public function getLatitud(): NumericFloat
+    {
+        return $this->latitud;
+    }
+
+    /**
+     * @param NumericFloat $latitud
+     */
+    public function setLatitud(NumericFloat $latitud): void
+    {
+        $this->latitud = $latitud;
+    }
+
+    /**
+     * @return NumericFloat
+     */
+    public function getLongitud(): NumericFloat
+    {
+        return $this->longitud;
+    }
+
+    /**
+     * @param NumericFloat $longitud
+     */
+    public function setLongitud(NumericFloat $longitud): void
+    {
+        $this->longitud = $longitud;
+    }
+
+    /**
      * @return Id
      */
-    public function getIdSede(): Id
+    public function getIdRuta(): Id
     {
-        return $this->idSede;
+        return $this->idRuta;
     }
 
     /**
-     * @param Id $idSede
+     * @param Id $idRuta
      */
-    public function setIdSede(Id $idSede): void
+    public function setIdRuta(Id $idRuta): void
     {
-        $this->idSede = $idSede;
+        $this->idRuta = $idRuta;
     }
-
-    /**
-     * @return Text
-     */
-    public function getSede(): Text
-    {
-        return $this->sede;
-    }
-
-    /**
-     * @param Text $sede
-     */
-    public function setSede(Text $sede): void
-    {
-        $this->sede = $sede;
-    }
-
-    /**
-     * @return Text
-     */
-    public function getTipoDocumento(): Text
-    {
-        return $this->tipoDocumento;
-    }
-
-    /**
-     * @param Text $tipoDocumento
-     */
-    public function setTipoDocumento(Text $tipoDocumento): void
-    {
-        $this->tipoDocumento = $tipoDocumento;
-    }
-
-
 
 
 }

@@ -30,9 +30,9 @@ class UsuarioResource extends JsonResource
             'fechaModifico'     => $this->getFechaModifico()->value(),
             'idUsuarioRegistro'     => $this->getIdUsuarioModifico()->value(),
             'idUsuarioModifico'     => $this->getIdUsuarioModifico()->value(),
-            //'usuarioRegistro'     => $this->getUsuarioRegistro()->value(),
-            //'usuarioModifico'     => $this->getUsuarioModifico()->value(),
-        ];
+            'usuarioRegistro'     => $this->getUsuarioRegistro()->value(),
+            'usuarioModifico'     => $this->getUsuarioModifico()->value()
+       ];
 
     }
 }

@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-//use App\Enums\IdEliminado;
-//use App\Enums\IdEstado;
 use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -99,6 +96,14 @@ class User extends Authenticatable
 
     public function cliente(){
         return $this->hasOne('App\Models\V2\Cliente','id','idCliente');
+    }
+
+    public function usuarioRegistro(){
+        return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
+    }
+
+    public function usuarioModifico(){
+        return $this->hasOne('App\Models\User','id','idUsuarioModifico');
     }
 
 }

@@ -24,7 +24,7 @@ final class UpdateUseCase
         ?string $foto,
         string $nombre,
         string $apellido,
-        ?string $idTipoDocumento,
+        int $idTipoDocumento,
         ?string $numeroDocumento,
         ?string $correo,
         ?string $idSede,
@@ -36,7 +36,7 @@ final class UpdateUseCase
         $_foto = new Text($foto,true, 99999,'La foto excede el maximo de caracteres');
         $_nombre = new Text($nombre,false, 150,'El nombre excede los 150 caracteres');
         $_apellido = new Text($apellido,false, 150,'El apellido excede los 150 caracteres');
-        $_idTipoDocumento = new Id($idTipoDocumento,true,'El id del tipo de documento no tiene el formato correcto');
+        $_idTipoDocumento = new NumericInteger($idTipoDocumento);
         $_numeroDocumento = new Text($numeroDocumento,true, 150,'El numero de documento excede los 150 caracteres');
         $_correo = new Text($correo,true, 150,'El correo excede los 150 caracteres');
         $_idSede = new Id($idSede,true,'El id de la sede no tiene el formato correcto');

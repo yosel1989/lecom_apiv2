@@ -4,6 +4,7 @@ namespace App\Models\V2;
 
 use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
+use App\Enums\IdTipoDocumento;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
@@ -50,6 +51,7 @@ class Personal extends Model
     protected $casts = [
         'fechaRegistro' =>  'string',
         'fechaModifico' =>  'string',
+        'idTipoDocumento' => IdTipoDocumento::class,
         'idEstado' => IdEstado::class,
         'idEliminado' => IdEliminado::class,
     ];
@@ -64,6 +66,10 @@ class Personal extends Model
 
     public function usuarioModifico(){
         return $this->hasOne('App\Models\User','id','idUsuarioModifico');
+    }
+
+    public function tipoDocumento(){
+        return $this->hasOne('App\Models\V2\TipoDocumento','id','idTipoDocumento');
     }
 
 }
