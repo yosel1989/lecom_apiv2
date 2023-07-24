@@ -60,6 +60,10 @@ class Ruta extends Model
         return $this->hasOne('App\Models\User','id','idUsuarioModifico');
     }
 
+    public function tipo(){
+        return $this->hasOne('App\Models\V2\TipoRUta','id','idTipo');
+    }
+
     public function paraderos(){
         return $this->hasMany('App\Models\V2\Paradero','idRuta','id');
     }

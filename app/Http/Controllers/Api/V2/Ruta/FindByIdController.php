@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Api\V2\Sede;
+namespace App\Http\Controllers\Api\V2\Ruta;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V2\Sede\TipoDocumentoListResource;
+use App\Http\Resources\V2\Ruta\RutaResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
 
-class GetListByClienteController extends Controller
+class FindByIdController extends Controller
 {
-    private \Src\V2\Sede\Infrastructure\GetListByClienteController $controller;
+    private \Src\V2\Ruta\Infrastructure\FindByIdController $controller;
 
-    public function __construct(\Src\V2\Sede\Infrastructure\GetListByClienteController $controller)
+    public function __construct(\Src\V2\Ruta\Infrastructure\FindByIdController $controller)
     {
         $this->controller = $controller;
     }
@@ -23,11 +23,11 @@ class GetListByClienteController extends Controller
     {
         try {
 
-            //return response()->json(Sede::all());
+            //return response()->json(Ruta::all());
 
-            $collection = TipoDocumentoListResource::collection($this->controller->__invoke($request));
+            $vehicle = RutaResource::make($this->controller->__invoke($request));
             return response()->json([
-                'data' => $collection,
+                'data' => $vehicle,
                 'error' =>  null,
                 'trace' => null,
                 'status' => Response::HTTP_OK

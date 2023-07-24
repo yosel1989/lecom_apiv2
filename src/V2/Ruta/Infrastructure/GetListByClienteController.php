@@ -1,17 +1,17 @@
 <?php
 
 
-namespace Src\V2\Sede\Infrastructure;
+namespace Src\V2\Ruta\Infrastructure;
 
 use Illuminate\Http\Request;
-use Src\V2\Sede\Application\GetListUseCase;
-use Src\V2\Sede\Infrastructure\Repositories\EloquentSedeRepository;
+use Src\V2\Ruta\Application\GetListByClienteUseCase;
+use Src\V2\Ruta\Infrastructure\Repositories\EloquentRutaRepository;
 
 final class GetListByClienteController
 {
-    private EloquentSedeRepository $repository;
+    private EloquentRutaRepository $repository;
 
-    public function __construct(EloquentSedeRepository $repository)
+    public function __construct(EloquentRutaRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -23,7 +23,7 @@ final class GetListByClienteController
     public function __invoke( Request $request ): array
     {
         $idClient = $request->id;
-        $getVehicleCollectionByClientUseCase = new GetListUseCase($this->repository);
+        $getVehicleCollectionByClientUseCase = new GetListByClienteUseCase($this->repository);
         return $getVehicleCollectionByClientUseCase->__invoke($idClient);
     }
 
