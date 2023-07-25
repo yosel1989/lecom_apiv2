@@ -6,6 +6,7 @@ use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -84,20 +85,29 @@ class AuthController extends Controller
 
     public function logout()
     {
-        if (Auth::check()) {
-            Auth::user()->tokens()->revoke();
+        try {
+            if (Auth::user()) {
+                Auth::user()->tokens()->delete();
+                return response()->json([
+                    'data'      => null,
+                    'error'   => null,
+                    'status' => Response::HTTP_OK
+                ]);
+            }else{
+                return response()->json([
+                    'data'      => null,
+                    'error'   => 'No tiene autorización para realizar dicho evento.',
+                    'status' => Response::HTTP_UNAUTHORIZED
+                ]);
+            }
+        }catch (Exception $e){
             return response()->json([
                 'data'      => null,
-                'message'   => null,
-                'status' => Response::HTTP_OK
-            ]);
-        }else{
-            return response()->json([
-                'data'      => null,
-                'message'   => 'No tiene autorización para realizar dicho evento.',
+                'error'   => 'Ocurrio un error al intentar cerrar sesión',
                 'status' => Response::HTTP_UNAUTHORIZED
             ]);
         }
+
     }
 
 }
