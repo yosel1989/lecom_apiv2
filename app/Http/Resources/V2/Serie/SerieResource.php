@@ -20,6 +20,8 @@ class SerieResource extends JsonResource
             'nombre'          => $this->getNombre()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
             'idCliente'       => $this->getIdCliente()->value(),
+            'idTipoSerie'       => $this->getIdTipo()->value(),
+            'tipo'       => $this->getTipo()->value(),
             'idSede'       => $this->getIdSede()->value(),
             'sede'       => $this->getSede()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),

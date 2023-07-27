@@ -13,7 +13,7 @@ interface SerieRepositoryContract
         Text $nombre,
         Id $idCliente,
         Id $idSede,
-        Id $idTipoSerie,
+        NumericInteger $idTipoSerie,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;
@@ -25,7 +25,7 @@ interface SerieRepositoryContract
         Id $id,
         Text $nombre,
         Id $idSede,
-        Id $idTipoSerie,
+        NumericInteger $idTipoSerie,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;

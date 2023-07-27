@@ -21,7 +21,7 @@ final class Serie
     private DateTimeFormat $fechaModifico;
 
     private Id $idSede;
-    private Id $idTipo;
+    private NumericInteger $idTipo;
 
     private Text $tipo;
     private Text $usuarioRegistro;
@@ -34,7 +34,7 @@ final class Serie
      * @param Text $nombre
      * @param Id $idCliente
      * @param Id $idSede
-     * @param Id $idTipo
+     * @param NumericInteger $idTipo
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      * @param Id $idUsuarioRegistro
@@ -47,7 +47,7 @@ final class Serie
         Text $nombre,
         Id $idCliente,
         Id $idSede,
-        Id $idTipo,
+        NumericInteger $idTipo,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
         Id $idUsuarioRegistro,
@@ -311,17 +311,17 @@ final class Serie
     }
 
     /**
-     * @return Id
+     * @return NumericInteger
      */
-    public function getIdTipo(): Id
+    public function getIdTipo(): NumericInteger
     {
         return $this->idTipo;
     }
 
     /**
-     * @param Id $idTipo
+     * @param NumericInteger $idTipo
      */
-    public function setIdTipo(Id $idTipo): void
+    public function setIdTipo(NumericInteger $idTipo): void
     {
         $this->idTipo = $idTipo;
     }

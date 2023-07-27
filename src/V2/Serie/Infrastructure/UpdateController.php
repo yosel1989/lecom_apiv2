@@ -21,7 +21,7 @@ final class UpdateController
         $user = Auth::user();
         $idSerie     = $request->id;
         $nombre          = $request->input('nombre');
-        $idTipo             = $request->input('idTipo');
+        $idTipo             = $request->input('idTipoSerie');
         $idSede          = $request->input('idSede');
         $idEstado   = $request->input('idEstado');
 
@@ -29,8 +29,8 @@ final class UpdateController
         $useCase->__invoke(
             $idSerie,
             $nombre,
-            $idTipo,
             $idSede,
+            $idTipo,
             $idEstado,
             $user->getId()
         );

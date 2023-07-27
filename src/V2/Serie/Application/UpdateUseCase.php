@@ -24,16 +24,14 @@ final class UpdateUseCase
         string $nombre,
         string | null $idSede,
         string $idTipo,
-        string $idCliente,
         int $idEstado,
         string $idUsuarioRegistro
     ): void
     {
         $_idSerie = new Id($idSerie,false,'El id del Serie no tiene el formato correcto');
         $_nombre = new Text($nombre,false, 100,'El nombre de la Serie excede los 100 caracteres');
-        $_idCliente = new Id($idCliente,false,'El id del cliente no tiene el formato correcto');
         $_idSede = new Id($idSede,true,'El id de la sede no tiene el formato correcto');
-        $_idTipo = new Id($idTipo,true,'El id del pos no tiene el formato correcto');
+        $_idTipo = new NumericInteger($idTipo);
         $_idEstado = new NumericInteger($idEstado);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 

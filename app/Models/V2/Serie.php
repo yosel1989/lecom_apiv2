@@ -46,6 +46,7 @@ class Serie extends Model
     protected $casts = [
         'fechaRegistro' =>  'string',
         'fechaModifico' =>  'string',
+        'idTipoSerie' => 'integer',
         'idEstado' => IdEstado::class,
         'idEliminado' => IdEliminado::class
     ];
@@ -55,7 +56,7 @@ class Serie extends Model
     }
 
     public function tipo(){
-        return $this->hasOne('App\Models\V2\TipoSerie','id','idTipo');
+        return $this->hasOne('App\Models\V2\TipoSerie','id','idTipoSerie');
     }
 
     public function usuarioRegistro(){

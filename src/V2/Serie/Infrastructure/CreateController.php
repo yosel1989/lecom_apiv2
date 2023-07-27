@@ -20,7 +20,7 @@ final class CreateController
     {
         $user = Auth::user();
         $nombre             = $request->input('nombre');
-        $idTipo             = $request->input('idTipo');
+        $idTipo             = $request->input('idTipoSerie');
         $idSede             = $request->input('idSede');
         $idCliente          = $id;
         $idEstado           = $request->input('idEstado');
@@ -28,9 +28,9 @@ final class CreateController
         $useCase = new CreateUseCase( $this->repository );
         $useCase->__invoke(
             $nombre,
-            $idTipo,
             $idCliente,
             $idSede,
+            $idTipo,
             $idEstado,
             $user->getId()
         );

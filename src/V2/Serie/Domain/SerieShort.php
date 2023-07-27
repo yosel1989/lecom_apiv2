@@ -21,7 +21,7 @@ final class SerieShort
      * @param Text $nombre
      * @param Id $idSede
      * //     * @param Id $idPos
-     * @param Id $idTipo
+     * @param NumericInteger $idTipo
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      */
@@ -29,7 +29,7 @@ final class SerieShort
         Id $id,
         Text $nombre,
         Id $idSede,
-        Id $idTipo,
+        NumericInteger $idTipo,
         NumericInteger $idEstado,
         NumericInteger $idEliminado
     )
@@ -120,6 +120,22 @@ final class SerieShort
     public function setIdSede(Id $idSede): void
     {
         $this->idSede = $idSede;
+    }
+
+    /**
+     * @return NumericInteger
+     */
+    public function getIdTipo(): NumericInteger
+    {
+        return $this->idTipo;
+    }
+
+    /**
+     * @param NumericInteger $idTipo
+     */
+    public function setIdTipo(NumericInteger $idTipo): void
+    {
+        $this->idTipo = $idTipo;
     }
 
 

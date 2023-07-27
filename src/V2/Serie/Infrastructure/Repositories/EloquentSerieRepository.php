@@ -42,7 +42,7 @@ final class EloquentSerieRepository implements SerieRepositoryContract
                 new Text($model->nombre, false, 100, 'El nombre de la Serie excede los 100 caracteres'),
                 new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
                 new Id($model->idSede, true, 'El id de la sede no tiene el formato correcto'),
-                new Id($model->idTipo, true, 'El id del tipo de serie no tiene el formato correcto'),
+                new NumericInteger($model->idTipoSerie),
                 new NumericInteger($model->idEstado->value),
                 new NumericInteger($model->idEliminado->value),
                 new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
@@ -75,7 +75,7 @@ final class EloquentSerieRepository implements SerieRepositoryContract
                 new Id($model->id , false, 'El id del Serie no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la Serie excede los 100 caracteres'),
                 new Id($model->idSede , true, 'El id de la sede no tiene el formato correcto'),
-                new Id($model->idTipo , true, 'El id del tipo de pos no tiene el formato correcto'),
+                new NumericInteger($model->idTipoSerie),
                 new NumericInteger($model->idEstado->value),
                 new NumericInteger($model->idEliminado->value),
             );
@@ -90,7 +90,7 @@ final class EloquentSerieRepository implements SerieRepositoryContract
         Text $nombre,
         Id $idCliente,
         Id $idSede,
-        Id $idTipo,
+        NumericInteger $idTipo,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -99,7 +99,7 @@ final class EloquentSerieRepository implements SerieRepositoryContract
             'nombre' => $nombre->value(),
             'idCliente' => $idCliente->value(),
             'idSede' => $idSede->value(),
-            'idTipo' => $idTipo->value(),
+            'idTipoSerie' => $idTipo->value(),
             'idEstado' => $idEstado->value(),
             'idUsuarioRegistro' => $idUsuarioRegistro->value()
         ]);
@@ -110,7 +110,7 @@ final class EloquentSerieRepository implements SerieRepositoryContract
         Id $id,
         Text $nombre,
         Id $idSede,
-        Id $idTipoSerie,
+        NumericInteger $idTipoSerie,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -150,7 +150,7 @@ final class EloquentSerieRepository implements SerieRepositoryContract
             new Text($model->nombre, false, 100, 'El nombre del Serie excede los 100 caracteres'),
             new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
             new Id($model->idSede, true, 'El id de la sede no tiene el formato correcto'),
-            new Id($model->idTipoSerie, true, 'El id del tipo de serie no tiene el formato correcto'),
+            new NumericInteger($model->idTipoSerie),
             new NumericInteger($model->idEstado->value),
             new NumericInteger($model->idEliminado->value),
             new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
