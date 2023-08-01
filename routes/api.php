@@ -91,6 +91,7 @@ include 'V2/tipo-serie-route.php';
 include 'V2/tipo-ruta-route.php';
 include 'V2/paradero-route.php';
 include 'V2/serie-route.php';
+include 'V2/caja-diario-route.php';
 
 
 Route::get('v1/erts', function(){

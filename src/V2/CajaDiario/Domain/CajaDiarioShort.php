@@ -1,49 +1,44 @@
 <?php
 declare(strict_types=1);
 
-namespace Src\V2\Paradero\Domain;
+namespace Src\V2\CajaDiario\Domain;
 
 use Src\Core\Domain\ValueObjects\Id;
-use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 
-final class ParaderoShort
+final class CajaDiarioShort
 {
     private Id $id;
     private Text $nombre;
-    private NumericFloat $precioBase;
     private NumericInteger $idEstado;
     private NumericInteger $idEliminado;
-    private Id $idRuta;
-    private NumericInteger $idTipoRuta;
+    private Id $idSede;
+    private Id $idPos;
 
     /**
      * @param Id $id
      * @param Text $nombre
-     * @param NumericFloat $precioBase
-     * @param NumericInteger $idTipoRuta
-     * @param Id $idRuta
+     * @param Id $idSede
+     * @param Id $idPos
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      */
     public function __construct(
         Id $id,
         Text $nombre,
-        NumericFloat $precioBase,
-        NumericInteger $idTipoRuta,
-        Id $idRuta,
+        Id $idSede,
+        Id $idPos,
         NumericInteger $idEstado,
         NumericInteger $idEliminado
     )
     {
         $this->id = $id;
         $this->nombre = $nombre;
-        $this->precioBase = $precioBase;
         $this->idEstado = $idEstado;
         $this->idEliminado = $idEliminado;
-        $this->idRuta = $idRuta;
-        $this->idTipoRuta = $idTipoRuta;
+        $this->idSede = $idSede;
+        $this->idPos = $idPos;
     }
 
     /**
@@ -76,22 +71,6 @@ final class ParaderoShort
     public function setNombre(Text $nombre): void
     {
         $this->nombre = $nombre;
-    }
-
-    /**
-     * @return NumericFloat
-     */
-    public function getPrecioBase(): NumericFloat
-    {
-        return $this->precioBase;
-    }
-
-    /**
-     * @param NumericFloat $precioBase
-     */
-    public function setPrecioBase(NumericFloat $precioBase): void
-    {
-        $this->precioBase = $precioBase;
     }
 
     /**
@@ -129,34 +108,19 @@ final class ParaderoShort
     /**
      * @return Id
      */
-    public function getIdRuta(): Id
+    public function getIdSede(): Id
     {
-        return $this->idRuta;
+        return $this->idSede;
     }
 
     /**
-     * @param Id $idRuta
+     * @param Id $idSede
      */
-    public function setIdRuta(Id $idRuta): void
+    public function setIdSede(Id $idSede): void
     {
-        $this->idRuta = $idRuta;
+        $this->idSede = $idSede;
     }
 
-    /**
-     * @return NumericInteger
-     */
-    public function getIdTipoRuta(): NumericInteger
-    {
-        return $this->idTipoRuta;
-    }
-
-    /**
-     * @param NumericInteger $idTipoRuta
-     */
-    public function setIdTipoRuta(NumericInteger $idTipoRuta): void
-    {
-        $this->idTipoRuta = $idTipoRuta;
-    }
 
 
 }

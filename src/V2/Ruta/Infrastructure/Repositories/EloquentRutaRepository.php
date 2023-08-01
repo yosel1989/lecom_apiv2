@@ -77,6 +77,32 @@ final class EloquentRutaRepository implements RutaRepositoryContract
         return $arrVehicles;
     }
 
+
+    public function listByTipo(NumericInteger $idTipoRuta, Id $idCliente): array
+    {
+        $models = $this->eloquentModelRuta
+            ->where('idCliente',$idCliente->value())
+            ->where('idTipo',$idTipoRuta->value())
+            ->get();
+
+        $arrVehicles = array();
+
+        foreach ( $models as $model ){
+
+            $OModel = new RutaShort(
+                new Id($model->id , false, 'El id del Ruta no tiene el formato correcto'),
+                new Text($model->nombre, false, 100, 'El nombre de la Ruta excede los 100 caracteres'),
+                new NumericInteger($model->idTipo->value),
+                new NumericInteger($model->idEstado->value),
+                new NumericInteger($model->idEliminado->value),
+            );
+
+            $arrVehicles[] = $OModel;
+        }
+
+        return $arrVehicles;
+    }
+
     public function create(
         Text $nombre,
         NumericInteger $idTipo,

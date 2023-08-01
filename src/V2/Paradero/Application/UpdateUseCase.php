@@ -26,6 +26,7 @@ final class UpdateUseCase
         float $precioBase,
         float $latitud,
         float $longitud,
+        int $idTipoRuta,
         string $idRuta,
         int $idEstado,
         string $idUsuarioRegistro
@@ -36,6 +37,7 @@ final class UpdateUseCase
         $_precioBase = new NumericFloat($precioBase);
         $_latitud = new NumericFloat($latitud);
         $_longitud = new NumericFloat($longitud);
+        $_idTipoRuta = new NumericInteger($idTipoRuta);
         $_idRuta = new Id($idRuta,false,'El id de la ruta no tiene el formato correcto');
         $_idEstado = new NumericInteger($idEstado);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
@@ -46,6 +48,7 @@ final class UpdateUseCase
             $_precioBase,
             $_latitud,
             $_longitud,
+            $_idTipoRuta,
             $_idRuta,
             $_idEstado,
             $_idUsuarioRegistro

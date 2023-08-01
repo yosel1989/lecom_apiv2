@@ -30,6 +30,7 @@ final class EloquentParaderoRepository implements ParaderoRepositoryContract
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
             'ruta:id,nombre',
+            'tipoRuta:id,nombre',
         )->where('idCliente',$idCliente->value())->get();
 
         $arrVehicles = array();
@@ -42,6 +43,7 @@ final class EloquentParaderoRepository implements ParaderoRepositoryContract
                 new NumericFloat($model->precioBase),
                 new NumericFloat($model->latitud),
                 new NumericFloat($model->longitud),
+                new NumericInteger($model->idTipoRuta->value),
                 new Id($model->idRuta, false, 'El id de la ruta no tiene el formato correcto'),
                 new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
                 new NumericInteger($model->idEstado->value),
@@ -55,6 +57,7 @@ final class EloquentParaderoRepository implements ParaderoRepositoryContract
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
             $OModel->setRuta(new Text(!is_null($model->ruta) ?  $model->ruta->nombre  : null, true, -1));
+            $OModel->setTipoRuta(new Text(!is_null($model->tipoRuta) ?  $model->tipoRuta->nombre  : null, true, -1));
 
             $arrVehicles[] = $OModel;
         }
@@ -75,6 +78,7 @@ final class EloquentParaderoRepository implements ParaderoRepositoryContract
                 new Id($model->id , false, 'El id del destino no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la destino excede los 100 caracteres'),
                 new NumericFloat($model->precioBase),
+                new NumericInteger($model->idTipoRuta->value),
                 new Id($model->idRuta , false, 'El id de la ruta no tiene el formato correcto'),
                 new NumericInteger($model->idEstado->value),
                 new NumericInteger($model->idEliminado->value),
@@ -91,6 +95,7 @@ final class EloquentParaderoRepository implements ParaderoRepositoryContract
         NumericFloat $precioBase,
         NumericFloat $latitud,
         NumericFloat $longitud,
+        NumericInteger $idTipoRuta,
         Id $idRuta,
         Id $idCliente,
         NumericInteger $idEstado,
@@ -102,6 +107,7 @@ final class EloquentParaderoRepository implements ParaderoRepositoryContract
             'precioBase' => $precioBase->value(),
             'latitud' => $latitud->value(),
             'longitud' => $longitud->value(),
+            'idTipoRuta' => $idTipoRuta->value(),
             'idRuta' => $idRuta->value(),
             'idCliente' => $idCliente->value(),
             'idEstado' => $idEstado->value(),
@@ -116,6 +122,7 @@ final class EloquentParaderoRepository implements ParaderoRepositoryContract
         NumericFloat $precioBase,
         NumericFloat $latitud,
         NumericFloat $longitud,
+        NumericInteger $idTipoRuta,
         Id $idRuta,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
@@ -126,6 +133,7 @@ final class EloquentParaderoRepository implements ParaderoRepositoryContract
             'precioBase' => $precioBase->value(),
             'latitud' => $latitud->value(),
             'longitud' => $longitud->value(),
+            'idTipoRuta' => $idTipoRuta->value(),
             'idRuta' => $idRuta->value(),
             'idEstado' => $idEstado->value(),
             'idUsuarioModifico' => $idUsuarioRegistro->value()
@@ -152,6 +160,7 @@ final class EloquentParaderoRepository implements ParaderoRepositoryContract
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
             'ruta:id,nombre',
+            'tipoRuta:id,nombre',
         )->findOrFail($idParadero->value());
         $OModel = new Paradero(
             new Id($model->id , false, 'El id de la destino no tiene el formato correcto'),
@@ -159,6 +168,7 @@ final class EloquentParaderoRepository implements ParaderoRepositoryContract
             new NumericFloat($model->precioBase),
             new NumericFloat($model->latitud),
             new NumericFloat($model->longitud),
+            new NumericInteger($model->idTipoRuta->value),
             new Id($model->idRuta, false, 'El id de la ruta no tiene el formato correcto'),
             new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
             new NumericInteger($model->idEstado->value),
@@ -171,6 +181,7 @@ final class EloquentParaderoRepository implements ParaderoRepositoryContract
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
         $OModel->setRuta(new Text(!is_null($model->ruta) ?  $model->ruta->nombre  : null, true, -1));
+        $OModel->setTipoRuta(new Text(!is_null($model->tipoRuta) ?  $model->tipoRuta->nombre  : null, true, -1));
 
 
         return $OModel;

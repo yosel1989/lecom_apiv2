@@ -24,6 +24,7 @@ final class UpdateController
         $precioBase         = $request->input('precioBase');
         $latitud         = $request->input('latitud');
         $longitud         = $request->input('longitud');
+        $idTipoRuta          = $request->input('idTipoRuta');
         $idRuta          = $request->input('idRuta');
         $idEstado           = $request->input('idEstado');
 
@@ -34,6 +35,7 @@ final class UpdateController
             $precioBase,
             $latitud,
             $longitud,
+            $idTipoRuta,
             $idRuta,
             $idEstado,
             $user->getId()

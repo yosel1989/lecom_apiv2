@@ -25,6 +25,7 @@ final class CreateUseCase
         float $precioBase,
         float $latitud,
         float $longitud,
+        int $idTipoRuta,
         string $idRuta,
         string $idCliente,
         int $idEstado,
@@ -35,6 +36,7 @@ final class CreateUseCase
         $_precioBase = new NumericFloat($precioBase);
         $_latitud = new NumericFloat($latitud);
         $_longitud = new NumericFloat($longitud);
+        $_idTipoRuta = new NumericInteger($idTipoRuta);
         $_idRuta = new Id($idRuta,false,'El id de la ruta no tiene el formato correcto');
         $_idCliente = new Id($idCliente,false,'El id del cliente no tiene el formato correcto');
         $_idEstado = new NumericInteger($idEstado);
@@ -45,6 +47,7 @@ final class CreateUseCase
             $_precioBase,
             $_latitud,
             $_longitud,
+            $_idTipoRuta,
             $_idRuta,
             $_idCliente,
             $_idEstado,

@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('paraderos', function (Blueprint $table) {
+        Schema::create('caja_diario', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->string('nombre',100);
+            $table->uuid('idCaja');
+            $table->uuid('idRuta')->nullable();
             $table->uuid('idCliente');
-            $table->mediumInteger('idTipoRuta');
-            $table->uuid('idRuta');
-            $table->decimal('precioBase',5,2)->default(0.0);
-            $table->decimal('latitud',11,9)->default(0.0);
-            $table->decimal('longitud',11,9)->default(0.0);
+            $table->decimal('montoInicial',8,2)->default(0.0);
+            $table->decimal('montoFinal',8,2)->nullable();
             $table->tinyInteger('idEstado')->default(1);
             $table->tinyInteger('idEliminado')->default(0);
-            $table->uuid('idUsuarioRegistro')->nullable();
+            $table->uuid('idUsuarioRegistro');
             $table->uuid('idUsuarioModifico')->nullable();
+            $table->timestamp('fechaApertura');
+            $table->timestamp('fechaCierre')->nullable();
             $table->timestamp('fechaRegistro');
             $table->timestamp('fechaModifico')->nullable();
         });
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('paraderos');
+        Schema::dropIfExists('caja_diario');
     }
 };

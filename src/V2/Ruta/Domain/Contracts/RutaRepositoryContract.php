@@ -19,6 +19,7 @@ interface RutaRepositoryContract
 
     public function collectionByCliente(Id $idCliente): array;
     public function listByCliente(Id $idCliente): array;
+    public function listByTipo(NumericInteger $idTipoRuta, Id $idCliente): array;
 
     public function update(
         Id $id,

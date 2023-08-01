@@ -15,6 +15,7 @@ interface ParaderoRepositoryContract
         NumericFloat $precioBase,
         NumericFloat $latitud,
         NumericFloat $longitud,
+        NumericInteger $idTipoRuta,
         Id $idRuta,
         Id $idCliente,
         NumericInteger $idEstado,
@@ -30,6 +31,7 @@ interface ParaderoRepositoryContract
         NumericFloat $precioBase,
         NumericFloat $latitud,
         NumericFloat $longitud,
+        NumericInteger $idTipoRuta,
         Id $idRuta,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro

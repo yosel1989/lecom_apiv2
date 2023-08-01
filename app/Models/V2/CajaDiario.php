@@ -4,18 +4,17 @@ namespace App\Models\V2;
 
 use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
-use App\Enums\IdTipoRuta;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
-class Paradero extends Model
+class CajaDiario extends Model
 {
     use UUID;
 
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $table = "paraderos";
+    protected $table = "caja_diario";
     public $timestamps = true;
 
     const CREATED_AT = 'fechaRegistro';
@@ -27,17 +26,17 @@ class Paradero extends Model
      */
     protected $fillable = [
         'id',
-        'nombre',
-        'precioBase',
-        'latitud',
-        'longitud',
-        'idCliente',
-        'idTipoRuta',
+        'idCaja',
         'idRuta',
+        'idCliente',
+        'montoInicial',
+        'montoFinal',
         'idEstado',
         'idEliminado',
         'idUsuarioRegistro',
         'idUsuarioModifico',
+        'fechaApertura',
+        'fechaCierre',
         'fechaRegistro',
         'fechaModifico',
     ];
@@ -48,15 +47,24 @@ class Paradero extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'precioBase' =>  'float',
-        'latitud' =>  'float',
-        'longitud' =>  'float',
+        'montoInicial' =>  'float',
+        'montoFinal' =>  'float',
+        'fechaApertura' =>  'string',
+        'fechaApertura' =>  'string',
+        'fechaCierre' =>  'string',
         'fechaRegistro' =>  'string',
         'fechaModifico' =>  'string',
-        'idTipoRuta' => IdTipoRuta::class,
         'idEstado' => IdEstado::class,
-        'idEliminado' => IdEliminado::class,
+        'idEliminado' => IdEliminado::class
     ];
+
+    public function caja(){
+        return $this->hasOne('App\Models\V2\Caja','id','idCaja');
+    }
+
+    public function ruta(){
+        return $this->hasOne('App\Models\V2\Ruta','id','idRuta');
+    }
 
     public function usuarioRegistro(){
         return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
@@ -65,13 +73,4 @@ class Paradero extends Model
     public function usuarioModifico(){
         return $this->hasOne('App\Models\User','id','idUsuarioModifico');
     }
-
-    public function ruta(){
-        return $this->hasOne('App\Models\V2\Ruta','id','idRuta');
-    }
-
-    public function tipoRuta(){
-        return $this->hasOne('App\Models\V2\TipoRuta','id','idTipoRuta');
-    }
-
 }

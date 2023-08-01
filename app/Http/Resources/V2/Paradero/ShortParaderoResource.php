@@ -19,6 +19,7 @@ class ShortParaderoResource extends JsonResource
             'id'                  => $this->getId()->value(),
             'nombre'              => $this->getNombre()->value(),
             'precioBase'          => $this->getPrecioBase()->value(),
+            'idTipoRuta'            => $this->getIdTipoRuta()->value(),
             'idRuta'            => $this->getIdRuta()->value(),
             'idEstado'            => $this->getIdEstado()->value(),
         ];
