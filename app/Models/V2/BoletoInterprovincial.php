@@ -21,6 +21,7 @@ class BoletoInterprovincial extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
+    protected $table = "boleto_interprovincial_base";
     public $timestamps = true;
     protected $dynamicTableName;
 
@@ -44,6 +45,8 @@ class BoletoInterprovincial extends Model
         'numeroDocumento',
         'nombre',
         'direccion',
+        'serie',
+        'numeroBoleto',
         'codigoBoleto',
         'latitud',
         'longitud',

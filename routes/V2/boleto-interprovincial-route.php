@@ -3,6 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Symfony\Component\HttpFoundation\Response;
@@ -144,32 +145,34 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
             if (!Schema::hasTable('boleto_interprovincial_' . $_cliente->codigo)) {
-                Schema::create('boleto_interprovincial_' . $_cliente->codigo, function (Blueprint $table) {
-                    $table->uuid('id')->unique()->primary();
-                    $table->uuid('idRuta')->nullable();
-                    $table->uuid('idParadero')->nullable();
-                    $table->uuid('idVehiculo')->nullable();
-                    $table->uuid('idCaja')->nullable();
-                    $table->uuid('idPos')->nullable();
-                    $table->uuid('idCliente')->nullable();
-                    $table->smallInteger('idTipoDocumento')->nullable();
-                    $table->string('numeroDocumento',20)->nullable();
-                    $table->string('nombre',250)->nullable();
-                    $table->string('direccion',250)->nullable();
-                    $table->string('codigoBoleto',30)->nullable();
-                    $table->decimal('latitud',10,8)->nullable();
-                    $table->decimal('longitud',10,8)->nullable();
-                    $table->decimal('precio',5,2);
-                    $table->dateTime('fecha');
-                    $table->tinyInteger('idEstado')->default(1);
-                    $table->tinyInteger('idEliminado')->default(0);
-                    $table->tinyInteger('anulado')->default(0);
-                    $table->tinyInteger('enBlanco')->default(0);
-                    $table->uuid('idUsuarioRegistro');
-                    $table->uuid('idUsuarioModifico')->nullable();
-                    $table->timestamp('fechaRegistro');
-                    $table->timestamp('fechaModifico')->nullable();
-                });
+                DB::statement("CREATE TABLE boleto_interprovincial_' . $_cliente->codigo . ' LIKE boleto_interprovincial_base");
+
+//                Schema::create('boleto_interprovincial_' . $_cliente->codigo, function (Blueprint $table) {
+//                    $table->uuid('id')->unique()->primary();
+//                    $table->uuid('idRuta')->nullable();
+//                    $table->uuid('idParadero')->nullable();
+//                    $table->uuid('idVehiculo')->nullable();
+//                    $table->uuid('idCaja')->nullable();
+//                    $table->uuid('idPos')->nullable();
+//                    $table->uuid('idCliente')->nullable();
+//                    $table->smallInteger('idTipoDocumento')->nullable();
+//                    $table->string('numeroDocumento',20)->nullable();
+//                    $table->string('nombre',250)->nullable();
+//                    $table->string('direccion',250)->nullable();
+//                    $table->string('codigoBoleto',30)->nullable();
+//                    $table->decimal('latitud',10,8)->nullable();
+//                    $table->decimal('longitud',10,8)->nullable();
+//                    $table->decimal('precio',5,2);
+//                    $table->dateTime('fecha');
+//                    $table->tinyInteger('idEstado')->default(1);
+//                    $table->tinyInteger('idEliminado')->default(0);
+//                    $table->tinyInteger('anulado')->default(0);
+//                    $table->tinyInteger('enBlanco')->default(0);
+//                    $table->uuid('idUsuarioRegistro');
+//                    $table->uuid('idUsuarioModifico')->nullable();
+//                    $table->timestamp('fechaRegistro');
+//                    $table->timestamp('fechaModifico')->nullable();
+//                });
             }
 
             $model = new \App\Models\V2\BoletoInterprovincial();

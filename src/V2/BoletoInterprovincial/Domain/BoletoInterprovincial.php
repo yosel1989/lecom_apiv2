@@ -18,7 +18,7 @@ final class BoletoInterprovincial
     private Id $idParadero;
     private Id $idCaja;
     private Id $idPos;
-    private Text $idTipoDocumento;
+    private NumericInteger $idTipoDocumento;
     private Text $numeroDocumento;
     private Text $codigoBoleto;
     private NumericFloat $latitud;
@@ -40,6 +40,11 @@ final class BoletoInterprovincial
     private Text $tipoDocumento;
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
+    private Text $nombre;
+    private Text $serie;
+    private Text $numeroBoleto;
+    private NumericInteger $enBlanco;
+    private Text $direccion;
 
     /**
      * @param Id $id
@@ -49,7 +54,12 @@ final class BoletoInterprovincial
      * @param Id $idParadero
      * @param Id $idCaja
      * @param Id $idPos
+     * @param NumericInteger $idTipoDocumento
      * @param Text $numeroDocumento
+     * @param Text $nombre
+     * @param Text $direccion
+     * @param Text $serie
+     * @param Text $numeroBoleto
      * @param Text $codigoBoleto
      * @param NumericFloat $latitud
      * @param NumericFloat $longitud
@@ -57,6 +67,7 @@ final class BoletoInterprovincial
      * @param DateTimeFormat $fecha
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
+     * @param NumericInteger $enBlanco
      * @param Id $idUsuarioRegistro
      * @param Id $idUsuarioModifico
      * @param DateTimeFormat $fechaRegistro
@@ -70,7 +81,12 @@ final class BoletoInterprovincial
         Id $idParadero,
         Id $idCaja,
         Id $idPos,
+        NumericInteger $idTipoDocumento,
         Text $numeroDocumento,
+        Text $nombre,
+        Text $direccion,
+        Text $serie,
+        Text $numeroBoleto,
         Text $codigoBoleto,
         NumericFloat $latitud,
         NumericFloat $longitud,
@@ -78,6 +94,7 @@ final class BoletoInterprovincial
         DateTimeFormat $fecha,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
+        NumericInteger $enBlanco,
         Id $idUsuarioRegistro,
         Id $idUsuarioModifico,
         DateTimeFormat $fechaRegistro,
@@ -104,6 +121,12 @@ final class BoletoInterprovincial
         $this->idUsuarioModifico = $idUsuarioModifico;
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
+        $this->nombre = $nombre;
+        $this->serie = $serie;
+        $this->numeroBoleto = $numeroBoleto;
+        $this->enBlanco = $enBlanco;
+        $this->direccion = $direccion;
+        $this->idTipoDocumento = $idTipoDocumento;
     }
 
     /**
@@ -219,17 +242,17 @@ final class BoletoInterprovincial
     }
 
     /**
-     * @return Text
+     * @return NumericInteger
      */
-    public function getIdTipoDocumento(): Text
+    public function getIdTipoDocumento(): NumericInteger
     {
         return $this->idTipoDocumento;
     }
 
     /**
-     * @param Text $idTipoDocumento
+     * @param NumericInteger $idTipoDocumento
      */
-    public function setIdTipoDocumento(Text $idTipoDocumento): void
+    public function setIdTipoDocumento(NumericInteger $idTipoDocumento): void
     {
         $this->idTipoDocumento = $idTipoDocumento;
     }
@@ -554,6 +577,85 @@ final class BoletoInterprovincial
         $this->usuarioModifico = $usuarioModifico;
     }
 
+    /**
+     * @return Text
+     */
+    public function getNombre(): Text
+    {
+        return $this->nombre;
+    }
+
+    /**
+     * @param Text $nombre
+     */
+    public function setNombre(Text $nombre): void
+    {
+        $this->nombre = $nombre;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getSerie(): Text
+    {
+        return $this->serie;
+    }
+
+    /**
+     * @param Text $serie
+     */
+    public function setSerie(Text $serie): void
+    {
+        $this->serie = $serie;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getNumeroBoleto(): Text
+    {
+        return $this->numeroBoleto;
+    }
+
+    /**
+     * @param Text $numeroBoleto
+     */
+    public function setNumeroBoleto(Text $numeroBoleto): void
+    {
+        $this->numeroBoleto = $numeroBoleto;
+    }
+
+    /**
+     * @return NumericInteger
+     */
+    public function getEnBlanco(): NumericInteger
+    {
+        return $this->enBlanco;
+    }
+
+    /**
+     * @param NumericInteger $enBlanco
+     */
+    public function setEnBlanco(NumericInteger $enBlanco): void
+    {
+        $this->enBlanco = $enBlanco;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getDireccion(): Text
+    {
+        return $this->direccion;
+    }
+
+    /**
+     * @param Text $direccion
+     */
+    public function setDireccion(Text $direccion): void
+    {
+        $this->direccion = $direccion;
+    }
 
 
 }

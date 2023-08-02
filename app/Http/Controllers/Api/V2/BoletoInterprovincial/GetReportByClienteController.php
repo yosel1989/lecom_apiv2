@@ -48,8 +48,8 @@ class GetReportByClienteController extends Controller
                 'data' => [],
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
-                'status' => $e->getCode()
-            ]);
+                'status' => Response::HTTP_BAD_REQUEST
+            ], Response::HTTP_BAD_REQUEST);
 
         }
     }
