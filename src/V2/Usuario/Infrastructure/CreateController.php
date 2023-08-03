@@ -26,6 +26,7 @@ final class CreateController
         $clave          = $request->input('clave');
         $idPersonal          = $request->input('idPersonal');
         $idPerfil          = $request->input('idPerfil');
+        $idSede         = $request->input('idSede');
         $idCliente       = $request->idCliente;
         $idEstado        = $request->input('idEstado');
         $idNivelUsuario        = $request->input('idNivelUsuario');
@@ -39,6 +40,7 @@ final class CreateController
             $correo,
             $idPersonal,
             $idPerfil,
+            $idSede,
             $idCliente,
             $idNivelUsuario,
             $idEstado,

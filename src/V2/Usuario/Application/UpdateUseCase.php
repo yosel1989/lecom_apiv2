@@ -26,6 +26,7 @@ final class UpdateUseCase
         ?string $correo,
         ?string $idPersonal,
         ?string $idPerfil,
+        ?string $idSede,
         int $idEstado,
         string $idUsuarioRegistro
     ): void
@@ -36,6 +37,7 @@ final class UpdateUseCase
         $_correo = new Text($correo,true, 100,'El correo excede los 100 caracteres');
         $_idPersonal = new Id($idPersonal,true,'El id del personal no tiene el formato correcto');
         $_idPerfil = new Id($idPerfil,true,'El id del perfil no tiene el formato correcto');
+        $_idSede = new Id($idSede,true,'El id de la sede no tiene el formato correcto');
         $_idEstado = new NumericInteger($idEstado);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario que modifica no tiene el formato correcto');
 
@@ -45,6 +47,7 @@ final class UpdateUseCase
             $_apellido,
             $_idPersonal,
             $_idPerfil,
+            $_idSede,
             $_correo,
             $_idEstado,
             $_idUsuarioRegistro

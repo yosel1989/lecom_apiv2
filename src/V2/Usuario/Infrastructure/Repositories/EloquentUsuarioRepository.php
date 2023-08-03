@@ -28,6 +28,7 @@ final class EloquentUsuarioRepository implements UsuarioRepositoryContract
     {
         $personal = $this->eloquentModelUsuario->with(
             'perfil:id,nombre',
+            'sede:id,nombre',
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
         )->where('idCliente',$idCliente->value())->get();
@@ -43,6 +44,7 @@ final class EloquentUsuarioRepository implements UsuarioRepositoryContract
                 new Text($model->apellidos,false, 100,'El apellido excede los 100 caracteres'),
                 new Id($model->idPersonal,true,'El id del personal no tiene el formato correcto'),
                 new Id($model->idPerfil,true,'El id del perfil no tiene el formato correcto'),
+                new Id($model->idSede,true,'El id de la sede no tiene el formato correcto'),
                 new Text($model->correo,true, 100,'El correo excede los 100 caracteres'),
                 new Id($model->idCliente,false,'El id del cliente no tiene el formato correcto'),
                 new NumericInteger($model->idEstado->value),
@@ -55,7 +57,9 @@ final class EloquentUsuarioRepository implements UsuarioRepositoryContract
 
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
-            $OModel->setPerfil(!is_null($model->perfil) ? new Text($model->perfil->nombre, false, 100,'') : new Text(""));
+            $OModel->setPerfil( new Text( !is_null($model->perfil) ? $model->perfil->nombre : null, true, -1,''));
+            $OModel->setSede( new Text( !is_null($model->sede) ? $model->sede->nombre : null, true, -1,''));
+
 
             $arrVehicles[] = $OModel;
         }
@@ -70,6 +74,7 @@ final class EloquentUsuarioRepository implements UsuarioRepositoryContract
         Text $apellido,
         Id $idPersonal,
         Id $idPerfil,
+        Id $idSede,
         Text $correo,
         Id $idCliente,
         NumericInteger $idNivelUsuario,
@@ -85,6 +90,7 @@ final class EloquentUsuarioRepository implements UsuarioRepositoryContract
             'correo' => $correo->value(),
             'idPersonal' => $idPersonal->value(),
             'idPerfil' => $idPerfil->value(),
+            'idSede' => $idSede->value(),
             'idCliente' => $idCliente->value(),
             'idNivel' => $idNivelUsuario->value(),
             'idEstado' => $idEstado->value(),
@@ -99,6 +105,7 @@ final class EloquentUsuarioRepository implements UsuarioRepositoryContract
         Text $apellido,
         Id $idPersonal,
         Id $idPerfil,
+        Id $idSede,
         Text $correo,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
@@ -110,6 +117,7 @@ final class EloquentUsuarioRepository implements UsuarioRepositoryContract
             'correo' => $correo->value(),
             'idPersonal' => $idPersonal->value(),
             'idPerfil' => $idPerfil->value(),
+            'idSede' => $idSede->value(),
             'idEstado' => $idEstado->value(),
             'idUsuarioModifico' => $idUsuarioRegistro->value()
         ]);
@@ -133,6 +141,7 @@ final class EloquentUsuarioRepository implements UsuarioRepositoryContract
     {
         $model = $this->eloquentModelUsuario->with(
             'perfil:id,nombre',
+            'sede:id,nombre',
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
         )->findOrFail($idUsuario->value());
@@ -143,6 +152,7 @@ final class EloquentUsuarioRepository implements UsuarioRepositoryContract
             new Text($model->apellidos,false, 100,'El apellido excede los 100 caracteres'),
             new Id($model->idPersonal,true,'El id del personal no tiene el formato correcto'),
             new Id($model->idPerfil,true,'El id del perfil no tiene el formato correcto'),
+            new Id($model->idSede,true,'El id de la sede no tiene el formato correcto'),
             new Text($model->correo,true, 100,'El correo excede los 100 caracteres'),
             new Id($model->idCliente,false,'El id del cliente no tiene el formato correcto'),
             new NumericInteger($model->idEstado->value),
@@ -152,7 +162,8 @@ final class EloquentUsuarioRepository implements UsuarioRepositoryContract
             new DateTimeFormat($model->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
             new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
         );
-        $OModel->setPerfil(!is_null($model->perfil) ? new Text($model->perfil->nombre, false, 100,'') : new Text(""));
+        $OModel->setPerfil( new Text( !is_null($model->perfil) ? $model->perfil->nombre : null, true, -1,''));
+        $OModel->setSede( new Text( !is_null($model->sede) ? $model->sede->nombre : null, true, -1,''));
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
 

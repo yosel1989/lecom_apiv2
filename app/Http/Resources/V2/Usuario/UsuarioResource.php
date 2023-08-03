@@ -23,6 +23,8 @@ class UsuarioResource extends JsonResource
             'perfil'       => $this->getPerfil()->value(),
             'correo'       => $this->getCorreo()->value(),
             'idPerfil'       => $this->getIdPerfil()->value(),
+            'idSede'       => $this->getIdSede()->value(),
+            'sede'       => $this->getSede()->value(),
             'idPersonal'       => $this->getIdPersonal()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),

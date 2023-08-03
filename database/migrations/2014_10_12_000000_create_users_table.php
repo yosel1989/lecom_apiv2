@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nombres', 100);
             $table->string('apellidos', 100);
             $table->uuid('idPersonal')->nullable()->unique();
+            $table->uuid('idSede')->nullable();
             $table->uuid('idPerfil')->nullable();
             $table->uuid('idRol')->nullable();
             $table->uuid('idCliente')->nullable();

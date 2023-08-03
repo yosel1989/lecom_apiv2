@@ -36,6 +36,7 @@ class User extends Authenticatable
         'apellidos',
         'idPersonal',
         'idPerfil',
+        'idSede',
         'idRol',
         'idCliente',
         'correo',
@@ -90,6 +91,10 @@ class User extends Authenticatable
 
     public function perfil(){
         return $this->hasOne('App\Models\V2\Perfil','id','idPerfil');
+    }
+
+    public function sede(){
+        return $this->hasOne('App\Models\V2\Sede','id','idSede');
     }
 
 

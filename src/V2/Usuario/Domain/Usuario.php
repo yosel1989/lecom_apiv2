@@ -8,9 +8,6 @@ use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 
-/**
- * @property Id idPersonalModifico
- */
 final class Usuario
 {
     private Id $id;
@@ -30,6 +27,8 @@ final class Usuario
 
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
+    private Id $idSede;
+    private Text $sede;
 
 
     /**
@@ -39,6 +38,7 @@ final class Usuario
      * @param Text $apellido
      * @param Id $idPersonal
      * @param Id $idPerfil
+     * @param Id $idSede
      * @param Text $correo
      * @param Id $idCliente
      * @param NumericInteger $idEstado
@@ -55,6 +55,7 @@ final class Usuario
         Text $apellido,
         Id $idPersonal,
         Id $idPerfil,
+        Id $idSede,
         Text $correo,
         Id $idCliente,
         NumericInteger $idEstado,
@@ -76,9 +77,10 @@ final class Usuario
         $this->idEstado = $idEstado;
         $this->idEliminado = $idEliminado;
         $this->idUsuarioRegistro = $idUsuarioRegistro;
-        $this->idPersonalModifico = $idUsuarioModifico;
+        $this->idUsuarioModifico = $idUsuarioModifico;
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
+        $this->idSede = $idSede;
     }
 
     /**
@@ -278,7 +280,7 @@ final class Usuario
      */
     public function getIdUsuarioModifico(): Id
     {
-        return $this->idPersonalModifico;
+        return $this->idUsuarioModifico;
     }
 
     /**
@@ -286,7 +288,7 @@ final class Usuario
      */
     public function setIdUsuarioModifico(Id $idUsuarioModifico): void
     {
-        $this->idPersonalModifico = $idUsuarioModifico;
+        $this->idUsuarioModifico = $idUsuarioModifico;
     }
 
     /**
@@ -352,5 +354,39 @@ final class Usuario
     {
         $this->usuarioModifico = $usuarioModifico;
     }
+
+    /**
+     * @return Id
+     */
+    public function getIdSede(): Id
+    {
+        return $this->idSede;
+    }
+
+    /**
+     * @param Id $idSede
+     */
+    public function setIdSede(Id $idSede): void
+    {
+        $this->idSede = $idSede;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getSede(): Text
+    {
+        return $this->sede;
+    }
+
+    /**
+     * @param Text $sede
+     */
+    public function setSede(Text $sede): void
+    {
+        $this->sede = $sede;
+    }
+
+
 
 }

@@ -16,6 +16,7 @@ interface UsuarioRepositoryContract
         Text $apellido,
         Id $idPersonal,
         Id $idPerfil,
+        Id $idSede,
         Text $correo,
         Id $idCliente,
         NumericInteger $idNivelUsuario,
@@ -30,6 +31,7 @@ interface UsuarioRepositoryContract
         Text $apellido,
         Id $idPersonal,
         Id $idPerfil,
+        Id $idSede,
         Text $correo,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro

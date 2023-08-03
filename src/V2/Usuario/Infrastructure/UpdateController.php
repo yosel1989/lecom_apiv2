@@ -25,6 +25,7 @@ final class UpdateController
         $correo        = $request->input('correo');
         $idPersonal          = $request->input('idPersonal');
         $idPerfil          = $request->input('idPerfil');
+        $idSede          = $request->input('idSede');
         $idEstado        = $request->input('idEstado');
 
         $useCase = new UpdateUseCase( $this->repository );
@@ -35,6 +36,7 @@ final class UpdateController
             $correo,
             $idPersonal,
             $idPerfil,
+            $idSede,
             $idEstado,
             $user->getId()
         );
