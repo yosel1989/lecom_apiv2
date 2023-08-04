@@ -20,7 +20,7 @@ class PersonalListResource extends JsonResource
             'nombre'          => $this->getNombre()->value(),
             'apellido'       => $this->getApellido()->value(),
             'idCliente'       => $this->getIdCliente()->value(),
-            'idSede'       => $this->getIdCliente()->value(),
+            'idSede'       => $this->getIdSede()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),
 
