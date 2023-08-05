@@ -33,6 +33,7 @@ final class BoletoInterprovincial
     private DateTimeFormat $fechaModifico;
 
     private Text $vehiculo;
+    private Text $sede;
     private Text $ruta;
     private Text $paradero;
     private Text $caja;
@@ -45,9 +46,11 @@ final class BoletoInterprovincial
     private Text $numeroBoleto;
     private NumericInteger $enBlanco;
     private Text $direccion;
+    private Id $idSede;
 
     /**
      * @param Id $id
+     * @param Id $idSede
      * @param Id $idCliente
      * @param Id $idVehiculo
      * @param Id $idRuta
@@ -75,6 +78,7 @@ final class BoletoInterprovincial
      */
     public function __construct(
         Id $id,
+        Id $idSede,
         Id $idCliente,
         Id $idVehiculo,
         Id $idRuta,
@@ -127,6 +131,7 @@ final class BoletoInterprovincial
         $this->enBlanco = $enBlanco;
         $this->direccion = $direccion;
         $this->idTipoDocumento = $idTipoDocumento;
+        $this->idSede = $idSede;
     }
 
     /**
@@ -655,6 +660,38 @@ final class BoletoInterprovincial
     public function setDireccion(Text $direccion): void
     {
         $this->direccion = $direccion;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getSede(): Text
+    {
+        return $this->sede;
+    }
+
+    /**
+     * @param Text $sede
+     */
+    public function setSede(Text $sede): void
+    {
+        $this->sede = $sede;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdSede(): Id
+    {
+        return $this->idSede;
+    }
+
+    /**
+     * @param Id $idSede
+     */
+    public function setIdSede(Id $idSede): void
+    {
+        $this->idSede = $idSede;
     }
 
 

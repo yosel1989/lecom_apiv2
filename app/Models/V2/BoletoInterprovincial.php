@@ -21,7 +21,7 @@ class BoletoInterprovincial extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $table = "boleto_interprovincial_base";
+//    protected $table = "boleto_interprovincial_base";
     public $timestamps = true;
     protected $dynamicTableName;
 
@@ -37,6 +37,7 @@ class BoletoInterprovincial extends Model
      */
     protected $fillable = [
         'id',
+        'idSede',
         'idRuta',
         'idParadero',
         'idVehiculo',
@@ -88,6 +89,9 @@ class BoletoInterprovincial extends Model
     public function setDynamicTableName($tableName)
     {
         $this->dynamicTableName = $tableName;
+        $this->table = $tableName;
+        parent::setTable($tableName);
+        self::setTable($tableName);
     }
 
     public function getTable()
@@ -102,7 +106,14 @@ class BoletoInterprovincial extends Model
 
 
 
+    public function newInstance($attributes = [], $exists = false)
+    {
+        $model = parent::newInstance($attributes, $exists);
 
+        $model->setTable($this->getTable());
+
+        return $model;
+    }
 
 
 
@@ -110,8 +121,10 @@ class BoletoInterprovincial extends Model
 
 
     public function usuarioRegistro(): HasOne{
+        $this->dynamicTableName = $this->getTable();
+        $this->table = $this->getTable();
         parent::setTable('boleto_interprovincial_' . $this->getTable());
-        return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
+        return $this->setTable('boleto_interprovincial_' . $this->getTable())->hasOne('App\Models\User','id','idUsuarioRegistro');
     }
 
     public function usuarioModifico(): HasOne{
@@ -130,8 +143,10 @@ class BoletoInterprovincial extends Model
     }
 
     public function ruta(): HasOne{
+        $this->dynamicTableName = 'boleto_interprovincial_' . $this->getTable();
+        $this->table = 'boleto_interprovincial_' . $this->getTable();
         parent::setTable('boleto_interprovincial_' . $this->getTable());
-        return $this->hasOne('App\Models\V2\Ruta','id','idRuta');
+        return $this->setTable('boleto_interprovincial_' . $this->getTable())->hasOne('App\Models\V2\Ruta','id','idRuta');
     }
 
     public function caja(): HasOne{
@@ -142,6 +157,11 @@ class BoletoInterprovincial extends Model
     public function pos(): HasOne{
         parent::setTable('boleto_interprovincial_' . $this->getTable());
         return $this->hasOne('App\Models\V2\Pos','id','idPos');
+    }
+
+    public function sede(): HasOne{
+        parent::setTable('boleto_interprovincial_' . $this->getTable());
+        return $this->hasOne('App\Models\V2\Sede','id','idSede');
     }
 
 }

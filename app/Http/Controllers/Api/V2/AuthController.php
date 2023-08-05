@@ -52,7 +52,7 @@ class AuthController extends Controller
                             'correo' => $user->correo,
                             'idNivel' => $user->idNivel,
                             'idPerfil' => $user->idPerfil,
-                            'perfil' => '',
+                            'perfil' => $user->idPerfil ? $user->perfil->nombre : null,
                             'idEstado' => $user->idEstado,
                             'idCliente' => $user->idCliente,
                             'cliente' => $user->idCliente ? $user->cliente->nombre : null,

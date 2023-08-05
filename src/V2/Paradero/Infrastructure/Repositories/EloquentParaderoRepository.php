@@ -90,6 +90,33 @@ final class EloquentParaderoRepository implements ParaderoRepositoryContract
         return $arrVehicles;
     }
 
+    public function listByClienteByRuta(Id $idCliente, Id $idRuta): array
+    {
+        $models = $this->eloquentModelParadero
+            ->where('idCliente',$idCliente->value())
+            ->where('idRuta',$idRuta->value())
+            ->get();
+
+        $arrVehicles = array();
+
+        foreach ( $models as $model ){
+
+            $OModel = new ParaderoShort(
+                new Id($model->id , false, 'El id del destino no tiene el formato correcto'),
+                new Text($model->nombre, false, 100, 'El nombre de la destino excede los 100 caracteres'),
+                new NumericFloat($model->precioBase),
+                new NumericInteger($model->idTipoRuta->value),
+                new Id($model->idRuta , false, 'El id de la ruta no tiene el formato correcto'),
+                new NumericInteger($model->idEstado->value),
+                new NumericInteger($model->idEliminado->value),
+            );
+
+            $arrVehicles[] = $OModel;
+        }
+
+        return $arrVehicles;
+    }
+
     public function create(
         Text $nombre,
         NumericFloat $precioBase,

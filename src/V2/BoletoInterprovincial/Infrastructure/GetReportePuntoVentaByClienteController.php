@@ -4,10 +4,10 @@
 namespace Src\V2\BoletoInterprovincial\Infrastructure;
 
 use Illuminate\Http\Request;
-use Src\V2\BoletoInterprovincial\Application\GetReportByClienteUseCase;
+use Src\V2\BoletoInterprovincial\Application\GetReportePuntoVentaByClienteUseCase;
 use Src\V2\BoletoInterprovincial\Infrastructure\Repositories\EloquentBoletoInterprovincialRepository;
 
-final class GetReportByClienteController
+final class GetReportePuntoVentaByClienteController
 {
     private EloquentBoletoInterprovincialRepository $repository;
 
@@ -22,11 +22,11 @@ final class GetReportByClienteController
      */
     public function __invoke( Request $request ): array
     {
-        $idClient = $request->id;
-        $fechaDesde = $request->fechaDesde;
-        $fechaHasta = $request->fechaHasta;
-        $useCase = new GetReportByClienteUseCase($this->repository);
-        return $useCase->__invoke($idClient, $fechaDesde, $fechaHasta);
+        $idCliente = $request->id;
+        $idSede = $request->idSede;
+        $fecha = (new \DateTime('now'))->format('Y-m-d');
+        $useCase = new GetReportePuntoVentaByClienteUseCase($this->repository);
+        return $useCase->__invoke($idCliente, $idSede, $fecha);
     }
 
 }

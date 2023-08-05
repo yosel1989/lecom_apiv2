@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('boleto_interprovincial_base', function (Blueprint $table) {
                 $table->uuid('id')->unique()->primary();
+                $table->uuid('idSede')->nullable();
                 $table->uuid('idRuta')->nullable();
                 $table->uuid('idParadero')->nullable();
                 $table->uuid('idVehiculo')->nullable();

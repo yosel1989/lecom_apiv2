@@ -16,6 +16,7 @@ Route::namespace('App\Http\Controllers\Api\V2\BoletoInterprovincial')->middlewar
 
 
     Route::get('cliente/{id}/{fechaDesde}/{fechaHasta}/boleto-interprovincial/reporte', 'GetReportByClienteController');
+    Route::get('cliente/{id}/boleto-interprovincial/reporte-punto-venta/sede/{idSede}', 'GetReportePuntoVentaByClienteController');
 });
 
 

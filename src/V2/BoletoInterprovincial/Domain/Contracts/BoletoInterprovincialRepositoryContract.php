@@ -12,6 +12,7 @@ interface BoletoInterprovincialRepositoryContract
 
     public function collectionByCliente(Id $idCliente): array;
     public function reportByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): array;
+    public function reportePuntoVentaByCliente(Id $idCliente, Id $idSede, DateFormat $fecha): array;
 
     public function changeState(
         Id $idBoletoInterprovincial,

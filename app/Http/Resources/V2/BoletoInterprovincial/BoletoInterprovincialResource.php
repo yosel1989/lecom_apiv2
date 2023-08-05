@@ -23,6 +23,7 @@ class BoletoInterprovincialResource extends JsonResource
             'idCaja'       => $this->getIdCaja()->value(),
             'idPos'       => $this->getIdPos()->value(),
             'idCliente'          => $this->getIdCliente()->value(),
+            'tipoDocumento'          => $this->getTipoDocumento()->value(),
             'idTipoDocumento'          => $this->getIdTipoDocumento()->value(),
             'numeroDocumento'       => $this->getNumeroDocumento()->value(),
             'nombre'       => $this->getNombre()->value(),
@@ -45,7 +46,9 @@ class BoletoInterprovincialResource extends JsonResource
             'usuarioModifico'     => $this->getUsuarioModifico()->value(),
 
 
-            'ruta'     => $this->gerRuta()->value(),
+            'ruta'     => $this->getRuta()->value(),
+            'paradero'     => $this->getParadero()->value(),
+            'vehiculo'     => $this->getVehiculo()->value(),
         ];
 
     }
