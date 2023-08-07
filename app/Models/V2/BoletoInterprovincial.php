@@ -64,6 +64,9 @@ class BoletoInterprovincial extends Model
         'fechaModifico',
         'idUsuarioRegistro',
         'idUsuarioModifico',
+
+
+        'total'
     ];
 
     /**
@@ -81,6 +84,7 @@ class BoletoInterprovincial extends Model
         'fecha' => 'string',
         'fechaRegistro' => 'string',
         'fechaModifico' => 'string',
+        'total' => 'integer',
         'anulado' => IdAnulado::class,
         'enBlanco' => IdEnBlanco::class,
     ];

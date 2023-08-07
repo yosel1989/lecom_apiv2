@@ -17,6 +17,7 @@ Route::namespace('App\Http\Controllers\Api\V2\BoletoInterprovincial')->middlewar
 
     Route::get('cliente/{id}/{fechaDesde}/{fechaHasta}/boleto-interprovincial/reporte', 'GetReportByClienteController');
     Route::get('cliente/{id}/boleto-interprovincial/reporte-punto-venta/sede/{idSede}', 'GetReportePuntoVentaByClienteController');
+    Route::post('cliente/{id}/boleto-interprovincial/punto-venta', 'PuntoVentaController');
 });
 
 
@@ -92,7 +93,7 @@ Route::middleware('auth:sanctum')->group(function() {
             if( $Paradero->isEmpty() ){
                 return response()->json([
                     'data'      => null,
-                    'error' => 'La ruta no se encuentra registrado en el sistema o esta inhabilitado.',
+                    'error' => 'El paradero se encuentra registrado en el sistema o esta inhabilitado.',
                     'status' => Response::HTTP_NOT_FOUND
                 ]);
             }
