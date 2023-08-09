@@ -5,21 +5,26 @@ declare(strict_types=1);
 namespace Src\V2\Vehiculo\Infrastructure\Repositories;
 
 use App\Models\V2\Vehiculo as EloquentModelVehiculo;
+use App\Models\V2\UsuarioVehiculo as EloquentModelUsuarioVehiculo;
 use Illuminate\Support\Facades\DB;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\V2\Vehiculo\Domain\Contracts\VehiculoRepositoryContract;
+use Src\V2\Vehiculo\Domain\UsuarioVehiculo;
 use Src\V2\Vehiculo\Domain\Vehiculo;
+use Src\V2\Vehiculo\Domain\VehiculoList;
 
 final class EloquentVehiculoRepository implements VehiculoRepositoryContract
 {
     private EloquentModelVehiculo $eloquentVehicleModel;
+    private EloquentModelUsuarioVehiculo $eloquentUserVehicleModel;
 
     public function __construct()
     {
         $this->eloquentModelVehiculo = new EloquentModelVehiculo;
+        $this->eloquentModelUsuarioVehiculo = new EloquentModelUsuarioVehiculo;
     }
 
 
@@ -57,6 +62,63 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
         }
 
         return $arrVehicles;
+    }
+
+    public function listByCliente(Id $idCliente): array
+    {
+        $vehicles = $this->eloquentModelVehiculo->where('idCliente',$idCliente->value())->get();
+
+        $arrVehicles = array();
+
+        foreach ( $vehicles as $model ){
+
+            $OModel = new VehiculoList(
+                new Id($model->id , false, 'El id del vehiculo no tiene el formato correcto'),
+                new Text($model->placa, false, 7, 'La placa excede los 7 caracteres'),
+                new Text($model->unidad, false, 10, 'La unidad excede los 10 caracteres'),
+            );
+            $arrVehicles[] = $OModel;
+        }
+
+        return $arrVehicles;
+    }
+
+    public function listByUsuario(Id $idUsuario): array
+    {
+        $vehicles = $this->eloquentModelUsuarioVehiculo->with('pkVehiculos:id,placa,unidad','usuarioRegistro:id,nombres,apellidos','usuarioModifico:id,nombres,apellidos')
+            ->where('idUsuario',$idUsuario->value())->get();
+
+        $arrVehicles = array();
+
+        foreach ( $vehicles as $model ){
+
+            $OModel = new UsuarioVehiculo(
+                new Id($model->pkVehiculos->id , false, 'El id del vehiculo no tiene el formato correcto'),
+                new Text($model->pkVehiculos->placa, false, -1, ''),
+                new Text($model->pkVehiculos->unidad, false, -1, ''),
+                new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
+                new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+                new DateTimeFormat($model->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
+                new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+            );
+            $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
+            $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
+
+
+            $arrVehicles[] = $OModel;
+        }
+
+        return $arrVehicles;
+    }
+
+    public function asignarUsuario(Id $idUsuario, Text $vehiculos, Id $idUsuarioRegistro): void
+    {
+        $this->eloquentModelUsuarioVehiculo->create([
+            'idUsuario' => $idUsuario->value(),
+            'vehiculos' => $vehiculos->value(),
+            'idUsuarioRegistro' => $idUsuarioRegistro->value(),
+            'idUsuarioModifico' => $idUsuarioRegistro->value(),
+        ]);
     }
 
     public function create(

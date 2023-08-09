@@ -17,6 +17,9 @@ interface VehiculoRepositoryContract
         Id $idUsuarioRegistro
     ): void;
     public function collectionByCliente(Id $idCliente): array;
+    public function listByCliente(Id $idCliente): array;
+    public function listByUsuario(Id $idUsuario): array;
+    public function asignarUsuario(Id $idUsuario, Text $vehiculos, Id $idUsuarioRegistro): void;
 
     public function update(
         Id $id,
