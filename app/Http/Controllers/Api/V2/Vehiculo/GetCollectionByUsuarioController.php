@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Api\V2\Vehiculo;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V2\Vehiculo\VehiculoListResource;
+use App\Http\Resources\V2\Vehiculo\UsuarioVehiculoResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
 
-class GetListByClienteController extends Controller
+class GetCollectionByUsuarioController extends Controller
 {
-    private \Src\V2\Vehiculo\Infrastructure\GetListByClienteController $controller;
+    private \Src\V2\Vehiculo\Infrastructure\GetCollectionByUsuarioController $controller;
 
-    public function __construct(\Src\V2\Vehiculo\Infrastructure\GetListByClienteController $controller)
+    public function __construct(\Src\V2\Vehiculo\Infrastructure\GetCollectionByUsuarioController $controller)
     {
         $this->controller = $controller;
     }
@@ -25,7 +25,7 @@ class GetListByClienteController extends Controller
 
             //return response()->json(Vehiculo::all());
 
-            $collection = VehiculoListResource::collection($this->controller->__invoke($request));
+            $collection = UsuarioVehiculoResource::collection($this->controller->__invoke($request));
             return response()->json([
                 'data' => $collection,
                 'error' =>  null,

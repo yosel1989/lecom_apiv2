@@ -2,8 +2,6 @@
 
 namespace App\Models\V2;
 
-use App\Enums\IdEliminado;
-use App\Enums\IdEstado;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,8 +23,9 @@ class UsuarioVehiculo extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'idUsuario',
-        'idVehiculo',
+        'vehiculos',
         'idUsuarioRegistro',
         'idUsuarioModifico',
         'fechaRegistro',
@@ -41,26 +40,11 @@ class UsuarioVehiculo extends Model
     protected $casts = [
         'fechaRegistro' =>  'string',
         'fechaModifico' =>  'string',
-        'idEstado' => IdEstado::class,
-        'idEliminado' => IdEliminado::class,
+        'vehiculos' => 'array'
     ];
 
-
-    // Marca del vehiculo
-    public function idBrand_pk(){
-        return $this->belongsTo('App\Models\General\VehicleBrand','idMarca');
-    }
-    // Flota del vehiculo
-    public function idFleet_pk(){
-        return $this->belongsTo('App\Models\General\VehicleFleet','idFlota');
-    }
-    // Modelo del vehiculo
-    public function idModel_pk(){
-        return $this->belongsTo('App\Models\General\VehicleModel','idModelo');
-    }
-    // Clase del vehiculo
-    public function idClass_pk(){
-        return $this->belongsTo('App\Models\General\VehicleClass','idClase');
+    public function pkVehiculos(){
+        return $this->hasOne('App\Models\V2\Vehiculo','id','vehiculos->id');
     }
 
     public function usuarioRegistro(){

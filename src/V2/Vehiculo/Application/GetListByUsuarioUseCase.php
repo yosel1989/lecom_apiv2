@@ -7,7 +7,7 @@ namespace Src\V2\Vehiculo\Application;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\V2\Vehiculo\Domain\Contracts\VehiculoRepositoryContract;
 
-final class GetListByClienteUseCase
+final class GetListByUsuarioUseCase
 {
     private VehiculoRepositoryContract $repository;
 
@@ -16,9 +16,9 @@ final class GetListByClienteUseCase
         $this->repository = $repository;
     }
 
-    public function __invoke(string $idCliente): array
+    public function __invoke(string $idUsuario): array
     {
-        $_idCliente = new Id($idCliente,false, 'El id del cliente no tiene el formato correcto');
-        return $this->repository->listByCliente($_idCliente);
+        $_idUsuario = new Id($idUsuario,false, 'El id del usuario no tiene el formato correcto');
+        return $this->repository->listByUsuario($_idUsuario);
     }
 }

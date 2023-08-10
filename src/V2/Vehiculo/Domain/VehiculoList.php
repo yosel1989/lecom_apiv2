@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 namespace Src\V2\Vehiculo\Domain;
-
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\Text;
 
