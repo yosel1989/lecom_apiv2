@@ -12,6 +12,7 @@ use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\V2\Vehiculo\Domain\Contracts\VehiculoRepositoryContract;
 use Src\V2\Vehiculo\Domain\Vehiculo;
+use Src\V2\Vehiculo\Domain\VehiculoList;
 
 final class EloquentVehiculoRepository implements VehiculoRepositoryContract
 {
@@ -53,6 +54,29 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
 
+            $arrVehicles[] = $OModel;
+        }
+
+        return $arrVehicles;
+    }
+
+    public function listByCliente(Id $idCliente): array
+    {
+        $vehicles = $this->eloquentModelVehiculo->select(
+            'id',
+            'placa',
+            'unidad'
+        )->where('idCliente',$idCliente->value())->get();
+
+        $arrVehicles = array();
+
+        foreach ( $vehicles as $model ){
+
+            $OModel = new VehiculoList(
+                new Id($model->id , false, 'El id del vehiculo no tiene el formato correcto'),
+                new Text($model->placa, false, 7, 'La placa excede los 7 caracteres'),
+                new Text($model->unidad, false, 10, 'La unidad excede los 10 caracteres')
+            );
             $arrVehicles[] = $OModel;
         }
 
