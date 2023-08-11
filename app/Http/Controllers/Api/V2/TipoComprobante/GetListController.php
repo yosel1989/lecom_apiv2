@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Api\V2\TipoDocumento;
+namespace App\Http\Controllers\Api\V2\TipoComprobante;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V2\TipoDocumento\TipoComprobanteListResource;
+use App\Http\Resources\V2\TipoComprobante\TipoComprobanteListResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -11,9 +11,9 @@ use InvalidArgumentException;
 
 class GetListController extends Controller
 {
-    private \Src\V2\TipoDocumento\Infrastructure\GetListController $controller;
+    private \Src\V2\TipoComprobante\Infrastructure\GetListController $controller;
 
-    public function __construct(\Src\V2\TipoDocumento\Infrastructure\GetListController $controller)
+    public function __construct(\Src\V2\TipoComprobante\Infrastructure\GetListController $controller)
     {
         $this->controller = $controller;
     }
@@ -23,7 +23,7 @@ class GetListController extends Controller
     {
         try {
 
-            //return response()->json(TipoDocumento::all());
+            //return response()->json(TipoComprobante::all());
 
             $collection = TipoComprobanteListResource::collection($this->controller->__invoke($request));
             return response()->json([

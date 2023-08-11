@@ -96,6 +96,9 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
     public function reportByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): array
     {
+        set_time_limit(240);
+
+
         $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
         $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_' . $OCliente->codigo);
 
@@ -115,12 +118,12 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             $OModel = new BoletoInterprovincial(
                 new Id($model->id, false, 'El id del boleto no tiene el formato correcto'),
                 new Id($model->idSede, true, 'El id de la sede no tiene el formato correcto'),
-                new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
-                new Id($model->idVehiculo, false, 'El id del vehiculo no tiene el formato correcto'),
-                new Id($model->idRuta, false, 'El id de la ruta no tiene el formato correcto'),
-                new Id($model->idParadero, false, 'El id del paradero no tiene el formato correcto'),
-                new Id($model->idCaja, false, 'El id de la caja no tiene el formato correcto'),
-                new Id($model->idPos, false, 'El id del pos no tiene el formato correcto'),
+                new Id($model->idCliente, true, 'El id del cliente no tiene el formato correcto'),
+                new Id($model->idVehiculo, true, 'El id del vehiculo no tiene el formato correcto'),
+                new Id($model->idRuta, true, 'El id de la ruta no tiene el formato correcto'),
+                new Id($model->idParadero, true, 'El id del paradero no tiene el formato correcto'),
+                new Id($model->idCaja, true, 'El id de la caja no tiene el formato correcto'),
+                new Id($model->idPos, true, 'El id del pos no tiene el formato correcto'),
                 new NumericInteger($model->idTipoDocumento->value),
                 new Text($model->numeroDocumento, false, -1, ''),
                 new Text($model->nombre, true, -1, ''),

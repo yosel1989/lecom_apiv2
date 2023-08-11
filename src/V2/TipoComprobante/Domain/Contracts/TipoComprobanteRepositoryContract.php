@@ -1,0 +1,10 @@
+<?php
+
+namespace Src\V2\TipoComprobante\Domain\Contracts;
+
+interface TipoComprobanteRepositoryContract
+{
+
+    public function list(): array;
+
+}
