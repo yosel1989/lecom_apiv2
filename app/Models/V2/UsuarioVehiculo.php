@@ -43,9 +43,6 @@ class UsuarioVehiculo extends Model
         'vehiculos' => 'array'
     ];
 
-    public function pkVehiculos(){
-        return $this->hasOne('App\Models\V2\Vehiculo','id','vehiculos->id');
-    }
 
     public function usuarioRegistro(){
         return $this->hasOne('App\Models\User','id','idUsuarioRegistro');

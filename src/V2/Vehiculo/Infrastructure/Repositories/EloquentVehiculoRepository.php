@@ -7,6 +7,7 @@ namespace Src\V2\Vehiculo\Infrastructure\Repositories;
 use App\Models\V2\Vehiculo as EloquentModelVehiculo;
 use App\Models\V2\UsuarioVehiculo as EloquentModelUsuarioVehiculo;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
@@ -18,13 +19,13 @@ use Src\V2\Vehiculo\Domain\VehiculoList;
 
 final class EloquentVehiculoRepository implements VehiculoRepositoryContract
 {
-    private EloquentModelVehiculo $eloquentVehicleModel;
+    private EloquentModelVehiculo $eloquentModelVehiculo;
     private EloquentModelUsuarioVehiculo $eloquentUserVehicleModel;
 
     public function __construct()
     {
         $this->eloquentModelVehiculo = new EloquentModelVehiculo;
-        $this->eloquentModelUsuarioVehiculo = new EloquentModelUsuarioVehiculo;
+        $this->eloquentUserVehicleModel = new EloquentModelUsuarioVehiculo;
     }
 
 
@@ -86,24 +87,45 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
 
     public function listByUsuario(Id $idUsuario): array
     {
-        $vehicles = $this->eloquentModelUsuarioVehiculo->with('pkVehiculos:id,placa,unidad','usuarioRegistro:id,nombres,apellidos','usuarioModifico:id,nombres,apellidos')
+        $relation = $this->eloquentUserVehicleModel->with('usuarioRegistro:id,nombres,apellidos','usuarioModifico:id,nombres,apellidos')
             ->where('idUsuario',$idUsuario->value())->get();
 
-        $arrVehicles = array();
+        if($relation->isEmpty()){
+            return [];
+        }
 
-        foreach ( $vehicles as $model ){
+        $relation = $relation->first();
 
-            $OModel = new UsuarioVehiculo(
-                new Id($model->pkVehiculos->id , false, 'El id del vehiculo no tiene el formato correcto'),
-                new Text($model->pkVehiculos->placa, false, -1, ''),
-                new Text($model->pkVehiculos->unidad, false, -1, ''),
-                new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
-                new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
-                new DateTimeFormat($model->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
-                new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
-            );
-            $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
-            $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
+        $rel = json_decode($relation->vehiculos);
+
+        foreach ( $rel as $model ){
+
+            if($model->id !== '0'){
+                $vehicle = $this->eloquentModelVehiculo->findOrFail($rel->id);
+
+                $OModel = new UsuarioVehiculo(
+                    new Id($vehicle->id , false, 'El id del vehiculo no tiene el formato correcto'),
+                    new Text($vehicle->placa, false, -1, ''),
+                    new Text($vehicle->unidad, false, -1, ''),
+                    new Id($relation->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
+                    new Id($relation->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+                    new DateTimeFormat($relation->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
+                    new DateTimeFormat($relation->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+                );
+            }else{
+                $OModel = new UsuarioVehiculo(
+                    new Text($model->id , false, -1),
+                    new Text($model->placa, false, -1, ''),
+                    new Text($model->unidad, false, -1, ''),
+                    new Id($relation->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
+                    new Id($relation->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+                    new DateTimeFormat($relation->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
+                    new DateTimeFormat($relation->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+                );
+            }
+
+            $OModel->setUsuarioRegistro(new Text(!is_null($relation->usuarioRegistro) ? ( $relation->usuarioRegistro->nombres . ' ' . $relation->usuarioRegistro->apellidos ) : null, true, -1));
+            $OModel->setUsuarioModifico(new Text(!is_null($relation->usuarioModifico) ? ( $relation->usuarioModifico->nombres . ' ' . $relation->usuarioModifico->apellidos ) : null, true, -1));
 
 
             $arrVehicles[] = $OModel;
@@ -114,12 +136,23 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
 
     public function asignarUsuario(Id $idUsuario, Text $vehiculos, Id $idUsuarioRegistro): void
     {
-        $this->eloquentModelUsuarioVehiculo->create([
-            'idUsuario' => $idUsuario->value(),
-            'vehiculos' => $vehiculos->value(),
-            'idUsuarioRegistro' => $idUsuarioRegistro->value(),
-            'idUsuarioModifico' => $idUsuarioRegistro->value(),
-        ]);
+
+        $relacion = $this->eloquentUserVehicleModel->where('idUsuario', $idUsuario->value())->get();
+        if(!$relacion->isEmpty()){
+            $this->eloquentUserVehicleModel->findOrFail($relacion->first()->id)->update([
+                'vehiculos' => $vehiculos->value(),
+                'idUsuarioModifico' => $idUsuarioRegistro->value(),
+            ]);
+        }else{
+            $this->eloquentUserVehicleModel->create([
+                'idUsuario' => $idUsuario->value(),
+                'vehiculos' => $vehiculos->value(),
+                'idUsuarioRegistro' => $idUsuarioRegistro->value(),
+                'idUsuarioModifico' => $idUsuarioRegistro->value(),
+            ]);
+        }
+
+
     }
 
     public function create(

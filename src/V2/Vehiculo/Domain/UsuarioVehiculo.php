@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Src\V2\Vehiculo\Domain;
 
+
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
-use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 
 final class UsuarioVehiculo
 {
-    private Id $id;
+    private Text|Id $id;
     private Text $placa;
     private Text $unidad;
     private Id $idUsuarioRegistro;
@@ -23,16 +23,16 @@ final class UsuarioVehiculo
 
 
     /**
-     * @param Id $id
+     * @param Text|Id $id
      * @param Text $placa
      * @param Text $unidad
-     * @param Id $idUsuarioRegistro
-     * @param Id $idUsuarioModifico
+     * @param Id $usuarioRegistro
+     * @param Id $usuarioModifico
      * @param DateTimeFormat $fechaRegistro
      * @param DateTimeFormat $fechaModifico
      */
     public function __construct(
-        Id $id,
+        Text | Id $id,
         Text $placa,
         Text $unidad,
         Id $idUsuarioRegistro,
@@ -44,24 +44,24 @@ final class UsuarioVehiculo
         $this->id = $id;
         $this->placa = $placa;
         $this->unidad = $unidad;
-        $this->idUsuarioRegistro = $idUsuarioRegistro;
-        $this->idUsuarioModifico = $idUsuarioModifico;
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
+        $this->idUsuarioRegistro = $idUsuarioRegistro;
+        $this->idUsuarioModifico = $idUsuarioModifico;
     }
 
     /**
-     * @return Id
+     * @return Id|Text
      */
-    public function getId(): Id
+    public function getId(): Id|Text
     {
         return $this->id;
     }
 
     /**
-     * @param Id $id
+     * @param Id|Text $id
      */
-    public function setId(Id $id): void
+    public function setId(Id|Text $id): void
     {
         $this->id = $id;
     }
@@ -193,7 +193,6 @@ final class UsuarioVehiculo
     {
         $this->usuarioModifico = $usuarioModifico;
     }
-
 
 
 }

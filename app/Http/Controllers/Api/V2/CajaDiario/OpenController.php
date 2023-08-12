@@ -14,8 +14,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class OpenController extends Controller
 {
@@ -35,7 +33,7 @@ class OpenController extends Controller
     {
         try {
 
-            $Vehiculo = \App\Models\Administracion\Vehiculo::where('id',$request->input('idVehiculo'))
+            /*$Vehiculo = \App\Models\Administracion\Vehiculo::where('id',$request->input('idVehiculo'))
                 ->where('idEstado', IdEstado::Habilitado)
                 ->where('idEliminado',IdEliminado::NoEliminado)
                 ->get();
@@ -56,14 +54,15 @@ class OpenController extends Controller
                     'error' => 'Los tipos de comprobante no se encuentras registrados en el sistema.',
                     'status' => Response::HTTP_NOT_FOUND
                 ]);
-            }
+            }*/
 
 
 
 //            return response()->json($id);
             $this->controller->__invoke($request);
             return response()->json([
-                'data' => [
+                'data' =>
+                    /*[
                     'tiposComprobante' => $TiposComprobante->map(function($tc, $key) use ($_vehiculo) {
 
                         $serieLetra = '';
@@ -79,24 +78,26 @@ class OpenController extends Controller
                             'serie' => $serieLetra . str_pad($_vehiculo->codigo,3,'0',STR_PAD_LEFT),
                         ];
                     }),
-                ],
+                ]*/
+                null
+                ,
                 'error' =>  null,
-                'status' => ResponseAlias::HTTP_CREATED
+                'status' => Response::HTTP_CREATED
             ]);
 
         }catch ( InvalidArgumentException $e ){
 
             return response()->json([
                 'data' => null,
-                'error' => $e->getMessage(),
-                'status' => ResponseAlias::HTTP_BAD_REQUEST
+                'error' => $e->getMessage() . $e->getTraceAsString(),
+                'status' => Response::HTTP_BAD_REQUEST
             ]);
 
         }catch ( Exception $e ){
 
             return response()->json([
                 'data' => null,
-                'error' => $e->getMessage(),
+                'error' => $e->getMessage() . $e->getTraceAsString(),
                 'status' => $e->getCode()
             ]);
 

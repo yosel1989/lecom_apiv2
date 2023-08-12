@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\V2\TipoDocumento;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V2\TipoDocumento\TipoComprobanteListResource;
+use App\Http\Resources\V2\TipoDocumento\TipoDocumentoListResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -25,7 +25,7 @@ class GetListController extends Controller
 
             //return response()->json(TipoDocumento::all());
 
-            $collection = TipoComprobanteListResource::collection($this->controller->__invoke($request));
+            $collection = TipoDocumentoListResource::collection($this->controller->__invoke($request));
             return response()->json([
                 'data' => $collection,
                 'error' =>  null,
