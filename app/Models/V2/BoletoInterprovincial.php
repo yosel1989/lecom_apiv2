@@ -57,6 +57,7 @@ class BoletoInterprovincial extends Model
         'fecha',
         'idEstado',
         'idEliminado',
+        'idTipoComprobante',
         'anulado',
         'enBlanco',
         'idEliminado',

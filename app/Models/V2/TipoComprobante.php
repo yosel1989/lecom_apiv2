@@ -2,6 +2,7 @@
 
 namespace App\Models\V2;
 
+use App\Enums\EnumPuntoVenta;
 use Illuminate\Database\Eloquent\Model;
 
 class TipoComprobante extends Model
@@ -19,6 +20,7 @@ class TipoComprobante extends Model
     protected $fillable = [
         'id',
         'nombre',
+        'blPuntoVenta',
     ];
 
     /**
@@ -27,6 +29,8 @@ class TipoComprobante extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'blPuntoVenta' => EnumPuntoVenta::class,
+
     ];
 
 }

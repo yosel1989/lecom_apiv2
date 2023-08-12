@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api\Apps\BoleteroPOS;
 
+use App\Enums\EnumPuntoVenta;
 use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
+use App\Enums\IdTipoComprobante;
 use App\Models\User;
 use App\Models\V2\Caja;
 use App\Models\V2\Destino;
@@ -14,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use MyCLabs\Enum\Enum;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -71,6 +74,9 @@ class AuthController extends Controller
                 ->where('idEliminado',IdEliminado::NoEliminado)
                 ->get();
 
+            $TiposComprobante = \App\Models\V2\TipoComprobante::where('blPuntoVenta', EnumPuntoVenta::Si)
+                ->get();
+
             if( $EquipoPos->isEmpty() ){
                 return response()->json([
                     'data'      => null,
@@ -108,12 +114,21 @@ class AuthController extends Controller
                 ]);
             }
 
+            if( $TiposComprobante->isEmpty() ){
+                return response()->json([
+                    'data'      => null,
+                    'error' => 'Los tipos de comprobante no se encuentras registrados en el sistema.',
+                    'status' => Response::HTTP_NOT_FOUND
+                ]);
+            }
+
 
 
             $_caja = $OCaja->first();
             $_equipopos = $EquipoPos->first();
             $_vehiculo = $Vehiculo->first();
             $_usuario = $Ousuario->first();
+            $_tiposComprobante = $TiposComprobante;
 
 
 
@@ -162,6 +177,21 @@ class AuthController extends Controller
                             'access' => $token,
                             'type' => 'Bearer'
                         ],
+                        'tiposComprobante' => $_tiposComprobante->map(function($tc, $key) use ($_vehiculo) {
+
+                            $serieLetra = '';
+                            switch ( $tc->id ){
+                                case IdTipoComprobante::Boleta->value: $serieLetra = 'B'; break;
+                                case IdTipoComprobante::Factura->value: $serieLetra = 'F'; break;
+                                default: $serieLetra = 'B'; break;
+                            }
+
+                            return [
+                                'id' => $tc->id,
+                                'nombre' => $tc->nombre,
+                                'serie' => $serieLetra . str_pad($_vehiculo->codigo,3,'0',STR_PAD_LEFT),
+                            ];
+                        }),
                         'usuario' => [
                             'id' => $usuario->id,
                             'usuario' => $usuario->usuario,
