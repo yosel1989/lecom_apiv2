@@ -9,6 +9,8 @@ use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
 use App\Enums\IdTipoComprobante;
 use App\Http\Controllers\Controller;
+use App\Models\V2\BoletoInterprovincial;
+use App\Models\V2\Cliente;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -33,7 +35,7 @@ class OpenController extends Controller
     {
         try {
 
-            /*$Vehiculo = \App\Models\Administracion\Vehiculo::where('id',$request->input('idVehiculo'))
+            $Vehiculo = \App\Models\Administracion\Vehiculo::where('id',$request->input('idVehiculo'))
                 ->where('idEstado', IdEstado::Habilitado)
                 ->where('idEliminado',IdEliminado::NoEliminado)
                 ->get();
@@ -54,7 +56,7 @@ class OpenController extends Controller
                     'error' => 'Los tipos de comprobante no se encuentras registrados en el sistema.',
                     'status' => Response::HTTP_NOT_FOUND
                 ]);
-            }*/
+            }
 
 
 
@@ -62,7 +64,7 @@ class OpenController extends Controller
             $this->controller->__invoke($request);
             return response()->json([
                 'data' =>
-                    /*[
+                    [
                     'tiposComprobante' => $TiposComprobante->map(function($tc, $key) use ($_vehiculo) {
 
                         $serieLetra = '';
@@ -72,15 +74,19 @@ class OpenController extends Controller
                             default: $serieLetra = 'B'; break;
                         }
 
+                        $serie = $serieLetra . str_pad($_vehiculo->codigo,3,'0',STR_PAD_LEFT);
+                        $OCliente = Cliente::findOrFail($_vehiculo->idCliente);
+                        $BoletoInterprovincial = new BoletoInterprovincial();
+                        $BoletoInterprovincial->setTable('boleto_interprovincial_' . $OCliente->codigo);
+
                         return [
                             'id' => $tc->id,
                             'nombre' => $tc->nombre,
-                            'serie' => $serieLetra . str_pad($_vehiculo->codigo,3,'0',STR_PAD_LEFT),
+                            'serie' => $serie,
+                            'ultimoNumero' => is_null($BoletoInterprovincial->where('serie',$serie)->max('numeroBoleto')) ? 0 : $BoletoInterprovincial->where('serie',$serie)->max('numeroBoleto')
                         ];
                     }),
-                ]*/
-                null
-                ,
+                ],
                 'error' =>  null,
                 'status' => Response::HTTP_CREATED
             ]);

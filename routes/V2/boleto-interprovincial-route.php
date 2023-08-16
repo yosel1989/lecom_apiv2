@@ -26,6 +26,20 @@ Route::namespace('App\Http\Controllers\Api\V2\BoletoInterprovincial')->middlewar
 Route::middleware('auth:sanctum')->group(function() {
     Route::post('app/{idCliente}/boleto-pos', function(Request $request){
 
+
+        $nombres = $request->has('nombres') ? $request->input('nombres') : null;
+        $apellidos = $request->has('apellidos') ? $request->input('apellidos') : null;
+
+
+
+        $idTipoComprobante = $request->has('idTipoComprobante') ? (int)$request->input('idTipoComprobante') : null;
+        $serieComprobante = $request->has('serieComprobante') ? $request->input('serieComprobante') : null;
+        $numeroComprobante = $request->has('numeroComprobante') ? (int)$request->input('numeroComprobante') : null;
+
+
+        $porPagar = $request->has('porPagar') ? (int)$request->input('porPagar') : 0;
+
+
         try {
             $user = Auth::user();
 
@@ -197,7 +211,19 @@ Route::middleware('auth:sanctum')->group(function() {
                 'latitud' => $request->input('latitud'),
                 'longitud' => $request->input('longitud'),
                 'enBlanco' => $request->input('enBlanco'),
-                'idUsuarioRegistro' => $user->getId()
+                'idUsuarioRegistro' => $user->getId(),
+
+
+                'nombres' => $nombres,
+                'apellidos' => $apellidos,
+
+
+                'idTipoComprobante' => $idTipoComprobante,
+                'serieComprobante' => $serieComprobante,
+                'numeroComprobante' => $numeroComprobante,
+
+                'idPorPagar' => $porPagar,
+
             ]);
 
             return response()->json([

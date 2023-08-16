@@ -6,6 +6,8 @@ use App\Enums\IdAnulado;
 use App\Enums\IdEliminado;
 use App\Enums\IdEnBlanco;
 use App\Enums\IdEstado;
+use App\Enums\IdPorPagar;
+use App\Enums\IdTipoComprobante;
 use App\Enums\IdTipoDocumento;
 use App\Traits\TableNameDynamic;
 use App\Traits\UUID;
@@ -46,8 +48,7 @@ class BoletoInterprovincial extends Model
         'numeroDocumento',
         'nombre',
         'direccion',
-        'serie',
-        'numeroBoleto',
+
         'codigoBoleto',
         'latitud',
         'longitud',
@@ -67,7 +68,15 @@ class BoletoInterprovincial extends Model
         'idUsuarioModifico',
 
 
-        'total'
+        'total',
+        'nombres',
+        'apellidos',
+
+        'idTipoComprobante',
+        'serieComprobante',
+        'numeroComprobante',
+
+        'porPagar',
     ];
 
     /**
@@ -76,6 +85,7 @@ class BoletoInterprovincial extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'idTipoComprobante' => IdTipoComprobante::class,
         'idTipoDocumento' => IdTipoDocumento::class,
         'idEstado' => IdEstado::class,
         'idEliminado' => IdEliminado::class,
@@ -83,11 +93,13 @@ class BoletoInterprovincial extends Model
         'latitud' => 'float',
         'longitud' => 'float',
         'fecha' => 'string',
+        'numeroComprobante' => 'integer',
         'fechaRegistro' => 'string',
         'fechaModifico' => 'string',
         'total' => 'integer',
         'anulado' => IdAnulado::class,
         'enBlanco' => IdEnBlanco::class,
+        'idPorPagar' => IdPorPagar::class,
     ];
 
 

@@ -10,7 +10,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
         // Datos
-        $token = 'apis-token-5021.fA3IeIEstiOpNeWnhP62mEafE-Bls3ib';
+        $token = 'apis-token-5219.Z-vyOAqzo6FeJk-V5Rt8cutqHvgP8TXd';
         $numeroDocumento = $numeroDocumento;
 
         if(\App\Enums\IdTipoDocumento::Ruc->value === $idTipoDocumento){
@@ -53,6 +53,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
             return response()->json([
                 'data'      => [
+                    'idTipoDocumento' => \App\Enums\IdTipoDocumento::Ruc->value,
                     'nombre' => $empresa->razonSocial,
                     'direccion' => $empresa->direccion . ' , ' . $empresa->departamento . ' - ' . $empresa->provincia . ' - ' . $empresa->distrito
                 ],
@@ -100,7 +101,10 @@ Route::middleware('auth:sanctum')->group(function() {
 
             return response()->json([
                 'data'      => [
+                    'idTipoDocumento' => \App\Enums\IdTipoDocumento::Dni->value,
                     'nombre' => $persona->nombres . ' ' . $persona->apellidoPaterno . ' ' . $persona->apellidoMaterno,
+                    'nombres' => $persona->nombres,
+                    'apellidos' => $persona->apellidoPaterno . ' ' . $persona->apellidoMaterno,
                     'direccion' => null
                 ],
 //                'data2'      => $persona,
