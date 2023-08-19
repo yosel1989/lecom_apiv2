@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function() {
         $idTipoComprobante = $request->has('idTipoComprobante') ? (int)$request->input('idTipoComprobante') : null;
         $serieComprobante = $request->has('serieComprobante') ? $request->input('serieComprobante') : null;
         $numeroComprobante = $request->has('numeroComprobante') ? (int)$request->input('numeroComprobante') : null;
+        $idTipoBoleto = $request->has('idTipoBoleto') ? (int)$request->input('idTipoBoleto') : \App\Enums\IdTipoBoleto::VentaBoleto->value;
 
 
         $porPagar = $request->has('porPagar') ? (int)$request->input('porPagar') : 0;
@@ -201,10 +202,7 @@ Route::middleware('auth:sanctum')->group(function() {
                 'idVehiculo' => $request->input('idVehiculo'),
                 'idCaja' => $request->input('idCaja'),
                 'idPos' => $request->input('idPos'),
-                'idTipoDocumento' => $request->input('idTipoDocumento'),
-                'numeroDocumento' => $request->input('numeroDocumento'),
-                'nombre' => $request->input('nombre'),
-                'direccion' => $request->input('direccion'),
+
                 'precio' => $request->input('precio'),
                 'fecha' => $request->input('fecha'),
                 'codigoBoleto' => $request->input('codigoBoleto'),
@@ -212,6 +210,15 @@ Route::middleware('auth:sanctum')->group(function() {
                 'longitud' => $request->input('longitud'),
                 'enBlanco' => $request->input('enBlanco'),
                 'idUsuarioRegistro' => $user->getId(),
+
+                // ruc
+
+                'idTipoDocumento' => $request->input('idTipoDocumento'),
+                'numeroDocumento' => $request->input('numeroDocumento'),
+                'nombre' => $request->input('nombre'),
+                'direccion' => $request->input('direccion'),
+
+                // pasajero
 
 
                 'nombres' => $nombres,
@@ -223,6 +230,7 @@ Route::middleware('auth:sanctum')->group(function() {
                 'numeroComprobante' => $numeroComprobante,
 
                 'idPorPagar' => $porPagar,
+                'idTipoBoleto' => $idTipoBoleto,
 
             ]);
 

@@ -7,6 +7,7 @@ use App\Enums\IdEliminado;
 use App\Enums\IdEnBlanco;
 use App\Enums\IdEstado;
 use App\Enums\IdPorPagar;
+use App\Enums\IdTipoBoleto;
 use App\Enums\IdTipoComprobante;
 use App\Enums\IdTipoDocumento;
 use App\Traits\TableNameDynamic;
@@ -77,6 +78,7 @@ class BoletoInterprovincial extends Model
         'numeroComprobante',
 
         'porPagar',
+        'idTipoBoleto'
     ];
 
     /**
@@ -100,6 +102,7 @@ class BoletoInterprovincial extends Model
         'anulado' => IdAnulado::class,
         'enBlanco' => IdEnBlanco::class,
         'idPorPagar' => IdPorPagar::class,
+        'idTipoBoleto' => IdTipoBoleto::class,
     ];
 
 
