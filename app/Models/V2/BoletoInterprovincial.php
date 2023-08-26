@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 
 class BoletoInterprovincial extends Model
 {
-    use UUID;
+//    use UUID;
 //    use TableNameDynamic;
 
     protected $keyType = 'string';
@@ -78,7 +78,11 @@ class BoletoInterprovincial extends Model
         'numeroComprobante',
 
         'porPagar',
-        'idTipoBoleto'
+        'idTipoBoleto',
+
+
+        'numeroBoleto',
+        'serie',
     ];
 
     /**
@@ -103,6 +107,10 @@ class BoletoInterprovincial extends Model
         'enBlanco' => IdEnBlanco::class,
         'idPorPagar' => IdPorPagar::class,
         'idTipoBoleto' => IdTipoBoleto::class,
+
+
+
+        'idComprobanteElectronico'
     ];
 
 

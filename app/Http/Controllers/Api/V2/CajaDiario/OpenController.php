@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Api\V2\CajaDiario;
 
 
+use App\Enums\EnumParametroConfiguracion;
 use App\Enums\EnumPuntoVenta;
 use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
@@ -11,6 +12,7 @@ use App\Enums\IdTipoComprobante;
 use App\Http\Controllers\Controller;
 use App\Models\V2\BoletoInterprovincial;
 use App\Models\V2\Cliente;
+use App\Models\V2\ClienteConfiguracion;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -35,18 +37,24 @@ class OpenController extends Controller
     {
         try {
 
-            $Vehiculo = \App\Models\Administracion\Vehiculo::where('id',$request->input('idVehiculo'))
-                ->where('idEstado', IdEstado::Habilitado)
-                ->where('idEliminado',IdEliminado::NoEliminado)
-                ->get();
-            if( $Vehiculo->isEmpty() ){
-                return response()->json([
-                    'data'      => null,
-                    'error' => 'El vehiculo con la placa '. $request->input('placa') . ' no se encuentra registrado en el sistema o se encuentra inhabilitado.',
-                    'status' => Response::HTTP_NOT_FOUND
-                ]);
+            $_vehiculo = null;
+
+            if($request->has('idVehiculo')){
+                $Vehiculo = \App\Models\Administracion\Vehiculo::where('id',$request->input('idVehiculo'))
+                    ->where('idEstado', IdEstado::Habilitado)
+                    ->where('idEliminado',IdEliminado::NoEliminado)
+                    ->get();
+                if( $Vehiculo->isEmpty() ){
+                    return response()->json([
+                        'data'      => null,
+                        'error' => 'El vehiculo con la placa '. $request->input('placa') . ' no se encuentra registrado en el sistema o se encuentra inhabilitado.',
+                        'status' => Response::HTTP_NOT_FOUND
+                    ]);
+                }
+                $_vehiculo = $Vehiculo->first();
             }
-            $_vehiculo = $Vehiculo->first();
+
+
 
             $TiposComprobante = \App\Models\V2\TipoComprobante::where('blPuntoVenta', EnumPuntoVenta::Si)
                 ->get();
@@ -58,14 +66,13 @@ class OpenController extends Controller
                 ]);
             }
 
+            $Configuracion = ClienteConfiguracion::where('idCliente', $request->input('idCliente'))->where('idParametroConfiguracion', EnumParametroConfiguracion::NumeroComprobantesDiarios->value)->get();
 
-
-//            return response()->json($id);
             $this->controller->__invoke($request);
+
             return response()->json([
-                'data' =>
-                    [
-                    'tiposComprobante' => $TiposComprobante->map(function($tc, $key) use ($_vehiculo) {
+                'data' => [
+                    'tiposComprobante' => $request->has('idVehiculo') ? $TiposComprobante->map(function($tc, $key) use ($_vehiculo, $request) {
 
                         $serieLetra = '';
                         switch ( $tc->id ){
@@ -75,7 +82,7 @@ class OpenController extends Controller
                         }
 
                         $serie = $serieLetra . str_pad($_vehiculo->codigo,3,'0',STR_PAD_LEFT);
-                        $OCliente = Cliente::findOrFail($_vehiculo->idCliente);
+                        $OCliente = Cliente::findOrFail($request->input('idCliente'));
                         $BoletoInterprovincial = new BoletoInterprovincial();
                         $BoletoInterprovincial->setTable('boleto_interprovincial_' . $OCliente->codigo);
 
@@ -85,7 +92,10 @@ class OpenController extends Controller
                             'serie' => $serie,
                             'ultimoNumero' => is_null($BoletoInterprovincial->where('serie',$serie)->max('numeroBoleto')) ? 0 : $BoletoInterprovincial->where('serie',$serie)->max('numeroBoleto')
                         ];
-                    }),
+                    }) : [],
+                    'configuracion' => [
+                        'numeroComprobantesDiarios' => !$Configuracion->isEmpty() ? $Configuracion->first()->valor : 0
+                    ]
                 ],
                 'error' =>  null,
                 'status' => Response::HTTP_CREATED
