@@ -508,6 +508,8 @@ Route::middleware('auth:sanctum')->group(function() {
                 'idPorPagar' => $porPagar,
                 'idTipo' => $idTipoBoleto,
 
+                'menorEdad' => $request->input('menorEdad')
+
             ]);
 
             if($idTipoComprobante !== 0){
@@ -526,7 +528,9 @@ Route::middleware('auth:sanctum')->group(function() {
                     'subTotal'  => $request->input('precio'),
                     'igv' => 0,
                     'total'  => $request->input('precio'),
-                    'idUsuarioRegistro' => $user->getId()
+                    'idUsuarioRegistro' => $user->getId(),
+
+                    'idProducto' => $idComprobanteElectronico
 //                    'idCliente' => $request->input('idCliente'),
                 ]);
 

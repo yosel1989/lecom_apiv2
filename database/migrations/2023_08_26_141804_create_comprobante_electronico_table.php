@@ -33,6 +33,9 @@ return new class extends Migration
             $table->uuid('idUsuarioModifico')->nullable();
             $table->timestamp('fechaRegistro');
             $table->timestamp('fechaModifico')->nullable();
+
+            $table->uuid('idProducto')->nullable();
+
         });
     }
 

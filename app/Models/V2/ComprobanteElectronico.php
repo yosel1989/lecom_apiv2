@@ -45,7 +45,8 @@ class ComprobanteElectronico extends Model
         'idUsuarioRegistro',
         'idUsuarioModifico',
         'fechaRegistro',
-        'fechaModifico'
+        'fechaModifico',
+        'idProducto'
     ];
 
     /**

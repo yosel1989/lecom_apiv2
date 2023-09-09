@@ -10,11 +10,8 @@ use App\Enums\IdPorPagar;
 use App\Enums\IdTipoBoleto;
 use App\Enums\IdTipoComprobante;
 use App\Enums\IdTipoDocumento;
-use App\Traits\TableNameDynamic;
-use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Facades\DB;
 
 class BoletoInterprovincial extends Model
 {
@@ -68,7 +65,6 @@ class BoletoInterprovincial extends Model
         'idUsuarioRegistro',
         'idUsuarioModifico',
 
-
         'total',
         'nombres',
         'apellidos',
@@ -80,9 +76,11 @@ class BoletoInterprovincial extends Model
         'porPagar',
         'idTipoBoleto',
 
-
         'numeroBoleto',
         'serie',
+
+        'menorEdad',
+        'idComprobanteElectronico'
     ];
 
     /**
@@ -108,9 +106,8 @@ class BoletoInterprovincial extends Model
         'idPorPagar' => IdPorPagar::class,
         'idTipoBoleto' => IdTipoBoleto::class,
 
+        'menorEdad' => 'integer',
 
-
-        'idComprobanteElectronico'
     ];
 
 
