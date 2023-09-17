@@ -19,7 +19,11 @@ class TipoDocumento extends Model
     protected $fillable = [
         'id',
         'nombre',
-        'numeroDigitos'
+        'nombreCorto',
+        'numeroDigitos',
+        'aplFactura',
+        'aplBoleta',
+        'aplPasajero',
     ];
 
     /**
@@ -28,7 +32,10 @@ class TipoDocumento extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'numeroDigitos' =>  'integer'
+        'numeroDigitos' =>  'integer',
+        'aplFactura' =>  'integer',
+        'aplBoleta' =>  'integer',
+        'aplPasajero' =>  'integer',
     ];
 
     public function usuarioRegistro(){

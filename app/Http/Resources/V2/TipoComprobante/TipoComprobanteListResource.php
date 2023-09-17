@@ -17,7 +17,8 @@ class TipoComprobanteListResource extends JsonResource
         // Map Domain User model values
         return [
             'id'            => $this->getId()->value(),
-            'nombre'          => $this->getNombre()->value()
+            'nombre'          => $this->getNombre()->value(),
+            'puntoVenta'          => (boolean)$this->getPuntoVenta()->value(),
         ];
 
     }

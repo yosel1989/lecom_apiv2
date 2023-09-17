@@ -18,7 +18,11 @@ class TipoDocumentoListResource extends JsonResource
         return [
             'id'            => $this->getId()->value(),
             'nombre'          => $this->getNombre()->value(),
+            'nombreCorto'          => $this->getNombreCorto()->value(),
             'numeroDigitos'       => $this->getNumeroDigitos()->value(),
+            'aplFactura'       => (boolean)$this->getAplFactura()->value(),
+            'aplBoleta'       => (boolean)$this->getAplBoleta()->value(),
+            'aplPasajero'       => (boolean)$this->getAplPasajero()->value(),
         ];
 
     }

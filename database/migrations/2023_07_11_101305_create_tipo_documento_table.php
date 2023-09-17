@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('nombre', 50);
             $table->string('nombreCorto', 50);
             $table->smallInteger('numeroDigitos');
+            $table->smallInteger('aplFactura')->default(0);
+            $table->smallInteger('aplBoleta')->default(0);
+            $table->smallInteger('aplPasajero')->default(0);
         });
     }
 

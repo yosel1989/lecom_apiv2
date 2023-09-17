@@ -10,20 +10,24 @@ final class TipoComprobante
 {
     private NumericInteger $id;
     private Text $nombre;
+    private NumericInteger $puntoVenta;
 
     /**
      * @param NumericInteger $id
      * @param Text $nombre
+     * @param NumericInteger $puntoVenta
      */
     public function __construct(
         NumericInteger $id,
         Text $nombre,
+        NumericInteger $puntoVenta
     )
     {
 
         $this->id = $id;
         $this->nombre = $nombre;
 
+        $this->puntoVenta = $puntoVenta;
     }
 
     /**
@@ -56,6 +60,22 @@ final class TipoComprobante
     public function setNombre(Text $nombre): void
     {
         $this->nombre = $nombre;
+    }
+
+    /**
+     * @return NumericInteger
+     */
+    public function getPuntoVenta(): NumericInteger
+    {
+        return $this->puntoVenta;
+    }
+
+    /**
+     * @param NumericInteger $puntoVenta
+     */
+    public function setPuntoVenta(NumericInteger $puntoVenta): void
+    {
+        $this->puntoVenta = $puntoVenta;
     }
 
 

@@ -31,7 +31,11 @@ final class EloquentTipoDocumentoRepository implements TipoDocumentoRepositoryCo
             $OModel = new TipoDocumento(
                 new NumericInteger($model->id),
                 new Text($model->nombre, false, -1, ''),
-                new NumericInteger($model->numeroDigitos)
+                new Text($model->nombreCorto, false, -1, ''),
+                new NumericInteger($model->numeroDigitos),
+                new NumericInteger($model->aplFactura),
+                new NumericInteger($model->aplBoleto),
+                new NumericInteger($model->aplPasajero),
             );
 
             $arrVehicles[] = $OModel;

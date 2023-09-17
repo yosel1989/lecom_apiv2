@@ -10,7 +10,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
         // Datos
-        $token = 'apis-token-5219.Z-vyOAqzo6FeJk-V5Rt8cutqHvgP8TXd';
+        $token = 'apis-token-5227.qK6OMuUPY45HWN9j-VY5dWjdMWZPqZG5';
         $numeroDocumento = $numeroDocumento;
 
         if(\App\Enums\IdTipoDocumento::Ruc->value === $idTipoDocumento){
