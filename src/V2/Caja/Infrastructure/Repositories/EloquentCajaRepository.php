@@ -9,6 +9,7 @@ use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\V2\Caja\Domain\CajaSede;
 use Src\V2\Caja\Domain\Contracts\CajaRepositoryContract;
 use Src\V2\Caja\Domain\Caja;
 use Src\V2\Caja\Domain\CajaShort;
@@ -56,6 +57,29 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         return $arrVehicles;
     }
 
+    public function listBySede(Id $idCliente, Id $idSede): array
+    {
+        $models = $this->eloquentModelCaja
+            ->where('idCliente',$idCliente->value())
+            ->where('idSede',$idSede->value())->get();
+
+        $arr = array();
+
+        foreach ( $models as $model ){
+
+            $OModel = new CajaSede(
+                new Id($model->id , false, 'El id de la caja no tiene el formato correcto'),
+                new Text($model->nombre, false, 100, 'El nombre de la caja excede los 100 caracteres'),
+                new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
+                new Id($model->idSede, true, 'El id de la sede no tiene el formato correcto'),
+            );
+
+
+            $arr[] = $OModel;
+        }
+
+        return $arr;
+    }
 
     public function listByCliente(Id $idCliente): array
     {
