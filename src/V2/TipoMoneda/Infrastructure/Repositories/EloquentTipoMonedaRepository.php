@@ -22,7 +22,7 @@ final class EloquentTipoMonedaRepository implements TipoMonedaRepositoryContract
 
     public function list(): array
     {
-        $models = $this->eloquentModelTipoMoneda->get();
+        $models = $this->eloquentModelTipoMoneda->all();
 
         $arr = array();
 
@@ -32,7 +32,7 @@ final class EloquentTipoMonedaRepository implements TipoMonedaRepositoryContract
                 new NumericInteger($model->id),
                 new Text($model->nombre, false, -1, ''),
                 new Text($model->simbolo, false, -1, ''),
-                new Text($model->valor)
+                new Text($model->valor, false, -1, '')
             );
 
             $arr[] = $OModel;

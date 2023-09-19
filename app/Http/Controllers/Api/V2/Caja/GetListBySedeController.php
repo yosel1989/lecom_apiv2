@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
 
-class GetlistBySedeController extends Controller
+class GetListBySedeController extends Controller
 {
     private \Src\V2\Caja\Infrastructure\GetListBySedeController $controller;
 

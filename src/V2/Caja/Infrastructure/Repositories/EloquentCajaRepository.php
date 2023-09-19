@@ -60,6 +60,12 @@ final class EloquentCajaRepository implements CajaRepositoryContract
     public function listBySede(Id $idCliente, Id $idSede): array
     {
         $models = $this->eloquentModelCaja
+            ->select(
+                'id',
+                'nombre',
+                'idCliente',
+                'idSede'
+            )
             ->where('idCliente',$idCliente->value())
             ->where('idSede',$idSede->value())->get();
 
@@ -83,7 +89,15 @@ final class EloquentCajaRepository implements CajaRepositoryContract
 
     public function listByCliente(Id $idCliente): array
     {
-        $models = $this->eloquentModelCaja->where('idCliente',$idCliente->value())->get();
+        $models = $this->eloquentModelCaja
+            ->select(
+                'id',
+                'nombre',
+                'idSede',
+                'idPos',
+                'idEstado',
+                'idEliminado'
+            )->where('idCliente',$idCliente->value())->get();
 
         $arrVehicles = array();
 

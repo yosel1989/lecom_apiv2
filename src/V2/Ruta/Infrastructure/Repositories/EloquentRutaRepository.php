@@ -57,7 +57,13 @@ final class EloquentRutaRepository implements RutaRepositoryContract
 
     public function listByCliente(Id $idCliente): array
     {
-        $models = $this->eloquentModelRuta->where('idCliente',$idCliente->value())->get();
+        $models = $this->eloquentModelRuta->select(
+            'id',
+            'nombre',
+            'idTipo',
+            'idEstado',
+            'idEliminado'
+        )->where('idCliente',$idCliente->value())->get();
 
         $arrVehicles = array();
 
@@ -81,6 +87,13 @@ final class EloquentRutaRepository implements RutaRepositoryContract
     public function listByTipo(NumericInteger $idTipoRuta, Id $idCliente): array
     {
         $models = $this->eloquentModelRuta
+            ->select(
+                'id',
+                'nombre',
+                'idTipo',
+                'idEstado',
+                'idEliminado'
+            )
             ->where('idCliente',$idCliente->value())
             ->where('idTipo',$idTipoRuta->value())
             ->get();
