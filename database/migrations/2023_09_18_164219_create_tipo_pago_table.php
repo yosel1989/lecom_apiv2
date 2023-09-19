@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tipo_moneda', function (Blueprint $table) {
+        Schema::create('tipo_pago', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 50);
-            $table->string('simbolo', 10);
-            $table->string('valor', 10);
+            $table->string('nombre', 75);
+            $table->string('valor',10);
         });
     }
 
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tipo_moneda');
+        Schema::dropIfExists('tipo_pago');
     }
 };

@@ -93,6 +93,8 @@ include 'V2/paradero-route.php';
 include 'V2/serie-route.php';
 include 'V2/caja-diario-route.php';
 include 'V2/tipo-comprobante-route.php';
+include 'V2/tipo-pago-route.php';
+include 'V2/tipo-moneda-route.php';
 
 
 Route::get('v1/erts', function(){

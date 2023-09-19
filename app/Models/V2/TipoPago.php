@@ -2,13 +2,14 @@
 
 namespace App\Models\V2;
 
+use App\Enums\EnumPuntoVenta;
 use Illuminate\Database\Eloquent\Model;
 
-class TipoMoneda extends Model
+class TipoPago extends Model
 {
     public $incrementing = true;
 
-    protected $table = "tipo_moneda";
+    protected $table = "tipo_pago";
     public $timestamps = false;
 
     /**
@@ -19,8 +20,7 @@ class TipoMoneda extends Model
     protected $fillable = [
         'id',
         'nombre',
-        'simbolo',
-        'valor'
+        'valor',
     ];
 
     /**
@@ -30,4 +30,5 @@ class TipoMoneda extends Model
      */
     protected $casts = [
     ];
+
 }
