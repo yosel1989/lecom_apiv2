@@ -11,24 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ce_comprobante_electronico_items', function (Blueprint $table) {
+        Schema::create('ce_comprobante_electronico_guias', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->uuid('idComprobante');
             $table->uuid('idCliente');
-            $table->integer('idUnidadMedida');
+            $table->uuid('idTipoGuia');
+            $table->string('serie', 4);
+            $table->integer('numero');
 
 
-
-            $table->integer('idProducto');
-            $table->string('producto',250);
-            $table->string('detalle',250);
-            $table->integer('cantidad' );
-            $table->decimal('valor',10,2);
-            $table->decimal('subTotal',10,2);
-            $table->decimal('igv',10,2)->default(0);
-            $table->decimal('total',10,2);
-            $table->smallInteger('idEstado')->default(1);
-            $table->tinyInteger('idEliminado')->default(0);
             $table->uuid('idUsuarioRegistro');
             $table->uuid('idUsuarioModifico')->nullable();
             $table->timestamp('fechaRegistro');
@@ -41,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ce_comprobante_electronico_detalle');
+        Schema::dropIfExists('ce_comprobante_electronico_guias');
     }
 };

@@ -14,7 +14,7 @@ class ComprobanteElectronicoDetalle extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $table = "comprobante_electronico_detalle";
+    protected $table = "ce_comprobante_electronico_detalle";
     public $timestamps = true;
 
     const CREATED_AT = 'fechaRegistro';

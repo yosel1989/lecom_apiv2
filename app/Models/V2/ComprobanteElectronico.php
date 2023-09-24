@@ -3,6 +3,9 @@
 namespace App\Models\V2;
 
 use App\Enums\EnumRazonComprobante;
+use App\Enums\EnumSunatTransaccion;
+use App\Enums\EnumTipoComprobante;
+use App\Enums\EnumTipoDocumento;
 use App\Enums\EnumTipoMoneda;
 use App\Enums\EnumTipoPago;
 use App\Enums\IdTipoDocumento;
@@ -14,7 +17,7 @@ class ComprobanteElectronico extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $table = "comprobante_electronico";
+    protected $table = "ce_comprobante_electronico";
     public $timestamps = true;
 
     const CREATED_AT = 'fechaRegistro';
@@ -26,27 +29,86 @@ class ComprobanteElectronico extends Model
      */
     protected $fillable = [
         'id',
-        'idCliente',
-        'idTipoDocumento',
-        'numeroDocumento',
-        'nombre',
-        'direccion',
-        'idRazon',
+
+        'idTipoComprobante',
         'serie',
         'numero',
-        'idTipoMoneda',
-        'idTipoPago',
-        'subTotal',
-        'igv',
+        'idSunatTransaccion',
+
+
+        'idClienteSunat',
+        'idClienteSunatTipoDocumento',
+        'clienteSunatNumeroDocumento',
+        'clienteSunatNombre',
+        'clienteSunatDireccion',
+        'clienteEmail',
+        'clienteEmail1',
+        'clienteEmail2',
+
+        'fechaEmision',
+        'fechaVencimiento',
+
+        'idMoneda',
+        'tipoCambio',
+        'porcentajeIgv',
+        'descuentoGlobal',
+        'totalDescuento',
+        'totalAnticipo',
+        'totalGravada',
+        'totalInafecta',
+        'totalExonerada',
+        'totalIgv',
+        'totalGratuita',
+        'totalOtros',
+        'totalIsc',
         'total',
+
+        'idPercepcionTipo',
+        'percepcionBaseImponible',
+        'totalPercepcion',
+        'totalIncluidoPercepcion',
+
+        'idRetencionTipo',
+        'retencionBaseImponible',
+        'totalRetencion',
+
+        'totalImpBolsa',
         'observaciones',
+
+        'idTipoComprobanteModifica',
+        'serieComprobanteModifica',
+        'numeroComprobanteModifica',
+
+        'idTipoNotaCredito',
+        'idTipoNotaDebito',
+
+        'enviarSunat',
+        'enviarCliente',
+
+        'condicionesPago',
+        'medioPago',
+
+        'placaVehiculo',
+        'ordenCompraServicio',
+
+        'detraccion',
+        'idDetraccion',
+
+        'formato_de_pdf',
+
+        'contingencia',
+        'bienesRegionSelva',
+        'servRegionSelva',
+
+        'idRazon',
+        'idProducto',
+
         'idEstado',
         'idEliminado',
         'idUsuarioRegistro',
         'idUsuarioModifico',
         'fechaRegistro',
         'fechaModifico',
-        'idProducto'
     ];
 
     /**
@@ -55,18 +117,53 @@ class ComprobanteElectronico extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'fechaRegistro' =>  'string',
-        'fechaModifico' =>  'string',
-        'idTipoDocumento' =>  IdTipoDocumento::class,
-        'idRazon' =>  EnumRazonComprobante::class,
-        'idTipoMoneda' =>  EnumTipoMoneda::class,
-        'idTipoPago' =>  EnumTipoPago::class,
+        'idTipoComprobante' =>  EnumTipoComprobante::class,
         'numero' =>  'integer',
-        'subTotal' =>  'float',
-        'igv' =>  'integer',
-        'total' =>  'integer',
+        'idSunatTransaccion' =>  'integer',
+        'idClienteSuantTipoDocumento' => 'integer',
+
+        'fechaEmision' => 'string',
+        'fechaVencimiento' => 'string',
+        'idMoneda' => 'integer',
+        'tipoCambio' => 'float',
+        'porcentajeIgv' => 'float',
+        'descuentoGlobal' => 'float',
+        'totalDescuento' => 'float',
+        'totalAnticipo' => 'float',
+        'totalGravada' => 'float',
+        'totalInafecta' => 'float',
+        'totalExonerada' => 'float',
+        'totalIgv' => 'float',
+        'totalGratuita' => 'float',
+        'totalOtros' => 'float',
+        'totalIsc' => 'float',
+        'total' => 'float',
+        'idPercepcionTipo' => 'integer',
+        'percepcionBaseImponible' => 'float',
+        'totalPercepcion' => 'float',
+        'totalIncluidoPercepcion' => 'float',
+        'idRetencionTipo' => 'integer',
+        'retencionBaseImponible' => 'float',
+        'totalRetencion' => 'float',
+        'totalImpBolsa' => 'float',
+        'idTipoComprobanteModifica' => 'integer',
+        'numeroComprobanteModifica' => 'integer',
+        'idTipoNotaCredito' => 'integer',
+        'idTipoNotaDebito' => 'integer',
+        'enviarSunat' => 'boolean',
+        'enviarCliente' => 'boolean',
+        'detraccion' => 'boolean',
+        'idDetraccion' => 'integer',
+        'contingencia' => 'boolean',
+        'bienesRegionSelva' => 'boolean',
+        'servRegionSerlva' => 'boolean',
+        'idRazon' => 'integer',
+
+
         'idEstado' =>  'integer',
-        'idEliminado' =>  'integer'
+        'idEliminado' =>  'integer',
+        'fechaRegistro' =>  'string',
+        'fechaModifico' =>  'string'
     ];
 
 }
