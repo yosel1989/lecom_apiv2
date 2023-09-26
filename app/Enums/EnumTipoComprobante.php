@@ -6,6 +6,7 @@ enum EnumTipoComprobante: int
 {
     case Boleta = 1;
     case Factura = 2;
-    case NotaCredito = 3;
-    case NotaDebito = 4;
+    case Ticket = 3;
+    case NotaCredito = 4;
+    case NotaDebito = 5;
 }

@@ -90,7 +90,7 @@ include 'V2/tipo-documento-route.php';
 include 'V2/tipo-serie-route.php';
 include 'V2/tipo-ruta-route.php';
 include 'V2/paradero-route.php';
-include 'V2/serie-route.php';
+include 'V2/comprobante-serie-route.php';
 include 'V2/caja-diario-route.php';
 include 'V2/tipo-comprobante-route.php';
 include 'V2/tipo-pago-route.php';

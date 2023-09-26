@@ -18,7 +18,7 @@ class Cors
         if ($response instanceof  Response) {
             return $next($request)->header('Access-Control-Allow-Origin', '*')
                 ->header('Access-Control-Allow-Methods', '*')
-                ->header('Access-Control-Allow-Headers', '*');
+                ->header('Access-Control-Allow-Headers', '*,Authorization');
         }
 
         // If it is a real column \Symfony\Component\HttpFoundation\Response::class
