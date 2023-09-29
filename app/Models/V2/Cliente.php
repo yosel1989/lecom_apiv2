@@ -44,7 +44,9 @@ class Cliente extends Model
         'idUsuarioRegistro',
         'idUsuarioModifico',
         'fechaRegistro',
-        'fechaModifico'
+        'fechaModifico',
+
+        'total'
     ];
 
     /**
@@ -58,7 +60,8 @@ class Cliente extends Model
         'fechaModifico' =>  'string',
         'idTipo' => IdTipoCliente::class,
         'idEstado' => IdEstado::class,
-        'idEliminado' => IdEliminado::class
+        'idEliminado' => IdEliminado::class,
+        'total' => 'int'
     ];
 
     public function sede(){

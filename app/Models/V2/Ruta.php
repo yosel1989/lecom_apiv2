@@ -37,6 +37,8 @@ class Ruta extends Model
         'idUsuarioModifico',
         'fechaRegistro',
         'fechaModifico',
+
+        'total'
     ];
 
     /**
@@ -45,6 +47,7 @@ class Ruta extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'total' =>  'integer',
         'fechaRegistro' =>  'string',
         'fechaModifico' =>  'string',
         'idTipo' => IdTipoRuta::class,
