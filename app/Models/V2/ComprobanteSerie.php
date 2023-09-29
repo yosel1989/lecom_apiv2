@@ -34,7 +34,10 @@ class ComprobanteSerie extends Model
         'idUsuarioRegistro',
         'idUsuarioModifico',
         'fechaRegistro',
-        'fechaModifico'
+        'fechaModifico',
+
+
+        'total'
     ];
 
     /**
@@ -43,6 +46,7 @@ class ComprobanteSerie extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'total' =>  'int',
         'fechaRegistro' =>  'string',
         'fechaModifico' =>  'string',
         'idTipoComprobante' =>  EnumTipoComprobante::class,

@@ -40,6 +40,8 @@ class Paradero extends Model
         'idUsuarioModifico',
         'fechaRegistro',
         'fechaModifico',
+
+        'total'
     ];
 
     /**
@@ -48,6 +50,7 @@ class Paradero extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'total' =>  'int',
         'precioBase' =>  'float',
         'latitud' =>  'float',
         'longitud' =>  'float',

@@ -36,6 +36,8 @@ class Caja extends Model
         'idUsuarioModifico',
         'fechaRegistro',
         'fechaModifico',
+
+        'total'
     ];
 
     /**
@@ -44,6 +46,7 @@ class Caja extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'total' =>  'integer',
         'fechaRegistro' =>  'string',
         'fechaModifico' =>  'string',
         'idEstado' => IdEstado::class,
