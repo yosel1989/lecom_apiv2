@@ -2,6 +2,9 @@
 
 namespace App\Models\V2;
 
+use App\Enums\EnumEstadoBoleto;
+use App\Enums\EnumTipoMoneda;
+use App\Enums\EnumTipoPago;
 use App\Enums\IdAnulado;
 use App\Enums\IdEliminado;
 use App\Enums\IdEnBlanco;
@@ -21,7 +24,7 @@ class BoletoInterprovincial extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
-//    protected $table = "boleto_interprovincial_base";
+    protected $table = "boleto_interprovincial_base";
     public $timestamps = true;
     protected $dynamicTableName;
 
@@ -37,50 +40,45 @@ class BoletoInterprovincial extends Model
      */
     protected $fillable = [
         'id',
-        'idSede',
-        'idRuta',
-        'idParadero',
-        'idVehiculo',
         'idCliente',
+        'idSede',
+        'idCaja',
         'idTipoDocumento',
         'numeroDocumento',
-        'nombre',
-        'direccion',
-
-        'codigoBoleto',
-        'latitud',
-        'longitud',
-        'idCaja',
-        'idPos',
-        'precio',
-        'fecha',
-        'idEstado',
-        'idEliminado',
-        'idTipoComprobante',
-        'anulado',
-        'enBlanco',
-        'idEliminado',
-        'fechaRegistro',
-        'fechaModifico',
-        'idUsuarioRegistro',
-        'idUsuarioModifico',
-
-        'total',
         'nombres',
         'apellidos',
-
-        'idTipoComprobante',
-        'serieComprobante',
-        'numeroComprobante',
-
-        'porPagar',
-        'idTipoBoleto',
-
-        'numeroBoleto',
-        'serie',
-
         'menorEdad',
-        'idComprobanteElectronico'
+
+        'idVehiculo',
+        'idAsiento',
+        'fechaPartida',
+        'horaPartida',
+        'idRuta',
+        'idParadero',
+        'precio',
+        'idTipoMoneda',
+        'idFormaPago',
+        'obsequio',
+
+
+        'idPos',
+        'codigo',
+//        'serie',
+//        'numero',
+        'latitud',
+        'longitud',
+
+
+        'fechaEmision',
+        'idEstado',
+        'idUsuarioRegistro',
+        'idUsuarioModifico',
+        'fechaRegistro',
+        'fechaModifico',
+
+
+        'idTipoBoleto',
+        'porPagar'
     ];
 
     /**
@@ -89,24 +87,28 @@ class BoletoInterprovincial extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'idTipoComprobante' => IdTipoComprobante::class,
+//        'idTipoComprobante' => IdTipoComprobante::class,
         'idTipoDocumento' => IdTipoDocumento::class,
-        'idEstado' => IdEstado::class,
-        'idEliminado' => IdEliminado::class,
+        'idTipoMoneda' => EnumTipoMoneda::class,
+        'idFormaPago' => EnumTipoPago::class,
+        'idEstado' => EnumEstadoBoleto::class,
+//        'idEliminado' => IdEliminado::class,
         'precio' => 'float',
         'latitud' => 'float',
         'longitud' => 'float',
-        'fecha' => 'string',
-        'numeroComprobante' => 'integer',
+        'fechaPartida' => 'string',
+        'horaPartida' => 'string',
+        'fechaEmision' => 'string',
+//        'numeroComprobante' => 'integer',
         'fechaRegistro' => 'string',
         'fechaModifico' => 'string',
         'total' => 'integer',
-        'anulado' => IdAnulado::class,
-        'enBlanco' => IdEnBlanco::class,
-        'idPorPagar' => IdPorPagar::class,
+//        'anulado' => IdAnulado::class,
+//        'enBlanco' => IdEnBlanco::class,
+        'porPagar' => 'boolean',
         'idTipoBoleto' => IdTipoBoleto::class,
 
-        'menorEdad' => 'integer',
+        'menorEdad' => 'boolean',
 
     ];
 

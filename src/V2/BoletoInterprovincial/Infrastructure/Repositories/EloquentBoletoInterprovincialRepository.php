@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Src\V2\BoletoInterprovincial\Infrastructure\Repositories;
 
+use App\Enums\EnumTipoComprobante;
+use App\Enums\IdTipoBoleto;
 use App\Enums\IdTipoSerie;
 use App\Models\User;
 use App\Models\V2\BoletoInterprovincial as EloquentModelBoletoInterprovincial;
@@ -340,16 +342,35 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
     }
 
     public function puntoVenta(
+        Id $_id,
+
         Id $_idCliente,
         Id $_idSede,
+        Id $_idCaja,
+        NumericInteger $_idTipoDocumento,
+        Text $_numeroDocumento,
+        Text $_nombres,
+        Text $_apellidos,
+        NumericInteger $_menorEdad,
+
+        Id $_idVehiculo,
+        Id $_idAsiento,
+        DateFormat $_fechaPartida,
+        DateFormat $_horaPartida,
         Id $_idRuta,
         Id $_idParadero,
         NumericFloat $_precio,
-        NumericInteger $_idTipoDocumento,
-        Text $_numeroDocumento,
-        Text $_nombre,
-        Text $_direccion,
-        Id $idUsuario
+        NumericInteger $_idTipoMoneda,
+        NumericInteger $_idFormaPago,
+        NumericInteger $_obsequio,
+
+        NumericInteger $_idTipoComprobante,
+        NumericInteger $_idTipoDocumentoEntidad,
+        Text $_numeroDocumentoEntidad,
+        Text $_nombreEntidad,
+        Text $_direccionEntidad,
+
+        Id $_idUsuarioRegistro
     ): void
     {
         $Cliente = \App\Models\V2\Cliente::where('id', $_idCliente->value())->where('idEstado',1)->where('idEliminado',0)->get();
@@ -383,12 +404,12 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         }
         $_caja = $Caja->first();
 
-        $Serie  = \App\Models\V2\Serie::
+        $Serie  = \App\Models\V2\ComprobanteSerie::
         where('idEstado',1)
-            ->where('idEliminado',0)
+//            ->where('idEliminado',0)
             ->where('idCliente',$_idCliente->value())
             ->where('idSede', $_idSede->value())
-            ->where('idTipoSerie', IdTipoSerie::BoletoInterprovincial->value)
+            ->where('idTipoComprobante', $_idTipoComprobante->value())
             ->get();
         if( $Serie->isEmpty() ){
             throw new InvalidArgumentException('Falta configurar la serie en el sistema');
@@ -397,32 +418,49 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
 
         $model = new \App\Models\V2\BoletoInterprovincial();
-        $model->setTable('boleto_interprovincial_' . $Cliente->first()->codigo);
+//        $model->setTable('boleto_interprovincial_' . $Cliente->first()->codigo);
 
-        $total = $model->selectRaw('COUNT(*) as total')->where('serie', $_serie->nombre)->where('idSede',$_serie->idSede)->get()->first()->total;
-
+//        $total = $model->selectRaw('COUNT(*) as total')->where('serie', $_serie->nombre)->where('idSede',$_serie->idSede)->get()->first()->total;
+//
 
         $model->create([
-            'idSede' => $_idSede->value(),
+            'id' => $_id->value(),
+
             'idCliente' => $_idCliente->value(),
-            'idRuta' => $_idRuta->value(),
-            'idParadero' => $_idParadero->value(),
-            'idVehiculo' => null,
-            'idCaja' => $_caja->id,
-            'idPos' => null,
+            'idSede' => $_idSede->value(),
+            'idCaja' => $_idCaja->value(),
             'idTipoDocumento' => $_idTipoDocumento->value(),
             'numeroDocumento' => $_numeroDocumento->value(),
-            'nombre' => $_nombre->value(),
-            'direccion' => $_direccion->value(),
+            'nombres' => $_nombres->value(),
+            'apellidos' => $_apellidos->value(),
+            'menorEdad' => $_menorEdad->value(),
+
+            'idVehiculo' => $_idVehiculo->value(),
+            'idAsiento' => $_idAsiento->value(),
+            'fechaPartida' => $_fechaPartida->value(),
+            'horaPartida' => $_horaPartida->value(),
+            'idRuta' => $_idRuta->value(),
+            'idParadero' => $_idParadero->value(),
             'precio' => $_precio->value(),
-            'fecha' => (new \DateTime('now'))->format('Y-m-d'),
-            'serie' => $_serie->nombre,
-            'numeroBoleto' => $total + 1,
-            'codigoBoleto' => $_serie->nombre . '-' . str_pad((string)($total + 1),10,'0',STR_PAD_LEFT),
+            'idTipoMoneda' => $_idTipoMoneda->value(),
+            'idFormaPago' => $_idFormaPago->value(),
+            'obsequio' => $_obsequio->value(),
+
+            'codigo' => 'B' . $Cliente->first()->codigo .'-'.(new \DateTime('now'))->format('YmdHis'),
             'latitud' => 0,
             'longitud' => 0,
-            'enBlanco' => 0,
-            'idUsuarioRegistro' => $idUsuario->value()
+
+//            'idTipoComprobante' => $_idTipoComprobante->value(),
+//            'idTipoDocumentoEntidad' => $_idTipoDocumentoEntidad->value(),
+//            'numeroDocumentoEntidad' => $_numeroDocumentoEntidad->value(),
+//            'nombreEntidad' => $_nombreEntidad->value(),
+//            'direccionEntidad' => $_direccionEntidad->value(),
+
+            'fechaEmision' => (new \DateTime('now'))->format('Y-m-d H:i:s'),
+            'idUsuarioRegistro' => $_idUsuarioRegistro->value(),
+
+            'idTipoBoleto' => IdTipoBoleto::VentaBoleto->value
+
         ]);
     }
 

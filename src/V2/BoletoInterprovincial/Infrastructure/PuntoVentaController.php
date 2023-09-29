@@ -3,6 +3,7 @@
 
 namespace Src\V2\BoletoInterprovincial\Infrastructure;
 
+use Faker\Core\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Src\V2\BoletoInterprovincial\Application\PuntoVentaUseCase;
@@ -23,6 +24,7 @@ final class PuntoVentaController
      */
     public function __invoke( Request $request ): void
     {
+        $id   = \Ramsey\Uuid\Uuid::uuid4();
         $user = Auth::user();
 
         $idCliente = $request->input('idCliente');
@@ -56,6 +58,8 @@ final class PuntoVentaController
 
         $useCase = new PuntoVentaUseCase($this->repository);
         $useCase->__invoke(
+            $id,
+
             $idCliente,
             $idSede,
             $idCaja,

@@ -7,7 +7,6 @@ use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
-use Src\Core\Domain\ValueObjects\TimeFormat;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincial;
 
 interface BoletoInterprovincialRepositoryContract
@@ -29,37 +28,36 @@ interface BoletoInterprovincialRepositoryContract
 
 
     public function puntoVenta(
-        Id $_idCaja,
+        Id $_id,
+
         Id $_idCliente,
         Id $_idSede,
-
-        Text $_tipoDocumentoPasajeroValor,
-        NumericInteger $_tipoDocumentoPasajero,
-        Text $_numeroDocumentoPasajero,
-        Text $_nombrePasajero,
-        Text $_apellidoPasajero,
-
+        Id $_idCaja,
+        NumericInteger $_idTipoDocumento,
+        Text $_numeroDocumento,
+        Text $_nombres,
+        Text $_apellidos,
         NumericInteger $_menorEdad,
+
+
         Id $_idVehiculo,
-        Text $_placaVehiculo,
         Id $_idAsiento,
         DateFormat $_fechaPartida,
-        TimeFormat $_horaPartida,
+        DateFormat $_horaPartida,
         Id $_idRuta,
         Id $_idParadero,
         NumericFloat $_precio,
-
         NumericInteger $_idTipoMoneda,
-        Text $_tipoMonedaValor,
-
         NumericInteger $_idFormaPago,
-        Text $_formaPagoValor,
-
         NumericInteger $_obsequio,
-        NumericFloat $_pago,
-        NumericFloat $_vuelto,
 
         NumericInteger $_idTipoComprobante,
+        NumericInteger $_idTipoDocumentoEntidad,
+        Text $_numeroDocumentoEntidad,
+        Text $_nombreEntidad,
+        Text $_direccionEntidad,
+
+        Id $_idUsuarioRegistro
 
 
     ): void;

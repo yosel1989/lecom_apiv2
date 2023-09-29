@@ -22,6 +22,8 @@ final class PuntoVentaUseCase
 
     public function __invoke(
 
+        string $id,
+
         string $idCliente,
         string $idSede,
         string $idCaja,
@@ -51,6 +53,8 @@ final class PuntoVentaUseCase
         string $idUsuarioRegistro
     ): void
     {
+        $_id = new Id($id,false, 'El id no tiene el formato correcto');
+
         $_idCliente = new Id($idCliente,false, 'El id del cliente no tiene el formato correcto');
         $_idSede = new Id($idSede,false, 'El id de la sede no tiene el formato correcto');
         $_idCaja = new Id($idCaja,false, 'El id de la caja no tiene el formato correcto');
@@ -74,13 +78,15 @@ final class PuntoVentaUseCase
 
         $_idTipoComprobante = new NumericInteger($idTipoComprobante);
         $_idTipoDocumentoEntidad = new NumericInteger($idTipoDocumentoEntidad);
-        $_numeroDocumentoEntidad = new Text($numeroDocumentoEntidad,true, 4, 'El numero de documento de la entidad excede los 4 caracteres');
+        $_numeroDocumentoEntidad = new Text($numeroDocumentoEntidad,true, -1, '');
         $_nombreEntidad = new Text($nombreEntidad,true, -1, '');
         $_direccionEntidad = new Text($direccionEntidad,true, -1, '');
 
         $_idUsuario = new Id($idUsuarioRegistro,false, 'El id del usuario no tiene el formato correcto');
 
         $this->repository->puntoVenta(
+            $_id,
+
             $_idCliente,
             $_idSede,
             $_idCaja,

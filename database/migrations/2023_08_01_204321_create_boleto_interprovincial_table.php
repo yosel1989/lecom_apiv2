@@ -13,32 +13,49 @@ return new class extends Migration
     {
         Schema::create('boleto_interprovincial_base', function (Blueprint $table) {
                 $table->uuid('id')->unique()->primary();
-                $table->uuid('idSede')->nullable();
-                $table->uuid('idRuta')->nullable();
-                $table->uuid('idParadero')->nullable();
-                $table->uuid('idVehiculo')->nullable();
+                $table->uuid('idCliente');
+                $table->uuid('idSede');
                 $table->uuid('idCaja')->nullable();
-                $table->uuid('idPos')->nullable();
-                $table->uuid('idCliente')->nullable();
-                $table->smallInteger('idTipoDocumento')->nullable();
-                $table->string('numeroDocumento',20)->nullable();
-                $table->string('nombre',250)->nullable();
-                $table->string('direccion',250)->nullable();
-                $table->string('serie',20)->nullable();
-                $table->string('numeroBoleto',50)->nullable();
-                $table->string('codigoBoleto',30)->nullable();
-                $table->decimal('latitud',10,8)->nullable();
-                $table->decimal('longitud',10,8)->nullable();
+                $table->integer('idTipoDocumento');
+                $table->string('numeroDocumento',20);
+                $table->string('nombres',250);
+                $table->string('apellidos',250);
+                $table->boolean('menorEdad')->default(false);
+
+
+                $table->uuid('idVehiculo')->nullable();
+                $table->uuid('idAsiento')->nullable();
+                $table->date('fechaPartida')->nullable();
+                $table->time('horaPartida')->nullable();
+                $table->uuid('idRuta');
+                $table->uuid('idParadero');
                 $table->decimal('precio',5,2);
-                $table->dateTime('fecha');
+                $table->integer('idTipoMoneda');
+                $table->integer('idFormaPago');
+                $table->boolean('obsequio');
+
+
+                $table->uuid('idPos')->nullable();
+                $table->string('codigo');
+//                $table->string('serie',20);
+//                $table->integer('numero');
+                $table->decimal('latitud')->default(0);
+                $table->decimal('longitud')->default(0);
+
+
+                $table->timestamp('fechaEmision');
                 $table->tinyInteger('idEstado')->default(1);
-                $table->tinyInteger('idEliminado')->default(0);
-                $table->tinyInteger('anulado')->default(0);
-                $table->tinyInteger('enBlanco')->default(0);
                 $table->uuid('idUsuarioRegistro');
                 $table->uuid('idUsuarioModifico')->nullable();
                 $table->timestamp('fechaRegistro');
                 $table->timestamp('fechaModifico')->nullable();
+
+
+                $table->integer('idTipoBoleto');
+                $table->boolean('porPagar')->default(false);
+
+//
+                $table->index(['idCliente', 'fechaEmision']);
         });
     }
 
