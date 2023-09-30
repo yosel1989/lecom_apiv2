@@ -8,6 +8,7 @@ use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincial;
+use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
 
 interface BoletoInterprovincialRepositoryContract
 {
@@ -60,5 +61,5 @@ interface BoletoInterprovincialRepositoryContract
         Id $_idUsuarioRegistro
 
 
-    ): void;
+    ): BoletoInterprovincialOficial;
 }

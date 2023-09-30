@@ -23,6 +23,7 @@ use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\Core\Domain\ValueObjects\TimeFormat;
+use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
 use Src\V2\BoletoInterprovincial\Domain\Contracts\BoletoInterprovincialRepositoryContract;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincial;
 
@@ -344,7 +345,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
     }
 
     public function puntoVenta(
-<<<<<<< HEAD
+
         Id $_id,
 
         Id $_idCliente,
@@ -374,43 +375,11 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         Text $_direccionEntidad,
 
         Id $_idUsuarioRegistro
-=======
-        Id $_idCaja,
-        Id $_idCliente,
-        Id $_idSede,
 
-        Text $_tipoDocumentoPasajeroValor,
-        NumericInteger $_tipoDocumentoPasajero,
-        Text $_numeroDocumentoPasajero,
-        Text $_nombrePasajero,
-        Text $_apellidoPasajero,
-
-        NumericInteger $_menorEdad,
-        Id $_idVehiculo,
-        Text $_placaVehiculo,
-        Id $_idAsiento,
-        DateFormat $_fechaPartida,
-        TimeFormat $_horaPartida,
-        Id $_idRuta,
-        Id $_idParadero,
-        NumericFloat $_precio,
-
-        NumericInteger $_idTipoMoneda,
-        Text $_tipoMonedaValor,
-
-        NumericInteger $_idFormaPago,
-        Text $_formaPagoValor,
-
-        NumericInteger $_obsequio,
-        NumericFloat $_pago,
-        NumericFloat $_vuelto,
-
-        NumericInteger $_idTipoComprobante,
->>>>>>> dbe38efa2a4b2acb62ff700cddf377432e7383b6
-    ): void
+    ): BoletoInterprovincialOficial
     {
         // Validar caja
-        $Caja = Caja::selectRaw('count(*) as total')->where('id', $_idCaja)->where('idEstado', 1)->where('idEliminado',0)->first();
+        $Caja = Caja::selectRaw('count(*) as total')->where('id', $_idCaja->value())->where('idEstado', 1)->where('idEliminado',0)->first();
         if( $Caja->total === 0 ){
             throw new InvalidArgumentException( 'La caja no se encuentra registrado en el sistema o esta inhabilitado.' );
         }
@@ -430,7 +399,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             throw new InvalidArgumentException('El paradero no se encuentra registrado en el sistema o esta inhabilitado.');
         }
 
-<<<<<<< HEAD
+
         $Serie  = \App\Models\V2\ComprobanteSerie::
         where('idEstado',1)
 //            ->where('idEliminado',0)
@@ -438,9 +407,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             ->where('idSede', $_idSede->value())
             ->where('idTipoComprobante', $_idTipoComprobante->value())
             ->get();
-=======
-        $Serie  = \App\Models\V2\ComprobanteSerie::where('idEstado',1)->where('idEliminado',0)->where('idCliente',$_idCliente->value())->where('idSede', $_idSede->value())->where('idTipoSerie', IdTipoSerie::BoletoInterprovincial->value)->get();
->>>>>>> dbe38efa2a4b2acb62ff700cddf377432e7383b6
+
         if( $Serie->isEmpty() ){
             throw new InvalidArgumentException('Falta configurar la serie en el sistema');
         }
@@ -457,7 +424,6 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             'id' => $_id->value(),
 
             'idCliente' => $_idCliente->value(),
-<<<<<<< HEAD
             'idSede' => $_idSede->value(),
             'idCaja' => $_idCaja->value(),
             'idTipoDocumento' => $_idTipoDocumento->value(),
@@ -472,18 +438,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             'horaPartida' => $_horaPartida->value(),
             'idRuta' => $_idRuta->value(),
             'idParadero' => $_idParadero->value(),
-=======
-            'idRuta' => $_idRuta->value(),
-            'idParadero' => $_idParadero->value(),
-            'idVehiculo' => null,
-            'idCaja' => $_idCaja->value(),
-            'idPos' => null,
-            'idTipoDocumento' => $_idTipoDocumento->value(),
-            'numeroDocumento' => $_numeroDocumentoPasajero->value(),
-            'nombres' => $_nombrePasajero->value(),
-            'apellidos' => $_apellidoPasajero->value(),
-            'direccion' => $->value(),
->>>>>>> dbe38efa2a4b2acb62ff700cddf377432e7383b6
+
             'precio' => $_precio->value(),
             'idTipoMoneda' => $_idTipoMoneda->value(),
             'idFormaPago' => $_idFormaPago->value(),
@@ -492,7 +447,6 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             'codigo' => 'B' . $Cliente->first()->codigo .'-'.(new \DateTime('now'))->format('YmdHis'),
             'latitud' => 0,
             'longitud' => 0,
-<<<<<<< HEAD
 
 //            'idTipoComprobante' => $_idTipoComprobante->value(),
 //            'idTipoDocumentoEntidad' => $_idTipoDocumentoEntidad->value(),
@@ -505,11 +459,56 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
             'idTipoBoleto' => IdTipoBoleto::VentaBoleto->value
 
-=======
-            'enBlanco' => 0,
-            'idUsuarioRegistro' => $_u->value()
->>>>>>> dbe38efa2a4b2acb62ff700cddf377432e7383b6
         ]);
+
+
+        $boleto = $model->with(
+            'usuarioRegistro:id,nombres,apellidos',
+            'usuarioModifico:id,nombres,apellidos',
+            'vehiculo:id,placa',
+            'ruta:id,nombre',
+            'paradero:id,nombre',
+            'tipoDocumento:id,nombre',
+            'caja:id,nombre',
+            'sede:id,nombre',
+            'tipoMoneda:id,nombre',
+            'tipoComprobante:id,nombre',
+            'tipoDocumentoEntidad:id,nombre',
+        )->findOrFail($_id->value());
+        $OUTPUT = new BoletoInterprovincialOficial(
+             new Id($boleto->id,false, 'El id no tiene el formato correcto'),
+
+             new Id($boleto->idCliente,false, 'El id del cliente no tiene el formato correcto'),
+             new Id($boleto->idSede,false, 'El id de la sede no tiene el formato correcto'),
+             new Id($boleto->idCaja,false, 'El id de la caja no tiene el formato correcto'),
+             new NumericInteger($boleto->idTipoDocumento->value),
+             new Text($boleto->numeroDocumento,false, -1, ''),
+             new Text($boleto->nombres,false, -1, ''),
+             new Text($boleto->apellidos,false, -1, ''),
+             new NumericInteger((int)$boleto->menorEdad),
+
+
+             new Id($boleto->idVehiculo,true, 'El id del vehiculo no tiene el formato correcto'),
+             new Id($boleto->idAsiento,true, 'El id del asiento no tiene el formato correcto'),
+             new DateFormat($boleto->fechaPartida,true, 'El formato de la fecha no es la correcta'),
+             new DateFormat($boleto->horaPartida,true, 'El formato de la hora no es la correcta'),
+             new Id($boleto->idRuta,false, 'El id de la ruta no tiene el formato correcto'),
+             new Id($boleto->idParadero,false, 'El id del paradero no tiene el formato correcto'),
+             new NumericFloat($boleto->precio),
+             new NumericInteger($boleto->idTipoMoneda->value),
+             new NumericInteger($boleto->idFormaPago->value),
+             new NumericInteger((int)$boleto->obsequio),
+
+             new NumericInteger($boleto->idTipoComprobante),
+             new NumericInteger($boleto->idTipoDocumentoEntidad),
+             new Text($boleto->numeroDocumentoEntidad,true, -1, ''),
+             new Text($boleto->nombreEntidad,true, -1, ''),
+             new Text($boleto->direccionEntidad,true, -1, ''),
+
+             new Id($boleto->idUsuarioRegistro,false, 'El id del usuario no tiene el formato correcto')
+        );
+
+        return $OUTPUT;
     }
 
 }

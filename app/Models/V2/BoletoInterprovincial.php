@@ -191,4 +191,24 @@ class BoletoInterprovincial extends Model
         return $this->hasOne('App\Models\V2\Sede','id','idSede');
     }
 
+    public function tipoDocumento(): HasOne{
+        parent::setTable('boleto_interprovincial_' . $this->getTable());
+        return $this->hasOne('App\Models\V2\TipoDocumento','id','idTipoDocumento');
+    }
+
+    public function tipoMoneda(): HasOne{
+        parent::setTable('boleto_interprovincial_' . $this->getTable());
+        return $this->hasOne('App\Models\V2\TipoMoneda','id','idTipoMoneda');
+    }
+
+    public function tipoComprobante(): HasOne{
+        parent::setTable('boleto_interprovincial_' . $this->getTable());
+        return $this->hasOne('App\Models\V2\TipoComprobante','id','idTipoComprobante');
+    }
+
+    public function tipoDocumentoEntidad(): HasOne{
+        parent::setTable('boleto_interprovincial_' . $this->getTable());
+        return $this->hasOne('App\Models\V2\TipoDocumento','id','idTipoDocumentoEntidad');
+    }
+
 }

@@ -9,6 +9,7 @@ use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
 use Src\V2\BoletoInterprovincial\Domain\Contracts\BoletoInterprovincialRepositoryContract;
 
 final class PuntoVentaUseCase
@@ -51,7 +52,7 @@ final class PuntoVentaUseCase
         ?string $nombreEntidad,
         ?string $direccionEntidad,
         string $idUsuarioRegistro
-    ): void
+    ): BoletoInterprovincialOficial
     {
         $_id = new Id($id,false, 'El id no tiene el formato correcto');
 
@@ -84,7 +85,7 @@ final class PuntoVentaUseCase
 
         $_idUsuario = new Id($idUsuarioRegistro,false, 'El id del usuario no tiene el formato correcto');
 
-        $this->repository->puntoVenta(
+        return $this->repository->puntoVenta(
             $_id,
 
             $_idCliente,

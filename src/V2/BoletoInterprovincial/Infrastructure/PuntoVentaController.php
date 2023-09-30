@@ -3,10 +3,10 @@
 
 namespace Src\V2\BoletoInterprovincial\Infrastructure;
 
-use Faker\Core\Uuid;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Src\V2\BoletoInterprovincial\Application\PuntoVentaUseCase;
+use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
 use Src\V2\BoletoInterprovincial\Infrastructure\Repositories\EloquentBoletoInterprovincialRepository;
 
 final class PuntoVentaController
@@ -22,7 +22,7 @@ final class PuntoVentaController
      * @param Request $request
      * @return mixed
      */
-    public function __invoke( Request $request ): void
+    public function __invoke( Request $request ): BoletoInterprovincialOficial
     {
         $id   = \Ramsey\Uuid\Uuid::uuid4();
         $user = Auth::user();
@@ -57,9 +57,8 @@ final class PuntoVentaController
         $idUsuarioRegistro = $user->getId();
 
         $useCase = new PuntoVentaUseCase($this->repository);
-        $useCase->__invoke(
+        return $useCase->__invoke(
             $id,
-
             $idCliente,
             $idSede,
             $idCaja,
