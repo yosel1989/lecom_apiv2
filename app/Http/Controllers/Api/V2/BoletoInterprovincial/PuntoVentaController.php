@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
+use Luecano\NumeroALetras\NumeroALetras;
 use PDF;
 
 class PuntoVentaController extends Controller
@@ -28,10 +29,13 @@ class PuntoVentaController extends Controller
             $boleto = $this->controller->__invoke($request);
 
             // Creando pdf boleto
-            $customPaper = array( 0 , 0 , 226.77 , 226.77 );
-            $pdf = PDF::loadView('comprobantes.boleta-electronica', [
-                'boleto' => $boleto
-            ])->setPaper($customPaper, 'landscape')->set_option( 'dpi' , '72' );;
+            $formatter = new NumeroALetras();
+            $pdf = PDF::loadView('comprobantes.boleta-electronica', compact('boleto', 'formatter'))
+                ->setPaper(array( 0 , 0 , 226.77 , 226.77 ), 'landscape')->set_option( 'dpi' , '72' );
+            $page_count = $pdf->get_canvas( )->get_page_number( );
+            unset( $pdf );
+            $pdf = PDF::loadView('comprobantes.boleta-electronica', compact('boleto', 'formatter'))
+                ->setPaper(array( 0 , 0 , 226.77 , 226.77 * $page_count + 20 ), 'landscape')->set_option( 'dpi' , '72' );
 
             return response()->json([
                 'data' => null,

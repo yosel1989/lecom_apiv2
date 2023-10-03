@@ -51,6 +51,7 @@ return new class extends Migration
                 $table->timestamp('fechaModifico')->nullable();
 
 
+                $table->integer('idTipoComprobante');
                 $table->integer('idTipoBoleto');
                 $table->boolean('porPagar')->default(false);
 

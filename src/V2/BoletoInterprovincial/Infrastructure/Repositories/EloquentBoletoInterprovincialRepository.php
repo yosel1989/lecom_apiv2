@@ -448,7 +448,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             'latitud' => 0,
             'longitud' => 0,
 
-//            'idTipoComprobante' => $_idTipoComprobante->value(),
+            'idTipoComprobante' => $_idTipoComprobante->value(),
 //            'idTipoDocumentoEntidad' => $_idTipoDocumentoEntidad->value(),
 //            'numeroDocumentoEntidad' => $_numeroDocumentoEntidad->value(),
 //            'nombreEntidad' => $_nombreEntidad->value(),
@@ -499,7 +499,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
              new NumericInteger($boleto->idFormaPago->value),
              new NumericInteger((int)$boleto->obsequio),
 
-             new NumericInteger($boleto->idTipoComprobante),
+             new NumericInteger($boleto->idTipoComprobante->value),
              new NumericInteger($boleto->idTipoDocumentoEntidad),
              new Text($boleto->numeroDocumentoEntidad,true, -1, ''),
              new Text($boleto->nombreEntidad,true, -1, ''),
@@ -507,6 +507,12 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
              new Id($boleto->idUsuarioRegistro,false, 'El id del usuario no tiene el formato correcto')
         );
+        $OUTPUT->setVehiculoPlaca(new Text(!is_null($boleto->vehiculo) ? $boleto->vehiculo->placa : null, true, -1));
+        $OUTPUT->setRuta(new Text(!is_null($boleto->ruta) ? $boleto->ruta->nombre : null, true, -1));
+        $OUTPUT->setParadero(new Text(!is_null($boleto->paradero) ? $boleto->paradero->nombre : null, true, -1));
+        $OUTPUT->setTipoDocumento(new Text(!is_null($boleto->tipoDocumento) ? $boleto->tipoDocumento->nombre : null, true, -1));
+        $OUTPUT->setCaja(new Text(!is_null($boleto->caja) ? $boleto->caja->nombre : null, true, -1));
+        $OUTPUT->setTipoComprobante(new Text(!is_null($boleto->tipoComprobante) ? $boleto->tipoComprobante->nombre : null, true, -1));
 
         return $OUTPUT;
     }

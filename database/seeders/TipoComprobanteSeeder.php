@@ -14,17 +14,17 @@ class TipoComprobanteSeeder extends Seeder
     public function run()
     {
         \App\Models\V2\TipoComprobante::create([
-            'nombre' => 'Boleta',
+            'nombre' => 'Boleta de Venta Electrónica',
             'blPuntoVenta' => true
         ]);
 
         \App\Models\V2\TipoComprobante::create([
-            'nombre' => 'Factura',
+            'nombre' => 'Factura de Venta Electrónica',
             'blPuntoVenta' => true
         ]);
 
         \App\Models\V2\TipoComprobante::create([
-            'nombre' => 'Ticket',
+            'nombre' => 'Ticket de Venta Electrónica',
             'blPuntoVenta' => true
         ]);
 

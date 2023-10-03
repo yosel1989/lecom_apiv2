@@ -78,7 +78,8 @@ class BoletoInterprovincial extends Model
 
 
         'idTipoBoleto',
-        'porPagar'
+        'porPagar',
+        'idTipoComprobante'
     ];
 
     /**
@@ -87,7 +88,7 @@ class BoletoInterprovincial extends Model
      * @var array<string, string>
      */
     protected $casts = [
-//        'idTipoComprobante' => IdTipoComprobante::class,
+        'idTipoComprobante' => IdTipoComprobante::class,
         'idTipoDocumento' => IdTipoDocumento::class,
         'idTipoMoneda' => EnumTipoMoneda::class,
         'idFormaPago' => EnumTipoPago::class,
