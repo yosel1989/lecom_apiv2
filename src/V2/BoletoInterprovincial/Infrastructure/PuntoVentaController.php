@@ -20,7 +20,7 @@ final class PuntoVentaController
 
     /**
      * @param Request $request
-     * @return mixed
+     * @return BoletoInterprovincialOficial
      */
     public function __invoke( Request $request ): BoletoInterprovincialOficial
     {

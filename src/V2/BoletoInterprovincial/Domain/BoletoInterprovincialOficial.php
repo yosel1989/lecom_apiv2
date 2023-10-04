@@ -8,7 +8,7 @@ use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 
-class BoletoInterprovincialOficial
+final class BoletoInterprovincialOficial
 {
     private Id $id;
     private Id $idCliente;
@@ -729,5 +729,7 @@ class BoletoInterprovincialOficial
         $this->usuarioModifico = $usuarioModifico;
     }
 
-
+    public function generateQr(): string{
+        return "B001 | 1 | 3 | {$this->getNumeroDocumento()->value()} | {$this->getNombres()->value()} | {$this->getApellidos()->value()} | {$this->getIdTipoComprobante()->value()}";
+    }
 }
