@@ -13,17 +13,29 @@ return new class extends Migration
     {
         Schema::create('ce_comprobante_electronico_guias', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->uuid('idComprobante');
-            $table->uuid('idCliente');
-            $table->uuid('idTipoGuia');
+            $table->uuid('id_comprobante');
+            $table->uuid('id_cliente');
+            $table->uuid('id_tipo_guia');
             $table->string('serie', 4);
             $table->integer('numero');
 
 
-            $table->uuid('idUsuarioRegistro');
-            $table->uuid('idUsuarioModifico')->nullable();
-            $table->timestamp('fechaRegistro');
-            $table->timestamp('fechaModifico')->nullable();
+            $table->uuid('id_usu_registro');
+            $table->uuid('id_usu_modifico')->nullable();
+            $table->timestamp('f_registro');
+            $table->timestamp('f_modifico')->nullable();
+
+            $table->index([
+                'id_comprobante',
+                'id_cliente',
+                'id_tipo_guia',
+                'serie',
+                'numero',
+                'id_usu_registro',
+                'id_usu_modifico',
+                'f_registro',
+                'f_modifico'
+            ]);
         });
     }
 

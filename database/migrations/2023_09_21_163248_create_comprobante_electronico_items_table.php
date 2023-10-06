@@ -13,35 +13,49 @@ return new class extends Migration
     {
         Schema::create('ce_comprobante_electronico_items', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->uuid('idComprobante');
-            $table->uuid('idCliente');
-            $table->integer('idUnidadMedida');
-            $table->string('codigo', 250)->nullable();
+            $table->uuid('id_comprobante');
+            $table->uuid('id_cliente');
+
+            $table->integer('id_unidad_medida');
+            $table->uuid('codigo');
             $table->string('descripcion', 250);
             $table->decimal('cantidad', 22, 10);
-            $table->decimal('valorUnitario', 22, 10);
-            $table->decimal('precioUnitario', 22, 10);
+            $table->decimal('valor_unitario', 22, 10);
+            $table->decimal('precio_unitario', 22, 10);
             $table->decimal('descuento', 14, 2)->default(0);
-            $table->decimal('subTotal', 14, 2);
-            $table->integer('idTipoIgv');
-            $table->integer('idTipoIvap')->nullable();
+            $table->decimal('sub_total', 14, 2);
+            $table->integer('id_tipo_igv');
+            $table->integer('id_tipo_ivap')->nullable();
             $table->decimal('igv', 14, 2);
             $table->decimal('impBolsa', 14, 2)->default(0);
             $table->decimal('total', 14, 2);
 
-            $table->boolean('anticipoRegularizar')->default(false);
-            $table->string('anticipoComprobanteSerie', 4)->nullable();
-            $table->string('anticipoComprobanteNumero', 8)->nullable();
+            $table->boolean('anticipo_regularizar')->default(false);
+            $table->string('anticipo_comprobante_serie', 4)->nullable();
+            $table->string('anticipo_comprobante_numero', 8)->nullable();
 
-            $table->string('codigoProductoSunat', 8)->nullable();
-            $table->decimal('tipoIsc', 14, 2)->default(0);
+            $table->string('codigo_producto_sunat', 8)->nullable();
+            $table->decimal('tipo_isc', 14, 2)->default(0);
             $table->decimal('isc', 14, 2)->default(0);
 
 
-            $table->uuid('idUsuarioRegistro');
-            $table->uuid('idUsuarioModifico')->nullable();
-            $table->timestamp('fechaRegistro');
-            $table->timestamp('fechaModifico')->nullable();
+            $table->uuid('id_usu_registro');
+            $table->uuid('id_usu_modifico')->nullable();
+            $table->timestamp('f_registro');
+            $table->timestamp('f_modifico')->nullable();
+
+            $table->index([
+                'id_comprobante',
+                'id_cliente',
+                'id_unidad_medida',
+                'codigo',
+                'id_tipo_igv',
+                'id_tipo_ivap',
+                'id_usu_registro',
+                'id_usu_modifico',
+                'f_registro',
+                'f_modifico'
+            ]);
         });
     }
 

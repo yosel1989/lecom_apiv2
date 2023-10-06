@@ -13,86 +13,112 @@ return new class extends Migration
     {
         Schema::create('ce_comprobante_electronico', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
+            $table->uuid('id_cliente');
+            $table->uuid('id_sede')->nullable();
 
-            $table->integer('idTipoComprobante');
+            $table->integer('id_tipo_comprobante');
             $table->string('serie', 15);
             $table->integer('numero');
-            $table->integer('idSunatTransaccion');
+            $table->integer('id_sunat_transaccion');
 
 
-            $table->uuid('idClienteSunat')->nullable();
-            $table->integer('idClienteSunatTipoDocumento');
-            $table->string('clienteSunatNumeroDocumento',15);
-            $table->string('clienteSunatNombre',100);
-            $table->string('clienteSunatDireccion',100)->nullable();
-            $table->string('clienteEmail',250)->nullable();
-            $table->string('clienteEmail1',250)->nullable();
-            $table->string('clienteEmail2',250)->nullable();
+//            $table->uuid('idClienteSunat')->nullable();
+            $table->integer('id_tipo_documento_entidad');
+            $table->string('numero_documento_entidad',15);
+            $table->string('nombre_entidad',100);
+            $table->string('direccion_entidad',100)->nullable();
+            $table->string('email',250)->nullable();
+            $table->string('email1',250)->nullable();
+            $table->string('email2',250)->nullable();
 
-            $table->dateTime('fechaEmision');
-            $table->dateTime('fechaVencimiento')->nullable();
+            $table->dateTime('f_emision');
+            $table->dateTime('f_vencimiento')->nullable();
 
-            $table->integer('idMoneda');
-            $table->decimal('tipoCambio',4,3)->nullable();
-            $table->decimal('porcentajeIgv',4,2)->default(0);
-            $table->decimal('descuentoGlobal',14,2)->default(0);
-            $table->decimal('totalDescuento',14,2)->default(0);
-            $table->decimal('totalAnticipo',14,2)->default(0);
-            $table->decimal('totalGravada',14,2)->default(0);
-            $table->decimal('totalInafecta',14,2)->default(0);
-            $table->decimal('totalExonerada',14,2)->default(0);
-            $table->decimal('totalIgv',14,2)->default(0);
-            $table->decimal('totalGratuita',14,2)->default(0);
-            $table->decimal('totalOtros',14,2)->default(0);
-            $table->decimal('totalIsc',14,2)->default(0);
+            $table->integer('id_moneda');
+            $table->decimal('tipo_cambio',4,3)->nullable();
+            $table->decimal('porcentaje_igv',4,2)->default(0);
+            $table->decimal('descuento_global',14,2)->default(0);
+            $table->decimal('to_descuento',14,2)->default(0);
+            $table->decimal('to_anticipo',14,2)->default(0);
+            $table->decimal('to_gravada',14,2)->default(0);
+            $table->decimal('to_inafecta',14,2)->default(0);
+            $table->decimal('to_exonerada',14,2)->default(0);
+            $table->decimal('to_igv',14,2)->default(0);
+            $table->decimal('to_gratuita',14,2)->default(0);
+            $table->decimal('to_otros',14,2)->default(0);
+            $table->decimal('to_isc',14,2)->default(0);
             $table->decimal('total',14,2)->default(0);
 
-            $table->integer('idPercepcionTipo')->nullable();
-            $table->decimal('percepcionBaseImponible',14,2)->default(0);
-            $table->decimal('totalPercepcion',14,2)->default(0);
-            $table->decimal('totalIncluidoPercepcion',14,2)->default(0);
+            $table->integer('id_percepcion_tipo')->nullable();
+            $table->decimal('percepcion_base_imponible',14,2)->default(0);
+            $table->decimal('to_percepcion',14,2)->default(0);
+            $table->decimal('to_incluido_percepcion',14,2)->default(0);
 
-            $table->integer('idRetencionTipo')->nullable();
-            $table->decimal('retencionBaseImponible',14,2)->default(0);
-            $table->decimal('totalRetencion',14,2)->default(0);
+            $table->integer('id_retencion_tipo')->nullable();
+            $table->decimal('retencion_base_imponible',14,2)->default(0);
+            $table->decimal('to_retencion',14,2)->default(0);
 
-            $table->decimal('totalImpBolsa',14,2)->default(0);
+            $table->decimal('to_imp_bolsa',14,2)->default(0);
             $table->string('observaciones',1000)->nullable();
 
-            $table->integer('idTipoComprobanteModifica')->nullable();
-            $table->string('serieComprobanteModifica',4)->nullable();
-            $table->integer('numeroComprobanteModifica')->nullable();
+            $table->integer('id_tipo_comprobante_modif')->nullable();
+            $table->string('serie_comprobante_modif',4)->nullable();
+            $table->integer('numero_comprobante_modif')->nullable();
 
-            $table->integer('idTipoNotaCredito')->nullable();
-            $table->integer('idTipoNotaDebito')->nullable();
+            $table->integer('id_tipo_nota_credito')->nullable();
+            $table->integer('id_tipo_nota_debito')->nullable();
 
-            $table->boolean('enviarSunat')->default(true);
-            $table->boolean('enviarCliente')->default(false);
+            $table->boolean('bl_enviar_sunat')->default(true);
+            $table->boolean('bl_enviar_cliente')->default(false);
 
-            $table->string('condicionesPago',250)->nullable();
-            $table->string('medioPago',250)->nullable();
+            $table->string('condiciones_pago',250)->nullable();
+            $table->string('medio_pago',250)->nullable();
 
-            $table->string('placaVehiculo',8)->nullable();
-            $table->string('ordenCompraServicio',20)->nullable();
+            $table->string('placa_vehiculo',8)->nullable();
+            $table->string('order_compra_servicio',20)->nullable();
 
-            $table->boolean('detraccion')->default(false);
-            $table->uuid('idDetraccion')->nullable();
+            $table->boolean('bl_detraccion')->default(false);
+            $table->uuid('id_detraccion')->nullable();
 
             $table->string('formato_de_pdf', 5)->nullable();
 
             $table->boolean('contingencia')->default(false);
-            $table->boolean('bienesRegionSelva')->default(false);
-            $table->boolean('servRegionSelva')->default(false);
+            $table->boolean('bienes_region_selva')->default(false);
+            $table->boolean('serv_region_selva')->default(false);
 
-            $table->integer('idRazon');
-            $table->uuid('idProducto')->nullable();
+            $table->integer('id_razon');
+            $table->uuid('id_producto')->nullable();
 
-            $table->smallInteger('idEstado')->default(1);
-            $table->tinyInteger('idEliminado')->default(0);
-            $table->uuid('idUsuarioRegistro');
-            $table->uuid('idUsuarioModifico')->nullable();
-            $table->timestamp('fechaRegistro');
-            $table->timestamp('fechaModifico')->nullable();
+
+            $table->smallInteger('id_estado')->default(1);
+            $table->uuid('id_usu_registro');
+            $table->uuid('id_usu_modifico')->nullable();
+            $table->timestamp('f_registro');
+            $table->timestamp('f_modifico')->nullable();
+
+            $table->index([
+                'id_sede',
+                'id_cliente',
+                'id_razon',
+                'f_registro',
+
+                'f_emision',
+                'id_tipo_comprobante',
+                'serie',
+                'numero',
+                'id_sunat_transaccion',
+                'id_moneda',
+                'id_tipo_nota_credito',
+                'id_tipo_nota_debito',
+                'id_detraccion',
+                'id_tipo_comprobante_modif',
+                'id_percepcion_tipo',
+                'id_retencion_tipo',
+
+                'id_estado',
+                'id_usu_registro',
+                'id_usu_modifico'
+            ]);
 
         });
     }

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('boleto_interprovincial_base', function (Blueprint $table) {
+        Schema::create('boleto_interprovincial', function (Blueprint $table) {
                 $table->uuid('id')->unique()->primary();
                 $table->uuid('idCliente');
                 $table->uuid('idSede');
@@ -56,7 +56,33 @@ return new class extends Migration
                 $table->boolean('porPagar')->default(false);
 
 //
-                $table->index(['idCliente', 'fechaEmision']);
+                $table->index([
+                    'idCliente',
+                    'idSede',
+                    'idCaja',
+                    'idTipoDocumento',
+                    'numeroDocumento',
+                    'menorEdad',
+                    'idVehiculo',
+                    'idAsiento',
+                    'fechaPartida',
+                    'horaPartida',
+                    'idRuta',
+                    'idParadero',
+                    'idTipoMoneda',
+                    'idFormaPago',
+                    'obsequio',
+                    'idPos',
+                    'codigo',
+                    'fechaEmision',
+                    'idUsuarioRegistro',
+                    'idUsuarioModifico',
+                    'fechaRegistro',
+                    'fechaModifico',
+                    'idTipoComprobante',
+                    'idTipoBoleto',
+                    'porPagar'
+                ]);
         });
     }
 
@@ -65,6 +91,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('boleto_interprovincial_base');
+        Schema::dropIfExists('boleto_interprovincial');
     }
 };

@@ -484,7 +484,8 @@ Route::middleware('auth:sanctum')->group(function() {
                 'latitud' => $request->input('latitud'),
                 'longitud' => $request->input('longitud'),
                 'precio' => $request->input('precio'),
-                'fecha' => $request->input('fecha'),
+                'fechaPartida' => (new DateTime($request->input('fecha')))->format('Y-m-d'),
+                'horaPartida' => (new DateTime($request->input('hora')))->format('H:m:s'),
                 'idUsuarioRegistro' => $user->getId(),
                 'idSede' => null,
 
@@ -513,6 +514,8 @@ Route::middleware('auth:sanctum')->group(function() {
             ]);
 
             if($idTipoComprobante !== 0){
+                $idTipoComprobante = \App\Enums\EnumTipoComprobante::Ticket->value;
+
                 \App\Models\V2\ComprobanteElectronico::create([
                     'id' => $idComprobanteElectronico,
                     'idCliente' => $request->input('idCliente'),
