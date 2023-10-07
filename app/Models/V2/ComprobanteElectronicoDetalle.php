@@ -26,9 +26,9 @@ class ComprobanteElectronicoDetalle extends Model
      */
     protected $fillable = [
         'id',
-        'idComprobante',
-        'idCliente',
-        'idUnidadMedida',
+        'id_comprobante',
+        'id_cliente',
+        'id_unidad_medida',
         'idProducto',
         'producto',
         'detalle',

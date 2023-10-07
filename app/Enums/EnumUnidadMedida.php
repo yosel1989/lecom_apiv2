@@ -4,5 +4,6 @@ namespace App\Enums;
 
 enum EnumUnidadMedida: int
 {
-    case Unidad = 1;
+    case Producto = 1;
+    case Servicio = 2;
 }

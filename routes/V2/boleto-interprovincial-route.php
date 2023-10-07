@@ -436,7 +436,7 @@ Route::middleware('auth:sanctum')->group(function() {
             }
 
 
-            if (!Schema::hasTable('boleto_interprovincial_' . $_cliente->codigo)) {
+            if (!Schema::hasTable('boleto_interprovincial_cliente_' . $_cliente->codigo)) {
                 DB::statement("CREATE TABLE boleto_interprovincial_' . $_cliente->codigo . ' LIKE boleto_interprovincial_base");
 
 //                Schema::create('boleto_interprovincial_' . $_cliente->codigo, function (Blueprint $table) {
@@ -467,95 +467,204 @@ Route::middleware('auth:sanctum')->group(function() {
 //                });
             }
 
-            $model = new \App\Models\V2\BoletoInterprovincial();
-            $model->setTable('boleto_interprovincial_' . $Cliente->first()->codigo);
+            $model = new \App\Models\V2\BoletoInterprovincialOficial();
+            $model->setTable('boleto_interprovincial_cliente_' . $Cliente->first()->codigo);
 
             $model->create([
                 'id' => $idBoleto,
-                'idRuta' => $request->input('idRuta'),
-                'idParadero' => $request->input('idParadero'),
-                'idVehiculo' => $request->input('idVehiculo'),
-                'idCaja' => $request->input('idCaja'),
-                'idPos' => $request->input('idPos'),
-                'idCliente' => $request->idCliente,
+                'id_ruta' => $request->input('idRuta'),
+                'id_paradero' => $request->input('idParadero'),
+                'id_vehiculo' => $request->input('idVehiculo'),
+                'id_caja' => $request->input('idCaja'),
+                'id_pos' => $request->input('idPos'),
+                'id_cliente' => $request->idCliente,
 
                 // boleto
-                'codigoBoleto' => $request->input('codigoBoleto'),
+                'codigo' => $request->input('codigoBoleto'),
                 'latitud' => $request->input('latitud'),
                 'longitud' => $request->input('longitud'),
                 'precio' => $request->input('precio'),
-                'fechaPartida' => (new DateTime($request->input('fecha')))->format('Y-m-d'),
-                'horaPartida' => (new DateTime($request->input('hora')))->format('H:m:s'),
-                'idUsuarioRegistro' => $user->getId(),
-                'idSede' => null,
+                'f_partida' => (new DateTime($request->input('fecha')))->format('Y-m-d'),
+                'h_partida' => (new DateTime($request->input('hora')))->format('H:m:s'),
+                'id_usu_registro' => $user->getId(),
+                'id_sede' => null,
 
 
                 //pasajero
-                'idTipoDocumento' => $request->input('idTipoDocumento'),
-                'numeroDocumento' => $request->input('numeroDocumento'),
+                'id_tipo_documento' => $request->input('idTipoDocumento'),
+                'numero_documento' => $request->input('numeroDocumento'),
                 'nombres' => $request->input('nombres'),
                 'apellidos' => $request->input('apellidos'),
                 'nombre' => $request->input('nombres') . ' ' . $request->input('apellidos'),
 
                 // estados
-                'enBlanco' => 0,
+//                'enBlanco' => 0,
                 'anulado' => 0,
 
 //                // comprobante
-                'idTipoComprobante' => $idTipoComprobante,
+                'id_tipo_comprobante' => $idTipoComprobante,
                 'serieComprobante' => $serieComprobante,
                 'numeroComprobante' => $numeroComprobante,
 
-                'idPorPagar' => $porPagar,
-                'idTipo' => $idTipoBoleto,
+                'por_pagar' => $porPagar,
+                'id_tipo_boleto' => $idTipoBoleto,
 
-                'menorEdad' => $request->input('menorEdad')
+                'menor_edad' => (boolean)$request->input('menorEdad'),
 
+                'id_tipo_moneda' => \App\Enums\EnumTipoMoneda::Soles->value,
+                'id_forma_pago' => \App\Enums\EnumFormaPago::Contado->value,
+                'obsequio' => false,
+                'f_emision' => (new DateTime('now'))->format('Y-m-d H:m:s'),
+                'id_estado' => 1,
             ]);
 
-            if($idTipoComprobante !== 0){
-                $idTipoComprobante = \App\Enums\EnumTipoComprobante::Ticket->value;
 
-                \App\Models\V2\ComprobanteElectronico::create([
-                    'id' => $idComprobanteElectronico,
-                    'idCliente' => $request->input('idCliente'),
-                    'idTipoDocumento' => $idTipoComprobante === \App\Enums\IdTipoComprobante::Factura->value ?  $request->input('idTipoDocumentoCliente') : $request->input('idTipoDocumento'),
-                    'numeroDocumento' => $idTipoComprobante === \App\Enums\IdTipoComprobante::Factura->value ?  $request->input('numeroDocumentoCliente') : $request->input('numeroDocumento'),
-                    'nombre' => $idTipoComprobante === \App\Enums\IdTipoComprobante::Factura->value ?  $request->input('nombreCliente') : ( $request->input('nombres') . ' ' . $request->input('apellidos') ),
-                    'direccion' => $idTipoComprobante === \App\Enums\IdTipoComprobante::Factura->value ?  $request->input('direccionCliente') : null,
-                    'idRazon' => $idRazon,
-                    'serie' => $serieComprobante,
-                    'numero' => $numeroComprobante,
-                    'idTipoMoneda' => \App\Enums\EnumTipoMoneda::Soles->value,
-                    'idTipoPago' => \App\Enums\EnumTipoPago::Efectivo->value,
-                    'subTotal'  => $request->input('precio'),
-                    'igv' => 0,
-                    'total'  => $request->input('precio'),
-                    'idUsuarioRegistro' => $user->getId(),
 
-                    'idProducto' => $idComprobanteElectronico
-//                    'idCliente' => $request->input('idCliente'),
-                ]);
 
-                \App\Models\V2\ComprobanteElectronicoDetalle::create([
-                    'idComprobante' => $idComprobanteElectronico,
-                    'idCliente' => $request->input('idCliente'),
-                    'idUnidadMedida' => \App\Enums\EnumUnidadMedida::Unidad->value,
-                    'idProducto' => $idProductoServicio,
-                    'producto' => $request->input('codigoBoleto'),
-                    'detalle' => "",
-                    'cantidad' => 1,
-                    'valor' => $request->input('precio'),
-                    'subTotal'  => $request->input('precio'),
-                    'igv' => 0,
-                    'total'  => $request->input('precio'),
-                    'idUsuarioRegistro' => $user->getId()
-                ]);
+            $idTipoDocumentoEntidad = '';
+            switch ($idTipoComprobante){
+                case \App\Enums\EnumTipoComprobante::Factura:
+                    $idTipoDocumentoEntidad = $request->input('idTipoDocumentoCliente');
+                    break;
+                default:
+                    $idTipoDocumentoEntidad = $request->input('idTipoDocumento');
+                    break;
+            }
+            $numeroDocumentoEntidad = '';
+            switch ($idTipoComprobante){
+                case \App\Enums\EnumTipoComprobante::Factura:
+                    $numeroDocumentoEntidad = $request->input('numeroDocumentoCliente');
+                    break;
+                default:
+                    $numeroDocumentoEntidad = $request->input('numeroDocumento');
+                    break;
+            }
+            $nombreEntidad = '';
+            switch ($idTipoComprobante){
+                case \App\Enums\EnumTipoComprobante::Factura:
+                    $nombreEntidad = $request->input('nombreCliente');
+                    break;
+                default:
+                    $nombreEntidad = $request->input('nombres') . ' ' . $request->input('apellidos');
+                    break;
             }
 
-            $model->findOrFail($idBoleto)->update([
-               'idComprobanteElectronico' => $idComprobanteElectronico
+            \App\Models\V2\ComprobanteElectronico::create([
+                'id' => $idComprobanteElectronico,
+                'id_cliente' => $request->input('idCliente'),
+                'id_sede' => null,
+
+                'id_tipo_comprobante' => $idTipoComprobante,
+                'serie' => $serieComprobante,
+                'numero' => $numeroComprobante,
+                'id_sunat_transaccion' => \App\Enums\EnumSunatTransaccion::VentaInterna->value,
+
+                'id_tipo_documento_entidad' => $idTipoDocumentoEntidad,
+                'numero_documento_entidad' => $numeroDocumentoEntidad,
+                'nombre_entidad' => $nombreEntidad,
+                'direccion' => $request->input('direccionCliente'),
+                'email' => null,
+                'email1' => null,
+                'email2' => null,
+
+                'f_emision' => (new DateTime('now'))->format('Y-m-d H:m:s'),
+                'f_vencimiento' => (new DateTime('now'))->format('Y-m-d H:m:s'),
+
+                'id_moneda' => \App\Enums\EnumTipoMoneda::Soles,
+                'tipo_cambio' => null,
+                'porcentaje_igv' => 0,
+                'descuento_global' => 0,
+                'to_descuento' => 0,
+                'to_anticipo' => 0,
+                'to_gravada' => $request->input('precio'),
+                'to_inafecta' => 0,
+                'to_exonerada' => $request->input('precio'),
+                'to_igv' => 0,
+                'to_gratuita' => 0,
+                'to_otros' => 0,
+                'to_isc' => 0,
+                'total' => $request->input('precio'),
+
+                'id_percepcion_tipo' => null,
+                'percepcion_base_imponible' => 0,
+                'to_percepcion' => 0,
+                'to_incluido_percepcion' => 0,
+
+                'id_retencion_tipo' => null,
+                'retencion_base_imponible' => 0,
+                'to_retencion' => 0,
+
+                'to_imp_bolsa' => 0,
+                'observaciones' => null,
+
+                'id_tipo_comprobante_modif' => null,
+                'serie_comprobante_modif' => null,
+                'numero_comprobante_modif' => null,
+
+                'id_tipo_nota_credito' => null,
+                'id_tipo_nota_debito' => null,
+
+                'bl_enviar_sunat' => false,
+                'bl_enviar_cliente' => false,
+
+                'condiciones_pago' => null,
+                'medio_pago' => null,
+
+                'placa_vehiculo' => null,
+                'order_compra_servicio' => null,
+
+                'bl_detraccion' => false,
+                'id_detraccion' => null,
+
+                'formato_de_pdf' => 'TICKET',
+
+                'contingencia' => false,
+                'bienes_region_selva' => false,
+                'serv_region_selva' => false,
+
+                'id_razon' => $idTipoBoleto === \App\Enums\IdTipoBoleto::VentaBoleto ? \App\Enums\EnumCeRazon::VentaBoletoInterprovincial->value : \App\Enums\EnumCeRazon::Encomienda->value,
+                'id_producto' => $idBoleto,
+
+                'id_estado' => 1,
+                'id_usu_registro' => $user->getId(),
+                'id_usu_modifico' => $user->getId(),
             ]);
+
+                \App\Models\V2\ComprobanteElectronicoItem::create([
+                    'id_comprobante' => $idComprobanteElectronico,
+                    'id_cliente' => $request->input('idCliente'),
+
+                    'id_unidad_medida' => \App\Enums\EnumUnidadMedida::Servicio->value,
+                    'codigo' => $idBoleto,
+                    'descripcion' => 'BOLETO INTERPROVINCIAL | RUTA:' . $_ruta->nombre . ' | DESTINO:' . $_paradero->nombre,
+                    'cantidad' => 1,
+                    'valor_unitario' => $request->input('precio'),
+                    'precio_unitario' => $request->input('precio'),
+                    'descuento' => 0,
+                    'sub_total' => $request->input('precio'),
+                    'id_tipo_igv' => \App\Enums\EnumSunatTipoIgv::ExoneradoTransferenciaGratuita->value,
+                    'id_tipo_ivap' => null,
+                    'igv' => 0,
+                    'impBolsa' => 0,
+                    'total' => $request->input('precio'),
+
+                    'anticipo_regularizar' => false,
+                    'anticipo_comprobante_serie' => null,
+                    'anticipo_comprobante_numero' => null,
+
+                    'codigo_producto_sunat' => null,
+                    'tipo_isc' => 0,
+                    'isc' => 0,
+
+
+                    'id_usu_registro' => $user->getId(),
+                    'id_usu_modifico' => $user->getId(),
+                ]);
+
+
+//            $model->findOrFail($idBoleto)->update([
+//               'id_comprobante' => $idComprobanteElectronico
+//            ]);
 
 
             return response()->json([

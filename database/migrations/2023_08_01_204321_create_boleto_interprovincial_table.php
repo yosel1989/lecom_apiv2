@@ -13,29 +13,29 @@ return new class extends Migration
     {
         Schema::create('boleto_interprovincial', function (Blueprint $table) {
                 $table->uuid('id')->unique()->primary();
-                $table->uuid('idCliente');
-                $table->uuid('idSede');
-                $table->uuid('idCaja')->nullable();
-                $table->integer('idTipoDocumento');
-                $table->string('numeroDocumento',20);
+                $table->uuid('id_cliente');
+                $table->uuid('id_sede');
+                $table->uuid('id_caja')->nullable();
+                $table->integer('id_tipo_documento');
+                $table->string('numero_documento',20);
                 $table->string('nombres',250);
                 $table->string('apellidos',250);
-                $table->boolean('menorEdad')->default(false);
+                $table->boolean('menor_edad')->default(false);
 
 
-                $table->uuid('idVehiculo')->nullable();
-                $table->uuid('idAsiento')->nullable();
-                $table->date('fechaPartida')->nullable();
-                $table->time('horaPartida')->nullable();
-                $table->uuid('idRuta');
-                $table->uuid('idParadero');
+                $table->uuid('id_vehiculo')->nullable();
+                $table->uuid('id_asiento')->nullable();
+                $table->date('f_partida')->nullable();
+                $table->time('h_partida')->nullable();
+                $table->uuid('id_ruta');
+                $table->uuid('id_paradero');
                 $table->decimal('precio',5,2);
-                $table->integer('idTipoMoneda');
-                $table->integer('idFormaPago');
+                $table->integer('id_tipo_moneda');
+                $table->integer('id_forma_pago');
                 $table->boolean('obsequio');
 
 
-                $table->uuid('idPos')->nullable();
+                $table->uuid('id_pos')->nullable();
                 $table->string('codigo');
 //                $table->string('serie',20);
 //                $table->integer('numero');
@@ -43,45 +43,45 @@ return new class extends Migration
                 $table->decimal('longitud')->default(0);
 
 
-                $table->timestamp('fechaEmision');
-                $table->tinyInteger('idEstado')->default(1);
-                $table->uuid('idUsuarioRegistro');
-                $table->uuid('idUsuarioModifico')->nullable();
-                $table->timestamp('fechaRegistro');
-                $table->timestamp('fechaModifico')->nullable();
+                $table->timestamp('f_emision');
+                $table->tinyInteger('id_estado')->default(1);
+                $table->uuid('id_usu_registro');
+                $table->uuid('id_usu_modifico')->nullable();
+                $table->timestamp('f_registro');
+                $table->timestamp('f_modifico')->nullable();
 
 
-                $table->integer('idTipoComprobante');
-                $table->integer('idTipoBoleto');
-                $table->boolean('porPagar')->default(false);
+                $table->integer('id_tipo_comprobante');
+                $table->integer('id_tipo_boleto');
+                $table->boolean('por_pagar')->default(false);
 
 //
                 $table->index([
-                    'idCliente',
-                    'idSede',
-                    'idCaja',
-                    'idTipoDocumento',
-                    'numeroDocumento',
-                    'menorEdad',
-                    'idVehiculo',
-                    'idAsiento',
-                    'fechaPartida',
-                    'horaPartida',
-                    'idRuta',
-                    'idParadero',
-                    'idTipoMoneda',
-                    'idFormaPago',
+                    'id_cliente',
+                    'id_sede',
+                    'id_caja',
+                    'id_tipo_documento',
+                    'numero_documento',
+                    'menor_edad',
+                    'id_vehiculo',
+                    'id_asiento',
+                    'f_partida',
+                    'h_partida',
+                    'id_ruta',
+                    'id_paradero',
+                    'id_tipo_moneda',
+                    'id_forma_pago',
                     'obsequio',
-                    'idPos',
+                    'id_pos',
                     'codigo',
-                    'fechaEmision',
-                    'idUsuarioRegistro',
-                    'idUsuarioModifico',
-                    'fechaRegistro',
-                    'fechaModifico',
-                    'idTipoComprobante',
-                    'idTipoBoleto',
-                    'porPagar'
+                    'f_emision',
+                    'id_usu_registro',
+                    'id_usu_modifico',
+                    'f_registro',
+                    'f_modifico',
+                    'id_tipo_comprobante',
+                    'id_tipo_boleto',
+                    'por_pagar'
                 ]);
         });
     }

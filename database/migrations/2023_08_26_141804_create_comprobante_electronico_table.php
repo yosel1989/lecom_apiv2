@@ -80,7 +80,7 @@ return new class extends Migration
             $table->boolean('bl_detraccion')->default(false);
             $table->uuid('id_detraccion')->nullable();
 
-            $table->string('formato_de_pdf', 5)->nullable();
+            $table->string('formato_de_pdf', 6)->nullable();
 
             $table->boolean('contingencia')->default(false);
             $table->boolean('bienes_region_selva')->default(false);

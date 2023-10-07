@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Models\V2\BoletoInterprovincial;
 use App\Models\V2\Cliente;
 use App\Models\V2\ClienteConfiguracion;
+use App\Models\V2\ComprobanteElectronico;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -78,7 +79,8 @@ class OpenController extends Controller
                         switch ( $tc->id ){
                             case IdTipoComprobante::Boleta->value: $serieLetra = 'B'; break;
                             case IdTipoComprobante::Factura->value: $serieLetra = 'F'; break;
-                            default: $serieLetra = 'B'; break;
+                            case IdTipoComprobante::Ticket->value: $serieLetra = 'T'; break;
+                            default: $serieLetra = 'T'; break;
                         }
 
                         $serie = $serieLetra . str_pad($_vehiculo->codigo,3,'0',STR_PAD_LEFT);
@@ -86,11 +88,23 @@ class OpenController extends Controller
                         $BoletoInterprovincial = new BoletoInterprovincial();
                         $BoletoInterprovincial->setTable('boleto_interprovincial_' . $OCliente->codigo);
 
+                        $ComprobanteElectronico = new ComprobanteElectronico();
+
                         return [
                             'id' => $tc->id,
                             'nombre' => $tc->nombre,
                             'serie' => $serie,
-                            'ultimoNumero' => is_null($BoletoInterprovincial->where('serie',$serie)->max('numeroBoleto')) ? 0 : $BoletoInterprovincial->where('serie',$serie)->max('numeroBoleto')
+                            'ultimoNumero' => is_null($ComprobanteElectronico
+                                ->where('serie',$serie)
+                                ->where('id_cliente',$request->input('idCliente'))
+                                ->where('id_tipo_comprobante', $tc->id)
+                                ->max('numero')) ?
+                                0 :
+                                $ComprobanteElectronico
+                                    ->where('serie',$serie)
+                                    ->where('id_cliente',$request->input('idCliente'))
+                                    ->where('id_tipo_comprobante', $tc->id)
+                                    ->max('numero')
                         ];
                     }) : [],
                     'configuracion' => [

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
+
     /**
      * The event to listener mappings for the application.
      *
@@ -35,4 +36,5 @@ class EventServiceProvider extends ServiceProvider
     {
         return false;
     }
+
 }
