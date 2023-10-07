@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('cliente_configuracion', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->integer('idParametroConfiguracion');
-            $table->integer('valor');
-            $table->uuid('idCliente');
-            $table->uuid('idUsuarioRegistro')->nullable();
-            $table->uuid('idUsuarioModifico')->nullable();
-            $table->timestamp('fechaRegistro')->nullable();
-            $table->timestamp('fechaModifico')->nullable();
+            $table->integer('id_parametro_configuracion');
+            $table->string('valor');
+            $table->uuid('id_cliente');
+            $table->uuid('id_usu_registro')->nullable();
+            $table->uuid('id_usu_modifico')->nullable();
+            $table->timestamp('f_registro')->nullable();
+            $table->timestamp('f_modifico')->nullable();
         });
     }
 

@@ -16,8 +16,8 @@ class ClienteConfiguracion extends Model
     protected $table = "cliente_configuracion";
     public $timestamps = true;
 
-    const CREATED_AT = 'fechaRegistro';
-    const UPDATED_AT = 'fechaModifico';
+    const CREATED_AT = 'f_registro';
+    const UPDATED_AT = 'f_modifico';
     /**
      * The attributes that are mass assignable.
      *
@@ -25,13 +25,13 @@ class ClienteConfiguracion extends Model
      */
     protected $fillable = [
         'id',
-        'idParametroConfiguracion',
-        'idCliente',
+        'id_parametro_configuracion',
+        'id_cliente',
         'valor',
-        'idUsuarioRegistro',
-        'idUsuarioModifico',
-        'fechaRegistro',
-        'fechaModifico',
+        'id_usu_registro',
+        'id_usu_modifico',
+        'f_registro',
+        'f_modifico',
     ];
 
     /**
@@ -40,14 +40,13 @@ class ClienteConfiguracion extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'fechaRegistro' =>  'string',
-        'fechaModifico' =>  'string',
-        'idParametroConfiguracion' => EnumParametroConfiguracion::class,
-        'valor' => 'integer'
+        'f_registro' =>  'string',
+        'f_modifico' =>  'string',
+        'id_parametro_configuracion' => EnumParametroConfiguracion::class
     ];
 
     public function parametro(){
-        return $this->hasOne('App\Models\V2\ParametroConfiguracion','id','idParametroConfiguracion');
+        return $this->hasOne('App\Models\V2\ParametroConfiguracion','id','id_parametro_configuracion');
     }
 
 }

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api\Apps\BoleteroPOS;
 
+use App\Enums\EnumParametroConfiguracion;
 use App\Enums\EnumPuntoVenta;
 use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
 use App\Enums\IdTipoComprobante;
 use App\Models\User;
 use App\Models\V2\Caja;
+use App\Models\V2\ClienteConfiguracion;
 use App\Models\V2\Destino;
 use App\Models\V2\Pos;
 use App\Models\V2\Ruta;
@@ -171,6 +173,9 @@ class AuthController extends Controller
 //                dd($Ousuario);
                 $token = $usuario->createToken($usuario->usuario.'-'.now())->plainTextToken;
 
+
+                $Configuracion = ClienteConfiguracion::select('valor')->where('id_cliente', $usuario->idCliente)->where('id_parametro_configuracion',EnumParametroConfiguracion::Empresa_Ruc->value)->get();
+
                 return response()->json([
                     'data'=>[
                         'token' => [
@@ -203,7 +208,8 @@ class AuthController extends Controller
                         'cliente' => [
                             'id' => $usuario->idCliente,
                             'codigo' => str_pad($usuario->cliente->codigo,2,'0',STR_PAD_LEFT),
-                            'nombre' =>  $usuario->cliente->nombre
+                            'nombre' =>  $usuario->cliente->nombre,
+                            'numeroDocumento' =>  !$Configuracion->isEmpty() ? (int)$Configuracion->first()->valor : ''
                         ],
                         'vehiculo' => [
                             'id' => $_vehiculo->id,
