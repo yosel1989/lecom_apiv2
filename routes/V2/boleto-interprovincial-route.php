@@ -442,8 +442,9 @@ Route::middleware('auth:sanctum')->group(function() {
             }
 
 
+
             if (!Schema::hasTable('boleto_interprovincial_cliente_' . $_cliente->codigo)) {
-                DB::statement("CREATE TABLE boleto_interprovincial_' . $_cliente->codigo . ' LIKE boleto_interprovincial_base");
+                DB::statement("CREATE TABLE boleto_interprovincial_cliente_' . $_cliente->codigo . ' LIKE boleto_interprovincial");
 
 //                Schema::create('boleto_interprovincial_' . $_cliente->codigo, function (Blueprint $table) {
 //                    $table->uuid('id')->unique()->primary();
@@ -475,6 +476,28 @@ Route::middleware('auth:sanctum')->group(function() {
 
             $model = new \App\Models\V2\BoletoInterprovincialOficial();
             $model->setTable('boleto_interprovincial_cliente_' . $Cliente->first()->codigo);
+
+
+
+            /******* Validar que el boleto  ******************/
+            if($model->where('codigo',$request->input('codigoBoleto'))->get()->count()){
+                return response()->json([
+                    'data' => null,
+                    'error' => 'El código del boleto ya fue registrado',
+                    'status' => 1001
+                ]);
+            }
+            /******* Validar que el comprobante  ******************/
+            if(\App\Models\V2\ComprobanteElectronico::where('serie',$request->input('serie'))->where('numero',$request->input('numero'))->get()->count()){
+                return response()->json([
+                    'data' => null,
+                    'error' => 'La serie y el número de comprobante ya fueron registrados',
+                    'status' => 1002
+                ]);
+            }
+
+
+
 
             $model->create([
                 'id' => $idBoleto,

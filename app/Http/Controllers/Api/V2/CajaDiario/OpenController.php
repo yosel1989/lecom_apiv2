@@ -67,7 +67,7 @@ class OpenController extends Controller
                 ]);
             }
 
-            $Configuracion = ClienteConfiguracion::where('idCliente', $request->input('idCliente'))->where('idParametroConfiguracion', EnumParametroConfiguracion::NumeroComprobantesDiarios->value)->get();
+            $Configuracion = ClienteConfiguracion::where('id_cliente', $request->input('idCliente'))->where('id_parametro_configuracion', EnumParametroConfiguracion::NumeroComprobantesDiarios->value)->get();
 
             $this->controller->__invoke($request);
 
@@ -108,7 +108,7 @@ class OpenController extends Controller
                         ];
                     }) : [],
                     'configuracion' => [
-                        'numeroComprobantesDiarios' => !$Configuracion->isEmpty() ? $Configuracion->first()->valor : 0
+                        'numeroComprobantesDiarios' => !$Configuracion->isEmpty() ? (int)$Configuracion->first()->valor : 0
                     ]
                 ],
                 'error' =>  null,

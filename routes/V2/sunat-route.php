@@ -120,9 +120,75 @@ Route::middleware('auth:sanctum')->group(function() {
             ]);
         }
 
+    });
 
 
 
+
+    Route::post('app/consulta-masiva-dni', function(Request $request){
+
+        ini_set('max_execution_time', 360);
+
+        $listado_dni = $request->input('data');
+
+
+        // Datos
+        $token = 'apis-token-5227.qK6OMuUPY45HWN9j-VY5dWjdMWZPqZG5';
+
+        $collection = [];
+
+        foreach ($listado_dni as $dni){
+
+            // Iniciar llamada a API
+            $curl = curl_init();
+
+            // Buscar dni
+            curl_setopt_array($curl, array(
+                // para user api versión 2
+                CURLOPT_URL => 'https://api.apis.net.pe/v2/reniec/dni?numero=' . $dni,
+                // para user api versión 1
+                // CURLOPT_URL => 'https://api.apis.net.pe/v1/dni?numero=' . $dni,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_SSL_VERIFYPEER => 0,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 2,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_CUSTOMREQUEST => 'GET',
+                CURLOPT_HTTPHEADER => array(
+                    'Referer: https://apis.net.pe/consulta-dni-api',
+                    'Authorization: Bearer ' . $token
+                ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            // Datos listos para usar
+            $persona = json_decode($response);
+
+            if(isset($persona->message)){
+
+                $collection[] = implode(',', [
+                    $dni,
+                    'Cliente No',
+                    'Cliente No',
+                    'Cliente No'
+                ]);
+
+            }else{
+                $collection[] = implode(',', [
+                    $dni,
+                    $persona->nombres . ' ' . $persona->apellidoPaterno . ' ' . $persona->apellidoMaterno,
+                    $persona->nombres,
+                    $persona->apellidoPaterno . ' ' . $persona->apellidoMaterno
+                ]);
+            }
+        }
+
+        return response()->json([
+            'data'      => $collection
+        ]);
 
     });
 });
