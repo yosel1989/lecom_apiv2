@@ -318,6 +318,12 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
         try {
+
+            if(!\App\Enums\IdTipoBoleto::tryFrom((int)$request->input('idTipoBoleto'))){
+                throw new InvalidArgumentException("Valor incorrecto para el tipo de boleto");
+            }
+
+
             $user = Auth::user();
 
             /** @var \App\Models\V2\Cliente | null $_cliente */

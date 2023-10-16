@@ -22,6 +22,7 @@ final class CreateController
         $idTipoDocumento            = $request->input('idTipoDocumento');
         $numeroDocumento        = $request->input('numeroDocumento');
         $nombre          = $request->input('nombre');
+
         $nombreContacto       = $request->input('nombreContacto');
         $correo = $request->input('correo');
         $direccion = $request->input('direccion');

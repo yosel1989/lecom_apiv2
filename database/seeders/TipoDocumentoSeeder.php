@@ -13,6 +13,8 @@ class TipoDocumentoSeeder extends Seeder
      */
     public function run()
     {
+        \App\Models\V2\TipoDocumento::truncate();
+
         \App\Models\V2\TipoDocumento::create([
             'nombre' => 'Dni',
             'nombreCorto' => 'Dni',
