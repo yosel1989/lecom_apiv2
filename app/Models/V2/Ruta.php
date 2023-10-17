@@ -18,8 +18,8 @@ class Ruta extends Model
     protected $table = "rutas";
     public $timestamps = true;
 
-    const CREATED_AT = 'fechaRegistro';
-    const UPDATED_AT = 'fechaModifico';
+    const CREATED_AT = 'f_registro';
+    const UPDATED_AT = 'f_modifico';
     /**
      * The attributes that are mass assignable.
      *
@@ -28,15 +28,15 @@ class Ruta extends Model
     protected $fillable = [
         'id',
         'nombre',
-        'idTipo',
-        'idCategoria',
-        'idCliente',
-        'idEstado',
-        'idEliminado',
-        'idUsuarioRegistro',
-        'idUsuarioModifico',
-        'fechaRegistro',
-        'fechaModifico',
+        'id_tipo',
+        'id_categoria',
+        'id_cliente',
+        'id_estado',
+        'id_eliminado',
+        'id_usu_registro',
+        'id_usu_modifico',
+        'f_registro',
+        'f_modifico',
 
         'total'
     ];
@@ -48,23 +48,23 @@ class Ruta extends Model
      */
     protected $casts = [
         'total' =>  'integer',
-        'fechaRegistro' =>  'string',
-        'fechaModifico' =>  'string',
-        'idTipo' => IdTipoRuta::class,
-        'idEstado' => IdEstado::class,
-        'idEliminado' => IdEliminado::class,
+        'f_registro' =>  'string',
+        'f_modifico' =>  'string',
+        'id_tipo' => IdTipoRuta::class,
+        'id_estado' => IdEstado::class,
+        'id_eliminado' => IdEliminado::class,
     ];
 
     public function usuarioRegistro(){
-        return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
+        return $this->hasOne('App\Models\User','id','id_usu_registro');
     }
 
     public function usuarioModifico(){
-        return $this->hasOne('App\Models\User','id','idUsuarioModifico');
+        return $this->hasOne('App\Models\User','id','id_usu_modifico');
     }
 
     public function tipo(){
-        return $this->hasOne('App\Models\V2\TipoRuta','id','idTipo');
+        return $this->hasOne('App\Models\V2\TipoRuta','id','id_tipo');
     }
 
     public function paraderos(){

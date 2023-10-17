@@ -21,7 +21,7 @@ final class CreateController
         $user = Auth::user();
         $nombre             = $request->input('nombre');
         $direccion             = $request->input('direccion');
-        $idCliente          = $id;
+        $idCliente          = $request->input('idCliente');
         $idEstado           = $request->input('idEstado');
 
         $useCase = new CreateUseCase( $this->repository );

@@ -17,8 +17,8 @@ class ComprobanteSerie extends Model
     protected $table = "ce_serie";
     public $timestamps = true;
 
-    const CREATED_AT = 'fechaRegistro';
-    const UPDATED_AT = 'fechaModifico';
+    const CREATED_AT = 'f_registro';
+    const UPDATED_AT = 'f_modifico';
     /**
      * The attributes that are mass assignable.
      *
@@ -27,14 +27,14 @@ class ComprobanteSerie extends Model
     protected $fillable = [
         'id',
         'nombre',
-        'idCliente',
-        'idSede',
-        'idTipoComprobante',
-        'idEstado',
-        'idUsuarioRegistro',
-        'idUsuarioModifico',
-        'fechaRegistro',
-        'fechaModifico',
+        'id_cliente',
+        'id_sede',
+        'id_tipo_comprobante',
+        'id_estado',
+        'id_usu_registro',
+        'id_usu_modifico',
+        'f_registro',
+        'f_modifico',
 
 
         'total'
@@ -47,26 +47,26 @@ class ComprobanteSerie extends Model
      */
     protected $casts = [
         'total' =>  'int',
-        'fechaRegistro' =>  'string',
-        'fechaModifico' =>  'string',
-        'idTipoComprobante' =>  EnumTipoComprobante::class,
-        'idEstado' =>  IdEstado::class,
+        'f_registro' =>  'string',
+        'f_modifico' =>  'string',
+        'id_tipo_comprobante' =>  EnumTipoComprobante::class,
+        'id_estado' =>  IdEstado::class,
     ];
 
     public function sede(){
-        return $this->hasOne('App\Models\V2\Sede','id','idSede');
+        return $this->hasOne('App\Models\V2\Sede','id','id_sede');
     }
 
     public function tipoComprobante(){
-        return $this->hasOne('App\Models\V2\TipoComprobante','id','idTipoComprobante');
+        return $this->hasOne('App\Models\V2\TipoComprobante','id','id_tipo_comprobante');
     }
 
     public function usuarioRegistro(){
-        return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
+        return $this->hasOne('App\Models\User','id','id_usu_registro');
     }
 
     public function usuarioModifico(){
-        return $this->hasOne('App\Models\User','id','idUsuarioModifico');
+        return $this->hasOne('App\Models\User','id','id_usu_modifico');
     }
 
 }

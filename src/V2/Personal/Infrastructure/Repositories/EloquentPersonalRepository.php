@@ -26,8 +26,14 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
 
     public function collectionByCliente(Id $idCliente): array
     {
-        $personal = $this->eloquentModelPersonal->with('sede:id,nombre', 'usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos', 'tipoDocumento:id,nombre')->where('idCliente',$idCliente->value())->get();
-
+        $personal = $this->eloquentModelPersonal->with(
+            'sede:id,nombre',
+            'usuarioRegistro:id,nombres,apellidos',
+            'usuarioModifico:id,nombres,apellidos',
+            'tipoDocumento:id,nombre'
+        )->where('id_cliente',$idCliente->value())
+        ->orderBy('nombre','ASC')
+        ->get();
         $arrVehicles = array();
 
         foreach ( $personal as $model ){
@@ -37,17 +43,17 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
                 new Text($model->foto,true, 99999,'La foto excede el maximo de caracteres'),
                 new Text($model->nombre,false, 150,'El nombre excede los 150 caracteres'),
                 new Text($model->apellido,false, 150,'El apellido excede los 150 caracteres'),
-                new NumericInteger($model->idTipoDocumento->value),
-                new Text($model->numeroDocumento,true, 150,'El numero de documento excede los 150 caracteres'),
+                new NumericInteger($model->id_tipo_documento->value),
+                new Text($model->numero_documento,true, 150,'El numero de documento excede los 150 caracteres'),
                 new Text($model->correo,true, 150,'El correo excede los 150 caracteres'),
-                new Id($model->idCliente,false,'El id del cliente no tiene el formato correcto'),
-                new Id($model->idSede,true,'El id de la sede no tiene el formato correcto'),
-                new NumericInteger($model->idEstado->value),
-                new NumericInteger($model->idEliminado->value),
-                new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
-                new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
-                new DateTimeFormat($model->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
-                new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+                new Id($model->id_cliente,false,'El id del cliente no tiene el formato correcto'),
+                new Id($model->id_sede,true,'El id de la sede no tiene el formato correcto'),
+                new NumericInteger($model->id_estado->value),
+                new NumericInteger($model->id_eliminado->value),
+                new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
+                new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+                new DateTimeFormat($model->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
+                new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
             );
 
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
@@ -64,7 +70,16 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
 
     public function ListByCliente(Id $idCliente): array
     {
-        $personal = $this->eloquentModelPersonal->where('idCliente',$idCliente->value())->get();
+        $personal = $this->eloquentModelPersonal
+            ->select(
+                'id',
+                'nombre',
+                'apellido',
+                'id_cliente',
+                'id_sede',
+                'id_estado',
+                'id_eliminado'
+            )->where('id_cliente',$idCliente->value())->orderBy('nombre','ASC')->get();
 
         $arrVehicles = array();
 
@@ -74,10 +89,10 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
                 new Id($model->id , false, 'El id del personal no tiene el formato correcto'),
                 new Text($model->nombre,false, 150,'El nombre excede los 150 caracteres'),
                 new Text($model->apellido,false, 150,'El apellido excede los 150 caracteres'),
-                new Id($model->idCliente,false,'El id del cliente no tiene el formato correcto'),
-                new Id($model->idSede,true,'El id de la sede no tiene el formato correcto'),
-                new NumericInteger($model->idEstado->value),
-                new NumericInteger($model->idEliminado->value),
+                new Id($model->id_cliente,false,'El id del cliente no tiene el formato correcto'),
+                new Id($model->id_sede,true,'El id de la sede no tiene el formato correcto'),
+                new NumericInteger($model->id_estado->value),
+                new NumericInteger($model->id_eliminado->value),
             );
 
             $arrVehicles[] = $OModel;
@@ -103,13 +118,13 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             'foto' => $foto->value(),
             'nombre' => $nombre->value(),
             'apellido' => $apellido->value(),
-            'idTipoDocumento' => $idTipoDocumento->value(),
-            'numeroDocumento' => $numeroDocumento->value(),
+            'id_tipo_documento' => $idTipoDocumento->value(),
+            'numero_documento' => $numeroDocumento->value(),
             'correo' => $correo->value(),
-            'idCliente' => $idCliente->value(),
-            'idSede' => $idSede->value(),
-            'idEstado' => $idEstado->value(),
-            'idUsuarioRegistro' => $idUsuarioRegistro->value()
+            'id_cliente' => $idCliente->value(),
+            'id_sede' => $idSede->value(),
+            'id_estado' => $idEstado->value(),
+            'id_usu_registro' => $idUsuarioRegistro->value()
         ]);
     }
 
@@ -131,12 +146,12 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             'foto' => $foto->value(),
             'nombre' => $nombre->value(),
             'apellido' => $apellido->value(),
-            'idTipoDocumento' => $idTipoDocumento->value(),
-            'numeroDocumento' => $numeroDocumento->value(),
+            'id_tipo_documento' => $idTipoDocumento->value(),
+            'numero_documento' => $numeroDocumento->value(),
             'correo' => $correo->value(),
-            'idSede' => $idSede->value(),
-            'idEstado' => $idEstado->value(),
-            'idUsuarioModifico' => $idUsuarioRegistro->value()
+            'id_sede' => $idSede->value(),
+            'id_estado' => $idEstado->value(),
+            'id_usu_modifico' => $idUsuarioRegistro->value()
         ]);
     }
 
@@ -147,8 +162,8 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
     ): void
     {
         $this->eloquentModelPersonal->findOrFail($idPersonal->value())->update([
-           'idEstado' => $idEstado->value(),
-           'idUsuarioModifico' => $idUsuarioModifico->value()
+           'id_estado' => $idEstado->value(),
+           'id_usu_modifico' => $idUsuarioModifico->value()
         ]);
     }
 
@@ -167,17 +182,17 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             new Text($model->foto,true, 99999,'La foto excede el maximo de caracteres'),
             new Text($model->nombre,false, 150,'El nombre excede los 150 caracteres'),
             new Text($model->apellido,false, 150,'El apellido excede los 150 caracteres'),
-            new NumericInteger($model->idTipoDocumento->value),
-            new Text($model->numeroDocumento,true, 150,'El numero de documento excede los 150 caracteres'),
+            new NumericInteger($model->id_tipo_documento->value),
+            new Text($model->numero_documento,true, 150,'El numero de documento excede los 150 caracteres'),
             new Text($model->correo,true, 150,'El correo excede los 150 caracteres'),
-            new Id($model->idCliente,false,'El id del cliente no tiene el formato correcto'),
-            new Id($model->idSede,true,'El id de la sede no tiene el formato correcto'),
-            new NumericInteger($model->idEstado->value),
-            new NumericInteger($model->idEliminado->value),
-            new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
-            new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
-            new DateTimeFormat($model->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
-            new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+            new Id($model->id_cliente,false,'El id del cliente no tiene el formato correcto'),
+            new Id($model->id_sede,true,'El id de la sede no tiene el formato correcto'),
+            new NumericInteger($model->id_estado->value),
+            new NumericInteger($model->id_eliminado->value),
+            new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
+            new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+            new DateTimeFormat($model->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
+            new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
         );
 
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));

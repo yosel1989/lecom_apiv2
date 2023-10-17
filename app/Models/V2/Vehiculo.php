@@ -17,8 +17,8 @@ class Vehiculo extends Model
     protected $table = "vehiculos";
     public $timestamps = true;
 
-    const CREATED_AT = 'fechaRegistro';
-    const UPDATED_AT = 'fechaModifico';
+    const CREATED_AT = 'f_registro';
+    const UPDATED_AT = 'f_modifico';
     /**
      * The attributes that are mass assignable.
      *
@@ -29,18 +29,18 @@ class Vehiculo extends Model
         'codigo',
         'placa',
         'unidad',
-        'idCliente',
-        'idCategoria',
-        'idModelo',
-        'idClass',
-        'idMarca',
-        'idFlota',
-        'idEstado',
-        'idEliminado',
-        'idUsuarioRegistro',
-        'idUsuarioModifico',
-        'fechaRegistro',
-        'fechaModifico',
+        'id_cliente',
+        'id_categoria',
+        'id_modelo',
+        'id_clase',
+        'id_marca',
+        'id_flota',
+        'id_estado',
+        'id_eliminado',
+        'id_usu_registro',
+        'id_usu_modifico',
+        'f_registro',
+        'f_modifico',
     ];
 
     /**
@@ -51,35 +51,35 @@ class Vehiculo extends Model
     protected $casts = [
         'codigo' =>  'integer',
         'total' =>  'integer',
-        'fechaRegistro' =>  'string',
-        'fechaModifico' =>  'string',
-        'idEstado' => IdEstado::class,
-        'idEliminado' => IdEliminado::class,
+        'f_registro' =>  'string',
+        'f_modifico' =>  'string',
+        'id_estado' => IdEstado::class,
+        'id_eliminado' => IdEliminado::class,
     ];
 
 
     // Marca del vehiculo
     public function idBrand_pk(){
-        return $this->belongsTo('App\Models\General\VehicleBrand','idMarca');
+        return $this->belongsTo('App\Models\General\VehicleBrand','id_marca');
     }
     // Flota del vehiculo
     public function idFleet_pk(){
-        return $this->belongsTo('App\Models\General\VehicleFleet','idFlota');
+        return $this->belongsTo('App\Models\General\VehicleFleet','id_flota');
     }
     // Modelo del vehiculo
     public function idModel_pk(){
-        return $this->belongsTo('App\Models\General\VehicleModel','idModelo');
+        return $this->belongsTo('App\Models\General\VehicleModel','id_modelo');
     }
     // Clase del vehiculo
     public function idClass_pk(){
-        return $this->belongsTo('App\Models\General\VehicleClass','idClase');
+        return $this->belongsTo('App\Models\General\VehicleClass','id_clase');
     }
 
     public function usuarioRegistro(){
-        return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
+        return $this->hasOne('App\Models\User','id','id_usu_registro');
     }
 
     public function usuarioModifico(){
-        return $this->hasOne('App\Models\User','id','idUsuarioModifico');
+        return $this->hasOne('App\Models\User','id','id_usu_modifico');
     }
 }

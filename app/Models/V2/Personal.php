@@ -18,8 +18,8 @@ class Personal extends Model
     protected $table = "personal";
     public $timestamps = true;
 
-    const CREATED_AT = 'fechaRegistro';
-    const UPDATED_AT = 'fechaModifico';
+    const CREATED_AT = 'f_registro';
+    const UPDATED_AT = 'f_modifico';
     /**
      * The attributes that are mass assignable.
      *
@@ -31,16 +31,16 @@ class Personal extends Model
         'nombre',
         'apellido',
         'correo',
-        'idCliente',
-        'idSede',
-        'idTipoDocumento',
-        'numeroDocumento',
-        'idEstado',
-        'idEliminado',
-        'idUsuarioRegistro',
-        'idUsuarioModifico',
-        'fechaRegistro',
-        'fechaModifico',
+        'id_cliente',
+        'id_sede',
+        'id_tipo_documento',
+        'numero_documento',
+        'id_estado',
+        'id_eliminado',
+        'id_usu_registro',
+        'id_usu_modifico',
+        'f_registro',
+        'f_modifico',
     ];
 
     /**
@@ -49,27 +49,27 @@ class Personal extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'fechaRegistro' =>  'string',
-        'fechaModifico' =>  'string',
-        'idTipoDocumento' => IdTipoDocumento::class,
-        'idEstado' => IdEstado::class,
-        'idEliminado' => IdEliminado::class,
+        'f_registro' =>  'string',
+        'f_modifico' =>  'string',
+        'id_tipo_documento' => IdTipoDocumento::class,
+        'id_estado' => IdEstado::class,
+        'id_eliminado' => IdEliminado::class,
     ];
 
     public function sede(){
-        return $this->hasOne('App\Models\V2\Sede','id','idSede');
+        return $this->hasOne('App\Models\V2\Sede','id','id_sede');
     }
 
     public function usuarioRegistro(){
-        return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
+        return $this->hasOne('App\Models\User','id','id_usu_registro');
     }
 
     public function usuarioModifico(){
-        return $this->hasOne('App\Models\User','id','idUsuarioModifico');
+        return $this->hasOne('App\Models\User','id','id_usu_modifico');
     }
 
     public function tipoDocumento(){
-        return $this->hasOne('App\Models\V2\TipoDocumento','id','idTipoDocumento');
+        return $this->hasOne('App\Models\V2\TipoDocumento','id','id_tipo_documento');
     }
 
 }

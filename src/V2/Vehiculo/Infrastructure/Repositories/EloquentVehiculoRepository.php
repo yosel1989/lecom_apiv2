@@ -32,7 +32,10 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
 
     public function collectionByCliente(Id $idCliente): array
     {
-        $vehicles = $this->eloquentModelVehiculo->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos')->where('idCliente',$idCliente->value())->get();
+        $vehicles = $this->eloquentModelVehiculo->with(
+            'usuarioRegistro:id,nombres,apellidos',
+            'usuarioModifico:id,nombres,apellidos'
+        )->where('id_cliente',$idCliente->value())->get();
 
         $arrVehicles = array();
 
@@ -42,18 +45,18 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
                 new Id($model->id , false, 'El id del vehiculo no tiene el formato correcto'),
                 new Text($model->placa, false, 7, 'La placa excede los 7 caracteres'),
                 new Text($model->unidad, false, 10, 'La unidad excede los 10 caracteres'),
-                new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
-                new Id($model->idMarca, true, 'El id de la marca del vehiculo no tiene el formato correcto'),
-                new Id($model->idModelo, true, 'El id del modelo del vehiculo no tiene el formato correcto'),
-                new Id($model->idClase, true, 'El id de la clase del vehiculo no tiene el formato correcto'),
-                new Id($model->idFlota, true, 'El id de la flota del vehiculo no tiene el formato correcto'),
-                new Id($model->idCategoria, true, 'El id de la categoria del vehiculo no tiene el formato correcto'),
-                new NumericInteger($model->idEstado->value),
-                new NumericInteger($model->idEliminado->value),
-                new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
-                new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
-                new DateTimeFormat($model->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
-                new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+                new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+                new Id($model->id_marca, true, 'El id de la marca del vehiculo no tiene el formato correcto'),
+                new Id($model->id_modelo, true, 'El id del modelo del vehiculo no tiene el formato correcto'),
+                new Id($model->id_clase, true, 'El id de la clase del vehiculo no tiene el formato correcto'),
+                new Id($model->id_flota, true, 'El id de la flota del vehiculo no tiene el formato correcto'),
+                new Id($model->id_categoria, true, 'El id de la categoria del vehiculo no tiene el formato correcto'),
+                new NumericInteger($model->id_estado->value),
+                new NumericInteger($model->id_eliminado->value),
+                new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
+                new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+                new DateTimeFormat($model->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
+                new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
             );
 
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
@@ -67,7 +70,13 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
 
     public function listByCliente(Id $idCliente): array
     {
-        $vehicles = $this->eloquentModelVehiculo->where('idCliente',$idCliente->value())->get();
+        $vehicles = $this->eloquentModelVehiculo
+            ->select(
+                'id',
+                'placa',
+                'unidad'
+            )
+            ->where('id_cliente',$idCliente->value())->get();
 
         $arrVehicles = array();
 
@@ -87,8 +96,10 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
 
     public function listByUsuario(Id $idUsuario): array
     {
-        $relation = $this->eloquentUserVehicleModel->with('usuarioRegistro:id,nombres,apellidos','usuarioModifico:id,nombres,apellidos')
-            ->where('idUsuario',$idUsuario->value())->get();
+        $relation = $this->eloquentUserVehicleModel->with(
+            'usuarioRegistro:id,nombres,apellidos',
+            'usuarioModifico:id,nombres,apellidos'
+        )->where('id_usuario',$idUsuario->value())->get();
 
         if($relation->isEmpty()){
             return [];
@@ -107,20 +118,20 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
                     new Id($vehicle->id , false, 'El id del vehiculo no tiene el formato correcto'),
                     new Text($vehicle->placa, false, -1, ''),
                     new Text($vehicle->unidad, false, -1, ''),
-                    new Id($relation->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
-                    new Id($relation->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
-                    new DateTimeFormat($relation->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
-                    new DateTimeFormat($relation->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+                    new Id($relation->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
+                    new Id($relation->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+                    new DateTimeFormat($relation->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
+                    new DateTimeFormat($relation->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
                 );
             }else{
                 $OModel = new UsuarioVehiculo(
                     new Text($model->id , false, -1),
                     new Text($model->placa, false, -1, ''),
                     new Text($model->unidad, false, -1, ''),
-                    new Id($relation->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
-                    new Id($relation->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
-                    new DateTimeFormat($relation->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
-                    new DateTimeFormat($relation->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+                    new Id($relation->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
+                    new Id($relation->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+                    new DateTimeFormat($relation->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
+                    new DateTimeFormat($relation->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
                 );
             }
 
@@ -136,23 +147,20 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
 
     public function asignarUsuario(Id $idUsuario, Text $vehiculos, Id $idUsuarioRegistro): void
     {
-
-        $relacion = $this->eloquentUserVehicleModel->where('idUsuario', $idUsuario->value())->get();
+        $relacion = $this->eloquentUserVehicleModel->select('id')->where('id_usuario', $idUsuario->value())->get();
         if(!$relacion->isEmpty()){
             $this->eloquentUserVehicleModel->findOrFail($relacion->first()->id)->update([
                 'vehiculos' => $vehiculos->value(),
-                'idUsuarioModifico' => $idUsuarioRegistro->value(),
+                'id_usu_modifico' => $idUsuarioRegistro->value(),
             ]);
         }else{
             $this->eloquentUserVehicleModel->create([
-                'idUsuario' => $idUsuario->value(),
+                'id_usuario' => $idUsuario->value(),
                 'vehiculos' => $vehiculos->value(),
-                'idUsuarioRegistro' => $idUsuarioRegistro->value(),
-                'idUsuarioModifico' => $idUsuarioRegistro->value(),
+                'id_usu_registro' => $idUsuarioRegistro->value(),
+                'id_usu_modifico' => $idUsuarioRegistro->value(),
             ]);
         }
-
-
     }
 
     public function create(
@@ -163,14 +171,30 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
         Id $idUsuarioRegistro
     ): void
     {
-        $count = DB::table('vehiculos')->count();
+        $count = $this->eloquentModelVehiculo->select('id')->where('id_cliente',$idCliente->value())->count();
+
+        // validar placa
+        $countPlaca = $this->eloquentModelVehiculo->select('id')->where('id_cliente', $idCliente->value())->where(DB::raw("UPPER(placa)"), mb_strtoupper($placa->value(), 'UTF-8') )->count();
+        if($count > 0){
+            throw new \InvalidArgumentException('La placa ya se encuentra registrada');
+        }
+        $countPlaca = $this->eloquentModelVehiculo->select('id')->where(DB::raw("UPPER(placa)"), mb_strtoupper($placa->value(), 'UTF-8') )->count();
+        if($count > 0){
+            throw new \InvalidArgumentException('La placa ya se encuentra registrada en el sistema con otro cliente');
+        }
+        $countCodigo = $this->eloquentModelVehiculo->select('id')->where('id_cliente', $idCliente->value())->where('codigo', ($count + 1) )->count();
+        if($count > 0){
+            throw new \InvalidArgumentException('El código de vehiculo ya se encuentra registrado');
+        }
+
+
         $this->eloquentModelVehiculo->create([
            'placa' => $placa->value(),
            'codigo' => ($count + 1) ,
            'unidad' => $unidad->value(),
-           'idCliente' => $idCliente->value(),
-           'idEstado' => $idEstado->value(),
-           'idUsuarioRegistro' => $idUsuarioRegistro->value()
+           'id_cliente' => $idCliente->value(),
+           'id_estado' => $idEstado->value(),
+           'id_usu_registro' => $idUsuarioRegistro->value()
         ]);
     }
 
@@ -183,11 +207,26 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
         Id $idUsuarioRegistro
     ): void
     {
-        $this->eloquentModelVehiculo->findOrFail($id->value())->update([
+        $vehiculo = $this->eloquentModelVehiculo->findOrFail($id->value());
+
+        $count = $this->eloquentModelVehiculo->select('id')->where('id_cliente',$vehiculo->id_cliente)->count();
+
+        // validar placa
+        $countPlaca = $this->eloquentModelVehiculo->select('id')->where('id', '<>', $id->value())->where('id_cliente', $vehiculo->id_cliente)->where(DB::raw("UPPER(placa)"), mb_strtoupper($placa->value(), 'UTF-8') )->count();
+        if($count > 0){
+            throw new \InvalidArgumentException('La placa ya se encuentra registrada');
+        }
+        $countPlaca = $this->eloquentModelVehiculo->select('id')->where('id', '<>', $id->value())->where(DB::raw("UPPER(placa)"), mb_strtoupper($placa->value(), 'UTF-8') )->count();
+        if($count > 0){
+            throw new \InvalidArgumentException('La placa ya se encuentra registrada en el sistema con otro cliente');
+        }
+
+
+        $vehiculo->update([
             'placa' => $placa->value(),
             'unidad' => $unidad->value(),
-            'idEstado' => $idEstado->value(),
-            'idUsuarioModifico' => $idUsuarioRegistro->value()
+            'id_estado' => $idEstado->value(),
+            'id_usu_modifico' => $idUsuarioRegistro->value()
         ]);
     }
 
@@ -198,8 +237,8 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
     ): void
     {
         $this->eloquentModelVehiculo->findOrFail($idVehiculo->value())->update([
-           'idEstado' => $idEstado->value(),
-           'idUsuarioModifico' => $idUsuarioModifico->value()
+           'id_estado' => $idEstado->value(),
+           'id_usu_modifico' => $idUsuarioModifico->value()
         ]);
     }
 
@@ -212,18 +251,18 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
             new Id($model->id , false, 'El id del vehiculo no tiene el formato correcto'),
             new Text($model->placa, false, 7, 'La placa excede los 7 caracteres'),
             new Text($model->unidad, false, 10, 'La unidad excede los 10 caracteres'),
-            new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
-            new Id($model->idMarca, true, 'El id de la marca del vehiculo no tiene el formato correcto'),
-            new Id($model->idModelo, true, 'El id del modelo del vehiculo no tiene el formato correcto'),
-            new Id($model->idClase, true, 'El id de la clase del vehiculo no tiene el formato correcto'),
-            new Id($model->idFlota, true, 'El id de la flota del vehiculo no tiene el formato correcto'),
-            new Id($model->idCategoria, true, 'El id de la categoria del vehiculo no tiene el formato correcto'),
-            new NumericInteger($model->idEstado->value),
-            new NumericInteger($model->idEliminado->value),
-            new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
-            new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
-            new DateTimeFormat($model->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
-            new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+            new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+            new Id($model->id_marca, true, 'El id de la marca del vehiculo no tiene el formato correcto'),
+            new Id($model->id_modelo, true, 'El id del modelo del vehiculo no tiene el formato correcto'),
+            new Id($model->id_clase, true, 'El id de la clase del vehiculo no tiene el formato correcto'),
+            new Id($model->id_flota, true, 'El id de la flota del vehiculo no tiene el formato correcto'),
+            new Id($model->id_categoria, true, 'El id de la categoria del vehiculo no tiene el formato correcto'),
+            new NumericInteger($model->id_estado->value),
+            new NumericInteger($model->id_eliminado->value),
+            new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
+            new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+            new DateTimeFormat($model->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
+            new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
         );
 
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));

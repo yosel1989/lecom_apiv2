@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Src\V2\ComprobanteSerie\Infrastructure\Repositories;
 
 use App\Models\V2\ComprobanteSerie as EloquentModelComprobanteSerie;
+use Illuminate\Support\Facades\DB;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
@@ -30,7 +31,7 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
             'usuarioRegistro:id,nombres,apellidos',
             'tipoComprobante:id,nombre',
             'sede:id,nombre'
-        )->where('idCliente',$idCliente->value())->get();
+        )->where('id_cliente',$idCliente->value())->get();
 
         $arrVehicles = array();
 
@@ -38,15 +39,15 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
 
             $OModel = new ComprobanteSerie(
                 new Id($model->id , false, 'El id no tiene el formato correcto'),
-                new NumericInteger($model->idTipoComprobante->value),
+                new NumericInteger($model->id_tipo_comprobante->value),
                 new Text($model->nombre, false, -1),
-                new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
-                new Id($model->idSede, false, 'El id de la sede no tiene el formato correcto'),
-                new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
-                new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
-                new DateTimeFormat($model->fechaRegistro, true, 'El formato de la fecha de registro no tiene el formato correcto'),
-                new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
-                new NumericInteger($model->idEstado->value)
+                new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+                new Id($model->id_sede, false, 'El id de la sede no tiene el formato correcto'),
+                new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
+                new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+                new DateTimeFormat($model->f_registro, true, 'El formato de la fecha de registro no tiene el formato correcto'),
+                new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+                new NumericInteger($model->id_estado->value)
             );
 
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
@@ -65,11 +66,11 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
     {
         $models = $this->eloquentModelComprobanteSerie->select(
             'id',
-            'idTipoComprobante',
+            'id_tipo_comprobante',
             'nombre',
-            'idSede',
-            'idEstado'
-        )->where('idCliente',$idCliente->value())->get();
+            'id_sede',
+            'id_estado'
+        )->where('id_cliente',$idCliente->value())->get();
 
         $arrVehicles = array();
 
@@ -77,10 +78,10 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
 
             $OModel = new ComprobanteSerieShort(
                 new Id($model->id , false, 'El id no tiene el formato correcto'),
-                new NumericInteger($model->idTipoComprobante ),
+                new NumericInteger($model->id_tipo_comprobante ),
                 new Text($model->nombre, false, 100, 'El nombre de la destino excede los 100 caracteres'),
-                new Id($model->idSede , false, 'El id de la sede no tiene el formato correcto'),
-                new NumericInteger($model->idEstado->value)
+                new Id($model->id_sede , false, 'El id de la sede no tiene el formato correcto'),
+                new NumericInteger($model->id_estado->value)
             );
 
             $arrVehicles[] = $OModel;
@@ -99,23 +100,23 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
     ): void
     {
         $existe = $this->eloquentModelComprobanteSerie
-            ->where('idCliente' , $idCliente->value())
-            ->where('nombre', trim($nombre->value()))
-            ->where('idTipoComprobante',$idTipoComprobante->value())
-            ->where('idSede', $idSede->value())
-            ->get()->count();
+            ->where('id_cliente' , $idCliente->value())
+            ->where(DB::raw("UPPER(nombre)"), mb_strtoupper($nombre->value()))
+            //->where('id_tipo_comprobante',$idTipoComprobante->value())
+            //->where('id_sede', $idSede->value())
+            ->count();
 
-        if($existe){
+        if($existe > 0){
             throw new \InvalidArgumentException('La serie ya se encuentra registrada');
         }
 
         $this->eloquentModelComprobanteSerie->create([
             'nombre' => trim($nombre->value()),
-            'idTipoComprobante' => $idTipoComprobante->value(),
-            'idCliente' => $idCliente->value(),
-            'idSede' => $idSede->value(),
-            'idEstado' => $idEstado->value(),
-            'idUsuarioRegistro' => $idUsuarioRegistro->value()
+            'id_tipo_comprobante' => $idTipoComprobante->value(),
+            'id_cliente' => $idCliente->value(),
+            'id_sede' => $idSede->value(),
+            'id_estado' => $idEstado->value(),
+            'id_usu_registro' => $idUsuarioRegistro->value()
         ]);
     }
 
@@ -131,23 +132,23 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
     ): void
     {
         $existe = $this->eloquentModelComprobanteSerie
-            ->where('idCliente' , $idCliente->value())
-            ->where('nombre', trim($nombre->value()))
-            ->where('idTipoComprobante',$idTipoComprobante->value())
-            ->where('idSede', $idSede->value())
-            ->where('id', '!=', $id->value())
-            ->get()->count();
+            ->where('id', '<>' , $id->value())
+            ->where('id_cliente' , $idCliente->value())
+            ->where(DB::raw("UPPER(nombre)"), mb_strtoupper($nombre->value()))
+            //->where('idTipoComprobante',$idTipoComprobante->value())
+            //->where('idSede', $idSede->value())
+            ->count();
 
-        if($existe){
+        if($existe > 0){
             throw new \InvalidArgumentException('La serie ya se encuentra registrada');
         }
 
         $this->eloquentModelComprobanteSerie->findOrFail($id->value())->update([
             'nombre' => $nombre->value(),
-            'idTipoComprobante' => $idTipoComprobante->value(),
-            'idSede' => $idSede->value(),
-            'idEstado' => $idEstado->value(),
-            'idUsuarioModifico' => $idUsuarioRegistro->value()
+            'id_tipo_comprobante' => $idTipoComprobante->value(),
+            'id_sede' => $idSede->value(),
+            'id_estado' => $idEstado->value(),
+            'id_usu_modifico' => $idUsuarioRegistro->value()
         ]);
     }
 
@@ -158,8 +159,8 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
     ): void
     {
         $this->eloquentModelComprobanteSerie->findOrFail($idComprobanteSerie->value())->update([
-            'idEstado' => $idEstado->value(),
-            'idUsuarioModifico' => $idUsuarioModifico->value()
+            'id_estado' => $idEstado->value(),
+            'id_usu_modifico' => $idUsuarioModifico->value()
         ]);
     }
 
@@ -176,15 +177,15 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
 
         $OModel = new ComprobanteSerie(
             new Id($model->id , false, 'El id no tiene el formato correcto'),
-            new NumericInteger($model->idTipoComprobante->value),
+            new NumericInteger($model->id_tipo_comprobante->value),
             new Text($model->nombre, false, -1),
-            new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
-            new Id($model->idSede, false, 'El id de la sede no tiene el formato correcto'),
-            new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
-            new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
-            new DateTimeFormat($model->fechaRegistro, true, 'El formato de la fecha de registro no tiene el formato correcto'),
-            new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
-            new NumericInteger($model->idEstado->value),
+            new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+            new Id($model->id_sede, false, 'El id de la sede no tiene el formato correcto'),
+            new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
+            new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+            new DateTimeFormat($model->f_registro, true, 'El formato de la fecha de registro no tiene el formato correcto'),
+            new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+            new NumericInteger($model->id_estado->value),
 
         );
 

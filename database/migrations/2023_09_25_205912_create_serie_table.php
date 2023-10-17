@@ -14,16 +14,18 @@ return new class extends Migration
         Schema::create('ce_serie', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->string('nombre', 4);
-            $table->uuid('idSede');
-            $table->uuid('idCliente');
-            $table->integer('idTipoComprobante');
-            $table->integer('idEstado');
+            $table->uuid('id_sede');
+            $table->uuid('id_cliente');
+            $table->integer('id_tipo_comprobante');
+            $table->integer('id_estado');
 
 
-            $table->uuid('idUsuarioRegistro');
-            $table->uuid('idUsuarioModifico')->nullable();
-            $table->timestamp('fechaRegistro');
-            $table->timestamp('fechaModifico')->nullable();
+            $table->uuid('id_usu_registro');
+            $table->uuid('id_usu_modifico')->nullable();
+            $table->timestamp('f_registro');
+            $table->timestamp('f_modifico')->nullable();
+
+            $table->index(['id', 'nombre', 'id_sede', 'id_cliente', 'id_tipo_comprobante', 'id_estado', 'id_usu_registro', 'f_registro']);
         });
     }
 

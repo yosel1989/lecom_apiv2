@@ -1,0 +1,27 @@
+
+version: '3.9'
+services:
+
+
+  plataforma-nginx:
+    image: nginx:alpine
+    container_name: plataforma-nginx
+    restart: always
+    expose:
+      - "80"
+      - "443"
+    networks:
+      - default
+    volumes:
+      - ./project/:/var/www/plataforma
+      - ./administracion/project/:/var/www/plataforma/administracion
+      - ./boletaje/project/:/var/www/plataforma/boletaje
+      - ./hoja-ruta/project/:/var/www/plataforma/hoja-ruta
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    environment:
+      - VIRTUAL_HOST=plataforma.lecomperu.com
+
+networks:
+  default:
+    external: true
+    name: proxy

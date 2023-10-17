@@ -19,8 +19,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $User = User::where('usuario',$request->input('usuario') )
-                    ->where('idEstado', IdEstado::Habilitado)
-                    ->where('idEliminado',IdEliminado::NoEliminado)
+                    ->where('id_estado', IdEstado::Habilitado)
+                    ->where('id_eliminado',IdEliminado::NoEliminado)
                     ->get();
 
         if( !$User->isEmpty() ){
@@ -50,13 +50,13 @@ class AuthController extends Controller
                             'nombres' => $user->nombres,
                             'apellidos' => $user->apellidos,
                             'correo' => $user->correo,
-                            'idNivel' => $user->idNivel,
-                            'idPerfil' => $user->idPerfil,
-                            'perfil' => $user->idPerfil ? $user->perfil->nombre : null,
+                            'idNivel' => $user->id_nivel,
+                            'idPerfil' => $user->id_perfil,
+                            'perfil' => $user->id_perfil ? $user->perfil->nombre : null,
                             'idEstado' => $user->idEstado,
-                            'idCliente' => $user->idCliente,
-                            'cliente' => $user->idCliente ? $user->cliente->nombre : null,
-                            'idSede' => $user->idSede,
+                            'idCliente' => $user->id_cliente,
+                            'cliente' => $user->id_cliente ? $user->cliente->nombre : null,
+                            'idSede' => $user->id_sede,
                             'sede' => $user->sede ? $user->sede->nombre : null,
                         ],
 //                        'client' => $user->client ? $user->client()->first(['id','bussiness_name', 'first_name', 'last_name']) : null,

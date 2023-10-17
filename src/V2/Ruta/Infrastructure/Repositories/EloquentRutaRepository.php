@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Src\V2\Ruta\Infrastructure\Repositories;
 
 use App\Models\V2\Ruta as EloquentModelRuta;
+use Illuminate\Support\Facades\DB;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
@@ -23,9 +24,16 @@ final class EloquentRutaRepository implements RutaRepositoryContract
     }
 
 
+    /**
+     * @param Id $idCliente
+     * @return array
+     */
     public function collectionByCliente(Id $idCliente): array
     {
-        $models = $this->eloquentModelRuta->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos', 'tipo:id,nombre')->where('idCliente',$idCliente->value())->get();
+        $models = $this->eloquentModelRuta->with(
+            'usuarioRegistro:id,nombres,apellidos',
+            'usuarioModifico:id,nombres,apellidos',
+            'tipo:id,nombre')->where('id_cliente',$idCliente->value())->get();
 
         $arrVehicles = array();
 
@@ -34,14 +42,14 @@ final class EloquentRutaRepository implements RutaRepositoryContract
             $OModel = new Ruta(
                 new Id($model->id , false, 'El id de la Ruta no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la Ruta excede los 100 caracteres'),
-                new NumericInteger($model->idTipo->value),
-                new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
-                new NumericInteger($model->idEstado->value),
-                new NumericInteger($model->idEliminado->value),
-                new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
-                new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
-                new DateTimeFormat($model->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
-                new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+                new NumericInteger($model->id_tipo->value),
+                new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+                new NumericInteger($model->id_estado->value),
+                new NumericInteger($model->id_eliminado->value),
+                new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
+                new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+                new DateTimeFormat($model->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
+                new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
             );
 
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
@@ -55,15 +63,19 @@ final class EloquentRutaRepository implements RutaRepositoryContract
     }
 
 
+    /**
+     * @param Id $idCliente
+     * @return array
+     */
     public function listByCliente(Id $idCliente): array
     {
         $models = $this->eloquentModelRuta->select(
             'id',
             'nombre',
-            'idTipo',
-            'idEstado',
-            'idEliminado'
-        )->where('idCliente',$idCliente->value())->get();
+            'id_tipo',
+            'id_estado',
+            'id_eliminado'
+        )->where('id_cliente',$idCliente->value())->get();
 
         $arrVehicles = array();
 
@@ -72,9 +84,9 @@ final class EloquentRutaRepository implements RutaRepositoryContract
             $OModel = new RutaShort(
                 new Id($model->id , false, 'El id del Ruta no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la Ruta excede los 100 caracteres'),
-                new NumericInteger($model->idTipo->value),
-                new NumericInteger($model->idEstado->value),
-                new NumericInteger($model->idEliminado->value),
+                new NumericInteger($model->id_tipo->value),
+                new NumericInteger($model->id_estado->value),
+                new NumericInteger($model->id_eliminado->value),
             );
 
             $arrVehicles[] = $OModel;
@@ -84,18 +96,23 @@ final class EloquentRutaRepository implements RutaRepositoryContract
     }
 
 
+    /**
+     * @param NumericInteger $idTipoRuta
+     * @param Id $idCliente
+     * @return array
+     */
     public function listByTipo(NumericInteger $idTipoRuta, Id $idCliente): array
     {
         $models = $this->eloquentModelRuta
             ->select(
                 'id',
                 'nombre',
-                'idTipo',
-                'idEstado',
-                'idEliminado'
+                'id_tipo',
+                'id_estado',
+                'id_eliminado'
             )
-            ->where('idCliente',$idCliente->value())
-            ->where('idTipo',$idTipoRuta->value())
+            ->where('id_cliente',$idCliente->value())
+            ->where('id_tipo',$idTipoRuta->value())
             ->get();
 
         $arrVehicles = array();
@@ -105,9 +122,9 @@ final class EloquentRutaRepository implements RutaRepositoryContract
             $OModel = new RutaShort(
                 new Id($model->id , false, 'El id del Ruta no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la Ruta excede los 100 caracteres'),
-                new NumericInteger($model->idTipo->value),
-                new NumericInteger($model->idEstado->value),
-                new NumericInteger($model->idEliminado->value),
+                new NumericInteger($model->id_tipo->value),
+                new NumericInteger($model->id_estado->value),
+                new NumericInteger($model->id_eliminado->value),
             );
 
             $arrVehicles[] = $OModel;
@@ -116,6 +133,13 @@ final class EloquentRutaRepository implements RutaRepositoryContract
         return $arrVehicles;
     }
 
+    /**
+     * @param Text $nombre
+     * @param NumericInteger $idTipo
+     * @param Id $idCliente
+     * @param NumericInteger $idEstado
+     * @param Id $idUsuarioRegistro
+     */
     public function create(
         Text $nombre,
         NumericInteger $idTipo,
@@ -124,16 +148,28 @@ final class EloquentRutaRepository implements RutaRepositoryContract
         Id $idUsuarioRegistro
     ): void
     {
+        $count = $this->eloquentModelRuta->select('id')->where('id_cliente', $idCliente->value())->where(DB::raw("UPPER(nombre)"), mb_strtoupper($nombre->value(), 'UTF-8') )->count();
+        if($count > 0){
+            throw new \InvalidArgumentException('La ruta ya se encuentra registrada');
+        }
+
         $this->eloquentModelRuta->create([
            'nombre' => $nombre->value(),
-           'idTipo' => $idTipo->value(),
-           'idCliente' => $idCliente->value(),
-           'idEstado' => $idEstado->value(),
-           'idUsuarioRegistro' => $idUsuarioRegistro->value()
+           'id_tipo' => $idTipo->value(),
+           'id_cliente' => $idCliente->value(),
+           'id_estado' => $idEstado->value(),
+           'id_usu_registro' => $idUsuarioRegistro->value()
         ]);
     }
 
 
+    /**
+     * @param Id $id
+     * @param Text $nombre
+     * @param NumericInteger $idTipo
+     * @param NumericInteger $idEstado
+     * @param Id $idUsuarioRegistro
+     */
     public function update(
         Id $id,
         Text $nombre,
@@ -142,11 +178,18 @@ final class EloquentRutaRepository implements RutaRepositoryContract
         Id $idUsuarioRegistro
     ): void
     {
+        $perfil = $this->eloquentModelRuta->findOrFail($id->value());
+
+        $count = $this->eloquentModelRuta->select('id')->where('id', '<>', $id->value())->where('id_cliente', $perfil->id_cliente)->where(DB::raw("UPPER(nombre)"), mb_strtoupper($nombre->value(), 'UTF-8') )->count();
+        if($count > 0){
+            throw new \InvalidArgumentException('La ruta ya se encuentra registrada');
+        }
+
         $this->eloquentModelRuta->findOrFail($id->value())->update([
             'nombre' => $nombre->value(),
-            'idTipo' => $idTipo->value(),
-            'idEstado' => $idEstado->value(),
-            'idUsuarioModifico' => $idUsuarioRegistro->value()
+            'id_tipo' => $idTipo->value(),
+            'id_estado' => $idEstado->value(),
+            'id_usu_modifico' => $idUsuarioRegistro->value()
         ]);
     }
 
@@ -157,8 +200,8 @@ final class EloquentRutaRepository implements RutaRepositoryContract
     ): void
     {
         $this->eloquentModelRuta->findOrFail($idRuta->value())->update([
-           'idEstado' => $idEstado->value(),
-           'idUsuarioModifico' => $idUsuarioModifico->value()
+           'id_estado' => $idEstado->value(),
+           'id_usu_modifico' => $idUsuarioModifico->value()
         ]);
     }
 
@@ -170,14 +213,14 @@ final class EloquentRutaRepository implements RutaRepositoryContract
         $OModel = new Ruta(
             new Id($model->id , false, 'El id del Ruta no tiene el formato correcto'),
             new Text($model->nombre, false, 100, 'El nombre del Ruta excede los 100 caracteres'),
-            new NumericInteger($model->idTipo->value),
-            new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
-            new NumericInteger($model->idEstado->value),
-            new NumericInteger($model->idEliminado->value),
-            new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
-            new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
-            new DateTimeFormat($model->fechaRegistro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
-            new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+            new NumericInteger($model->id_tipo->value),
+            new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+            new NumericInteger($model->id_estado->value),
+            new NumericInteger($model->id_eliminado->value),
+            new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
+            new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+            new DateTimeFormat($model->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
+            new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
         );
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));

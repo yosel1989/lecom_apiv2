@@ -30,6 +30,8 @@ return new class extends Migration
             $table->uuid('idUsuarioModifico')->nullable();
             $table->timestamp('fechaRegistro');
             $table->timestamp('fechaModifico')->nullable();
+
+            $table->index(['id','codigo','idTipoDocumento','idTipo','idEstado','idEliminado','idClientePadre','idUsuarioRegistro','idUsuarioModifico','fechaRegistro']);
         });
     }
 

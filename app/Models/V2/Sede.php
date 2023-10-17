@@ -17,8 +17,8 @@ class Sede extends Model
     protected $table = "sede";
     public $timestamps = true;
 
-    const CREATED_AT = 'fechaRegistro';
-    const UPDATED_AT = 'fechaModifico';
+    const CREATED_AT = 'f_registro';
+    const UPDATED_AT = 'f_modifico';
     /**
      * The attributes that are mass assignable.
      *
@@ -28,13 +28,13 @@ class Sede extends Model
         'id',
         'nombre',
         'direccion',
-        'idCliente',
-        'idEstado',
-        'idEliminado',
-        'idUsuarioRegistro',
-        'idUsuarioModifico',
-        'fechaRegistro',
-        'fechaModifico',
+        'id_cliente',
+        'id_estado',
+        'id_eliminado',
+        'id_usu_registro',
+        'id_usu_modifico',
+        'f_registro',
+        'f_modifico',
     ];
 
     /**
@@ -43,18 +43,18 @@ class Sede extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'fechaRegistro' =>  'string',
-        'fechaModifico' =>  'string',
-        'idEstado' => IdEstado::class,
-        'idEliminado' => IdEliminado::class
+        'f_registro' =>  'string',
+        'f_modifico' =>  'string',
+        'id_estado' => IdEstado::class,
+        'id_eliminado' => IdEliminado::class
     ];
 
     public function usuarioRegistro(){
-        return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
+        return $this->hasOne('App\Models\User','id','id_usu_registro');
     }
 
     public function usuarioModifico(){
-        return $this->hasOne('App\Models\User','id','idUsuarioModifico');
+        return $this->hasOne('App\Models\User','id','id_usu_modifico');
     }
 
 }

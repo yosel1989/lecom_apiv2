@@ -18,8 +18,8 @@ class Perfil extends Model
     protected $table = "perfil";
     public $timestamps = true;
 
-    const CREATED_AT = 'fechaRegistro';
-    const UPDATED_AT = 'fechaModifico';
+    const CREATED_AT = 'f_registro';
+    const UPDATED_AT = 'f_modifico';
     /**
      * The attributes that are mass assignable.
      *
@@ -28,14 +28,14 @@ class Perfil extends Model
     protected $fillable = [
         'id',
         'nombre',
-        'idNivelUsuario',
-        'idCliente',
-        'idEstado',
-        'idEliminado',
-        'idUsuarioRegistro',
-        'idUsuarioModifico',
-        'fechaRegistro',
-        'fechaModifico',
+        'id_nivel_usuario',
+        'id_cliente',
+        'id_estado',
+        'id_eliminado',
+        'id_usu_registro',
+        'id_usu_modifico',
+        'f_registro',
+        'f_modifico',
     ];
 
     /**
@@ -44,19 +44,19 @@ class Perfil extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'fechaRegistro' =>  'string',
-        'fechaModifico' =>  'string',
-        'idEstado' => IdEstado::class,
-        'idEliminado' => IdEliminado::class,
-        'idNivelUsuario' => IdNivelUsuario::class,
+        'f_registro' =>  'string',
+        'f_modifico' =>  'string',
+        'id_estado' => IdEstado::class,
+        'id_eliminado' => IdEliminado::class,
+        'id_nivel_usuario' => IdNivelUsuario::class,
     ];
 
     public function usuarioRegistro(){
-        return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
+        return $this->hasOne('App\Models\User','id','id_usu_registro');
     }
 
     public function usuarioModifico(){
-        return $this->hasOne('App\Models\User','id','idUsuarioModifico');
+        return $this->hasOne('App\Models\User','id','id_usu_modifico');
     }
 
 }

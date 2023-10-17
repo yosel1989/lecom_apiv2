@@ -13,21 +13,23 @@ return new class extends Migration
     {
         Schema::create('vehiculos', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->smallInteger("codigo")->unique();
+            $table->smallInteger("codigo");
             $table->string('placa',10);
             $table->string('unidad',10);
-            $table->uuid('idCliente');
-            $table->uuid('idMarca')->nullable();
-            $table->uuid('idCategoria')->nullable();
-            $table->uuid('idModelo')->nullable();
-            $table->uuid('idClase')->nullable();
-            $table->uuid('idFlota')->nullable();
-            $table->tinyInteger('idEstado')->default(1);
-            $table->tinyInteger('idEliminado')->default(0);
-            $table->uuid('idUsuarioRegistro')->nullable();
-            $table->uuid('idUsuarioModifico')->nullable();
-            $table->timestamp('fechaRegistro');
-            $table->timestamp('fechaModifico')->nullable();
+            $table->uuid('id_cliente');
+            $table->uuid('id_marca')->nullable();
+            $table->uuid('id_categoria')->nullable();
+            $table->uuid('id_modelo')->nullable();
+            $table->uuid('id_clase')->nullable();
+            $table->uuid('id_flota')->nullable();
+            $table->tinyInteger('id_estado')->default(1);
+            $table->tinyInteger('id_eliminado')->default(0);
+            $table->uuid('id_usu_registro')->nullable();
+            $table->uuid('id_usu_modifico')->nullable();
+            $table->timestamp('f_registro');
+            $table->timestamp('f_modifico')->nullable();
+
+            $table->index(['id', "codigo", 'placa', 'unidad', 'id_cliente', 'id_marca', 'id_categoria', 'id_modelo', 'id_clase', 'id_flota', 'id_estado', 'id_eliminado', 'id_usu_registro', 'f_registro']);
         });
     }
 

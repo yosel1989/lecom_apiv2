@@ -20,8 +20,8 @@ class User extends Authenticatable
 
     protected $table = "users";
 
-    const CREATED_AT = 'fechaRegistro';
-    const UPDATED_AT = 'fechaModifico';
+    const CREATED_AT = 'f_registro';
+    const UPDATED_AT = 'f_modifico';
 
     const USER_EMAIL_FIELD  = "correo";
 
@@ -34,23 +34,23 @@ class User extends Authenticatable
         'id',
         'nombres',
         'apellidos',
-        'idPersonal',
-        'idPerfil',
-        'idSede',
-        'idRol',
-        'idCliente',
+        'id_personal',
+        'id_perfil',
+        'id_sede',
+        'id_rol',
+        'id_cliente',
         'correo',
         'telefono',
         'usuario',
         'clave',
-        'idNivel',
-        'idEstado',
-        'idUsuarioRegistro',
-        'idUsuarioModifico',
+        'id_nivel',
+        'id_estado',
+        'id_usu_registro',
+        'id_usu_modifico',
         'fechaEmailVerifico',
-        'idEliminado',
-        'fechaRegistro',
-        'fechaModifico',
+        'id_eliminado',
+        'f_registro',
+        'f_modifico',
     ];
 
     /**
@@ -74,11 +74,11 @@ class User extends Authenticatable
      */
     protected $casts = [
         'fechaEmailVerifico' => 'string',
-        'fechaRegistro' => 'string',
-        'fechaModifico' => 'string',
+        'f_registro' => 'string',
+        'f_modifico' => 'string',
         'clave' => 'hashed',
-        'idEstado' => IdEstado::class,
-        'idEliminado' => IdEliminado::class,
+        'id_estado' => IdEstado::class,
+        'id_eliminado' => IdEliminado::class,
     ];
 
     public function modulos(){
@@ -86,29 +86,29 @@ class User extends Authenticatable
     }
 
     public function client(){
-        return $this->hasOne('App\Models\Auth\Client','id','idCliente');
+        return $this->hasOne('App\Models\Auth\Client','id','id_cliente');
     }
 
     public function perfil(){
-        return $this->hasOne('App\Models\V2\Perfil','id','idPerfil');
+        return $this->hasOne('App\Models\V2\Perfil','id','id_perfil');
     }
 
     public function sede(){
-        return $this->hasOne('App\Models\V2\Sede','id','idSede');
+        return $this->hasOne('App\Models\V2\Sede','id','id_sede');
     }
 
 
 
     public function cliente(){
-        return $this->hasOne('App\Models\V2\Cliente','id','idCliente');
+        return $this->hasOne('App\Models\V2\Cliente','id','id_cliente');
     }
 
     public function usuarioRegistro(){
-        return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
+        return $this->hasOne('App\Models\User','id','id_usu_registro');
     }
 
     public function usuarioModifico(){
-        return $this->hasOne('App\Models\User','id','idUsuarioModifico');
+        return $this->hasOne('App\Models\User','id','id_usu_modifico');
     }
 
 }
