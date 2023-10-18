@@ -13,19 +13,21 @@ return new class extends Migration
     {
         Schema::create('caja_diario', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->uuid('idCaja');
-            $table->uuid('idRuta')->nullable();
-            $table->uuid('idCliente');
-            $table->decimal('montoInicial',8,2)->default(0.0);
-            $table->decimal('montoFinal',8,2)->nullable();
-            $table->tinyInteger('idEstado')->default(1);
-            $table->tinyInteger('idEliminado')->default(0);
-            $table->uuid('idUsuarioRegistro');
-            $table->uuid('idUsuarioModifico')->nullable();
-            $table->timestamp('fechaApertura');
-            $table->timestamp('fechaCierre')->nullable();
-            $table->timestamp('fechaRegistro');
-            $table->timestamp('fechaModifico')->nullable();
+            $table->uuid('id_caja');
+            $table->uuid('id_ruta')->nullable();
+            $table->uuid('id_cliente');
+            $table->decimal('monto_inicial',8,2)->default(0.0);
+            $table->decimal('monto_final',8,2)->nullable();
+            $table->tinyInteger('id_estado')->default(1);
+            $table->tinyInteger('id_eliminado')->default(0);
+            $table->uuid('id_usu_registro');
+            $table->uuid('id_usu_modifico')->nullable();
+            $table->timestamp('f_apertura');
+            $table->timestamp('f_cierre')->nullable();
+            $table->timestamp('f_registro');
+            $table->timestamp('f_modifico')->nullable();
+
+            $table->index(['id', 'id_caja', 'id_ruta', 'id_cliente', 'monto_inicial', 'monto_final', 'id_estado', 'id_eliminado', 'id_usu_registro', 'f_apertura', 'f_cierre', 'f_registro']);
         });
     }
 

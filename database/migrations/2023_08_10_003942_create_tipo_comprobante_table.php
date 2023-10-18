@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('tipo_comprobante', function (Blueprint $table) {
             $table->id();
             $table->string('nombre', 50);
-            $table->smallInteger('blPuntoVenta')->default(0);
+            $table->smallInteger('bl_punto_venta')->default(0);
+
+            $table->index(['id', 'nombre', 'bl_punto_venta']);
         });
     }
 

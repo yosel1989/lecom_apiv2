@@ -351,9 +351,9 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
             $Vehiculo = \App\Models\V2\Vehiculo::where('id', $request->input('idVehiculo'))
-                ->where('idEstado',1)
-                ->where('idEliminado',0)
-                ->where('idCliente',$_cliente->id)
+                ->where('id_estado',1)
+                ->where('id_eliminado',0)
+                ->where('id_cliente',$_cliente->id)
                 ->get();
             if( $Vehiculo->isEmpty() ){
                 return response()->json([
@@ -366,9 +366,9 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
             $Ruta = \App\Models\V2\Ruta::where('id', $request->input('idRuta'))
-                ->where('idEstado',1)
-                ->where('idEliminado',0)
-                ->where('idCliente',$_cliente->id)
+                ->where('id_estado',1)
+                ->where('id_eliminado',0)
+                ->where('id_cliente',$_cliente->id)
                 ->get();
             if( $Ruta->isEmpty() ){
                 return response()->json([
@@ -382,9 +382,9 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
             $Paradero = \App\Models\V2\Paradero::where('id', $request->input('idParadero'))
-                ->where('idEstado',1)
-                ->where('idEliminado',0)
-                ->where('idCliente',$_cliente->id)
+                ->where('id_estado',1)
+                ->where('id_eliminado',0)
+                ->where('id_cliente',$_cliente->id)
                 ->get();
             if( $Paradero->isEmpty() ){
                 return response()->json([
@@ -397,9 +397,9 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
             $Caja  = \App\Models\V2\Caja::where('id', $request->input('idCaja'))
-                ->where('idEstado',1)
-                ->where('idEliminado',0)
-                ->where('idCliente',$_cliente->id)
+                ->where('id_estado',1)
+                ->where('id_eliminado',0)
+                ->where('id_cliente',$_cliente->id)
                 ->get();
             if( $Caja->isEmpty() ){
                 return response()->json([
@@ -411,9 +411,9 @@ Route::middleware('auth:sanctum')->group(function() {
             $_caja = $Caja->first();
 
             $Pos  = \App\Models\V2\Pos::where('id', $request->input('idPos'))
-                ->where('idEstado',1)
-                ->where('idEliminado',0)
-                ->where('idCliente',$_cliente->id)
+                ->where('id_estado',1)
+                ->where('id_eliminado',0)
+                ->where('id_cliente',$_cliente->id)
                 ->get();
             if( $Pos->isEmpty() ){
                 return response()->json([
@@ -496,13 +496,22 @@ Route::middleware('auth:sanctum')->group(function() {
                 ]);
             }
 
-
+            /******* Validar viaje  ******************/
+            $existe  = \App\Models\V2\BoletoPrecio::select('id')
+                ->where('id_cliente', $request->input('idParadero'))
+                ->where('id_cliente', $request->idCliente)
+                ->where('id_ruta', $request->input('idRuta'))->count();
+            if($existe == 0){
+                throw new InvalidArgumentException('El viaje no se encuentra registrado en el sistema');
+            }
+            $viaje = \App\Models\V2\BoletoPrecio::select('id')->where('id_cliente', $request->idCliente)->where('id_ruta', $request->input('idRuta'))->first();
 
 
             $model->create([
                 'id' => $idBoleto,
                 'id_ruta' => $request->input('idRuta'),
-                'id_paradero' => $request->input('idParadero'),
+                'id_paradero_origen' => $viaje->id_paradero_origen,
+                'id_paradero_destino' => $viaje->id_paradero_destino,
                 'id_vehiculo' => $request->input('idVehiculo'),
                 'id_caja' => $request->input('idCaja'),
                 'id_pos' => $request->input('idPos'),

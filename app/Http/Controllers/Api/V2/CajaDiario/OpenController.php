@@ -42,8 +42,8 @@ class OpenController extends Controller
 
             if($request->has('idVehiculo')){
                 $Vehiculo = \App\Models\Administracion\Vehiculo::where('id',$request->input('idVehiculo'))
-                    ->where('idEstado', IdEstado::Habilitado)
-                    ->where('idEliminado',IdEliminado::NoEliminado)
+                    ->where('id_estado', IdEstado::Habilitado)
+                    ->where('id_eliminado',IdEliminado::NoEliminado)
                     ->get();
                 if( $Vehiculo->isEmpty() ){
                     return response()->json([
@@ -57,7 +57,7 @@ class OpenController extends Controller
 
 
 
-            $TiposComprobante = \App\Models\V2\TipoComprobante::where('blPuntoVenta', EnumPuntoVenta::Si)
+            $TiposComprobante = \App\Models\V2\TipoComprobante::where('bl_punto_venta', EnumPuntoVenta::Si)
                 ->get();
             if( $TiposComprobante->isEmpty() ){
                 return response()->json([

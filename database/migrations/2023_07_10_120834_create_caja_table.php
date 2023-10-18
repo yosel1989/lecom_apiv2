@@ -14,15 +14,17 @@ return new class extends Migration
         Schema::create('caja', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->string('nombre',100);
-            $table->uuid('idSede')->nullable();
-            $table->uuid('idPos')->nullable();
-            $table->uuid('idCliente');
-            $table->tinyInteger('idEstado')->default(1);
-            $table->tinyInteger('idEliminado')->default(0);
-            $table->uuid('idUsuarioRegistro')->nullable();
-            $table->uuid('idUsuarioModifico')->nullable();
-            $table->timestamp('fechaRegistro');
-            $table->timestamp('fechaModifico')->nullable();
+            $table->uuid('id_sede')->nullable();
+            $table->uuid('id_pos')->nullable();
+            $table->uuid('id_cliente');
+            $table->tinyInteger('id_estado')->default(1);
+            $table->tinyInteger('id_eliminado')->default(0);
+            $table->uuid('id_usu_registro')->nullable();
+            $table->uuid('id_usu_modifico')->nullable();
+            $table->timestamp('f_registro');
+            $table->timestamp('f_modifico')->nullable();
+
+            $table->index(['id', 'nombre', 'id_sede', 'id_pos', 'id_cliente', 'id_estado', 'id_eliminado', 'id_usu_registro', 'f_registro']);
         });
     }
 

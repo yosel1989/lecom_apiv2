@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Src\V2\TipoComprobante\Infrastructure\Repositories;
 
-use App\Enums\EnumPuntoVenta;
 use App\Models\V2\TipoComprobante as EloquentModelTipoComprobante;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
@@ -32,7 +31,7 @@ final class EloquentTipoComprobanteRepository implements TipoComprobanteReposito
             $OModel = new TipoComprobante(
                 new NumericInteger($model->id),
                 new Text($model->nombre, false, -1, ''),
-                new NumericInteger($model->blPuntoVenta->value),
+                new NumericInteger($model->bl_punto_venta->value),
             );
 
             $arrVehicles[] = $OModel;
@@ -44,7 +43,7 @@ final class EloquentTipoComprobanteRepository implements TipoComprobanteReposito
 
     public function listPuntoVenta(): array
     {
-        $models = $this->eloquent->where('blPuntoVenta', 1)->get();
+        $models = $this->eloquent->where('bl_punto_venta', 1)->get();
 
         $arrVehicles = array();
 
@@ -53,7 +52,7 @@ final class EloquentTipoComprobanteRepository implements TipoComprobanteReposito
             $OModel = new TipoComprobante(
                 new NumericInteger($model->id),
                 new Text($model->nombre, false, -1, ''),
-                new NumericInteger($model->blPuntoVenta->value),
+                new NumericInteger($model->bl_punto_venta->value),
             );
 
             $arrVehicles[] = $OModel;

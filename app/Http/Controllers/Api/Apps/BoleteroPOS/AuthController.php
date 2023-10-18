@@ -62,21 +62,21 @@ class AuthController extends Controller
             $OCaja = null;
 
             $EquipoPos = Pos::where('imei',$request->input('imei') )
-                ->where('idEstado', IdEstado::Habilitado)
-                ->where('idEliminado',IdEliminado::NoEliminado)
+                ->where('id_estado', IdEstado::Habilitado)
+                ->where('id_eliminado',IdEliminado::NoEliminado)
                 ->get();
 
             $Ousuario = User::where('usuario',$request->input('usuario') )
-                ->where('idEstado', IdEstado::Habilitado)
-                ->where('idEliminado',IdEliminado::NoEliminado)
+                ->where('id_estado', IdEstado::Habilitado)
+                ->where('id_eliminado',IdEliminado::NoEliminado)
                 ->get();
 
             $Vehiculo = \App\Models\Administracion\Vehiculo::where('placa',$request->input('placa'))
-                ->where('idEstado', IdEstado::Habilitado)
-                ->where('idEliminado',IdEliminado::NoEliminado)
+                ->where('id_estado', IdEstado::Habilitado)
+                ->where('id_eliminado',IdEliminado::NoEliminado)
                 ->get();
 
-            $TiposComprobante = \App\Models\V2\TipoComprobante::where('blPuntoVenta', EnumPuntoVenta::Si)
+            $TiposComprobante = \App\Models\V2\TipoComprobante::where('bl_punto_venta', EnumPuntoVenta::Si)
                 ->get();
 
             if( $EquipoPos->isEmpty() ){
@@ -86,9 +86,9 @@ class AuthController extends Controller
                     'status' => Response::HTTP_NOT_FOUND
                 ]);
             }else{
-                $OCaja = Caja::where('idPos', $EquipoPos->first()->id )
-                    ->where('idEstado', IdEstado::Habilitado)
-                    ->where('idEliminado',IdEliminado::NoEliminado)
+                $OCaja = Caja::where('id_pos', $EquipoPos->first()->id )
+                    ->where('id_estado', IdEstado::Habilitado)
+                    ->where('id_eliminado',IdEliminado::NoEliminado)
                     ->get();
             }
 
@@ -135,7 +135,7 @@ class AuthController extends Controller
 
 
 
-            if( $_usuario->idCliente !== $_vehiculo->idCliente ){
+            if( $_usuario->id_cliente !== $_vehiculo->id_cliente ){
                 return response()->json([
                     'data'      => null,
                     'error' => 'El usuario y el vehiculo no pertenecen al mismo cliente.',
@@ -143,7 +143,7 @@ class AuthController extends Controller
                 ]);
             }
 
-            if( $_usuario->idCliente !== $_equipopos->idCliente ){
+            if( $_usuario->id_cliente !== $_equipopos->id_cliente ){
                 return response()->json([
                     'data'      => null,
                     'error' => 'El usuario y el equipo pos no pertenecen al mismo cliente.',
@@ -151,7 +151,7 @@ class AuthController extends Controller
                 ]);
             }
 
-            if( $_usuario->idCliente !== $_caja->idCliente ){
+            if( $_usuario->id_cliente !== $_caja->id_cliente ){
                 return response()->json([
                     'data'      => null,
                     'error' => 'El usuario y la caja no pertenecen al mismo cliente.',
@@ -174,7 +174,7 @@ class AuthController extends Controller
                 $token = $usuario->createToken($usuario->usuario.'-'.now())->plainTextToken;
 
 
-                $Configuracion = ClienteConfiguracion::select('valor')->where('id_cliente', $usuario->idCliente)->where('id_parametro_configuracion',EnumParametroConfiguracion::Empresa_Ruc->value)->get();
+                $Configuracion = ClienteConfiguracion::select('valor')->where('id_cliente', $usuario->id_cliente)->where('id_parametro_configuracion',EnumParametroConfiguracion::Empresa_Ruc->value)->get();
 
                 return response()->json([
                     'data'=>[
@@ -188,6 +188,7 @@ class AuthController extends Controller
                             switch ( $tc->id ){
                                 case IdTipoComprobante::Boleta->value: $serieLetra = 'B'; break;
                                 case IdTipoComprobante::Factura->value: $serieLetra = 'F'; break;
+                                case IdTipoComprobante::Ticket->value: $serieLetra = 'T'; break;
                                 default: $serieLetra = 'B'; break;
                             }
 
@@ -203,10 +204,10 @@ class AuthController extends Controller
                             'nombres' => $usuario->nombres,
                             'apellidos' => $usuario->apellidos,
                             'correo' => $usuario->correo,
-                            'idNivel' => $usuario->idNivel
+                            'idNivel' => $usuario->id_nivel
                         ],
                         'cliente' => [
-                            'id' => $usuario->idCliente,
+                            'id' => $usuario->id_cliente,
                             'codigo' => str_pad($usuario->cliente->codigo,2,'0',STR_PAD_LEFT),
                             'nombre' =>  $usuario->cliente->nombre,
                             'numeroDocumento' =>  !$Configuracion->isEmpty() ? (int)$Configuracion->first()->valor : ''
@@ -216,12 +217,29 @@ class AuthController extends Controller
                             'codigo' => str_pad($_vehiculo->codigo,3,'0',STR_PAD_LEFT),
                             'placa' => $_vehiculo->placa,
                         ],
-                        'rutas' => Ruta::with('paraderos:id,nombre,precioBase,idRuta')->select(
-                                                'id',
-                                                'nombre'
-                                            )
-                                            ->where('idCliente', $usuario->idCliente)
-                                            ->where('idEstado',1)->get(),
+                        'rutas' => Ruta::with('paraderos:id,id_ruta,id_paradero_origen,id_paradero_destino,precio_base')->select(
+                                'id',
+                                'nombre'
+                            )
+                            ->where('id_cliente', $usuario->id_cliente)
+                            ->where('id_estado',1)->get()->map(function ($v) {
+
+                            return [
+                                'id' => $v->id,
+                                'nombre' => $v->nombre,
+                                'paraderos' => $v->paraderos->map(function ($p) {
+                                    return [
+                                        'id' => $p->id,
+                                        'idRuta' => $p->id_ruta,
+//                                        'idParaderoOrigen' => $p->id_paradero_origen,
+//                                        'idParaderoDestino' => $p->id_paradero_destino,
+                                        'precioBase' => $p->precio_base,
+                                        'nombre' => $p->paraderoOrigen->nombre . ' - ' . $p->paraderoDestino->nombre
+                                    ];
+                                })
+                            ];
+
+                        }),
                         'caja' => [
                             'id' => $_caja->id,
                             'nombre' => $_caja->nombre

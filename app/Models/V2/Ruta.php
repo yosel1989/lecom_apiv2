@@ -67,8 +67,12 @@ class Ruta extends Model
         return $this->hasOne('App\Models\V2\TipoRuta','id','id_tipo');
     }
 
+//    public function paraderos(){
+//        return $this->hasMany('App\Models\V2\Paradero','idRuta','id');
+//    }
+
     public function paraderos(){
-        return $this->hasMany('App\Models\V2\Paradero','idRuta','id');
+        return $this->hasMany('App\Models\V2\BoletoPrecio','id_ruta','id');
     }
 
 }

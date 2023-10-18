@@ -53,25 +53,36 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
         foreach ( $models as $model ){
 
-            $OModel = new BoletoInterprovincial(
+            $OModel = new BoletoInterprovincialOficial(
                 new Id($model->id, false, 'El id del boleto no tiene el formato correcto'),
-                new Id($model->idSede, true, 'El id de la sede no tiene el formato correcto'),
-                new Id($model->idCliente, true, 'El id del cliente no tiene el formato correcto'),
-                new Id($model->idVehiculo, true, 'El id del vehiculo no tiene el formato correcto'),
-                new Id($model->idRuta, true, 'El id de la ruta no tiene el formato correcto'),
-                new Id($model->idParadero, true, 'El id del paradero no tiene el formato correcto'),
-                new Id($model->idCaja, true, 'El id de la caja no tiene el formato correcto'),
+                new Id($model->id_cliente, true, 'El id del cliente no tiene el formato correcto'),
+                new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
+                new Id($model->id_caja, true, 'El id de la caja no tiene el formato correcto'),
+                new NumericInteger($model->id_tipo_documento->value),
+                new Text($model->numero_documento, false, -1, ''),
+                new Text($model->nombres, false, -1, ''),
+                new Text($model->apellidos, false, -1, ''),
+                new NumericInteger($model->menor_edad),
+                new Id($model->id_vehiculo, true, 'El id del vehiculo no tiene el formato correcto'),
+                new Id($model->id_asiento, true, 'El id del asiento no tiene el formato correcto'),
+                new DateFormat($model->f_partida, true, 'La fecha de partida no tiene el formato correcto'),
+                new TimeFormat($model->h_partida, true, 'La hora de partida no tiene el formato correcto'),
+                new Id($model->id_ruta, true, 'El id de la ruta no tiene el formato correcto'),
+                new Id($model->id_paradero_origen, true, 'El id del paradero origen no tiene el formato correcto'),
+                new Id($model->id_paradero_destino, true, 'El id del paradero destino no tiene el formato correcto'),
+                new NumericFloat($model->precio),
+                new NumericInteger($model->id_tipo_moneda),
+                new NumericInteger($model->id_forma_pago),
+                new NumericInteger($model->obsequio),
+                new NumericInteger($model->id_tipo_comprobante),
+                new NumericInteger($model->id_tipo_documento_entidad),
                 new Id($model->idPos, true, 'El id del pos no tiene el formato correcto'),
-                new NumericInteger($model->idTipoDocumento->value),
-                new Text($model->numeroDocumento, false, -1, ''),
-                new Text($model->nombre, true, -1, ''),
                 new Text($model->direccion, true, -1, ''),
                 new Text($model->serie, true, -1, ''),
                 new Text($model->numeroBoleto, true, -1, ''),
                 new Text($model->codigoBoleto, false, -1, ''),
                 new NumericFloat($model->latitud),
                 new NumericFloat($model->longitud),
-                new NumericFloat($model->precio),
                 new DateTimeFormat($model->fecha),
                 new NumericInteger($model->idEstado->value),
                 new NumericInteger($model->idEliminado->value),
@@ -216,10 +227,10 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
             $OModel = new BoletoInterprovincial(
                 new Id($model->id, false, 'El id del boleto no tiene el formato correcto'),
-                new Id($model->idSede, true, 'El id de la sede no tiene el formato correcto'),
-                new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
-                new Id($model->idVehiculo, true, 'El id del vehiculo no tiene el formato correcto'),
-                new Id($model->idRuta, true, 'El id de la ruta no tiene el formato correcto'),
+                new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
+                new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+                new Id($model->id_vehiculo, true, 'El id del vehiculo no tiene el formato correcto'),
+                new Id($model->id_ruta, true, 'El id de la ruta no tiene el formato correcto'),
                 new Id($model->idParadero, true, 'El id del paradero no tiene el formato correcto'),
                 new Id($model->idCaja, true, 'El id de la caja no tiene el formato correcto'),
                 new Id($model->idPos, true, 'El id del pos no tiene el formato correcto'),
@@ -252,13 +263,13 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             $TipoDocumento = TipoDocumento::findOrFail($model->idTipoDocumento->value);
             $OModel->setTipoDocumento(new Text($TipoDocumento->nombre, true, -1));
 
-            if($model->idRuta){
-                $Ruta = Ruta::findOrFail($model->idRuta);
+            if($model->id_ruta){
+                $Ruta = Ruta::findOrFail($model->id_ruta);
                 $OModel->setRuta(new Text($Ruta->nombre, true, -1));
             }
 
-            if($model->idVehiculo){
-                $Vehiculo = Vehiculo::findOrFail($model->idVehiculo);
+            if($model->id_vehiculo){
+                $Vehiculo = Vehiculo::findOrFail($model->id_vehiculo);
                 $OModel->setVehiculo(new Text($Vehiculo->placa, true, -1));
             }
 
@@ -309,10 +320,10 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         $model = $this->eloquentModelBoletoInterprovincial->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos', 'vehiculo:id,placa', 'destino:id,nombre')->findOrFail($idBoletoInterprovincial->value());
         $OModel = new BoletoInterprovincial(
             new Id($model->id, false, 'El id del boleto no tiene el formato correcto'),
-            new Id($model->idSede, true, 'El id de la sede no tiene el formato correcto'),
-            new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
-            new Id($model->idVehiculo, false, 'El id del vehiculo no tiene el formato correcto'),
-            new Id($model->idRuta, false, 'El id de la ruta no tiene el formato correcto'),
+            new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
+            new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+            new Id($model->id_vehiculo, false, 'El id del vehiculo no tiene el formato correcto'),
+            new Id($model->id_ruta, false, 'El id de la ruta no tiene el formato correcto'),
             new Id($model->idParadero, false, 'El id del paradero no tiene el formato correcto'),
             new Id($model->idCaja, false, 'El id de la caja no tiene el formato correcto'),
             new Id($model->idPos, false, 'El id del pos no tiene el formato correcto'),
@@ -417,7 +428,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         $model = new \App\Models\V2\BoletoInterprovincial();
 //        $model->setTable('boleto_interprovincial_' . $Cliente->first()->codigo);
 
-//        $total = $model->selectRaw('COUNT(*) as total')->where('serie', $_serie->nombre)->where('idSede',$_serie->idSede)->get()->first()->total;
+//        $total = $model->selectRaw('COUNT(*) as total')->where('serie', $_serie->nombre)->where('idSede',$_serie->id_sede)->get()->first()->total;
 //
 
         $model->create([
@@ -478,8 +489,8 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         $OUTPUT = new BoletoInterprovincialOficial(
              new Id($boleto->id,false, 'El id no tiene el formato correcto'),
 
-             new Id($boleto->idCliente,false, 'El id del cliente no tiene el formato correcto'),
-             new Id($boleto->idSede,false, 'El id de la sede no tiene el formato correcto'),
+             new Id($boleto->id_cliente,false, 'El id del cliente no tiene el formato correcto'),
+             new Id($boleto->id_sede,false, 'El id de la sede no tiene el formato correcto'),
              new Id($boleto->idCaja,false, 'El id de la caja no tiene el formato correcto'),
              new NumericInteger($boleto->idTipoDocumento->value),
              new Text($boleto->numeroDocumento,false, -1, ''),
@@ -488,11 +499,11 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
              new NumericInteger((int)$boleto->menorEdad),
 
 
-             new Id($boleto->idVehiculo,true, 'El id del vehiculo no tiene el formato correcto'),
+             new Id($boleto->id_vehiculo,true, 'El id del vehiculo no tiene el formato correcto'),
              new Id($boleto->idAsiento,true, 'El id del asiento no tiene el formato correcto'),
              new DateFormat($boleto->fechaPartida,true, 'El formato de la fecha no es la correcta'),
              new DateFormat($boleto->horaPartida,true, 'El formato de la hora no es la correcta'),
-             new Id($boleto->idRuta,false, 'El id de la ruta no tiene el formato correcto'),
+             new Id($boleto->id_ruta,false, 'El id de la ruta no tiene el formato correcto'),
              new Id($boleto->idParadero,false, 'El id del paradero no tiene el formato correcto'),
              new NumericFloat($boleto->precio),
              new NumericInteger($boleto->idTipoMoneda->value),

@@ -20,7 +20,7 @@ class TipoComprobante extends Model
     protected $fillable = [
         'id',
         'nombre',
-        'blPuntoVenta',
+        'bl_punto_venta',
     ];
 
     /**
@@ -29,7 +29,7 @@ class TipoComprobante extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'blPuntoVenta' => EnumPuntoVenta::class,
+        'bl_punto_venta' => EnumPuntoVenta::class,
 
     ];
 

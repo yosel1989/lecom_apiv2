@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Src\V2\Caja\Infrastructure\Repositories;
 
 use App\Models\V2\Caja as EloquentModelCaja;
+use Illuminate\Support\Facades\DB;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
@@ -26,7 +27,12 @@ final class EloquentCajaRepository implements CajaRepositoryContract
 
     public function collectionByCliente(Id $idCliente): array
     {
-        $models = $this->eloquentModelCaja->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos', 'sede:id,nombre' , 'pos:id,nombre')->where('idCliente',$idCliente->value())->get();
+        $models = $this->eloquentModelCaja->with(
+            'usuarioRegistro:id,nombres,apellidos',
+            'usuarioModifico:id,nombres,apellidos',
+            'sede:id,nombre' ,
+            'pos:id,nombre')
+            ->where('id_cliente',$idCliente->value())->get();
 
         $arrVehicles = array();
 
@@ -35,15 +41,15 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             $OModel = new Caja(
                 new Id($model->id , false, 'El id de la caja no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la caja excede los 100 caracteres'),
-                new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
-                new Id($model->idSede, true, 'El id de la sede no tiene el formato correcto'),
-                new Id($model->idPos, true, 'El id del pos no tiene el formato correcto'),
-                new NumericInteger($model->idEstado->value),
-                new NumericInteger($model->idEliminado->value),
-                new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
-                new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
-                new DateTimeFormat($model->fechaRegistro, true, 'El formato de la fecha de registro no tiene el formato correcto'),
-                new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+                new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+                new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
+                new Id($model->id_pos, true, 'El id del pos no tiene el formato correcto'),
+                new NumericInteger($model->id_estado->value),
+                new NumericInteger($model->id_eliminado->value),
+                new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
+                new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+                new DateTimeFormat($model->f_registro, true, 'El formato de la fecha de registro no tiene el formato correcto'),
+                new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
             );
 
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
@@ -63,11 +69,11 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             ->select(
                 'id',
                 'nombre',
-                'idCliente',
-                'idSede'
+                'id_cliente',
+                'id_sede'
             )
-            ->where('idCliente',$idCliente->value())
-            ->where('idSede',$idSede->value())->get();
+            ->where('id_cliente',$idCliente->value())
+            ->where('id_sede',$idSede->value())->get();
 
         $arr = array();
 
@@ -76,8 +82,8 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             $OModel = new CajaSede(
                 new Id($model->id , false, 'El id de la caja no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la caja excede los 100 caracteres'),
-                new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
-                new Id($model->idSede, true, 'El id de la sede no tiene el formato correcto'),
+                new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+                new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
             );
 
 
@@ -93,11 +99,11 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             ->select(
                 'id',
                 'nombre',
-                'idSede',
-                'idPos',
-                'idEstado',
-                'idEliminado'
-            )->where('idCliente',$idCliente->value())->get();
+                'id_sede',
+                'id_pos',
+                'id_estado',
+                'id_eliminado'
+            )->where('id_cliente',$idCliente->value())->get();
 
         $arrVehicles = array();
 
@@ -106,10 +112,10 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             $OModel = new CajaShort(
                 new Id($model->id , false, 'El id del caja no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la caja excede los 100 caracteres'),
-                new Id($model->idSede , true, 'El id de la sede no tiene el formato correcto'),
-                new Id($model->idPos , true, 'El id del pos no tiene el formato correcto'),
-                new NumericInteger($model->idEstado->value),
-                new NumericInteger($model->idEliminado->value),
+                new Id($model->id_sede , true, 'El id de la sede no tiene el formato correcto'),
+                new Id($model->id_pos , true, 'El id del pos no tiene el formato correcto'),
+                new NumericInteger($model->id_estado->value),
+                new NumericInteger($model->id_eliminado->value),
             );
 
             $arrVehicles[] = $OModel;
@@ -127,13 +133,21 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         Id $idUsuarioRegistro
     ): void
     {
+        $count = $this->eloquentModelCaja->select('id')
+            ->where('id_cliente', $idCliente->value())
+            ->where(DB::raw("UPPER(nombre)"), mb_strtoupper($nombre->value(), 'UTF-8') )
+            ->count();
+        if($count > 0){
+            throw new \InvalidArgumentException('La caja ya se encuentra registrada');
+        }
+
         $this->eloquentModelCaja->create([
             'nombre' => $nombre->value(),
-            'idCliente' => $idCliente->value(),
-            'idSede' => $idSede->value(),
-            'idPos' => $idPos->value(),
-            'idEstado' => $idEstado->value(),
-            'idUsuarioRegistro' => $idUsuarioRegistro->value()
+            'id_cliente' => $idCliente->value(),
+            'id_sede' => $idSede->value(),
+            'id_pos' => $idPos->value(),
+            'id_estado' => $idEstado->value(),
+            'id_usu_registro' => $idUsuarioRegistro->value()
         ]);
     }
 
@@ -147,12 +161,23 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         Id $idUsuarioRegistro
     ): void
     {
-        $this->eloquentModelCaja->findOrFail($id->value())->update([
+        $model = $this->eloquentModelCaja->findOrFail($id->value());
+
+        $count = $this->eloquentModelCaja->select('id')
+            ->where('id', '<>', $id->value())
+            ->where('id_cliente', $model->id_cliente)
+            ->where(DB::raw("UPPER(nombre)"), mb_strtoupper($nombre->value(), 'UTF-8') )
+            ->count();
+        if($count > 0){
+            throw new \InvalidArgumentException('La caja ya se encuentra registrada');
+        }
+
+        $model->update([
             'nombre' => $nombre->value(),
-            'idSede' => $idSede->value(),
-            'idPos' => $idPos->value(),
-            'idEstado' => $idEstado->value(),
-            'idUsuarioModifico' => $idUsuarioRegistro->value()
+            'id_sede' => $idSede->value(),
+            'id_pos' => $idPos->value(),
+            'id_estado' => $idEstado->value(),
+            'id_usu_modifico' => $idUsuarioRegistro->value()
         ]);
     }
 
@@ -163,8 +188,8 @@ final class EloquentCajaRepository implements CajaRepositoryContract
     ): void
     {
         $this->eloquentModelCaja->findOrFail($idCaja->value())->update([
-           'idEstado' => $idEstado->value(),
-           'idUsuarioModifico' => $idUsuarioModifico->value()
+           'id_estado' => $idEstado->value(),
+           'id_usu_modifico' => $idUsuarioModifico->value()
         ]);
     }
 
@@ -176,15 +201,15 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         $OModel = new Caja(
             new Id($model->id , false, 'El id del caja no tiene el formato correcto'),
             new Text($model->nombre, false, 100, 'El nombre del caja excede los 100 caracteres'),
-            new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
-            new Id($model->idSede, true, 'El id de la sede no tiene el formato correcto'),
-            new Id($model->idPos, true, 'El id del pos no tiene el formato correcto'),
-            new NumericInteger($model->idEstado->value),
-            new NumericInteger($model->idEliminado->value),
-            new Id($model->idUsuarioRegistro, true, 'El id del usuario que registro no tiene el formato correcto'),
-            new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
-            new DateTimeFormat($model->fechaRegistro, true, 'El formato de la fecha de registro no tiene el formato correcto'),
-            new DateTimeFormat($model->fechaModifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+            new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+            new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
+            new Id($model->id_pos, true, 'El id del pos no tiene el formato correcto'),
+            new NumericInteger($model->id_estado->value),
+            new NumericInteger($model->id_eliminado->value),
+            new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
+            new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+            new DateTimeFormat($model->f_registro, true, 'El formato de la fecha de registro no tiene el formato correcto'),
+            new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
         );
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));

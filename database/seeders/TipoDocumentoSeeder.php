@@ -16,27 +16,27 @@ class TipoDocumentoSeeder extends Seeder
         \App\Models\V2\TipoDocumento::truncate();
 
         \App\Models\V2\TipoDocumento::create([
-            'nombre' => 'Dni',
-            'nombreCorto' => 'Dni',
-            'numeroDigitos' => 8,
+            'nombre' => 'Documento Nacional de Identidad',
+            'nombre_corto' => 'DNI',
+            'num_digitos' => 8,
         ]);
 
         \App\Models\V2\TipoDocumento::create([
             'nombre' => 'Ruc',
-            'nombreCorto' => 'Ruc',
-            'numeroDigitos' => 11
+            'nombre_corto' => 'RUC',
+            'num_digitos' => 11
         ]);
 
         \App\Models\V2\TipoDocumento::create([
             'nombre' => 'Carnet de Extranjeria',
-            'nombreCorto' => 'Carnet de Extranjeria',
-            'numeroDigitos' => 20
+            'nombre_corto' => 'CE',
+            'num_digitos' => 20
         ]);
 
         \App\Models\V2\TipoDocumento::create([
             'nombre' => 'Pasaporte',
-            'nombreCorto' => 'Pasaporte',
-            'numeroDigitos' => 20
+            'nombre_corto' => 'PAS',
+            'num_digitos' => 20
         ]);
     }
 }

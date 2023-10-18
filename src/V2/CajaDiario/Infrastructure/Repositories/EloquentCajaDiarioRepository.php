@@ -29,12 +29,12 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
     ): void
     {
         $this->eloquentModelCajaDiario->create([
-            'idCaja' =>  $idCaja->value(),
-            'idRuta' =>  $idRuta->value(),
-            'idCliente' =>  $idCliente->value(),
-            'montoInicial' =>  $montoInicial->value(),
-            'fechaApertura' =>  $fechaApertura->value(),
-            'idUsuarioRegistro' =>  $idUsuarioRegistro->value(),
+            'id_caja' =>  $idCaja->value(),
+            'id_ruta' =>  $idRuta->value(),
+            'id_cliente' =>  $idCliente->value(),
+            'monto_inicial' =>  $montoInicial->value(),
+            'f_apertura' =>  $fechaApertura->value(),
+            'id_usu_registro' =>  $idUsuarioRegistro->value(),
         ]);
     }
 
@@ -48,13 +48,13 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
     ): void
     {
         $this->eloquentModelCajaDiario
-            ->where('idCaja',$idCaja->value())
-            ->where('idRuta',$idRuta->value())
-            ->where('idCliente',$idCliente->value())
+            ->where('id_caja',$idCaja->value())
+            ->where('id_ruta',$idRuta->value())
+            ->where('id_cliente',$idCliente->value())
             ->firstOrFail()->update([
-                'montoFinal' =>  $montoFinal->value(),
-                'fechaCierre' =>  $fechaCierre->value(),
-                'idUsuarioModifico' =>  $idUsuarioRegistro->value(),
+                'monto_final' =>  $montoFinal->value(),
+                'f_cierre' =>  $fechaCierre->value(),
+                'id_usu_modifico' =>  $idUsuarioRegistro->value(),
             ]);
     }
 

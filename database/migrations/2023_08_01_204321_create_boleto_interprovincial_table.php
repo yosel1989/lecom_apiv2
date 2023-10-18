@@ -28,7 +28,8 @@ return new class extends Migration
                 $table->date('f_partida')->nullable();
                 $table->time('h_partida')->nullable();
                 $table->uuid('id_ruta');
-                $table->uuid('id_paradero');
+                $table->uuid('id_paradero_origen');
+                $table->uuid('id_paradero_destino');
                 $table->decimal('precio',5,2);
                 $table->integer('id_tipo_moneda');
                 $table->integer('id_forma_pago');
@@ -68,7 +69,8 @@ return new class extends Migration
                     'f_partida',
                     'h_partida',
                     'id_ruta',
-                    'id_paradero',
+                    'id_paradero_origen',
+                    'id_paradero_destino',
                     'id_tipo_moneda',
                     'id_forma_pago',
                     'obsequio',

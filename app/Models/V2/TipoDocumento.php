@@ -19,11 +19,11 @@ class TipoDocumento extends Model
     protected $fillable = [
         'id',
         'nombre',
-        'nombreCorto',
-        'numeroDigitos',
-        'aplFactura',
-        'aplBoleta',
-        'aplPasajero',
+        'nombre_corto',
+        'num_digitos',
+        'apl_factura',
+        'apl_boleta',
+        'apl_pasajero',
     ];
 
     /**
@@ -32,18 +32,18 @@ class TipoDocumento extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'numeroDigitos' =>  'integer',
-        'aplFactura' =>  'integer',
-        'aplBoleta' =>  'integer',
-        'aplPasajero' =>  'integer',
+        'num_digitos' =>  'integer',
+        'apl_factura' =>  'integer',
+        'apl_boleta' =>  'integer',
+        'apl_pasajero' =>  'integer',
     ];
 
-    public function usuarioRegistro(){
-        return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
-    }
-
-    public function usuarioModifico(){
-        return $this->hasOne('App\Models\User','id','idUsuarioModifico');
-    }
+//    public function usuarioRegistro(){
+//        return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
+//    }
+//
+//    public function usuarioModifico(){
+//        return $this->hasOne('App\Models\User','id','idUsuarioModifico');
+//    }
 
 }

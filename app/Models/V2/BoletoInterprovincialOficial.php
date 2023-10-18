@@ -55,7 +55,8 @@ class BoletoInterprovincialOficial extends Model
         'f_partida',
         'h_partida',
         'id_ruta',
-        'id_paradero',
+        'id_paradero_origen',
+        'id_paradero_destino',
         'precio',
         'id_tipo_moneda',
         'id_forma_pago',
@@ -167,9 +168,14 @@ class BoletoInterprovincialOficial extends Model
         return $this->hasOne('App\Models\V2\Vehiculo','id','id_vehiculo');
     }
 
-    public function paradero(): HasOne{
+    public function paraderoOrigen(): HasOne{
         parent::setTable($this->getTable());
-        return $this->hasOne('App\Models\V2\Paradero','id','id_paradero');
+        return $this->hasOne('App\Models\V2\Paradero','id','id_paradero_origen');
+    }
+
+    public function paraderoDestino(): HasOne{
+        parent::setTable($this->getTable());
+        return $this->hasOne('App\Models\V2\Paradero','id','id_paradero_destino');
     }
 
     public function ruta(): HasOne{

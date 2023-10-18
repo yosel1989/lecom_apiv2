@@ -13,29 +13,31 @@ class TipoComprobanteSeeder extends Seeder
      */
     public function run()
     {
+        \App\Models\V2\TipoComprobante::truncate();
+
         \App\Models\V2\TipoComprobante::create([
             'nombre' => 'Boleta de Venta Electrónica',
-            'blPuntoVenta' => true
+            'bl_punto_venta' => true
         ]);
 
         \App\Models\V2\TipoComprobante::create([
             'nombre' => 'Factura de Venta Electrónica',
-            'blPuntoVenta' => true
+            'bl_punto_venta' => true
         ]);
 
         \App\Models\V2\TipoComprobante::create([
             'nombre' => 'Ticket de Venta Electrónica',
-            'blPuntoVenta' => true
+            'bl_punto_venta' => true
         ]);
 
         \App\Models\V2\TipoComprobante::create([
             'nombre' => 'Nota de Crédito',
-            'blPuntoVenta' => false
+            'bl_punto_venta' => false
         ]);
 
         \App\Models\V2\TipoComprobante::create([
             'nombre' => 'Nota de Débito',
-            'blPuntoVenta' => false
+            'bl_punto_venta' => false
         ]);
     }
 }
