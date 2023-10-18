@@ -20,22 +20,22 @@ final class CreateController
     {
         $user = Auth::user();
         $nombre             = $request->input('nombre');
-        $precioBase         = $request->input('precioBase');
+//        $precioBase         = $request->input('precioBase');
         $latitud         = $request->input('latitud');
         $longitud         = $request->input('longitud');
         $idCliente          = $id;
         $idTipoRuta          = $request->input('idTipoRuta');
-        $idRuta          = $request->input('idRuta');
+//        $idRuta          = $request->input('idRuta');
         $idEstado           = $request->input('idEstado');
 
         $useCase = new CreateUseCase( $this->repository );
         $useCase->__invoke(
             $nombre,
-            $precioBase,
+//            $precioBase,
             $latitud,
             $longitud,
             $idTipoRuta,
-            $idRuta,
+//            $idRuta,
             $idCliente,
             $idEstado,
             $user->getId()

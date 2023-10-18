@@ -12,11 +12,11 @@ interface ParaderoRepositoryContract
 {
     public function create(
         Text $nombre,
-        NumericFloat $precioBase,
+//        NumericFloat $precioBase,
         NumericFloat $latitud,
         NumericFloat $longitud,
         NumericInteger $idTipoRuta,
-        Id $idRuta,
+//        Id $idRuta,
         Id $idCliente,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
@@ -29,11 +29,11 @@ interface ParaderoRepositoryContract
     public function update(
         Id $id,
         Text $nombre,
-        NumericFloat $precioBase,
+//        NumericFloat $precioBase,
         NumericFloat $latitud,
         NumericFloat $longitud,
         NumericInteger $idTipoRuta,
-        Id $idRuta,
+//        Id $idRuta,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;

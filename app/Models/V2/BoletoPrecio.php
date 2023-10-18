@@ -2,24 +2,30 @@
 
 namespace App\Models\V2;
 
+use App\Enums\EnumEstadoBoleto;
 use App\Enums\IdEliminado;
-use App\Enums\IdEstado;
 use App\Enums\IdTipoRuta;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Paradero extends Model
+class BoletoPrecio extends Model
 {
     use UUID;
+//    use TableNameDynamic;
 
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $table = "paradero";
+    protected $table = "boleto_precio";
     public $timestamps = true;
+    protected $dynamicTableName;
 
     const CREATED_AT = 'f_registro';
     const UPDATED_AT = 'f_modifico';
+
+
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,21 +33,18 @@ class Paradero extends Model
      */
     protected $fillable = [
         'id',
-        'nombre',
-//        'precioBase',
-        'latitud',
-        'longitud',
         'id_cliente',
         'id_tipo_ruta',
-//        'idRuta',
+        'id_ruta',
+        'id_paradero_origen',
+        'id_paradero_destino',
+        'precio_base',
         'id_estado',
         'id_eliminado',
         'id_usu_registro',
         'id_usu_modifico',
         'f_registro',
-        'f_modifico',
-
-        'total'
+        'f_modifico'
     ];
 
     /**
@@ -50,16 +53,22 @@ class Paradero extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'total' =>  'int',
-//        'precioBase' =>  'float',
-        'latitud' =>  'float',
-        'longitud' =>  'float',
-        'f_registro' =>  'string',
-        'f_modifico' =>  'string',
         'id_tipo_ruta' => IdTipoRuta::class,
-        'id_estado' => IdEstado::class,
+        'id_estado' => EnumEstadoBoleto::class,
         'id_eliminado' => IdEliminado::class,
+        'precio_base' => 'float',
+        'f_registro' => 'string',
+        'f_modifico' => 'string',
+        'total' => 'integer',
     ];
+
+    public function paraderoOrigen(){
+        return $this->hasOne('App\Models\V2\Paradero','id','id_paradero_origen');
+    }
+
+    public function paraderoDestino(){
+        return $this->hasOne('App\Models\V2\Paradero','id','id_paradero_destino');
+    }
 
     public function usuarioRegistro(){
         return $this->hasOne('App\Models\User','id','id_usu_registro');
@@ -68,10 +77,10 @@ class Paradero extends Model
     public function usuarioModifico(){
         return $this->hasOne('App\Models\User','id','id_usu_modifico');
     }
-//
-//    public function ruta(){
-//        return $this->hasOne('App\Models\V2\Ruta','id','idRuta');
-//    }
+
+    public function ruta(){
+        return $this->hasOne('App\Models\V2\Ruta','id','id_ruta');
+    }
 
     public function tipoRuta(){
         return $this->hasOne('App\Models\V2\TipoRuta','id','id_tipo_ruta');

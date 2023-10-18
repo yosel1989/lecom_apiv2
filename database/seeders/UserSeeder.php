@@ -20,17 +20,56 @@ class UserSeeder extends Seeder
 //        $client_parent = 'e21e1f11-19a8-4fb9-99a3-7acd8d3ce5b3';
 //        $client_sinchiroca = '7e1d001f-9f48-4804-b18c-25baf46e8feb';
 //        $client_santacruz = '125cb48d-7c58-45f6-883d-b585b3d6f99c';
+//
+//
+//        \App\Models\User::create([
+////            'id'            => \Ramsey\Uuid\Uuid::uuid4(),
+//            'nombres'       => 'Administrador',
+//            'apellidos'     => 'Sistema',
+////            'idPerfil'    => null,
+////            'telefono'    => null,
+//            'correo'        => 'sa@lecomperu.com',
+//            'usuario'       => 'sa',
+//            'clave'         => \Illuminate\Support\Facades\Hash::make('fKvPt5La627WQm!H2QFt'),
+//            'id_nivel'       => IdNivelUsuario::Super,
+//            'id_estado'      => IdEstado::Habilitado,
+////            'idUsuarioRegistro'      => null,
+////            'idUsuarioModifico'      => null,
+////            'fechaEmailVerifico'      => null,
+////            'idEliminado'      => IdEliminado::NoEliminado,
+////            'fechaRegistro'      => null,
+////            'fechaModifico'      => null,
+//
+//
+////            'username'      => 'admlecomperu',
+////            'username'      => 'admlecomperu',
+////            'username'      => 'admlecomperu',
+////            'username'      => 'admlecomperu',
+////            'username'      => 'admlecomperu',
+////            'username'      => 'admlecomperu',
+////            'username'      => 'admlecomperu',
+////            'password'      => \Illuminate\Support\Facades\Hash::make('123456789'),
+////            'first_name'    => 'Luis Alexei',
+////            'last_name'     => 'Fuertes Valdez',
+////            'email'         => '',
+////            'phone'         => '',
+////            'level'         => NivelUsuario::Super,
+////            'actived'       => 1,
+////            'deleted'       => 0,
+////            'id_client'     => null,
+////            'id_role'       => null,
+//        ]);
 
 
         \App\Models\User::create([
 //            'id'            => \Ramsey\Uuid\Uuid::uuid4(),
-            'nombres'       => 'Administrador',
-            'apellidos'     => 'Sistema',
+            'nombres'       => 'Luis',
+            'apellidos'     => 'Alexei',
 //            'idPerfil'    => null,
 //            'telefono'    => null,
-            'correo'        => 'sa@lecomperu.com',
-            'usuario'       => 'sa',
-            'clave'         => \Illuminate\Support\Facades\Hash::make('fKvPt5La627WQm!H2QFt'),
+            'correo'        => 'lalexei@gmail.com',
+            'usuario'       => 'admlecomperu',
+            'clave'         => \Illuminate\Support\Facades\Hash::make('123456789a'),
             'id_nivel'       => IdNivelUsuario::Super,
             'id_estado'      => IdEstado::Habilitado,
 //            'idUsuarioRegistro'      => null,
@@ -60,45 +99,6 @@ class UserSeeder extends Seeder
 //            'id_role'       => null,
         ]);
 
-//
-//        \App\Models\User::create([
-////            'id'            => \Ramsey\Uuid\Uuid::uuid4(),
-//            'nombres'       => 'Luis',
-//            'apellidos'     => 'Alexei',
-////            'idPerfil'    => null,
-////            'telefono'    => null,
-//            'correo'        => 'lalexei@gmail.com',
-//            'usuario'       => 'admlecomperu',
-//            'clave'         => \Illuminate\Support\Facades\Hash::make('123456789'),
-//            'idNivel'       => IdNivelUsuario::Super,
-//            'idEstado'      => IdEstado::Habilitado,
-////            'idUsuarioRegistro'      => null,
-////            'idUsuarioModifico'      => null,
-////            'fechaEmailVerifico'      => null,
-////            'idEliminado'      => IdEliminado::NoEliminado,
-////            'fechaRegistro'      => null,
-////            'fechaModifico'      => null,
-//
-//
-////            'username'      => 'admlecomperu',
-////            'username'      => 'admlecomperu',
-////            'username'      => 'admlecomperu',
-////            'username'      => 'admlecomperu',
-////            'username'      => 'admlecomperu',
-////            'username'      => 'admlecomperu',
-////            'username'      => 'admlecomperu',
-////            'password'      => \Illuminate\Support\Facades\Hash::make('123456789'),
-////            'first_name'    => 'Luis Alexei',
-////            'last_name'     => 'Fuertes Valdez',
-////            'email'         => '',
-////            'phone'         => '',
-////            'level'         => NivelUsuario::Super,
-////            'actived'       => 1,
-////            'deleted'       => 0,
-////            'id_client'     => null,
-////            'id_role'       => null,
-//        ]);
-//
 //        \App\User::create([
 //            'id'            => \Ramsey\Uuid\Uuid::uuid4(),
 //            'username'      => 'Sinchiroca@lecom',

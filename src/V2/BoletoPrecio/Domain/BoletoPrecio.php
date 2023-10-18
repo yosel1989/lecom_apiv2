@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Src\V2\Paradero\Domain;
+namespace Src\V2\BoletoPrecio\Domain;
 
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
@@ -9,13 +9,15 @@ use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 
-final class Paradero
+final class BoletoPrecio
 {
-
     private Id $id;
-    private Text $nombre;
-    private NumericFloat $precioBase;
     private Id $idCliente;
+    private NumericInteger $idTipoRuta;
+    private Id $idRuta;
+    private Id $idParaderoOrigen;
+    private Id $idParaderoDestino;
+    private NumericFloat $precioBase;
     private NumericInteger $idEstado;
     private NumericInteger $idEliminado;
     private Id $idUsuarioRegistro;
@@ -23,25 +25,22 @@ final class Paradero
     private DateTimeFormat $fechaRegistro;
     private DateTimeFormat $fechaModifico;
 
-    private Text $usuarioRegistro;
-    private Text $usuarioModifico;
     private Text $tipoRuta;
     private Text $ruta;
-    private NumericFloat $latitud;
-    private NumericFloat $longitud;
-    private Id $idRuta;
-    private NumericInteger $idTipoRuta;
+    private Text $paraderoOrigen;
+    private Text $paraderoDestino;
+    private Text $usuarioRegistro;
+    private Text $usuarioModifico;
 
 
     /**
      * @param Id $id
-     * @param Text $nombre
-     * @param NumericFloat $precioBase
-     * @param NumericFloat $latitud
-     * @param NumericFloat $longitud
+     * @param Id $idCliente
      * @param NumericInteger $idTipoRuta
      * @param Id $idRuta
-     * @param Id $idCliente
+     * @param Id $idParaderoOrigen
+     * @param Id $idParaderoDestino
+     * @param NumericFloat $precioBase
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      * @param Id $idUsuarioRegistro
@@ -51,13 +50,14 @@ final class Paradero
      */
     public function __construct(
         Id $id,
-        Text $nombre,
-//        NumericFloat $precioBase,
-        NumericFloat $latitud,
-        NumericFloat $longitud,
-        NumericInteger $idTipoRuta,
-//        Id $idRuta,
         Id $idCliente,
+        NumericInteger $idTipoRuta,
+        Id $idRuta,
+
+        Id $idParaderoOrigen,
+        Id $idParaderoDestino,
+        NumericFloat $precioBase,
+
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
         Id $idUsuarioRegistro,
@@ -68,51 +68,18 @@ final class Paradero
     {
 
         $this->id = $id;
-        $this->nombre = $nombre;
-//        $this->precioBase = $precioBase;
         $this->idCliente = $idCliente;
+        $this->idTipoRuta = $idTipoRuta;
+        $this->idRuta = $idRuta;
+        $this->idParaderoOrigen = $idParaderoOrigen;
+        $this->idParaderoDestino = $idParaderoDestino;
+        $this->precioBase = $precioBase;
         $this->idEstado = $idEstado;
         $this->idEliminado = $idEliminado;
         $this->idUsuarioRegistro = $idUsuarioRegistro;
         $this->idUsuarioModifico = $idUsuarioModifico;
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
-        $this->latitud = $latitud;
-        $this->longitud = $longitud;
-//        $this->idRuta = $idRuta;
-        $this->idTipoRuta = $idTipoRuta;
-    }
-
-    /**
-     * @return Text
-     */
-    public function getUsuarioRegistro(): Text
-    {
-        return $this->usuarioRegistro;
-    }
-
-    /**
-     * @param Text $usuarioRegistro
-     */
-    public function setUsuarioRegistro(Text $usuarioRegistro): void
-    {
-        $this->usuarioRegistro = $usuarioRegistro;
-    }
-
-    /**
-     * @return Text
-     */
-    public function getUsuarioModifico(): Text
-    {
-        return $this->usuarioModifico;
-    }
-
-    /**
-     * @param Text $usuarioModifico
-     */
-    public function setUsuarioModifico(Text $usuarioModifico): void
-    {
-        $this->usuarioModifico = $usuarioModifico;
     }
 
     /**
@@ -132,19 +99,83 @@ final class Paradero
     }
 
     /**
-     * @return Text
+     * @return Id
      */
-    public function getNombre(): Text
+    public function getIdCliente(): Id
     {
-        return $this->nombre;
+        return $this->idCliente;
     }
 
     /**
-     * @param Text $nombre
+     * @param Id $idCliente
      */
-    public function setNombre(Text $nombre): void
+    public function setIdCliente(Id $idCliente): void
     {
-        $this->nombre = $nombre;
+        $this->idCliente = $idCliente;
+    }
+
+    /**
+     * @return NumericInteger
+     */
+    public function getIdTipoRuta(): NumericInteger
+    {
+        return $this->idTipoRuta;
+    }
+
+    /**
+     * @param NumericInteger $idTipoRuta
+     */
+    public function setIdTipoRuta(NumericInteger $idTipoRuta): void
+    {
+        $this->idTipoRuta = $idTipoRuta;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdRuta(): Id
+    {
+        return $this->idRuta;
+    }
+
+    /**
+     * @param Id $idRuta
+     */
+    public function setIdRuta(Id $idRuta): void
+    {
+        $this->idRuta = $idRuta;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdParaderoOrigen(): Id
+    {
+        return $this->idParaderoOrigen;
+    }
+
+    /**
+     * @param Id $idParaderoOrigen
+     */
+    public function setIdParaderoOrigen(Id $idParaderoOrigen): void
+    {
+        $this->idParaderoOrigen = $idParaderoOrigen;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdParaderoDestino(): Id
+    {
+        return $this->idParaderoDestino;
+    }
+
+    /**
+     * @param Id $idParaderoDestino
+     */
+    public function setIdParaderoDestino(Id $idParaderoDestino): void
+    {
+        $this->idParaderoDestino = $idParaderoDestino;
     }
 
     /**
@@ -161,22 +192,6 @@ final class Paradero
     public function setPrecioBase(NumericFloat $precioBase): void
     {
         $this->precioBase = $precioBase;
-    }
-
-    /**
-     * @return Id
-     */
-    public function getIdCliente(): Id
-    {
-        return $this->idCliente;
-    }
-
-    /**
-     * @param Id $idCliente
-     */
-    public function setIdCliente(Id $idCliente): void
-    {
-        $this->idCliente = $idCliente;
     }
 
     /**
@@ -278,70 +293,6 @@ final class Paradero
     /**
      * @return Text
      */
-    public function getRuta(): Text
-    {
-        return $this->ruta;
-    }
-
-    /**
-     * @param Text $ruta
-     */
-    public function setRuta(Text $ruta): void
-    {
-        $this->ruta = $ruta;
-    }
-
-    /**
-     * @return NumericFloat
-     */
-    public function getLatitud(): NumericFloat
-    {
-        return $this->latitud;
-    }
-
-    /**
-     * @param NumericFloat $latitud
-     */
-    public function setLatitud(NumericFloat $latitud): void
-    {
-        $this->latitud = $latitud;
-    }
-
-    /**
-     * @return NumericFloat
-     */
-    public function getLongitud(): NumericFloat
-    {
-        return $this->longitud;
-    }
-
-    /**
-     * @param NumericFloat $longitud
-     */
-    public function setLongitud(NumericFloat $longitud): void
-    {
-        $this->longitud = $longitud;
-    }
-
-    /**
-     * @return Id
-     */
-    public function getIdRuta(): Id
-    {
-        return $this->idRuta;
-    }
-
-    /**
-     * @param Id $idRuta
-     */
-    public function setIdRuta(Id $idRuta): void
-    {
-        $this->idRuta = $idRuta;
-    }
-
-    /**
-     * @return Text
-     */
     public function getTipoRuta(): Text
     {
         return $this->tipoRuta;
@@ -356,22 +307,84 @@ final class Paradero
     }
 
     /**
-     * @return NumericInteger
+     * @return Text
      */
-    public function getIdTipoRuta(): NumericInteger
+    public function getRuta(): Text
     {
-        return $this->idTipoRuta;
+        return $this->ruta;
     }
 
     /**
-     * @param NumericInteger $idTipoRuta
+     * @param Text $ruta
      */
-    public function setIdTipoRuta(NumericInteger $idTipoRuta): void
+    public function setRuta(Text $ruta): void
     {
-        $this->idTipoRuta = $idTipoRuta;
+        $this->ruta = $ruta;
     }
 
+    /**
+     * @return Text
+     */
+    public function getParaderoOrigen(): Text
+    {
+        return $this->paraderoOrigen;
+    }
 
+    /**
+     * @param Text $paraderoOrigen
+     */
+    public function setParaderoOrigen(Text $paraderoOrigen): void
+    {
+        $this->paraderoOrigen = $paraderoOrigen;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getParaderoDestino(): Text
+    {
+        return $this->paraderoDestino;
+    }
+
+    /**
+     * @param Text $paraderoDestino
+     */
+    public function setParaderoDestino(Text $paraderoDestino): void
+    {
+        $this->paraderoDestino = $paraderoDestino;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getUsuarioRegistro(): Text
+    {
+        return $this->usuarioRegistro;
+    }
+
+    /**
+     * @param Text $usuarioRegistro
+     */
+    public function setUsuarioRegistro(Text $usuarioRegistro): void
+    {
+        $this->usuarioRegistro = $usuarioRegistro;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getUsuarioModifico(): Text
+    {
+        return $this->usuarioModifico;
+    }
+
+    /**
+     * @param Text $usuarioModifico
+     */
+    public function setUsuarioModifico(Text $usuarioModifico): void
+    {
+        $this->usuarioModifico = $usuarioModifico;
+    }
 
 
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\V2\Paradero;
+namespace App\Http\Resources\V2\BoletoPrecio;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ShortParaderoResource extends JsonResource
+class ShortBoletoPrecioResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

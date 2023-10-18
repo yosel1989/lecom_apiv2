@@ -209,15 +209,14 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
     {
         $vehiculo = $this->eloquentModelVehiculo->findOrFail($id->value());
 
-        $count = $this->eloquentModelVehiculo->select('id')->where('id_cliente',$vehiculo->id_cliente)->count();
 
         // validar placa
         $countPlaca = $this->eloquentModelVehiculo->select('id')->where('id', '<>', $id->value())->where('id_cliente', $vehiculo->id_cliente)->where(DB::raw("UPPER(placa)"), mb_strtoupper($placa->value(), 'UTF-8') )->count();
-        if($count > 0){
+        if($countPlaca > 0){
             throw new \InvalidArgumentException('La placa ya se encuentra registrada');
         }
         $countPlaca = $this->eloquentModelVehiculo->select('id')->where('id', '<>', $id->value())->where(DB::raw("UPPER(placa)"), mb_strtoupper($placa->value(), 'UTF-8') )->count();
-        if($count > 0){
+        if($countPlaca > 0){
             throw new \InvalidArgumentException('La placa ya se encuentra registrada en el sistema con otro cliente');
         }
 

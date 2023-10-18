@@ -21,22 +21,22 @@ final class UpdateController
         $user = Auth::user();
         $idParadero     = $request->id;
         $nombre             = $request->input('nombre');
-        $precioBase         = $request->input('precioBase');
+//        $precioBase         = $request->input('precioBase');
         $latitud         = $request->input('latitud');
         $longitud         = $request->input('longitud');
         $idTipoRuta          = $request->input('idTipoRuta');
-        $idRuta          = $request->input('idRuta');
+//        $idRuta          = $request->input('idRuta');
         $idEstado           = $request->input('idEstado');
 
         $useCase = new UpdateUseCase( $this->repository );
         $useCase->__invoke(
             $idParadero,
             $nombre,
-            $precioBase,
+//            $precioBase,
             $latitud,
             $longitud,
             $idTipoRuta,
-            $idRuta,
+//            $idRuta,
             $idEstado,
             $user->getId()
         );

@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Src\V2\Paradero\Domain;
+namespace Src\V2\BoletoPrecio\Domain;
 
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 
-final class ParaderoShort
+final class BoletoPrecioShort
 {
     private Id $id;
     private Text $nombre;
@@ -30,19 +30,19 @@ final class ParaderoShort
     public function __construct(
         Id $id,
         Text $nombre,
-//        NumericFloat $precioBase,
+        NumericFloat $precioBase,
         NumericInteger $idTipoRuta,
-//        Id $idRuta,
+        Id $idRuta,
         NumericInteger $idEstado,
         NumericInteger $idEliminado
     )
     {
         $this->id = $id;
         $this->nombre = $nombre;
-//        $this->precioBase = $precioBase;
+        $this->precioBase = $precioBase;
         $this->idEstado = $idEstado;
         $this->idEliminado = $idEliminado;
-//        $this->idRuta = $idRuta;
+        $this->idRuta = $idRuta;
         $this->idTipoRuta = $idTipoRuta;
     }
 

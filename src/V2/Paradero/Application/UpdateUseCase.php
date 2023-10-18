@@ -23,33 +23,33 @@ final class UpdateUseCase
     public function __invoke(
         string $idParadero,
         string $nombre,
-        float $precioBase,
+//        float $precioBase,
         float $latitud,
         float $longitud,
         int $idTipoRuta,
-        string $idRuta,
+//        string $idRuta,
         int $idEstado,
         string $idUsuarioRegistro
     ): void
     {
         $_idParadero = new Id($idParadero,false,'El id del destino no tiene el formato correcto');
         $_nombre = new Text($nombre,false, 100,'El nombre de la destino excede los 100 caracteres');
-        $_precioBase = new NumericFloat($precioBase);
+//        $_precioBase = new NumericFloat($precioBase);
         $_latitud = new NumericFloat($latitud);
         $_longitud = new NumericFloat($longitud);
         $_idTipoRuta = new NumericInteger($idTipoRuta);
-        $_idRuta = new Id($idRuta,false,'El id de la ruta no tiene el formato correcto');
+//        $_idRuta = new Id($idRuta,false,'El id de la ruta no tiene el formato correcto');
         $_idEstado = new NumericInteger($idEstado);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
         $this->repository->update(
             $_idParadero,
             $_nombre,
-            $_precioBase,
+//            $_precioBase,
             $_latitud,
             $_longitud,
             $_idTipoRuta,
-            $_idRuta,
+//            $_idRuta,
             $_idEstado,
             $_idUsuarioRegistro
         );

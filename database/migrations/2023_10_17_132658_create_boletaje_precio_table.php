@@ -11,13 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('paradero', function (Blueprint $table) {
+        Schema::create('boleto_precio', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->string('nombre',100);
             $table->uuid('id_cliente');
             $table->mediumInteger('id_tipo_ruta');
-            $table->decimal('latitud',11,9)->default(0.0);
-            $table->decimal('longitud',11,9)->default(0.0);
+            $table->uuid('id_ruta');
+
+            $table->uuid('id_paradero_origen');
+            $table->uuid('id_paradero_destino');
+
+
+            $table->decimal('precio_base',5,2)->default(0.0);
             $table->tinyInteger('id_estado')->default(1);
             $table->tinyInteger('id_eliminado')->default(0);
             $table->uuid('id_usu_registro')->nullable();
@@ -25,7 +29,7 @@ return new class extends Migration
             $table->timestamp('f_registro');
             $table->timestamp('f_modifico')->nullable();
 
-            $table->index(['id', 'nombre', 'id_cliente', 'id_tipo_ruta', 'id_estado', 'id_eliminado', 'id_usu_registro', 'f_registro']);
+            $table->index(['id', 'id_tipo_ruta', 'id_ruta', 'id_paradero_origen', 'id_paradero_destino', 'precio_base', 'id_estado', 'id_eliminado', 'id_usu_registro', 'f_registro']);
         });
     }
 
@@ -34,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('paraderos');
+        Schema::dropIfExists('viaje_precio');
     }
 };
