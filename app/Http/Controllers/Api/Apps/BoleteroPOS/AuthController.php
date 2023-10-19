@@ -248,7 +248,13 @@ class AuthController extends Controller
                             'id' => $_equipopos->id,
                             'nombre' => $_equipopos->nombre
                         ],
-                        'tiposDocumento' => TipoDocumento::all()
+                        'tiposDocumento' => TipoDocumento::all()->map(function ($item) {
+                            return [
+                                'id' => $item->id,
+                                'nombre' => $item->nombre,
+                                'numeroDigitos' => $item->num_digitos
+                            ];
+                        })
 //                        '' => $Ousuario->client ? $Ousuario->client()->first(['id','bussiness_name', 'first_name', 'last_name']) : null,
 //                        'permissions' => $Ousuario->modules()->pluck('short_name')
                     ],

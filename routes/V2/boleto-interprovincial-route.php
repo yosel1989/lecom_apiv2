@@ -101,7 +101,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
 
-            $Paradero = \App\Models\V2\Paradero::where('id', $request->input('idParadero'))
+            $Paradero = \App\Models\V2\BoletoPrecio::where('id', $request->input('idParadero'))
                 ->where('idEstado',1)
                 ->where('idEliminado',0)
                 ->where('idCliente',$_cliente->id)
@@ -109,7 +109,7 @@ Route::middleware('auth:sanctum')->group(function() {
             if( $Paradero->isEmpty() ){
                 return response()->json([
                     'data'      => null,
-                    'error' => 'El paradero se encuentra registrado en el sistema o esta inhabilitado.',
+                    'error' => 'El viaje no se encuentra registrado en el sistema o esta inhabilitado.',
                     'status' => Response::HTTP_NOT_FOUND
                 ]);
             }
@@ -148,7 +148,7 @@ Route::middleware('auth:sanctum')->group(function() {
             if($_paradero->idRuta !== $_ruta->id){
                 return response()->json([
                     'data'      => null,
-                    'error' => 'El paradero '. $_paradero->nombre .' no esta asignado a la ruta ' . $_ruta->nombre,
+                    'error' => 'El viaje '. $_paradero->paraderoOrigen->nombre . ' - ' . $_paradero->paraderoDestino->nombre .' no esta registrado en la ruta ' . $_ruta->nombre,
                     'status' => Response::HTTP_NOT_FOUND
                 ]);
             }
@@ -381,7 +381,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
 
-            $Paradero = \App\Models\V2\Paradero::where('id', $request->input('idParadero'))
+            $Paradero = \App\Models\V2\BoletoPrecio::where('id', $request->input('idParadero'))
                 ->where('id_estado',1)
                 ->where('id_eliminado',0)
                 ->where('id_cliente',$_cliente->id)
@@ -389,7 +389,7 @@ Route::middleware('auth:sanctum')->group(function() {
             if( $Paradero->isEmpty() ){
                 return response()->json([
                     'data'      => null,
-                    'error' => 'El paradero se encuentra registrado en el sistema o esta inhabilitado.',
+                    'error' => 'El viaje no se encuentra registrado en el sistema o esta inhabilitado.',
                     'status' => Response::HTTP_NOT_FOUND
                 ]);
             }
@@ -428,7 +428,7 @@ Route::middleware('auth:sanctum')->group(function() {
             if($_paradero->idRuta !== $_ruta->id){
                 return response()->json([
                     'data'      => null,
-                    'error' => 'El paradero '. $_paradero->nombre .' no esta asignado a la ruta ' . $_ruta->nombre,
+                    'error' => 'El viaje '. $_paradero->paraderoOrigen->nombre . ' - ' . $_paradero->paraderoDestino->nombre .' no esta registrado en la ruta ' . $_ruta->nombre,
                     'status' => Response::HTTP_NOT_FOUND
                 ]);
             }
