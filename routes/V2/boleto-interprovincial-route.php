@@ -339,12 +339,12 @@ Route::middleware('auth:sanctum')->group(function() {
             /** @var \App\Models\V2\Pos | null $_pos */
             $_pos = null;
 
-            $Cliente = \App\Models\V2\Cliente::where('id', $request->idCliente)->where('idEstado',1)->where('idEliminado',0)->get();
+            $Cliente = \App\Models\V2\Cliente::where('id', $request->input('idCliente'))->where('idEstado',1)->where('idEliminado',0)->get();
             if( $Cliente->isEmpty() ){
                 return response()->json([
                     'data'      => null,
                     'error' => 'El cliente no se encuentra registrado en el sistema o esta inhabilitado.',
-                    'status' => Response::HTTP_NOT_FOUND
+                    'status' => 1004
                 ]);
             }
             $_cliente = $Cliente->first();
@@ -359,7 +359,7 @@ Route::middleware('auth:sanctum')->group(function() {
                 return response()->json([
                     'data'      => null,
                     'error' => 'El vehiculo no se encuentra registrado en el sistema o esta inhabilitado.',
-                    'status' => Response::HTTP_NOT_FOUND
+                    'status' => 1005
                 ]);
             }
             $_vehiculo = $Vehiculo->first();
@@ -374,7 +374,7 @@ Route::middleware('auth:sanctum')->group(function() {
                 return response()->json([
                     'data'      => null,
                     'error' => 'La ruta no se encuentra registrado en el sistema o esta inhabilitado.',
-                    'status' => Response::HTTP_NOT_FOUND
+                    'status' => 1006
                 ]);
             }
             $_ruta = $Ruta->first();
@@ -390,7 +390,7 @@ Route::middleware('auth:sanctum')->group(function() {
                 return response()->json([
                     'data'      => null,
                     'error' => 'El viaje no se encuentra registrado en el sistema o esta inhabilitado.',
-                    'status' => Response::HTTP_NOT_FOUND
+                    'status' => 1003
                 ]);
             }
             $_paradero = $Paradero->first();
@@ -405,7 +405,7 @@ Route::middleware('auth:sanctum')->group(function() {
                 return response()->json([
                     'data'      => null,
                     'error' => 'La caja no se encuentra registrado en el sistema o esta inhabilitado.',
-                    'status' => Response::HTTP_NOT_FOUND
+                    'status' => 1007
                 ]);
             }
             $_caja = $Caja->first();
@@ -419,93 +419,141 @@ Route::middleware('auth:sanctum')->group(function() {
                 return response()->json([
                     'data'      => null,
                     'error' => 'El equipo POS no se encuentra registrado en el sistema o esta inhabilitado.',
-                    'status' => Response::HTTP_NOT_FOUND
+                    'status' => 1008
                 ]);
             }
             $_pos = $Pos->first();
 
             /******* Verificar que el paradero insertado pertenece a la ruta ******************/
-            if($_paradero->idRuta !== $_ruta->id){
+            if($_paradero->id_ruta !== $_ruta->id){
                 return response()->json([
                     'data'      => null,
                     'error' => 'El viaje '. $_paradero->paraderoOrigen->nombre . ' - ' . $_paradero->paraderoDestino->nombre .' no esta registrado en la ruta ' . $_ruta->nombre,
-                    'status' => Response::HTTP_NOT_FOUND
+                    'status' => 1009
                 ]);
             }
             /******* Verificar que que la caja insertada pertenece al equipo POS ******************/
-            if($_caja->idPos !== $_pos->id){
+            if($_caja->id_pos !== $_pos->id){
                 return response()->json([
                     'data'      => null,
                     'error' => 'La caja ' . $_caja->nombre . ' no esta asignada al Equipo POS ' . $_pos->nombre,
-                    'status' => Response::HTTP_NOT_FOUND
+                    'status' => 1010
                 ]);
             }
 
 
-
-            if (!Schema::hasTable('boleto_interprovincial_cliente_' . $_cliente->codigo)) {
-                DB::statement("CREATE TABLE boleto_interprovincial_cliente_' . $_cliente->codigo . ' LIKE boleto_interprovincial");
-
-//                Schema::create('boleto_interprovincial_' . $_cliente->codigo, function (Blueprint $table) {
-//                    $table->uuid('id')->unique()->primary();
-//                    $table->uuid('idRuta')->nullable();
-//                    $table->uuid('idParadero')->nullable();
-//                    $table->uuid('idVehiculo')->nullable();
-//                    $table->uuid('idCaja')->nullable();
-//                    $table->uuid('idPos')->nullable();
-//                    $table->uuid('idCliente')->nullable();
-//                    $table->smallInteger('idTipoDocumento')->nullable();
-//                    $table->string('numeroDocumento',20)->nullable();
-//                    $table->string('nombre',250)->nullable();
-//                    $table->string('direccion',250)->nullable();
-//                    $table->string('codigoBoleto',30)->nullable();
-//                    $table->decimal('latitud',10,8)->nullable();
-//                    $table->decimal('longitud',10,8)->nullable();
-//                    $table->decimal('precio',5,2);
-//                    $table->dateTime('fecha');
-//                    $table->tinyInteger('idEstado')->default(1);
-//                    $table->tinyInteger('idEliminado')->default(0);
-//                    $table->tinyInteger('anulado')->default(0);
-//                    $table->tinyInteger('enBlanco')->default(0);
-//                    $table->uuid('idUsuarioRegistro');
-//                    $table->uuid('idUsuarioModifico')->nullable();
-//                    $table->timestamp('fechaRegistro');
-//                    $table->timestamp('fechaModifico')->nullable();
-//                });
-            }
+//            if (!Schema::hasTable('boleto_interprovincial_cliente_' . $_cliente->codigo)) {
+//                DB::statement("CREATE TABLE boleto_interprovincial_cliente_' . $_cliente->codigo . ' LIKE boleto_interprovincial");
+//
+////                Schema::create('boleto_interprovincial_' . $_cliente->codigo, function (Blueprint $table) {
+////                    $table->uuid('id')->unique()->primary();
+////                    $table->uuid('idRuta')->nullable();
+////                    $table->uuid('idParadero')->nullable();
+////                    $table->uuid('idVehiculo')->nullable();
+////                    $table->uuid('idCaja')->nullable();
+////                    $table->uuid('idPos')->nullable();
+////                    $table->uuid('idCliente')->nullable();
+////                    $table->smallInteger('idTipoDocumento')->nullable();
+////                    $table->string('numeroDocumento',20)->nullable();
+////                    $table->string('nombre',250)->nullable();
+////                    $table->string('direccion',250)->nullable();
+////                    $table->string('codigoBoleto',30)->nullable();
+////                    $table->decimal('latitud',10,8)->nullable();
+////                    $table->decimal('longitud',10,8)->nullable();
+////                    $table->decimal('precio',5,2);
+////                    $table->dateTime('fecha');
+////                    $table->tinyInteger('idEstado')->default(1);
+////                    $table->tinyInteger('idEliminado')->default(0);
+////                    $table->tinyInteger('anulado')->default(0);
+////                    $table->tinyInteger('enBlanco')->default(0);
+////                    $table->uuid('idUsuarioRegistro');
+////                    $table->uuid('idUsuarioModifico')->nullable();
+////                    $table->timestamp('fechaRegistro');
+////                    $table->timestamp('fechaModifico')->nullable();
+////                });
+//            }
 
             $model = new \App\Models\V2\BoletoInterprovincialOficial();
-            $model->setTable('boleto_interprovincial_cliente_' . $Cliente->first()->codigo);
+            $model->setTable('boleto_interprovincial_cliente_' . $_cliente->codigo);
 
 
 
             /******* Validar que el boleto  ******************/
-            if($model->where('codigo',$request->input('codigoBoleto'))->get()->count()){
+            if($model->where('codigo',$request->input('codigoBoleto'))->count() > 0){
                 return response()->json([
                     'data' => null,
-                    'error' => 'El código del boleto ya fue registrado',
-                    'status' => 1001
+                    'error' => null,
+                    'status' => Response::HTTP_CREATED
                 ]);
+//                return response()->json([
+//                    'data' => null,
+//                    'error' => 'El código del boleto ya fue registrado',
+//                    'status' => 1001
+//                ]);
             }
-            /******* Validar que el comprobante  ******************/
-            if(\App\Models\V2\ComprobanteElectronico::where('serie',$request->input('serie'))->where('numero',$request->input('numero'))->get()->count()){
-                return response()->json([
-                    'data' => null,
-                    'error' => 'La serie y el número de comprobante ya fueron registrados',
-                    'status' => 1002
-                ]);
-            }
+//            /******* Validar que el comprobante  ******************/
+//            if(\App\Models\V2\ComprobanteElectronico::where('serie',$request->input('serie'))->where('numero',$request->input('numero'))->get()->count()){
+//                return response()->json([
+//                    'data' => null,
+//                    'error' => 'La serie y el número de comprobante ya fueron registrados',
+//                    'status' => 1002
+//                ]);
+//            }
 
             /******* Validar viaje  ******************/
             $existe  = \App\Models\V2\BoletoPrecio::select('id')
-                ->where('id_cliente', $request->input('idParadero'))
-                ->where('id_cliente', $request->idCliente)
+                ->where('id', $request->input('idParadero'))
+                ->where('id_cliente', $_cliente->id)
                 ->where('id_ruta', $request->input('idRuta'))->count();
             if($existe == 0){
-                throw new InvalidArgumentException('El viaje no se encuentra registrado en el sistema');
+//                throw new InvalidArgumentException('El viaje no se encuentra registrado en el sistema');
+                return response()->json([
+                    'data' => null,
+                    'error' => 'El viaje no se encuentra registrado en el sistema',
+                    'status' => 1003
+                ]);
             }
-            $viaje = \App\Models\V2\BoletoPrecio::select('id')->where('id_cliente', $request->idCliente)->where('id_ruta', $request->input('idRuta'))->first();
+            $viaje = \App\Models\V2\BoletoPrecio::select('id', 'id_paradero_origen', 'id_paradero_destino')->where('id_cliente', $_cliente->id)->where('id_ruta', $request->input('idRuta'))->first();
 
+
+
+            /************ Validar boleto *****************/
+            $boletoValido = \App\Models\V2\BoletoInterprovincialOficial::select('id')
+                ->where('codigo', $request->input('codigoBoleto'))
+                ->where('id_cliente', $_cliente->id )
+                ->count();
+            if($boletoValido > 0){
+                return response()->json([
+                    'data' => null,
+                    'error' => null,
+                    'status' => Response::HTTP_CREATED
+                ]);
+//                return response()->json([
+//                    'data' => null,
+//                    'error' => 'El código del boleto ya fue registrado',
+//                    'status' => 1001
+//                ]);
+            }
+
+            /************ Validar comprobante *****************/
+            $comprobanteValido = \App\Models\V2\ComprobanteElectronico::select('id')
+                ->where('id_tipo_comprobante', $request->input('idTipoComprobante'))
+                ->where('serie', $request->input('serieComprobante'))
+                ->where('numero', $request->input('numeroComprobante'))
+                ->where('id_cliente', $_cliente->id )
+                ->count();
+            if($comprobanteValido > 0){
+                return response()->json([
+                    'data' => null,
+                    'error' => null,
+                    'status' => Response::HTTP_CREATED
+                ]);
+//                return response()->json([
+//                    'data' => null,
+//                    'error' => 'El comprobante ya fue registrado',
+//                    'status' => 1002
+//                ]);
+            }
 
             $model->create([
                 'id' => $idBoleto,
@@ -515,7 +563,7 @@ Route::middleware('auth:sanctum')->group(function() {
                 'id_vehiculo' => $request->input('idVehiculo'),
                 'id_caja' => $request->input('idCaja'),
                 'id_pos' => $request->input('idPos'),
-                'id_cliente' => $request->idCliente,
+                'id_cliente' => $_cliente->id,
 
                 // boleto
                 'codigo' => $request->input('codigoBoleto'),
@@ -525,8 +573,7 @@ Route::middleware('auth:sanctum')->group(function() {
                 'f_partida' => (new DateTime($request->input('fecha')))->format('Y-m-d'),
                 'h_partida' => (new DateTime($request->input('hora')))->format('H:m:s'),
                 'id_usu_registro' => $user->getId(),
-                'id_sede' => null,
-
+                'id_sede' => $_caja->id_sede,
 
                 //pasajero
                 'id_tipo_documento' => $request->input('idTipoDocumento'),
@@ -589,8 +636,8 @@ Route::middleware('auth:sanctum')->group(function() {
 
             \App\Models\V2\ComprobanteElectronico::create([
                 'id' => $idComprobanteElectronico,
-                'id_cliente' => $request->input('idCliente'),
-                'id_sede' => null,
+                'id_cliente' => $_cliente->id,
+                'id_sede' => $_caja->id_sede,
 
                 'id_tipo_comprobante' => $idTipoComprobante,
                 'serie' => $serieComprobante,
