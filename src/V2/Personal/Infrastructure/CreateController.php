@@ -4,6 +4,8 @@ namespace Src\V2\Personal\Infrastructure;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Facades\Image;
+use Ramsey\Uuid\Uuid;
 use Src\V2\Personal\Application\CreateUseCase;
 use Src\V2\Personal\Infrastructure\Repositories\EloquentPersonalRepository;
 
@@ -18,8 +20,21 @@ final class CreateController
 
     public function __invoke( Request $request ): void
     {
+        $id         = Uuid::uuid4();
+
+        if($request->foto !== 'null'){
+            $request->validate([
+                'imagen' => 'image|mimes:jpeg,jpg'
+            ]);
+        }
+
+        $fileName = (is_null($request->foto) || $request->foto === 'null') ? null : ($id . '.' . $request->foto->extension());
+        if( !is_null($request->file('foto')) ){
+            $this->resizeAndSTore(300,300,$request->file('foto'),$id,$fileName);
+        }
+
         $user = Auth::user();
-        $foto            = $request->input('foto');
+//        $foto            = $request->file('foto');
         $apellido        = $request->input('apellido');
         $nombre          = $request->input('nombre');
         $idCliente       = $request->idCliente;
@@ -31,7 +46,8 @@ final class CreateController
 
         $useCase = new CreateUseCase( $this->repository );
         $useCase->__invoke(
-            $foto,
+            $id,
+            $fileName,
             $nombre,
             $apellido,
             $idTipoDocumento,
@@ -43,4 +59,16 @@ final class CreateController
             $user->getId()
         );
     }
+
+    private function resizeAndSTore( int $width, ?int $height, $image, string $idClient, string $filename ){
+        $img = $image;
+
+        //Create a Image object with the tmp path
+        $image_resize = Image::make($img->getRealPath());
+        $image_resize->resize($width, $height, function ($constraint) {
+            $constraint->aspectRatio();
+        });
+        $image_resize->save(public_path("uploads/" . $filename));
+    }
+
 }

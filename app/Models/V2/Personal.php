@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Personal extends Model
 {
-    use UUID;
+//    use UUID;
 
     protected $keyType = 'string';
     public $incrementing = false;

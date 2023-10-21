@@ -20,6 +20,7 @@ final class CreateUseCase
     }
 
     public function __invoke(
+        string $id,
         ?string $foto,
         string $nombre,
         string $apellido,
@@ -32,6 +33,7 @@ final class CreateUseCase
         string $idUsuarioRegistro
     ): void
     {
+        $_id = new Id($id,false,'El id no tiene el formato correcto');
         $_foto = new Text($foto,true, 99999,'La foto excede el maximo de caracteres');
         $_nombre = new Text($nombre,false, 150,'El nombre excede los 150 caracteres');
         $_apellido = new Text($apellido,false, 150,'El apellido excede los 150 caracteres');
@@ -44,6 +46,7 @@ final class CreateUseCase
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
         $this->repository->create(
+            $_id,
             $_foto,
             $_nombre,
             $_apellido,

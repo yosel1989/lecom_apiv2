@@ -102,6 +102,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
     }
 
     public function create(
+        Id $id,
         Text $foto,
         Text $nombre,
         Text $apellido,
@@ -115,6 +116,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
     ): void
     {
         $this->eloquentModelPersonal->create([
+            'id' => $id->value(),
             'foto' => $foto->value(),
             'nombre' => $nombre->value(),
             'apellido' => $apellido->value(),

@@ -10,6 +10,7 @@ use Src\V2\Personal\Domain\Personal;
 interface PersonalRepositoryContract
 {
     public function create(
+        Id $id,
         Text $foto,
         Text $nombre,
         Text $apellido,
