@@ -174,7 +174,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
         Id $idPersonal,
     ): Personal
     {
-        ini_set('max_execution_time', '180');
+//        ini_set('max_execution_time', '180');
 
         $model = $this->eloquentModelPersonal->with(
             'sede:id,nombre',

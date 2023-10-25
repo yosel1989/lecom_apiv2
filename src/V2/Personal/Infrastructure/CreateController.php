@@ -52,7 +52,7 @@ final class CreateController
         $useCase = new CreateUseCase( $this->repository );
         $useCase->__invoke(
             $id,
-            asset("uploads/" . $cliente->id . "/" .$fileName),
+            $fileName ? ("uploads/" . $cliente->id . "/" .$fileName) : null,
             $nombre,
             $apellido,
             $idTipoDocumento,

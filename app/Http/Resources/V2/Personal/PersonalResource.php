@@ -24,7 +24,7 @@ class PersonalResource extends JsonResource
         // Map Domain User model values
         return [
             'id'            => $this->getId()->value(),
-            'foto'          => $this->getFoto()->value(),
+            'foto'          => $this->getFoto()->value() ? asset($this->getFoto()->value()) : null,
             'fotoBase64'    =>  $this->getFotoBase64()->value(),
             'nombre'          => $this->getNombre()->value(),
             'apellido'       => $this->getApellido()->value(),
