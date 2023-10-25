@@ -60,7 +60,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
             $OModel->setSede( new Text( !is_null($model->sede) ? $model->sede->nombre : null,true, -1 ) );
             $OModel->setTipoDocumento(new Text(!is_null($model->tipoDocumento) ? $model->tipoDocumento->nombre : null, true, -1));
-
+            $OModel->setFotoBase64(new Text(null, true, -1));
 
             $arrVehicles[] = $OModel;
         }
@@ -115,6 +115,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
         Id $idUsuarioRegistro
     ): void
     {
+
         $this->eloquentModelPersonal->create([
             'id' => $id->value(),
             'foto' => $foto->value(),
@@ -173,6 +174,8 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
         Id $idPersonal,
     ): Personal
     {
+        ini_set('max_execution_time', '180');
+
         $model = $this->eloquentModelPersonal->with(
             'sede:id,nombre',
             'usuarioRegistro:id,nombres,apellidos',
@@ -196,12 +199,22 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             new DateTimeFormat($model->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
             new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
         );
+        $fotoBase64 = null;
+//        if($model->foto){
+//            $ch = curl_init();
+//            curl_setopt($ch, CURLOPT_HEADER, 0);
+//            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
+//            curl_setopt($ch, CURLOPT_URL, $model->foto);
+//            $fotoBase64 = base64_encode(curl_exec($ch));
+//            curl_close($ch);
+//        }
+//        $fotoBase64 = $model->foto ? base64_encode(file_get_contents($model->foto,false,$context)) : null;
 
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
         $OModel->setSede( new Text( !is_null($model->sede) ? $model->sede->nombre : null,true, -1 ) );
         $OModel->setTipoDocumento(new Text(!is_null($model->tipoDocumento) ? $model->tipoDocumento->nombre : null, true, -1));
-
+        $OModel->setFotoBase64(new Text(!is_null($fotoBase64) ? $fotoBase64 : null, true, -1));
 
         return $OModel;
     }

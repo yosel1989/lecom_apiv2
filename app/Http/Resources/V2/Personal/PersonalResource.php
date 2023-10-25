@@ -14,10 +14,18 @@ class PersonalResource extends JsonResource
      */
     public function toArray($request)
     {
+//        $image = file_get_contents($this->getFoto()->value());
+//        $urlImage = '';
+//        if ($image !== false){
+//            $urlImage = 'data:image/jpg;base64,'.base64_encode($image);
+//        }
+
+
         // Map Domain User model values
         return [
             'id'            => $this->getId()->value(),
             'foto'          => $this->getFoto()->value(),
+            'fotoBase64'    =>  $this->getFotoBase64()->value(),
             'nombre'          => $this->getNombre()->value(),
             'apellido'       => $this->getApellido()->value(),
             'idCliente'       => $this->getIdCliente()->value(),

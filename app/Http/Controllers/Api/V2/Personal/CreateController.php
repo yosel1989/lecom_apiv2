@@ -28,7 +28,7 @@ class CreateController extends Controller
     public function __invoke(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
-            return response()->json($_POST);
+//            return response()->json($_POST);
 
 
             $this->controller->__invoke($request);
