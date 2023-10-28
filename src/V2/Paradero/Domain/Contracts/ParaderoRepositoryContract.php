@@ -25,6 +25,7 @@ interface ParaderoRepositoryContract
     public function collectionByCliente(Id $idCliente): array;
     public function listByCliente(Id $idCliente): array;
     public function listByClienteByRuta(Id $idCliente, Id $idRuta): array;
+    public function listByClienteByTipoRuta(Id $idCliente, NumericInteger $idRuta): array;
 
     public function update(
         Id $id,
