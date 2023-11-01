@@ -2,8 +2,10 @@
 
 namespace Src\V2\Personal\Infrastructure;
 
+use App\Models\V2\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Ramsey\Uuid\Uuid;
 use Src\V2\Personal\Application\CreateUseCase;
@@ -24,13 +26,16 @@ final class CreateController
 
         if($request->foto !== 'null'){
             $request->validate([
-                'imagen' => 'image|mimes:jpeg,jpg'
+                'foto' => 'image|mimes:jpeg,jpg'
             ]);
         }
 
+        // obtener el cliente
+        $cliente = Cliente::findOrFail($request->idCliente);
+
         $fileName = (is_null($request->foto) || $request->foto === 'null') ? null : ($id . '.' . $request->foto->extension());
         if( !is_null($request->file('foto')) ){
-            $this->resizeAndSTore(300,300,$request->file('foto'),$id,$fileName);
+            $this->resizeAndSTore(300,300,$request->file('foto'),$cliente,$fileName);
         }
 
         $user = Auth::user();
@@ -47,7 +52,7 @@ final class CreateController
         $useCase = new CreateUseCase( $this->repository );
         $useCase->__invoke(
             $id,
-            $fileName,
+            $fileName ? ("uploads/" . $cliente->id . "/" .$fileName) : null,
             $nombre,
             $apellido,
             $idTipoDocumento,
@@ -60,7 +65,7 @@ final class CreateController
         );
     }
 
-    private function resizeAndSTore( int $width, ?int $height, $image, string $idClient, string $filename ){
+    private function resizeAndSTore( int $width, ?int $height, $image, Cliente $cliente, string $filename ){
         $img = $image;
 
         //Create a Image object with the tmp path
@@ -68,7 +73,26 @@ final class CreateController
         $image_resize->resize($width, $height, function ($constraint) {
             $constraint->aspectRatio();
         });
-        $image_resize->save(public_path("uploads/" . $filename));
+
+        // verificar que la carpeta existe, sino crearla
+        if(!file_exists(public_path("uploads"))){
+            mkdir(public_path("uploads"), 666, true);
+        }
+
+        // verificar que la carpeta cliente, sino crearla
+        if(!file_exists(public_path("uploads/" . $cliente->id))){
+            // Crear folder para el cliente
+            mkdir(public_path("uploads/" . $cliente->id ), 666, true);
+            // Crear archivo de información
+            $info = '';
+            $info .= 'Id Cliente: ' . $cliente->id . PHP_EOL;
+            $info .= 'Código Cliente: ' . $cliente->codigo . PHP_EOL;
+            $info .= 'Nombre Cliente: ' . $cliente->nombre . PHP_EOL;
+            $info .= 'Fecha Registro: ' . $cliente->fechaRegistro . PHP_EOL;
+            Storage::disk('public')->put($cliente->id . "/info.txt" , $info);
+        }
+
+        $image_resize->save(public_path("uploads/" . $cliente->id . "/" . $filename));
     }
 
 }

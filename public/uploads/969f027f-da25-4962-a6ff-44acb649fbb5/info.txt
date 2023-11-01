@@ -1,0 +1,4 @@
+Id Cliente: 969f027f-da25-4962-a6ff-44acb649fbb5
+Código Cliente: 1
+Nombre Cliente: demo demo
+Fecha Registro: 2023-10-16 12:25:57

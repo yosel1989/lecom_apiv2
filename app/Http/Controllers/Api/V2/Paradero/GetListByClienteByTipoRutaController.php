@@ -1,20 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Api\V2\BoletoInterprovincial;
+namespace App\Http\Controllers\Api\V2\Paradero;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V2\BoletoInterprovincial\BoletoInterprovincialOficialResource;
-use App\Http\Resources\V2\BoletoInterprovincial\BoletoInterprovincialResource;
+use App\Http\Resources\V2\Paradero\ShortParaderoResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
 
-class GetReportByClienteController extends Controller
+class GetListByClienteByTipoRutaController extends Controller
 {
-    private \Src\V2\BoletoInterprovincial\Infrastructure\GetReportByClienteController $controller;
+    private \Src\V2\Paradero\Infrastructure\GetListByClienteByTipoRutaController $controller;
 
-    public function __construct(\Src\V2\BoletoInterprovincial\Infrastructure\GetReportByClienteController $controller)
+    public function __construct(\Src\V2\Paradero\Infrastructure\GetListByClienteByTipoRutaController $controller)
     {
         $this->controller = $controller;
     }
@@ -24,9 +23,9 @@ class GetReportByClienteController extends Controller
     {
         try {
 
-            //return response()->json(BoletoInterprovincial::all());
+            //return response()->json(Paradero::all());
 
-            $collection = BoletoInterprovincialOficialResource::collection($this->controller->__invoke($request));
+            $collection = ShortParaderoResource::collection($this->controller->__invoke($request));
             return response()->json([
                 'data' => $collection,
                 'error' =>  null,
@@ -49,8 +48,8 @@ class GetReportByClienteController extends Controller
                 'data' => [],
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
-                'status' => Response::HTTP_BAD_REQUEST
-            ], Response::HTTP_BAD_REQUEST);
+                'status' => $e->getCode()
+            ]);
 
         }
     }

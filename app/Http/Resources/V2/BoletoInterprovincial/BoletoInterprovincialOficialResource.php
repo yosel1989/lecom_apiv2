@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Http\Resources\V2\BoletoInterprovincial;
+
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class BoletoInterprovincialOficialResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        // Map Domain User model values
+        return [
+            'id'            => $this->getId()->value(),
+            'idCliente'            => $this->getIdCliente()->value(),
+            'idSede'            => $this->getIdSede()->value(),
+            'sede'            => $this->getSede()->value(),
+            'idCaja'            => $this->getIdCaja()->value(),
+            'caja'            => $this->getCaja()->value(),
+            'idTipoDocumento'            => $this->getIdTipoDocumento()->value(),
+            'tipoDocumento'            => $this->getTipoDocumento()->value(),
+            'numeroDocumento'            => $this->getNumeroDocumento()->value(),
+            'nombres'            => $this->getNombres()->value(),
+            'apellidos'            => $this->getApellidos()->value(),
+            'menorEdad'            => $this->getMenorEdad()->value(),
+            'idVehiculo'            => $this->getIdVehiculo()->value(),
+            'idAsiento'            => $this->getIdAsiento()->value(),
+            'fechaPartida'            => $this->getFechaPartida()->value(),
+            'horaPartida'            => $this->getHoraPartida()->value(),
+            'idRuta'            => $this->getIdRuta()->value(),
+            'idParaderoOrigen'            => $this->getIdParaderoOrigen()->value(),
+            'idParaderoDestino'            => $this->getIdParaderoDestino()->value(),
+            'precio'            => $this->getPrecio()->value(),
+            'idTipoMoneda'            => $this->getIdTipoMoneda()->value(),
+            'idFormaPago'            => $this->getIdFormaPago()->value(),
+            'obsequio'            => $this->getObsequio()->value(),
+            'idPos'            => $this->getIdPos()->value(),
+            'codigo'            => $this->getCodigo()->value(),
+            'latitud'            => $this->getLatitud()->value(),
+            'longitud'            => $this->getLongitud()->value(),
+            'fechaEmision'            => $this->getFechaEmision()->value(),
+            'idEstado'            => $this->getIdEstado()->value(),
+            'idUsuarioRegistro'            => $this->getIdUsuarioRegistro()->value(),
+            'idUsuarioModifico'            => $this->getIdUsuarioModifico()->value(),
+            'fechaRegistro'            => $this->getFechaRegistro()->value(),
+            'fechaModifico'            => $this->getFechaModifico()->value(),
+            'idTipoComprobante'            => $this->getIdTipoComprobante()->value(),
+            'idTipoBoleto'            => $this->getIdTipoBoleto()->value(),
+            'porPagar'            => $this->getPorPagar()->value(),
+        ];
+
+    }
+}

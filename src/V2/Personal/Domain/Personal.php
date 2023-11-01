@@ -32,6 +32,7 @@ final class Personal
     private Text $usuarioRegistro;
     private Text $sede;
     private Text $tipoDocumento;
+    private Text $fotoBase64;
 
     /**
      * @param Id $id
@@ -388,6 +389,22 @@ final class Personal
     public function setTipoDocumento(Text $tipoDocumento): void
     {
         $this->tipoDocumento = $tipoDocumento;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getFotoBase64(): Text
+    {
+        return $this->fotoBase64;
+    }
+
+    /**
+     * @param Text $fotoBase64
+     */
+    public function setFotoBase64(Text $fotoBase64): void
+    {
+        $this->fotoBase64 = $fotoBase64;
     }
 
 
