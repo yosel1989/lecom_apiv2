@@ -56,8 +56,7 @@ class OpenController extends Controller
             }
 
 
-
-            $TiposComprobante = \App\Models\V2\TipoComprobante::where('bl_punto_venta', EnumPuntoVenta::Si)
+            $TiposComprobante = \App\Models\V2\TipoComprobante::where('bl_punto_venta', 1)
                 ->get();
             if( $TiposComprobante->isEmpty() ){
                 return response()->json([
