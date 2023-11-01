@@ -18,7 +18,8 @@ class BoletoInterprovincialResource extends JsonResource
         return [
             'id'            => $this->getId()->value(),
             'idRuta'       => $this->getIdRuta()->value(),
-            'idParadero'       => $this->getIdParadero()->value(),
+            'idParaderoOrigen'       => $this->getIdParaderoOrigen()->value(),
+            'idParaderoDestino'       => $this->getIdParaderoDestino()->value(),
             'idVehiculo'       => $this->getIdVehiculo()->value(),
             'idCaja'       => $this->getIdCaja()->value(),
             'idPos'       => $this->getIdPos()->value(),

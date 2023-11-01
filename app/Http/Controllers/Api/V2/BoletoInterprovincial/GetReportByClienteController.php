@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V2\BoletoInterprovincial;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\V2\BoletoInterprovincial\BoletoInterprovincialOficialResource;
 use App\Http\Resources\V2\BoletoInterprovincial\BoletoInterprovincialResource;
 use Exception;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class GetReportByClienteController extends Controller
 
             //return response()->json(BoletoInterprovincial::all());
 
-            $collection = BoletoInterprovincialResource::collection($this->controller->__invoke($request));
+            $collection = BoletoInterprovincialOficialResource::collection($this->controller->__invoke($request));
             return response()->json([
                 'data' => $collection,
                 'error' =>  null,

@@ -13,6 +13,7 @@ use App\Models\V2\Caja;
 use App\Models\V2\Cliente as EloquentModelClient;
 use App\Models\V2\Paradero;
 use App\Models\V2\Ruta;
+use App\Models\V2\Sede;
 use App\Models\V2\TipoDocumento;
 use App\Models\V2\Vehiculo;
 use InvalidArgumentException;
@@ -76,21 +77,10 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
                 new NumericInteger($model->obsequio),
                 new NumericInteger($model->id_tipo_comprobante),
                 new NumericInteger($model->id_tipo_documento_entidad),
-                new Id($model->idPos, true, 'El id del pos no tiene el formato correcto'),
-                new Text($model->direccion, true, -1, ''),
-                new Text($model->serie, true, -1, ''),
-                new Text($model->numeroBoleto, true, -1, ''),
-                new Text($model->codigoBoleto, false, -1, ''),
-                new NumericFloat($model->latitud),
-                new NumericFloat($model->longitud),
-                new DateTimeFormat($model->fecha),
-                new NumericInteger($model->idEstado->value),
-                new NumericInteger($model->idEliminado->value),
-                new NumericInteger($model->enBlanco->value),
-                new Id($model->idUsuarioRegistro, false, 'El id del usuario que registro no tiene el formato correcto'),
-                new Id($model->idUsuarioModifico, true, 'El id del boleto no tiene el formato correcto'),
-                new DateTimeFormat($model->fechaRegistro),
-                new DateTimeFormat($model->fechaModifico)
+                new Text($model->numero_documento_entidad, false, -1),
+                new Text($model->nombre_entidad, false, -1, ''),
+                new Text($model->direccion_entidad, true, -1, ''),
+                new Id($model->id_usu_registro, false, 'El id del usuario no tiene el formato correcto'),
             );
 
 //            $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
@@ -101,7 +91,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
             $OModel->setUsuarioRegistro(new Text('', true, -1));
             $OModel->setUsuarioModifico(new Text('', true, -1));
-            $OModel->setVehiculo(new Text('', true, -1));
+//            $OModel->setVehiculo(new Text('', true, -1));
 //            $OModel->setDestino(new Text('', true, -1));
 
             $arrVehicles[] = $OModel;
@@ -112,8 +102,6 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
     public function reportByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): array
     {
-        set_time_limit(240);
-
 
         $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
         $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
@@ -131,74 +119,50 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
         foreach ( $models as $model ){
 
-            $OModel = new BoletoInterprovincial(
+            $OModel = new BoletoInterprovincialOficial(
                 new Id($model->id, false, 'El id del boleto no tiene el formato correcto'),
-                new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
                 new Id($model->id_cliente, true, 'El id del cliente no tiene el formato correcto'),
-                new Id($model->id_vehiculo, true, 'El id del vehiculo no tiene el formato correcto'),
-                new Id($model->id_ruta, true, 'El id de la ruta no tiene el formato correcto'),
-                new Id($model->id_paradero, true, 'El id del paradero no tiene el formato correcto'),
+                new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
                 new Id($model->id_caja, true, 'El id de la caja no tiene el formato correcto'),
-                new Id($model->id_pos, true, 'El id del pos no tiene el formato correcto'),
                 new NumericInteger($model->id_tipo_documento->value),
                 new Text($model->numero_documento, false, -1, ''),
-                new Text('nombre', true, -1, ''),
-                new Text('direccion', true, -1, ''),
-                new Text('serie-comprobante', true, -1, ''),
-                new Text('numero-comprobante', true, -1, ''),
-                new Text($model->codigo, false, -1, ''),
+                new Text($model->nombres, false, -1, ''),
+                new Text($model->apellidos, false, -1, ''),
+                new NumericInteger((int)$model->menor_edad),
+                new Id($model->id_vehiculo, true, 'El id del vehiculo no tiene el formato correcto'),
+                new Id($model->id_asiento, true, 'El id del asiento no tiene el formato correcto'),
+                new DateFormat($model->f_partida, true, 'La fecha de partida no tiene el formato correcto'),
+                new TimeFormat($model->h_partida, true, 'La hora de partida no tiene el formato correcto'),
+                new Id($model->id_ruta, true, 'El id de la ruta no tiene el formato correcto'),
+                new Id($model->id_paradero_origen, true, 'El id del paradero origen no tiene el formato correcto'),
+                new Id($model->id_paradero_destino, true, 'El id del paradero destino no tiene el formato correcto'),
+                new NumericFloat($model->precio),
+                new NumericInteger($model->id_tipo_moneda->value),
+                new NumericInteger($model->id_forma_pago->value),
+                new NumericInteger((int)$model->obsequio),
+                new Id($model->id_pos, true, 'El id del pos no tiene el formato correcto'),
+                new Text($model->codigo, false, -1),
                 new NumericFloat($model->latitud),
                 new NumericFloat($model->longitud),
-                new NumericFloat($model->precio),
-                new DateTimeFormat($model->f_partida . ' ' . $model->h_partida),
-                new NumericInteger($model->id_estado->value),
-                new NumericInteger(0),
-                new NumericInteger(0),
+                new DateTimeFormat($model->f_emision),
+                new NumericInteger($model->idEstado),
                 new Id($model->id_usu_registro, false, 'El id del usuario que registro no tiene el formato correcto'),
-                new Id($model->id_usu_modifico, true, 'El id del boleto no tiene el formato correcto'),
+                new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
                 new DateTimeFormat($model->f_registro),
-                new DateTimeFormat($model->f_modifico)
+                new DateTimeFormat($model->f_modifico),
+                new NumericInteger($model->id_tipo_comprobante->value),
+                new NumericInteger($model->id_tipo_boleto->value),
+                new NumericInteger((int)$model->por_pagar),
             );
 
-            $OModel->setUsuarioRegistro(new Text('', true, -1));
-            $OModel->setUsuarioModifico(new Text('', true, -1));
-            $OModel->setVehiculo(new Text('', true, -1));
-            $OModel->setRuta(new Text('', true, -1));
-            $OModel->setParadero(new Text('', true, -1));
+            $TipoDocumento = $model->id_tipo_documento ? TipoDocumento::findOrFail($model->id_tipo_documento->value, ['nombre_corto']) : null;
+            $OModel->setTipoDocumento(new Text(($TipoDocumento?->nombre_corto), true, -1));
 
-            $TipoDocumento = TipoDocumento::findOrFail($model->id_tipo_documento->value);
-            $OModel->setTipoDocumento(new Text($TipoDocumento->nombre, true, -1));
+            $Sede = $model->id_sede ? Sede::findOrFail($model->id_sede, ['nombre']) : null;
+            $OModel->setSede(new Text(($Sede?->nombre), true, -1));
 
-            if($model->id_ruta){
-                $Ruta = Ruta::findOrFail($model->id_ruta);
-                $OModel->setRuta(new Text($Ruta->nombre, true, -1));
-            }
-
-            if($model->id_vehiculo){
-                $Vehiculo = Vehiculo::findOrFail($model->id_vehiculo);
-                $OModel->setVehiculo(new Text($Vehiculo->placa, true, -1));
-            }
-
-            if($model->id_paradero){
-                $Paradero = Paradero::findOrFail($model->id_paradero);
-                $OModel->setParadero(new Text($Paradero->nombre, true, -1));
-            }
-
-            if($model->id_usu_registro){
-                $Usuario = User::findOrFail($model->id_usu_registro);
-                $OModel->setUsuarioRegistro(new Text($Usuario->nombres . ' ' . $Usuario->apellidos, true, -1));
-            }
-
-            if($model->id_usu_modifico){
-                $Usuario = User::findOrFail($model->id_usu_modifico);
-                $OModel->setUsuarioModifico(new Text($Usuario->nombres . ' ' . $Usuario->apellidos, true, -1));
-            }
-
-//            $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
-//            $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
-//            $OModel->setVehiculo(new Text(!is_null($model->vehiculo) ? ( $model->vehiculo->placa . ' ' . $model->vehiculo->placa ) : null, true, -1));
-//            $OModel->setDestino(new Text(!is_null($model->destino) ? ( $model->destino->nombre . ' ' . $model->destino->apellido ) : null, true, -1));
-
+            $Caja = $model->id_caja ? Caja::findOrFail($model->id_caja, ['nombre']) : null;
+            $OModel->setCaja(new Text(($Caja?->nombre), true, -1));
 
             $arrVehicles[] = $OModel;
         }

@@ -3,6 +3,7 @@
 namespace Src\V2\BoletoInterprovincial\Domain;
 
 use Src\Core\Domain\ValueObjects\DateFormat;
+use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
@@ -25,33 +26,42 @@ final class BoletoInterprovincialOficial
     private DateFormat $fechaPartida;
     private TimeFormat $horaPartida;
     private Id $idRuta;
+    private Id $idParaderoOrigen;
+    private Id $idParaderoDestino;
     private NumericFloat $precio;
     private NumericInteger $idTipoMoneda;
     private NumericInteger $idFormaPago;
     private NumericInteger $obsequio;
-    private NumericInteger $idTipoComprobante;
-    private NumericInteger $idTipoDocumentoEntidad;
-    private Text $numeroDocumentoEntidad;
-    private Text $nombreEntidad;
-    private Text $direccionEntidad;
+    private Id $idPos;
+    private Text $codigo;
+    private NumericFloat $latitud;
+    private NumericFloat $longitud;
+    private DateTimeFormat $fechaEmision;
+    private NumericInteger $idEstado;
     private Id $idUsuarioRegistro;
+    private Id $idUsuarioModifico;
+    private DateTimeFormat $fechaRegistro;
+    private DateTimeFormat $fechaModifico;
+    private NumericInteger $idTipoComprobante;
+    private NumericInteger $idTipoBoleto;
+    private NumericInteger $porPagar;
 
 
+
+    private Text $tipoDocumento;
     private Text $sede;
     private Text $caja;
-    private Text $tipoDocumento;
     private Text $vehiculoPlaca;
     private Text $ruta;
     private Text $paraderoOrigen;
     private Text $paraderoDestino;
     private Text $tipoMoneda;
     private Text $formaPago;
-    private Text $tipoComprobante;
-    private Text $tipoDocumentoEntidad;
+    private Text $pos;
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
-    private Id $idParaderoOrigen;
-    private Id $idParaderoDestino;
+    private Text $tipoComprobante;
+    private Text $tipoBoleto;
 
     /**
      * @param Id $id
@@ -66,19 +76,27 @@ final class BoletoInterprovincialOficial
      * @param Id $idVehiculo
      * @param Id $idAsiento
      * @param DateFormat $fechaPartida
-     * @param DateFormat $horaPartida
+     * @param TimeFormat $horaPartida
      * @param Id $idRuta
-     * @param Id $idParadero
+     * @param Id $idParaderoOrigen
+     * @param Id $idParaderoDestino
      * @param NumericFloat $precio
      * @param NumericInteger $idTipoMoneda
      * @param NumericInteger $idFormaPago
      * @param NumericInteger $obsequio
-     * @param NumericInteger $idTipoComprobante
-     * @param NumericInteger $idTipoDocumentoEntidad
-     * @param Text $numeroDocumentoEntidad
-     * @param Text $nombreEntidad
-     * @param Text $direccionEntidad
+     * @param Id $idPos
+     * @param Text $codigo
+     * @param NumericFloat $latitud
+     * @param NumericFloat $longitud
+     * @param DateTimeFormat $fechaEmision
+     * @param NumericInteger $idEstado
      * @param Id $idUsuarioRegistro
+     * @param Id $idUsuarioModifico
+     * @param DateTimeFormat $fechaRegistro
+     * @param DateTimeFormat $fechaModifico
+     * @param NumericInteger $idTipoComprobante
+     * @param NumericInteger $idTipoBoleto
+     * @param NumericInteger $porPagar
      */
     public function __construct(
         Id $id,
@@ -91,7 +109,6 @@ final class BoletoInterprovincialOficial
         Text $nombres,
         Text $apellidos,
         NumericInteger $menorEdad,
-
 
         Id $idVehiculo,
         Id $idAsiento,
@@ -106,15 +123,22 @@ final class BoletoInterprovincialOficial
         NumericInteger $idFormaPago,
         NumericInteger $obsequio,
 
+        Id $idPos,
+        Text $codigo,
+        NumericFloat $latitud,
+        NumericFloat $longitud,
+        DateTimeFormat $fechaEmision,
+        NumericInteger $idEstado,
+        Id $idUsuarioRegistro,
+        Id $idUsuarioModifico,
+        DateTimeFormat $fechaRegistro,
+        DateTimeFormat $fechaModifico,
         NumericInteger $idTipoComprobante,
-        NumericInteger $idTipoDocumentoEntidad,
-        Text $numeroDocumentoEntidad,
-        Text $nombreEntidad,
-        Text $direccionEntidad,
-
-        Id $idUsuarioRegistro
+        NumericInteger $idTipoBoleto,
+        NumericInteger $porPagar
     )
     {
+
         $this->id = $id;
         $this->idCliente = $idCliente;
         $this->idSede = $idSede;
@@ -129,18 +153,25 @@ final class BoletoInterprovincialOficial
         $this->fechaPartida = $fechaPartida;
         $this->horaPartida = $horaPartida;
         $this->idRuta = $idRuta;
+        $this->idParaderoOrigen = $idParaderoOrigen;
+        $this->idParaderoDestino = $idParaderoDestino;
         $this->precio = $precio;
         $this->idTipoMoneda = $idTipoMoneda;
         $this->idFormaPago = $idFormaPago;
         $this->obsequio = $obsequio;
-        $this->idTipoComprobante = $idTipoComprobante;
-        $this->idTipoDocumentoEntidad = $idTipoDocumentoEntidad;
-        $this->numeroDocumentoEntidad = $numeroDocumentoEntidad;
-        $this->nombreEntidad = $nombreEntidad;
-        $this->direccionEntidad = $direccionEntidad;
+        $this->idPos = $idPos;
+        $this->codigo = $codigo;
+        $this->latitud = $latitud;
+        $this->longitud = $longitud;
+        $this->fechaEmision = $fechaEmision;
+        $this->idEstado = $idEstado;
         $this->idUsuarioRegistro = $idUsuarioRegistro;
-        $this->idParaderoOrigen = $idParaderoOrigen;
-        $this->idParaderoDestino = $idParaderoDestino;
+        $this->idUsuarioModifico = $idUsuarioModifico;
+        $this->fechaRegistro = $fechaRegistro;
+        $this->fechaModifico = $fechaModifico;
+        $this->idTipoComprobante = $idTipoComprobante;
+        $this->idTipoBoleto = $idTipoBoleto;
+        $this->porPagar = $porPagar;
     }
 
     /**
@@ -370,17 +401,33 @@ final class BoletoInterprovincialOficial
     /**
      * @return Id
      */
-    public function getIdParadero(): Id
+    public function getIdParaderoOrigen(): Id
     {
-        return $this->idParadero;
+        return $this->idParaderoOrigen;
     }
 
     /**
-     * @param Id $idParadero
+     * @param Id $idParaderoOrigen
      */
-    public function setIdParadero(Id $idParadero): void
+    public function setIdParaderoOrigen(Id $idParaderoOrigen): void
     {
-        $this->idParadero = $idParadero;
+        $this->idParaderoOrigen = $idParaderoOrigen;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdParaderoDestino(): Id
+    {
+        return $this->idParaderoDestino;
+    }
+
+    /**
+     * @param Id $idParaderoDestino
+     */
+    public function setIdParaderoDestino(Id $idParaderoDestino): void
+    {
+        $this->idParaderoDestino = $idParaderoDestino;
     }
 
     /**
@@ -448,6 +495,166 @@ final class BoletoInterprovincialOficial
     }
 
     /**
+     * @return Id
+     */
+    public function getIdPos(): Id
+    {
+        return $this->idPos;
+    }
+
+    /**
+     * @param Id $idPos
+     */
+    public function setIdPos(Id $idPos): void
+    {
+        $this->idPos = $idPos;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getCodigo(): Text
+    {
+        return $this->codigo;
+    }
+
+    /**
+     * @param Text $codigo
+     */
+    public function setCodigo(Text $codigo): void
+    {
+        $this->codigo = $codigo;
+    }
+
+    /**
+     * @return NumericFloat
+     */
+    public function getLatitud(): NumericFloat
+    {
+        return $this->latitud;
+    }
+
+    /**
+     * @param NumericFloat $latitud
+     */
+    public function setLatitud(NumericFloat $latitud): void
+    {
+        $this->latitud = $latitud;
+    }
+
+    /**
+     * @return NumericFloat
+     */
+    public function getLongitud(): NumericFloat
+    {
+        return $this->longitud;
+    }
+
+    /**
+     * @param NumericFloat $longitud
+     */
+    public function setLongitud(NumericFloat $longitud): void
+    {
+        $this->longitud = $longitud;
+    }
+
+    /**
+     * @return DateTimeFormat
+     */
+    public function getFechaEmision(): DateTimeFormat
+    {
+        return $this->fechaEmision;
+    }
+
+    /**
+     * @param DateTimeFormat $fechaEmision
+     */
+    public function setFechaEmision(DateTimeFormat $fechaEmision): void
+    {
+        $this->fechaEmision = $fechaEmision;
+    }
+
+    /**
+     * @return NumericInteger
+     */
+    public function getIdEstado(): NumericInteger
+    {
+        return $this->idEstado;
+    }
+
+    /**
+     * @param NumericInteger $idEstado
+     */
+    public function setIdEstado(NumericInteger $idEstado): void
+    {
+        $this->idEstado = $idEstado;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdUsuarioRegistro(): Id
+    {
+        return $this->idUsuarioRegistro;
+    }
+
+    /**
+     * @param Id $idUsuarioRegistro
+     */
+    public function setIdUsuarioRegistro(Id $idUsuarioRegistro): void
+    {
+        $this->idUsuarioRegistro = $idUsuarioRegistro;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdUsuarioModifico(): Id
+    {
+        return $this->idUsuarioModifico;
+    }
+
+    /**
+     * @param Id $idUsuarioModifico
+     */
+    public function setIdUsuarioModifico(Id $idUsuarioModifico): void
+    {
+        $this->idUsuarioModifico = $idUsuarioModifico;
+    }
+
+    /**
+     * @return DateTimeFormat
+     */
+    public function getFechaRegistro(): DateTimeFormat
+    {
+        return $this->fechaRegistro;
+    }
+
+    /**
+     * @param DateTimeFormat $fechaRegistro
+     */
+    public function setFechaRegistro(DateTimeFormat $fechaRegistro): void
+    {
+        $this->fechaRegistro = $fechaRegistro;
+    }
+
+    /**
+     * @return DateTimeFormat
+     */
+    public function getFechaModifico(): DateTimeFormat
+    {
+        return $this->fechaModifico;
+    }
+
+    /**
+     * @param DateTimeFormat $fechaModifico
+     */
+    public function setFechaModifico(DateTimeFormat $fechaModifico): void
+    {
+        $this->fechaModifico = $fechaModifico;
+    }
+
+    /**
      * @return NumericInteger
      */
     public function getIdTipoComprobante(): NumericInteger
@@ -466,81 +673,49 @@ final class BoletoInterprovincialOficial
     /**
      * @return NumericInteger
      */
-    public function getIdTipoDocumentoEntidad(): NumericInteger
+    public function getIdTipoBoleto(): NumericInteger
     {
-        return $this->idTipoDocumentoEntidad;
+        return $this->idTipoBoleto;
     }
 
     /**
-     * @param NumericInteger $idTipoDocumentoEntidad
+     * @param NumericInteger $idTipoBoleto
      */
-    public function setIdTipoDocumentoEntidad(NumericInteger $idTipoDocumentoEntidad): void
+    public function setIdTipoBoleto(NumericInteger $idTipoBoleto): void
     {
-        $this->idTipoDocumentoEntidad = $idTipoDocumentoEntidad;
+        $this->idTipoBoleto = $idTipoBoleto;
     }
 
     /**
-     * @return Text
+     * @return NumericInteger
      */
-    public function getNumeroDocumentoEntidad(): Text
+    public function getPorPagar(): NumericInteger
     {
-        return $this->numeroDocumentoEntidad;
+        return $this->porPagar;
     }
 
     /**
-     * @param Text $numeroDocumentoEntidad
+     * @param NumericInteger $porPagar
      */
-    public function setNumeroDocumentoEntidad(Text $numeroDocumentoEntidad): void
+    public function setPorPagar(NumericInteger $porPagar): void
     {
-        $this->numeroDocumentoEntidad = $numeroDocumentoEntidad;
-    }
-
-    /**
-     * @return Text
-     */
-    public function getNombreEntidad(): Text
-    {
-        return $this->nombreEntidad;
-    }
-
-    /**
-     * @param Text $nombreEntidad
-     */
-    public function setNombreEntidad(Text $nombreEntidad): void
-    {
-        $this->nombreEntidad = $nombreEntidad;
+        $this->porPagar = $porPagar;
     }
 
     /**
      * @return Text
      */
-    public function getDireccionEntidad(): Text
+    public function getTipoDocumento(): Text
     {
-        return $this->direccionEntidad;
+        return $this->tipoDocumento;
     }
 
     /**
-     * @param Text $direccionEntidad
+     * @param Text $tipoDocumento
      */
-    public function setDireccionEntidad(Text $direccionEntidad): void
+    public function setTipoDocumento(Text $tipoDocumento): void
     {
-        $this->direccionEntidad = $direccionEntidad;
-    }
-
-    /**
-     * @return Id
-     */
-    public function getIdUsuarioRegistro(): Id
-    {
-        return $this->idUsuarioRegistro;
-    }
-
-    /**
-     * @param Id $idUsuarioRegistro
-     */
-    public function setIdUsuarioRegistro(Id $idUsuarioRegistro): void
-    {
-        $this->idUsuarioRegistro = $idUsuarioRegistro;
+        $this->tipoDocumento = $tipoDocumento;
     }
 
     /**
@@ -578,22 +753,6 @@ final class BoletoInterprovincialOficial
     /**
      * @return Text
      */
-    public function getTipoDocumento(): Text
-    {
-        return $this->tipoDocumento;
-    }
-
-    /**
-     * @param Text $tipoDocumento
-     */
-    public function setTipoDocumento(Text $tipoDocumento): void
-    {
-        $this->tipoDocumento = $tipoDocumento;
-    }
-
-    /**
-     * @return Text
-     */
     public function getVehiculoPlaca(): Text
     {
         return $this->vehiculoPlaca;
@@ -621,6 +780,38 @@ final class BoletoInterprovincialOficial
     public function setRuta(Text $ruta): void
     {
         $this->ruta = $ruta;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getParaderoOrigen(): Text
+    {
+        return $this->paraderoOrigen;
+    }
+
+    /**
+     * @param Text $paraderoOrigen
+     */
+    public function setParaderoOrigen(Text $paraderoOrigen): void
+    {
+        $this->paraderoOrigen = $paraderoOrigen;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getParaderoDestino(): Text
+    {
+        return $this->paraderoDestino;
+    }
+
+    /**
+     * @param Text $paraderoDestino
+     */
+    public function setParaderoDestino(Text $paraderoDestino): void
+    {
+        $this->paraderoDestino = $paraderoDestino;
     }
 
     /**
@@ -658,33 +849,17 @@ final class BoletoInterprovincialOficial
     /**
      * @return Text
      */
-    public function getTipoComprobante(): Text
+    public function getPos(): Text
     {
-        return $this->tipoComprobante;
+        return $this->pos;
     }
 
     /**
-     * @param Text $tipoComprobante
+     * @param Text $pos
      */
-    public function setTipoComprobante(Text $tipoComprobante): void
+    public function setPos(Text $pos): void
     {
-        $this->tipoComprobante = $tipoComprobante;
-    }
-
-    /**
-     * @return Text
-     */
-    public function getTipoDocumentoEntidad(): Text
-    {
-        return $this->tipoDocumentoEntidad;
-    }
-
-    /**
-     * @param Text $tipoDocumentoEntidad
-     */
-    public function setTipoDocumentoEntidad(Text $tipoDocumentoEntidad): void
-    {
-        $this->tipoDocumentoEntidad = $tipoDocumentoEntidad;
+        $this->pos = $pos;
     }
 
     /**
@@ -719,72 +894,36 @@ final class BoletoInterprovincialOficial
         $this->usuarioModifico = $usuarioModifico;
     }
 
-    public function generateQr(): string{
-        return "B001 | 1 | 3 | {$this->getNumeroDocumento()->value()} | {$this->getNombres()->value()} | {$this->getApellidos()->value()} | {$this->getIdTipoComprobante()->value()}";
+    /**
+     * @return Text
+     */
+    public function getTipoComprobante(): Text
+    {
+        return $this->tipoComprobante;
+    }
+
+    /**
+     * @param Text $tipoComprobante
+     */
+    public function setTipoComprobante(Text $tipoComprobante): void
+    {
+        $this->tipoComprobante = $tipoComprobante;
     }
 
     /**
      * @return Text
      */
-    public function getParaderoOrigen(): Text
+    public function getTipoBoleto(): Text
     {
-        return $this->paraderoOrigen;
+        return $this->tipoBoleto;
     }
 
     /**
-     * @param Text $paraderoOrigen
+     * @param Text $tipoBoleto
      */
-    public function setParaderoOrigen(Text $paraderoOrigen): void
+    public function setTipoBoleto(Text $tipoBoleto): void
     {
-        $this->paraderoOrigen = $paraderoOrigen;
-    }
-
-    /**
-     * @return Text
-     */
-    public function getParaderoDestino(): Text
-    {
-        return $this->paraderoDestino;
-    }
-
-    /**
-     * @param Text $paraderoDestino
-     */
-    public function setParaderoDestino(Text $paraderoDestino): void
-    {
-        $this->paraderoDestino = $paraderoDestino;
-    }
-
-    /**
-     * @return Id
-     */
-    public function getIdParaderoOrigen(): Id
-    {
-        return $this->idParaderoOrigen;
-    }
-
-    /**
-     * @param Id $idParaderoOrigen
-     */
-    public function setIdParaderoOrigen(Id $idParaderoOrigen): void
-    {
-        $this->idParaderoOrigen = $idParaderoOrigen;
-    }
-
-    /**
-     * @return Id
-     */
-    public function getIdParaderoDestino(): Id
-    {
-        return $this->idParaderoDestino;
-    }
-
-    /**
-     * @param Id $idParaderoDestino
-     */
-    public function setIdParaderoDestino(Id $idParaderoDestino): void
-    {
-        $this->idParaderoDestino = $idParaderoDestino;
+        $this->tipoBoleto = $tipoBoleto;
     }
 
 
