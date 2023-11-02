@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Src\V2\BoletoInterprovincial\Infrastructure\Repositories;
 
-use App\Enums\EnumTipoComprobante;
 use App\Enums\IdTipoBoleto;
-use App\Enums\IdTipoSerie;
 use App\Models\User;
 use App\Models\V2\BoletoInterprovincialOficial as EloquentModelBoletoInterprovincial;
 use App\Models\V2\Caja;
@@ -14,6 +12,7 @@ use App\Models\V2\Cliente as EloquentModelClient;
 use App\Models\V2\Paradero;
 use App\Models\V2\Ruta;
 use App\Models\V2\Sede;
+use App\Models\V2\TipoComprobante;
 use App\Models\V2\TipoDocumento;
 use App\Models\V2\Vehiculo;
 use InvalidArgumentException;
@@ -155,6 +154,9 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
                 new NumericInteger((int)$model->por_pagar),
             );
 
+            $Ruta = $model->id_ruta ? Ruta::findOrFail($model->id_ruta, ['nombre']) : null;
+            $OModel->setRuta(new Text(($Ruta?->nombre), true, -1));
+
             $TipoDocumento = $model->id_tipo_documento ? TipoDocumento::findOrFail($model->id_tipo_documento->value, ['nombre_corto']) : null;
             $OModel->setTipoDocumento(new Text(($TipoDocumento?->nombre_corto), true, -1));
 
@@ -163,6 +165,21 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
             $Caja = $model->id_caja ? Caja::findOrFail($model->id_caja, ['nombre']) : null;
             $OModel->setCaja(new Text(($Caja?->nombre), true, -1));
+
+            $ParaderoOrigen = $model->id_paradero_origen ? Paradero::findOrFail($model->id_paradero_origen, ['nombre']) : null;
+            $OModel->setParaderoOrigen(new Text(($ParaderoOrigen?->nombre), true, -1));
+
+            $ParaderoDestino = $model->id_paradero_destino ? Paradero::findOrFail($model->id_paradero_destino, ['nombre']) : null;
+            $OModel->setParaderoDestino(new Text(($ParaderoDestino?->nombre), true, -1));
+
+            $UsuarioRegistro = $model->id_usu_registro ? User::findOrFail($model->id_usu_registro, ['nombres','apellidos']) : null;
+            $OModel->setUsuarioRegistro(new Text(($UsuarioRegistro?->nombres . ' ' . $UsuarioRegistro?->apellidos), true, -1));
+
+            $UsuarioModifico = $model->id_usu_modifico ? User::findOrFail($model->id_usu_modifico, ['nombres','apellidos']) : null;
+            $OModel->setUsuarioModifico(new Text(($UsuarioModifico?->nombres . ' ' . $UsuarioModifico?->apellidos), true, -1));
+
+            $TipoComprobante = $model->id_tipo_comprobante ? TipoComprobante::findOrFail($model->id_tipo_comprobante->value, ['nombre']) : null;
+            $OModel->setTipoComprobante(new Text(($TipoComprobante?->nombre), true, -1));
 
             $arrVehicles[] = $OModel;
         }

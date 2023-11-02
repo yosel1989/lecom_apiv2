@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\V2\BoletoInterprovincial;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V2\BoletoInterprovincial\BoletoInterprovincialOficialResource;
-use App\Http\Resources\V2\BoletoInterprovincial\BoletoInterprovincialResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
