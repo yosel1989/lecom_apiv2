@@ -154,6 +154,9 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
                 new NumericInteger((int)$model->por_pagar),
             );
 
+            $Vehiculo = $model->id_vehiculo ? Vehiculo::findOrFail($model->id_vehiculo, ['placa']) : null;
+            $OModel->setVehiculoPlaca(new Text(($Vehiculo?->placa), true, -1));
+
             $Ruta = $model->id_ruta ? Ruta::findOrFail($model->id_ruta, ['nombre']) : null;
             $OModel->setRuta(new Text(($Ruta?->nombre), true, -1));
 

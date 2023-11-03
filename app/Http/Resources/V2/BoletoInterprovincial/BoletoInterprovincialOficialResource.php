@@ -29,6 +29,7 @@ class BoletoInterprovincialOficialResource extends JsonResource
             'apellidos'            => $this->getApellidos()->value(),
             'menorEdad'            => $this->getMenorEdad()->value(),
             'idVehiculo'            => $this->getIdVehiculo()->value(),
+            'vehiculo'            => $this->getVehiculoPlaca()->value(),
             'idAsiento'            => $this->getIdAsiento()->value(),
             'fechaPartida'            => $this->getFechaPartida()->value(),
             'horaPartida'            => $this->getHoraPartida()->value(),
