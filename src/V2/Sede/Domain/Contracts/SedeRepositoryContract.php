@@ -13,6 +13,7 @@ interface SedeRepositoryContract
         Text $nombre,
         Text $direccion,
         Id $idCliente,
+        Text $codigo,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;
@@ -24,6 +25,7 @@ interface SedeRepositoryContract
         Id $id,
         Text $nombre,
         Text $direccion,
+        Text $codigo,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;

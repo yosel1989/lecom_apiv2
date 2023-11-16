@@ -5,7 +5,6 @@ namespace Src\V2\BoletoPrecio\Infrastructure;
 
 use Illuminate\Http\Request;
 use Src\V2\BoletoPrecio\Application\GetListByClienteByRutaUseCase;
-use Src\V2\BoletoPrecio\Application\GetListByClienteUseCase;
 use Src\V2\BoletoPrecio\Infrastructure\Repositories\EloquentBoletoPrecioRepository;
 
 final class GetListByClienteByRutaController

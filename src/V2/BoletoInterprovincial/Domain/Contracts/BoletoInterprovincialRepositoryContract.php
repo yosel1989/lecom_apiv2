@@ -46,7 +46,7 @@ interface BoletoInterprovincialRepositoryContract
         DateFormat $_fechaPartida,
         DateFormat $_horaPartida,
         Id $_idRuta,
-        Id $_idParadero,
+        Id $_idBoletoPrecio,
         NumericFloat $_precio,
         NumericInteger $_idTipoMoneda,
         NumericInteger $_idFormaPago,

@@ -10,40 +10,74 @@ use Src\Core\Domain\ValueObjects\Text;
 
 final class BoletoPrecioShort
 {
+
+    private Text $paraderoOrigen;
+    private Text $paraderoDestino;
     private Id $id;
-    private Text $nombre;
+    private Id $idParaderoOrigen;
+    private Id $idParaderoDestino;
     private NumericFloat $precioBase;
     private NumericInteger $idEstado;
     private NumericInteger $idEliminado;
-    private Id $idRuta;
-    private NumericInteger $idTipoRuta;
+
 
     /**
      * @param Id $id
-     * @param Text $nombre
+     * @param Id $idParaderoOrigen
+     * @param Id $idParaderoDestino
      * @param NumericFloat $precioBase
-     * @param NumericInteger $idTipoRuta
-     * @param Id $idRuta
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      */
     public function __construct(
         Id $id,
-        Text $nombre,
+        Id $idParaderoOrigen,
+        Id $idParaderoDestino,
         NumericFloat $precioBase,
-        NumericInteger $idTipoRuta,
-        Id $idRuta,
+
         NumericInteger $idEstado,
         NumericInteger $idEliminado
     )
     {
+
         $this->id = $id;
-        $this->nombre = $nombre;
+        $this->idParaderoOrigen = $idParaderoOrigen;
+        $this->idParaderoDestino = $idParaderoDestino;
         $this->precioBase = $precioBase;
         $this->idEstado = $idEstado;
         $this->idEliminado = $idEliminado;
-        $this->idRuta = $idRuta;
-        $this->idTipoRuta = $idTipoRuta;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getParaderoOrigen(): Text
+    {
+        return $this->paraderoOrigen;
+    }
+
+    /**
+     * @param Text $paraderoOrigen
+     */
+    public function setParaderoOrigen(Text $paraderoOrigen): void
+    {
+        $this->paraderoOrigen = $paraderoOrigen;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getParaderoDestino(): Text
+    {
+        return $this->paraderoDestino;
+    }
+
+    /**
+     * @param Text $paraderoDestino
+     */
+    public function setParaderoDestino(Text $paraderoDestino): void
+    {
+        $this->paraderoDestino = $paraderoDestino;
     }
 
     /**
@@ -63,19 +97,35 @@ final class BoletoPrecioShort
     }
 
     /**
-     * @return Text
+     * @return Id
      */
-    public function getNombre(): Text
+    public function getIdParaderoOrigen(): Id
     {
-        return $this->nombre;
+        return $this->idParaderoOrigen;
     }
 
     /**
-     * @param Text $nombre
+     * @param Id $idParaderoOrigen
      */
-    public function setNombre(Text $nombre): void
+    public function setIdParaderoOrigen(Id $idParaderoOrigen): void
     {
-        $this->nombre = $nombre;
+        $this->idParaderoOrigen = $idParaderoOrigen;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdParaderoDestino(): Id
+    {
+        return $this->idParaderoDestino;
+    }
+
+    /**
+     * @param Id $idParaderoDestino
+     */
+    public function setIdParaderoDestino(Id $idParaderoDestino): void
+    {
+        $this->idParaderoDestino = $idParaderoDestino;
     }
 
     /**
@@ -124,38 +174,6 @@ final class BoletoPrecioShort
     public function setIdEliminado(NumericInteger $idEliminado): void
     {
         $this->idEliminado = $idEliminado;
-    }
-
-    /**
-     * @return Id
-     */
-    public function getIdRuta(): Id
-    {
-        return $this->idRuta;
-    }
-
-    /**
-     * @param Id $idRuta
-     */
-    public function setIdRuta(Id $idRuta): void
-    {
-        $this->idRuta = $idRuta;
-    }
-
-    /**
-     * @return NumericInteger
-     */
-    public function getIdTipoRuta(): NumericInteger
-    {
-        return $this->idTipoRuta;
-    }
-
-    /**
-     * @param NumericInteger $idTipoRuta
-     */
-    public function setIdTipoRuta(NumericInteger $idTipoRuta): void
-    {
-        $this->idTipoRuta = $idTipoRuta;
     }
 
 

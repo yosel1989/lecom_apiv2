@@ -19,6 +19,7 @@ class SedeResource extends JsonResource
             'id'            => $this->getId()->value(),
             'nombre'          => $this->getNombre()->value(),
             'direccion'       => $this->getDireccion()->value(),
+            'codigo'       => $this->getCodigo()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),
             'fechaRegistro'       => $this->getFechaRegistro()->value(),

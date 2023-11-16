@@ -29,7 +29,9 @@ final class EloquentSedeRepository implements SedeRepositoryContract
         $models = $this->eloquentModelSede->with(
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos'
-        )->where('id_cliente',$idCliente->value())->get();
+        )->where('id_cliente',$idCliente->value())
+            ->orderBy('nombre', 'asc')
+            ->get();
 
         $arrVehicles = array();
 
@@ -40,6 +42,7 @@ final class EloquentSedeRepository implements SedeRepositoryContract
                 new Text($model->nombre, false, 100, 'El nombre de la sede excede los 100 caracteres'),
                 new Text($model->direccion, true, 150, 'La direccion de la sede excede los 150 caracteres'),
                 new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+                new Text($model->codigo, true, -1, ''),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
                 new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
@@ -60,7 +63,7 @@ final class EloquentSedeRepository implements SedeRepositoryContract
 
     public function listByCliente(Id $idCliente): array
     {
-        $models = $this->eloquentModelSede->where('id_cliente',$idCliente->value())->get();
+        $models = $this->eloquentModelSede->where('id_cliente',$idCliente->value())->orderBy('nombre', 'asc')->get();
 
         $arrVehicles = array();
 
@@ -69,6 +72,7 @@ final class EloquentSedeRepository implements SedeRepositoryContract
             $OModel = new SedeShort(
                 new Id($model->id , false, 'El id del sede no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la sede excede los 100 caracteres'),
+                new Text($model->codigo, true, -1, ''),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
             );
@@ -83,6 +87,7 @@ final class EloquentSedeRepository implements SedeRepositoryContract
         Text $nombre,
         Text $direccion,
         Id $idCliente,
+        Text $codigo,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -91,13 +96,25 @@ final class EloquentSedeRepository implements SedeRepositoryContract
         if($count > 0){
             throw new \InvalidArgumentException('La sede ya se encuentra registrada');
         }
+        $_codigo = '';
+        if( !is_null($codigo->value())){
+            if(trim($codigo->value()) === '' ){
+                $_codigo = null;
+            }else{
+                $_codigo = $codigo->value();
+            }
+            if($this->eloquentModelSede->select('id')->where('id_cliente', $idCliente->value())->where('codigo', trim($codigo->value()))->count() > 0){
+                throw new \InvalidArgumentException('El código encuentra registrada');
+            }
+        }
 
         $this->eloquentModelSede->create([
-           'nombre' => $nombre->value(),
-           'direccion' => $direccion->value(),
-           'id_cliente' => $idCliente->value(),
-           'id_estado' => $idEstado->value(),
-           'id_usu_registro' => $idUsuarioRegistro->value()
+            'nombre' => $nombre->value(),
+            'direccion' => $direccion->value(),
+            'id_cliente' => $idCliente->value(),
+            'codigo' => $_codigo,
+            'id_estado' => $idEstado->value(),
+            'id_usu_registro' => $idUsuarioRegistro->value()
         ]);
     }
 
@@ -106,6 +123,7 @@ final class EloquentSedeRepository implements SedeRepositoryContract
         Id $id,
         Text $nombre,
         Text $direccion,
+        Text $codigo,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -116,10 +134,23 @@ final class EloquentSedeRepository implements SedeRepositoryContract
         if($count > 0){
             throw new \InvalidArgumentException('La sede ya se encuentra registrada');
         }
+        $_codigo = "";
+        if( !is_null($codigo->value())){
+            if(trim($codigo->value()) === '' ){
+                $_codigo = null;
+            }else{
+                $_codigo = $codigo->value();
+            }
+            if($this->eloquentModelSede->select('id')->where('id', '<>', $id->value())->where('id_cliente', $sede->id_cliente)->where('codigo', trim($codigo->value()))->count() > 0){
+                throw new \InvalidArgumentException('El código encuentra registrada');
+            }
+        }
+
 
         $this->eloquentModelSede->findOrFail($id->value())->update([
             'nombre' => $nombre->value(),
             'direccion' => $direccion->value(),
+            'codigo' => $_codigo,
             'id_estado' => $idEstado->value(),
             'id_usu_modifico' => $idUsuarioRegistro->value()
         ]);
@@ -150,6 +181,7 @@ final class EloquentSedeRepository implements SedeRepositoryContract
             new Text($model->nombre, false, 100, 'El nombre del sede excede los 100 caracteres'),
             new Text($model->direccion, true, 150, 'La dirección de la sede excede los 105 caracteres'),
             new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+            new Text($model->codigo, true, -1, ''),
             new NumericInteger($model->id_estado->value),
             new NumericInteger($model->id_eliminado->value),
             new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),

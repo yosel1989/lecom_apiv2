@@ -62,6 +62,7 @@ final class BoletoInterprovincialOficial
     private Text $usuarioModifico;
     private Text $tipoComprobante;
     private Text $tipoBoleto;
+    private Text $cliente;
 
     /**
      * @param Id $id
@@ -924,6 +925,22 @@ final class BoletoInterprovincialOficial
     public function setTipoBoleto(Text $tipoBoleto): void
     {
         $this->tipoBoleto = $tipoBoleto;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getCliente(): Text
+    {
+        return $this->cliente;
+    }
+
+    /**
+     * @param Text $cliente
+     */
+    public function setCliente(Text $cliente): void
+    {
+        $this->cliente = $cliente;
     }
 
 

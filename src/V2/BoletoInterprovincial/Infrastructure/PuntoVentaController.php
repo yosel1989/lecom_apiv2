@@ -42,7 +42,7 @@ final class PuntoVentaController
         $fechaPartida = $request->input('fechaPartida'); // null
         $horaPartida = $request->input('horaSalida'); //null
         $idRuta = $request->input('idRuta');
-        $idParadero = $request->input('idParadero');
+        $idBoletoPrecio = $request->input('idBoletoPrecio');
         $precio = $request->input('precio');
         $idTipoMoneda = $request->input('idTipoMoneda');
         $idFormaPago = $request->input('idFormaPago');
@@ -74,7 +74,7 @@ final class PuntoVentaController
             $fechaPartida,
             $horaPartida,
             $idRuta,
-            $idParadero,
+            $idBoletoPrecio,
             $precio,
             $idTipoMoneda,
             $idFormaPago,

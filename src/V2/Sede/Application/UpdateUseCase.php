@@ -23,6 +23,7 @@ final class UpdateUseCase
         string $idSede,
         string $nombre,
         ?string $direccion,
+        ?string $codigo,
         int $idEstado,
         string $idUsuarioRegistro
     ): void
@@ -30,6 +31,7 @@ final class UpdateUseCase
         $_idSede = new Id($idSede,false,'El id del sede no tiene el formato correcto');
         $_nombre = new Text($nombre, false,100,'El nombre del sede excede los 100 caracteres');
         $_direccion = new Text($direccion,true, 150,'La direccion de la sede excede los 150 caracteres');
+        $_codigo = new Text($codigo, true,5,'El codigo excede los 5 caracteres');
         $_idEstado = new NumericInteger($idEstado);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
@@ -37,6 +39,7 @@ final class UpdateUseCase
             $_idSede,
             $_nombre,
             $_direccion,
+            $_codigo,
             $_idEstado,
             $_idUsuarioRegistro
         );

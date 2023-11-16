@@ -18,6 +18,7 @@ class SedeListResource extends JsonResource
         return [
             'id'            => $this->getId()->value(),
             'nombre'          => $this->getNombre()->value(),
+            'codigo'          => $this->getCodigo()->value(),
 //            'direccion'          => $this->getDireccion()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),

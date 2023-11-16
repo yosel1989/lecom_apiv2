@@ -56,6 +56,7 @@ class Cliente extends Model
      */
     protected $casts = [
         'idTipoDocumento' => IdTipoDocumento::class,
+        'codigo' =>  'int',
         'fechaRegistro' =>  'string',
         'fechaModifico' =>  'string',
         'idTipo' => IdTipoCliente::class,

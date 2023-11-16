@@ -23,6 +23,7 @@ final class Sede
 
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
+    private Text $codigo;
 
 
     /**
@@ -30,6 +31,7 @@ final class Sede
      * @param Text $nombre
      * @param Text $direccion
      * @param Id $idCliente
+     * @param Text $codigo
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      * @param Id $idUsuarioRegistro
@@ -42,6 +44,7 @@ final class Sede
         Text $nombre,
         Text $direccion,
         Id $idCliente,
+        Text $codigo,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
         Id $idUsuarioRegistro,
@@ -61,6 +64,7 @@ final class Sede
         $this->idUsuarioModifico = $idUsuarioModifico;
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
+        $this->codigo = $codigo;
     }
 
     /**
@@ -253,6 +257,22 @@ final class Sede
     public function setUsuarioModifico(Text $usuarioModifico): void
     {
         $this->usuarioModifico = $usuarioModifico;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getCodigo(): Text
+    {
+        return $this->codigo;
+    }
+
+    /**
+     * @param Text $codigo
+     */
+    public function setCodigo(Text $codigo): void
+    {
+        $this->codigo = $codigo;
     }
 
 

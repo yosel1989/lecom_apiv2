@@ -8,6 +8,7 @@ use App\Enums\EnumTipoPago;
 use App\Enums\IdTipoBoleto;
 use App\Enums\IdTipoComprobante;
 use App\Enums\IdTipoDocumento;
+use App\Traits\TableNameDynamic;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 

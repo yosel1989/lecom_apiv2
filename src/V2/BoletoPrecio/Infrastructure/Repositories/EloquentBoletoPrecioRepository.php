@@ -99,7 +99,10 @@ final class EloquentBoletoPrecioRepository implements BoletoPrecioRepositoryCont
 
     public function listByClienteByRuta(Id $idCliente, Id $idRuta): array
     {
-        $models = $this->eloquentModelBoletoPrecio
+        $models = $this->eloquentModelBoletoPrecio->with(
+                'paraderoOrigen:id,nombre',
+                'paraderoDestino:id,nombre'
+            )
             ->where('id_cliente',$idCliente->value())
             ->where('id_ruta',$idRuta->value())
             ->get();
@@ -109,19 +112,23 @@ final class EloquentBoletoPrecioRepository implements BoletoPrecioRepositoryCont
         foreach ( $models as $model ){
 
             $OModel = new BoletoPrecioShort(
-                new Id($model->id , false, 'El id del destino no tiene el formato correcto'),
-                new Text($model->nombre, false, 100, 'El nombre de la destino excede los 100 caracteres'),
-                new NumericFloat($model->precio_base),
-                new NumericInteger($model->id_tipo_ruta->value),
-                new Id($model->id_ruta , false, 'El id de la ruta no tiene el formato correcto'),
-                new NumericInteger($model->id_estado->value),
-                new NumericInteger($model->id_eliminado->value),
+                new Id($model->id, false, 'El id no tiene el formato correcto'),
+
+                new Id($model->id_paradero_origen, false, 'El id del punto de origen no tiene el formato correcto'),
+                new Id($model->id_paradero_destino, false, 'El id del punto de destino no tiene el formato correcto'),
+                new NumericFloat($model->precio_base, false),
+
+                new NumericInteger($model->id_estado->value, false),
+                new NumericInteger($model->id_eliminado->value, false)
             );
 
-            $arrVehicles[] = $OModel;
+            $OModel->setParaderoOrigen(new Text(!is_null($model->paraderoOrigen) ? $model->paraderoOrigen->nombre : null, true, -1));
+            $OModel->setParaderoDestino(new Text(!is_null($model->paraderoDestino) ? $model->paraderoDestino->nombre : null, true, -1));
+
+            $arr[] = $OModel;
         }
 
-        return $arrVehicles;
+        return $arr;
     }
 
     public function create(

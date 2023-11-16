@@ -28,6 +28,7 @@ class Sede extends Model
         'id',
         'nombre',
         'direccion',
+        'codigo',
         'id_cliente',
         'id_estado',
         'id_eliminado',

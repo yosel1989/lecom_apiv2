@@ -22,6 +22,7 @@ final class CreateController
         $nombre             = $request->input('nombre');
         $direccion             = $request->input('direccion');
         $idCliente          = $request->input('idCliente');
+        $codigo          = $request->input('codigo');
         $idEstado           = $request->input('idEstado');
 
         $useCase = new CreateUseCase( $this->repository );
@@ -29,6 +30,7 @@ final class CreateController
             $nombre,
             $direccion,
             $idCliente,
+            $codigo,
             $idEstado,
             $user->getId()
         );

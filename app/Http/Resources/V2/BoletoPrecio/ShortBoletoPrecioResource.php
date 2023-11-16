@@ -17,10 +17,11 @@ class ShortBoletoPrecioResource extends JsonResource
 
         return [
             'id'                  => $this->getId()->value(),
-            'nombre'              => $this->getNombre()->value(),
-//            'precioBase'          => $this->getPrecioBase()->value(),
-            'idTipoRuta'            => $this->getIdTipoRuta()->value(),
-//            'idRuta'            => $this->getIdRuta()->value(),
+            'idParaderoOrigen'           => $this->getIdParaderoOrigen()->value(),
+            'paraderoOrigen'           => $this->getParaderoOrigen()->value(),
+            'idParaderoDestino'           => $this->getIdParaderoDestino()->value(),
+            'paraderoDestino'           => $this->getParaderoDestino()->value(),
+            'precioBase'          => $this->getPrecioBase()->value(),
             'idEstado'            => $this->getIdEstado()->value(),
         ];
     }

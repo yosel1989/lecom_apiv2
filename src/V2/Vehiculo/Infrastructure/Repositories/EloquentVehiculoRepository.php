@@ -173,17 +173,32 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
     {
         $count = $this->eloquentModelVehiculo->select('id')->where('id_cliente',$idCliente->value())->count();
 
-        // validar placa
-        $countPlaca = $this->eloquentModelVehiculo->select('id')->where('id_cliente', $idCliente->value())->where(DB::raw("UPPER(placa)"), mb_strtoupper($placa->value(), 'UTF-8') )->count();
-        if($count > 0){
-            throw new \InvalidArgumentException('La placa ya se encuentra registrada');
+        // Validar la unidad
+        if($this->eloquentModelVehiculo->where('unidad',$unidad->value())->where('id_cliente',$idCliente->value())->count() > 0){
+            throw new \InvalidArgumentException('La unidad ya se encuentra registrada');
         }
-        $countPlaca = $this->eloquentModelVehiculo->select('id')->where(DB::raw("UPPER(placa)"), mb_strtoupper($placa->value(), 'UTF-8') )->count();
-        if($count > 0){
+
+        // Validar la placa en otro cliente
+        if($this->eloquentModelVehiculo->select('id')
+                ->where('id_cliente', '<>', $idCliente->value())
+                ->where(DB::raw("UPPER(placa)"), '=',  mb_strtoupper($placa->value(), 'UTF-8') )
+                ->count() > 0){
             throw new \InvalidArgumentException('La placa ya se encuentra registrada en el sistema con otro cliente');
         }
-        $countCodigo = $this->eloquentModelVehiculo->select('id')->where('id_cliente', $idCliente->value())->where('codigo', ($count + 1) )->count();
-        if($count > 0){
+
+        // validar placa
+        if($this->eloquentModelVehiculo->select('id')
+                ->where('id_cliente', $idCliente->value())
+                ->where(DB::raw("UPPER(placa)"), '=',  mb_strtoupper($placa->value(), 'UTF-8') )
+                ->count() > 0){
+            throw new \InvalidArgumentException('La placa ya se encuentra registrada');
+        }
+//        $countPlaca = $this->eloquentModelVehiculo->select('id')->where(DB::raw("UPPER(placa)"), mb_strtoupper($placa->value(), 'UTF-8') )->count();
+//        if($countPlaca > 0){
+//            throw new \InvalidArgumentException('La placa ya se encuentra registrada en el sistema con otro cliente');
+//        }
+
+        if($this->eloquentModelVehiculo->select('id')->where('id_cliente', $idCliente->value())->where('codigo', ($count + 1) )->count() > 0){
             throw new \InvalidArgumentException('El código de vehiculo ya se encuentra registrado');
         }
 
@@ -209,17 +224,27 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
     {
         $vehiculo = $this->eloquentModelVehiculo->findOrFail($id->value());
 
-
-        // validar placa
-        $countPlaca = $this->eloquentModelVehiculo->select('id')->where('id', '<>', $id->value())->where('id_cliente', $vehiculo->id_cliente)->where(DB::raw("UPPER(placa)"), mb_strtoupper($placa->value(), 'UTF-8') )->count();
-        if($countPlaca > 0){
-            throw new \InvalidArgumentException('La placa ya se encuentra registrada');
+        // Validar la unidad
+        if($this->eloquentModelVehiculo->where('unidad',$unidad->value())->where('id_cliente',$vehiculo->id_cliente)->count() > 0){
+            throw new \InvalidArgumentException('La unidad ya se encuentra registrada');
         }
-        $countPlaca = $this->eloquentModelVehiculo->select('id')->where('id', '<>', $id->value())->where(DB::raw("UPPER(placa)"), mb_strtoupper($placa->value(), 'UTF-8') )->count();
-        if($countPlaca > 0){
+
+        // Validar la placa en otro cliente
+        if($this->eloquentModelVehiculo->select('id')
+                ->where('id_cliente', '<>', $vehiculo->id_cliente)
+                ->where(DB::raw("UPPER(placa)"), '=',  mb_strtoupper($placa->value(), 'UTF-8') )
+                ->count() > 0){
             throw new \InvalidArgumentException('La placa ya se encuentra registrada en el sistema con otro cliente');
         }
 
+        // validar placa
+        if($this->eloquentModelVehiculo->select('id')
+                ->where('id', '<>', $id->value())
+                ->where('id_cliente', $vehiculo->id_cliente)
+                ->where(DB::raw("UPPER(placa)"), mb_strtoupper($placa->value(), 'UTF-8') )
+                ->count() > 0){
+            throw new \InvalidArgumentException('La placa ya se encuentra registrada');
+        }
 
         $vehiculo->update([
             'placa' => $placa->value(),

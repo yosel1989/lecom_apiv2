@@ -21,8 +21,9 @@ Route::namespace('App\Http\Controllers\Api\V2\BoletoInterprovincial')->middlewar
     Route::post('cliente/{id}/boleto-interprovincial/punto-venta', 'PuntoVentaController');
 });
 
-
-
+//Route::namespace('App\Http\Controllers\Api\V2\BoletoInterprovincial')->group( function (){
+//    Route::get('cliente/{id}/boleto-interprovincial/punto-venta', 'PuntoVentaController');
+//});
 
 Route::middleware('auth:sanctum')->group(function() {
     Route::post('app/{idCliente}/boleto-pos', function(Request $request){

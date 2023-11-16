@@ -13,16 +13,19 @@ final class SedeShort
     private Text $nombre;
     private NumericInteger $idEstado;
     private NumericInteger $idEliminado;
+    private Text $codigo;
 
     /**
      * @param Id $id
      * @param Text $nombre
+     * @param Text $codigo
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      */
     public function __construct(
         Id $id,
         Text $nombre,
+        Text $codigo,
         NumericInteger $idEstado,
         NumericInteger $idEliminado
     )
@@ -31,6 +34,7 @@ final class SedeShort
         $this->nombre = $nombre;
         $this->idEstado = $idEstado;
         $this->idEliminado = $idEliminado;
+        $this->codigo = $codigo;
     }
 
     /**
@@ -95,6 +99,22 @@ final class SedeShort
     public function setIdEliminado(NumericInteger $idEliminado): void
     {
         $this->idEliminado = $idEliminado;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getCodigo(): Text
+    {
+        return $this->codigo;
+    }
+
+    /**
+     * @param Text $codigo
+     */
+    public function setCodigo(Text $codigo): void
+    {
+        $this->codigo = $codigo;
     }
 
 

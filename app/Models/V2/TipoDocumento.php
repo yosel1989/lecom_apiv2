@@ -24,6 +24,7 @@ class TipoDocumento extends Model
         'apl_factura',
         'apl_boleta',
         'apl_pasajero',
+        'apl_persona',
     ];
 
     /**
@@ -36,6 +37,7 @@ class TipoDocumento extends Model
         'apl_factura' =>  'integer',
         'apl_boleta' =>  'integer',
         'apl_pasajero' =>  'integer',
+        'apl_persona' =>  'boolean',
     ];
 
 //    public function usuarioRegistro(){

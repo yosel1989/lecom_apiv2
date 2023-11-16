@@ -23,6 +23,7 @@ final class CreateUseCase
         string $nombre,
         ?string $direccion,
         string $idCliente,
+        ?string $codigo,
         int $idEstado,
         string $idUsuarioRegistro
     ): void
@@ -30,6 +31,7 @@ final class CreateUseCase
         $_nombre = new Text($nombre,false, 100,'El nombre de la sede excede los 100 caracteres');
         $_direccion = new Text($direccion,true, 150,'La direccion de la sede excede los 150 caracteres');
         $_idCliente = new Id($idCliente,false,'El id del cliente no tiene el formato correcto');
+        $_codigo = new Text($codigo,true, 5,'El código  excede los 5 caracteres');
         $_idEstado = new NumericInteger($idEstado);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
@@ -37,6 +39,7 @@ final class CreateUseCase
             $_nombre,
             $_direccion,
             $_idCliente,
+            $_codigo,
             $_idEstado,
             $_idUsuarioRegistro
         );

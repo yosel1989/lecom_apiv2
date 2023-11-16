@@ -40,7 +40,7 @@ final class PuntoVentaUseCase
         ?string $fechaPartida,
         ?string $horaPartida,
         string $idRuta,
-        string $idParadero,
+        string $idBoletoPrecio,
         float $precio,
         int $idTipoMoneda,
         int $idFormaPago,
@@ -71,7 +71,7 @@ final class PuntoVentaUseCase
         $_fechaPartida = new DateFormat($fechaPartida,true, 'El formato de la fecha no es la correcta');
         $_horaPartida = new DateFormat($horaPartida,true, 'El formato de la hora no es la correcta');
         $_idRuta = new Id($idRuta,false, 'El id de la ruta no tiene el formato correcto');
-        $_idParadero = new Id($idParadero,false, 'El id del paradero no tiene el formato correcto');
+        $_idBoletoPrecio = new Id($idBoletoPrecio,false, 'El id del precio no tiene el formato correcto');
         $_precio = new NumericFloat($precio);
         $_idTipoMoneda = new NumericInteger($idTipoMoneda);
         $_idFormaPago = new NumericInteger($idFormaPago);
@@ -103,7 +103,7 @@ final class PuntoVentaUseCase
             $_fechaPartida,
             $_horaPartida,
             $_idRuta,
-            $_idParadero,
+            $_idBoletoPrecio,
             $_precio,
             $_idTipoMoneda,
             $_idFormaPago,

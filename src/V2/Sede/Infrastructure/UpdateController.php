@@ -22,6 +22,7 @@ final class UpdateController
         $idSede     = $request->id;
         $nombre          = $request->input('nombre');
         $direccion          = $request->input('direccion');
+        $codigo          = $request->input('codigo');
         $idEstado   = $request->input('idEstado');
 
         $useCase = new UpdateUseCase( $this->repository );
@@ -29,6 +30,7 @@ final class UpdateController
             $idSede,
             $nombre,
             $direccion,
+            $codigo,
             $idEstado,
             $user->getId()
         );

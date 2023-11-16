@@ -3,6 +3,7 @@
 namespace Src\V2\Personal\Infrastructure;
 
 use App\Models\V2\Cliente;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -35,7 +36,12 @@ final class CreateController
 
         $fileName = (is_null($request->foto) || $request->foto === 'null') ? null : ($id . '.' . $request->foto->extension());
         if( !is_null($request->file('foto')) ){
-            $this->resizeAndSTore(300,300,$request->file('foto'),$cliente,$fileName);
+            try {
+                $this->resizeAndSTore(300,300,$request->file('foto'),$cliente,$fileName);
+            }catch (\Exception $e){
+                throw new \InvalidArgumentException($e->getTraceAsString() . ' ' . $e->getMessage());
+            }
+
         }
 
         $user = Auth::user();

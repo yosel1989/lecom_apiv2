@@ -14,11 +14,13 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class PuntoVentaController extends Controller
 {
     private \Src\V2\BoletoInterprovincial\Infrastructure\PuntoVentaController $controller;
+    private \Src\V2\ClienteConfiguracion\Infrastructure\FindByIdController $controllerConfiguracion;
 
 
-    public function __construct(\Src\V2\BoletoInterprovincial\Infrastructure\PuntoVentaController $controller)
+    public function __construct(\Src\V2\BoletoInterprovincial\Infrastructure\PuntoVentaController $controller, \Src\V2\ClienteConfiguracion\Infrastructure\FindByIdController $controllerConfiguracion)
     {
         $this->controller = $controller;
+        $this->controllerConfiguracion = $controllerConfiguracion;
     }
 
     public function __invoke(Request $request)
@@ -29,19 +31,21 @@ class PuntoVentaController extends Controller
 
 
             $boleto = $this->controller->__invoke($request);
+            $configuracion = $this->controllerConfiguracion->__invoke($request);
 
             // generando el qr
-            $qrcode = base64_encode(QrCode::encoding('UTF-8')->format('svg')->size(100)->errorCorrection('M')->generate($boleto->generateQr()));
+//            $qrcode = base64_encode(QrCode::encoding('UTF-8')->format('svg')->size(100)->errorCorrection('M')->generate($boleto->generateQr()));
+            $qrcode = base64_encode(QrCode::encoding('UTF-8')->format('svg')->size(100)->errorCorrection('M')->generate('ddddddd'));
 
             // Creando pdf boleto
             $formatter = new NumeroALetras();
-            $pdf = PDF::loadView('comprobantes.boleta-electronica', compact('boleto', 'formatter', 'qrcode'))
+            $pdf = PDF::loadView('comprobantes.boleta-electronica', compact('boleto', 'configuracion', 'formatter', 'qrcode'))
                 ->setPaper(array( 0 , 0 , 226.77 , 226.77 ), 'landscape')->setOption( 'dpi' , '72' );
             $page_count = $pdf->getCanvas()->get_page_number();
 
 //            dd($pdf->getCanvas( ));
             unset( $pdf );
-            $pdf = PDF::loadView('comprobantes.boleta-electronica', compact('boleto', 'formatter', 'qrcode'))
+            $pdf = PDF::loadView('comprobantes.boleta-electronica', compact('boleto', 'configuracion', 'formatter', 'qrcode'))
                 ->setPaper(array( 0 , 0 , 226.77 * $page_count + 320 , 226.77 ), 'landscape')->setOption( 'dpi' , '72' );
             return response()->json([
                 'data' => null,
@@ -58,7 +62,7 @@ class PuntoVentaController extends Controller
                 'data' => [],
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
-                'd' => $page_count,
+//                'd' => $page_count,
                 'status' => Response::HTTP_BAD_REQUEST
             ]);
 
