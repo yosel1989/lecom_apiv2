@@ -10,6 +10,7 @@ use App\Models\V2\BoletoInterprovincialOficial as EloquentModelBoletoInterprovin
 use App\Models\V2\Caja;
 use App\Models\V2\Cliente;
 use App\Models\V2\Cliente as EloquentModelClient;
+use App\Models\V2\ComprobanteSerie;
 use App\Models\V2\Paradero;
 use App\Models\V2\Ruta;
 use App\Models\V2\Sede;
@@ -382,6 +383,14 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         if( is_null($Sede->first()->codigo) ){
             throw new InvalidArgumentException( 'Falta ingresar el código de la sede' );
         }
+        // Validar sede
+        $Serie = ComprobanteSerie::where('id_estado', 1)->where('id_cliente',$_idCliente->value())->where('id_tipo_comprobante',$_idTipoComprobante->value());
+        if( $Serie->count() === 0 ){
+            throw new InvalidArgumentException( 'Falta registrar la serie en el sistema' );
+        }
+        if( $Serie->count() > 1 ){
+            throw new InvalidArgumentException( 'Existe más de una serie registrada' );
+        }
         // Validar caja
         $Caja = Caja::selectRaw('count(*) as total')->where('id', $_idCaja->value())->where('id_estado', 1)->where('id_eliminado',0)->first();
         if( $Caja->total === 0 ){
@@ -463,13 +472,13 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             'nombre' => $_nombres->value() . ' ' . $_apellidos->value(),
 
             // estados
-//                'enBlanco' => 0,
+//          'enBlanco' => 0,
             'anulado' => 0,
 
-//                // comprobante
+//          // comprobante
             'id_tipo_comprobante' => $_idTipoComprobante->value(),
-            'serieComprobante' => $_serie->nombre,
-            'numeroComprobante' => 111111111,
+//            'serieComprobante' => $_serie->nombre,
+//            'numeroComprobante' => 111111111,
 
             'por_pagar' => 0,
             'id_tipo_boleto' => IdTipoBoleto::VentaBoleto->value,

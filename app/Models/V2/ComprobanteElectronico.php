@@ -32,7 +32,7 @@ class ComprobanteElectronico extends Model
         'id_sunat_transaccion',
 
 
-        //            $table->uuid('idClienteSunat')->nullable();
+        //  $table->uuid('idClienteSunat')->nullable();
         'id_tipo_documento_entidad',
         'numero_documento_entidad',
         'nombre_entidad',
@@ -104,7 +104,9 @@ class ComprobanteElectronico extends Model
         'id_usu_registro',
         'id_usu_modifico',
         'f_registro',
-        'f_modifico'
+        'f_modifico',
+
+        'ultimo_numero'
     ];
 
     /**
@@ -158,7 +160,10 @@ class ComprobanteElectronico extends Model
 
         'id_estado' =>  'integer',
         'f_registro' =>  'string',
-        'f_modifico' =>  'string'
+        'f_modifico' =>  'string',
+
+
+        'ultimo_numero' => 'integer'
     ];
 
 }
