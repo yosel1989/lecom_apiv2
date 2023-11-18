@@ -99,7 +99,7 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
         $relation = $this->eloquentUserVehicleModel->with(
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos'
-        )->where('id_usuario',$idUsuario->value())->get();
+        )->where('idUsuario',$idUsuario->value())->get();
 
         if($relation->isEmpty()){
             return [];
