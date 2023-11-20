@@ -116,6 +116,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 //            ->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos', 'vehiculo:id,placa', 'destino:id,nombre')
             ->whereDate('f_registro','>=',$fechaDesde->value())
             ->whereDate('f_registro','<=',$fechaHasta->value())
+            ->orderBy('f_registro', 'DESC')
             ->get();
 
         $arrVehicles = array();
