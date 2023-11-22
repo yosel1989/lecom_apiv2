@@ -301,15 +301,12 @@ Route::middleware('auth:sanctum')->group(function() {
         $porPagar = $request->has('porPagar') ? (int)$request->input('porPagar') : 0;
 
         switch ($idTipoBoleto){
-            case \App\Enums\IdTipoBoleto::VentaBoleto->value:
-                $idRazon = \App\Enums\EnumRazonComprobante::VentaBoleto->value;
-                $idProductoServicio = \App\Enums\EnumProductoServicio::BoletoInterprovincial->value;
-                break;
 
             case \App\Enums\IdTipoBoleto::Bodega:
                 $idRazon = \App\Enums\EnumRazonComprobante::Bodega->value;
                 $idProductoServicio = \App\Enums\EnumProductoServicio::Bodega->value;
                 break;
+            case \App\Enums\IdTipoBoleto::VentaBoleto->value:
             default:
                 $idRazon = \App\Enums\EnumRazonComprobante::VentaBoleto->value;
                 $idProductoServicio = \App\Enums\EnumProductoServicio::BoletoInterprovincial->value;
@@ -411,6 +408,24 @@ Route::middleware('auth:sanctum')->group(function() {
             }
             $_caja = $Caja->first();
 
+            // Validar apertura de caja
+            $cajaApertura = \App\Models\V2\CajaDiario::where('id_caja')->limit(1)->orderBy('f_apertura', 'DESC');
+            if($cajaApertura->count() === 0){
+                return response()->json([
+                    'data'      => null,
+                    'error' => 'No existe ninguna apertura de caja',
+                    'status' => 1020
+                ]);
+            }
+            if(!is_null($cajaApertura->first()->f_cierre)){
+                return response()->json([
+                    'data'      => null,
+                    'error' => 'Debe cerrar primero la caja',
+                    'status' => 1021
+                ]);
+            }
+
+
             $Pos  = \App\Models\V2\Pos::where('id', $request->input('idPos'))
                 ->where('id_estado',1)
                 ->where('id_eliminado',0)
@@ -481,25 +496,25 @@ Route::middleware('auth:sanctum')->group(function() {
 
             /******* Validar que el boleto  ******************/
             if($model->where('codigo',$request->input('codigoBoleto'))->count() > 0){
+//                return response()->json([
+//                    'data' => null,
+//                    'error' => 'El boleto fue registrado con exito',
+//                    'status' => Response::HTTP_CREATED
+//                ]);
                 return response()->json([
                     'data' => null,
-                    'error' => null,
-                    'status' => Response::HTTP_CREATED
+                    'error' => 'El código del boleto ya fue registrado',
+                    'status' => 1001
                 ]);
-//                return response()->json([
-//                    'data' => null,
-//                    'error' => 'El código del boleto ya fue registrado',
-//                    'status' => 1001
-//                ]);
             }
-//            /******* Validar que el comprobante  ******************/
-//            if(\App\Models\V2\ComprobanteElectronico::where('serie',$request->input('serie'))->where('numero',$request->input('numero'))->get()->count()){
-//                return response()->json([
-//                    'data' => null,
-//                    'error' => 'La serie y el número de comprobante ya fueron registrados',
-//                    'status' => 1002
-//                ]);
-//            }
+            /******* Validar que el comprobante  ******************/
+            if(\App\Models\V2\ComprobanteElectronico::where('serie',$request->input('serie'))->where('numero',$request->input('numero'))->get()->count()){
+                return response()->json([
+                    'data' => null,
+                    'error' => 'La serie y el número de comprobante ya fueron registrados',
+                    'status' => 1002
+                ]);
+            }
 
             /******* Validar viaje  ******************/
             $existe  = \App\Models\V2\BoletoPrecio::select('id')
@@ -524,36 +539,36 @@ Route::middleware('auth:sanctum')->group(function() {
                 ->where('id_cliente', $_cliente->id )
                 ->count();
             if($boletoValido > 0){
-                return response()->json([
-                    'data' => null,
-                    'error' => null,
-                    'status' => Response::HTTP_CREATED
-                ]);
 //                return response()->json([
 //                    'data' => null,
-//                    'error' => 'El código del boleto ya fue registrado',
-//                    'status' => 1001
+//                    'error' => null,
+//                    'status' => Response::HTTP_CREATED
 //                ]);
+                return response()->json([
+                    'data' => null,
+                    'error' => 'El código del boleto ya fue registrado',
+                    'status' => 1001
+                ]);
             }
 
             /************ Validar comprobante *****************/
-            $comprobanteValido = \App\Models\V2\ComprobanteElectronico::select('id')
+            $comprobanteValido = $model->select('id')
                 ->where('id_tipo_comprobante', $request->input('idTipoComprobante'))
                 ->where('serie', $request->input('serieComprobante'))
                 ->where('numero', $request->input('numeroComprobante'))
                 ->where('id_cliente', $_cliente->id )
                 ->count();
             if($comprobanteValido > 0){
-                return response()->json([
-                    'data' => null,
-                    'error' => null,
-                    'status' => Response::HTTP_CREATED
-                ]);
 //                return response()->json([
 //                    'data' => null,
-//                    'error' => 'El comprobante ya fue registrado',
-//                    'status' => 1002
+//                    'error' => null,
+//                    'status' => Response::HTTP_CREATED
 //                ]);
+                return response()->json([
+                    'data' => null,
+                    'error' => 'El comprobante ya fue registrado',
+                    'status' => 1002
+                ]);
             }
 
             $model->create([

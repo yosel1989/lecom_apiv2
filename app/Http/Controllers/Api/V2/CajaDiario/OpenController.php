@@ -66,7 +66,8 @@ class OpenController extends Controller
                 ]);
             }
 
-            $Configuracion = ClienteConfiguracion::where('id_cliente', $request->input('idCliente'))->where('id_parametro_configuracion', EnumParametroConfiguracion::NumeroComprobantesDiarios->value)->get();
+            $Configuracion = ClienteConfiguracion::where('id_cliente', $request->input('idCliente'))
+                ->where('id_parametro_configuracion', EnumParametroConfiguracion::NumeroComprobantesDiarios->value)->get();
 
             $this->controller->__invoke($request);
 
@@ -85,7 +86,7 @@ class OpenController extends Controller
                         $serie = $serieLetra . str_pad($_vehiculo->codigo,3,'0',STR_PAD_LEFT);
                         $OCliente = Cliente::findOrFail($request->input('idCliente'));
                         $BoletoInterprovincial = new BoletoInterprovincial();
-                        $BoletoInterprovincial->setTable('boleto_interprovincial_' . $OCliente->codigo);
+                        $BoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
 
                         $ComprobanteElectronico = new ComprobanteElectronico();
 
