@@ -17,11 +17,12 @@ final class GetReportByClienteUseCase
         $this->repository = $repository;
     }
 
-    public function __invoke(string $idCliente, string $fechaDesde, string $fechaHasta): array
+    public function __invoke(string $idCliente, string $fechaDesde, string $fechaHasta, ?string $idRuta): array
     {
         $_idCliente = new Id($idCliente,false, 'El id del cliente no tiene el formato correcto');
         $_fechaDesde = new DateFormat($fechaDesde,false, 'El fecha inicio no tiene el formato correcto');
         $_fechaHasta= new DateFormat($fechaHasta,false, 'El fecha final no tiene el formato correcto');
-        return $this->repository->reportByCliente($_idCliente, $_fechaDesde, $_fechaHasta);
+        $_idRuta= new Id($idRuta,true, 'El id de la ruta no tiene el formato correcto');
+        return $this->repository->reportByCliente($_idCliente, $_fechaDesde, $_fechaHasta, $_idRuta);
     }
 }

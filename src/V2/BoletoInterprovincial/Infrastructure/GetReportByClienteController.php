@@ -25,8 +25,9 @@ final class GetReportByClienteController
         $idClient = $request->id;
         $fechaDesde = $request->fechaDesde;
         $fechaHasta = $request->fechaHasta;
+        $idRuta = $request->idRuta;
         $useCase = new GetReportByClienteUseCase($this->repository);
-        return $useCase->__invoke($idClient, $fechaDesde, $fechaHasta);
+        return $useCase->__invoke($idClient, $fechaDesde, $fechaHasta, $idRuta);
     }
 
 }
