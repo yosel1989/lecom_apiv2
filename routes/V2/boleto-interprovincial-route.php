@@ -59,7 +59,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data'      => null,
                     'error' => 'El cliente no se encuentra registrado en el sistema o esta inhabilitado.',
                     'status' => Response::HTTP_NOT_FOUND
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             $_cliente = $Cliente->first();
 
@@ -74,7 +74,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data'      => null,
                     'error' => 'El vehiculo no se encuentra registrado en el sistema o esta inhabilitado.',
                     'status' => Response::HTTP_NOT_FOUND
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             $_vehiculo = $Vehiculo->first();
 
@@ -90,7 +90,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data'      => null,
                     'error' => 'La ruta no se encuentra registrado en el sistema o esta inhabilitado.',
                     'status' => Response::HTTP_NOT_FOUND
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             $_ruta = $Ruta->first();
 
@@ -106,7 +106,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data'      => null,
                     'error' => 'El viaje no se encuentra registrado en el sistema o esta inhabilitado.',
                     'status' => Response::HTTP_NOT_FOUND
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             $_paradero = $Paradero->first();
 
@@ -121,7 +121,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data'      => null,
                     'error' => 'La caja no se encuentra registrado en el sistema o esta inhabilitado.',
                     'status' => Response::HTTP_NOT_FOUND
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             $_caja = $Caja->first();
 
@@ -135,7 +135,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data'      => null,
                     'error' => 'El equipo POS no se encuentra registrado en el sistema o esta inhabilitado.',
                     'status' => Response::HTTP_NOT_FOUND
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             $_pos = $Pos->first();
 
@@ -145,7 +145,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data'      => null,
                     'error' => 'El viaje '. $_paradero->paraderoOrigen->nombre . ' - ' . $_paradero->paraderoDestino->nombre .' no esta registrado en la ruta ' . $_ruta->nombre,
                     'status' => Response::HTTP_NOT_FOUND
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             /******* Verificar que que la caja insertada pertenece al equipo POS ******************/
             if($_caja->idPos !== $_pos->id){
@@ -153,12 +153,12 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data'      => null,
                     'error' => 'La caja ' . $_caja->nombre . ' no esta asignada al Equipo POS ' . $_pos->nombre,
                     'status' => Response::HTTP_NOT_FOUND
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
 
 
             if (!Schema::hasTable('boleto_interprovincial_' . $_cliente->codigo)) {
-                DB::statement("CREATE TABLE boleto_interprovincial_' . $_cliente->codigo . ' LIKE boleto_interprovincial_base");
+                DB::statement("CREATE TABLE boleto_interprovincial_cliente_' . $_cliente->codigo . ' LIKE boleto_interprovincial_base");
 
 //                Schema::create('boleto_interprovincial_' . $_cliente->codigo, function (Blueprint $table) {
 //                    $table->uuid('id')->unique()->primary();
@@ -234,52 +234,20 @@ Route::middleware('auth:sanctum')->group(function() {
                 'data' => null,
                 'error' => null,
                 'status' => Response::HTTP_CREATED
-            ]);
+            ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
 
         }catch ( InvalidArgumentException | Exception $e ){
             return response()->json([
                 'data' => null,
                 'error' => $e->getMessage(),
                 'status' => Response::HTTP_BAD_REQUEST
-            ]);
+            ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
         }
 
     });
 
 
     Route::post('app/boleto-pos-v2', function(Request $request){
-
-
-        //        {
-        //            "idVehiculo": "a24f130c-bc1f-4b72-83c8-a8d371481806",
-        //    "idRuta": "a8af5916-96c8-49db-9793-688206125483",
-        //    "idParadero": "ff2c2b82-7ae9-4375-b8a6-4ddb2ff52380",
-        //    "idTipoDocumento":  1,
-        //    "numeroDocumento":  "45846461",
-        //    "nombre":  "YOSEL EDWIN AGUIRRE BALBIN",
-        //    "direccion":  null,
-        //    "precio": 99,
-        //    "fecha": "2022-07-11 17:23:14",
-        //    "codigoBoleto": "F02001-2023071100001",
-        //    "latitud": 0,
-        //    "longitud": 0,
-        //    "idCaja": "b7032077-32ed-44b3-b5d0-f94e85bc17d6",
-        //    "idPos": "5d8ffdbc-a14e-4c57-bc42-55fae676bbe5",
-        //    "enBlanco": 0,
-        //    "nombres": "YOSEL EDWIN",
-        //    "apellidos": "AGUIRRE BALBIN",
-        //    "idTipoComprobante": 1,
-        //    "serieComprobante": "B001",
-        //    "numeroComprobante": 1,
-        //    "porPagar": 0
-        //}
-
-
-        /*
-            idVehiculo,
-            idRuta,
-        */
-
 
 
         $idBoleto = Uuid::uuid4();
@@ -337,7 +305,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data'      => null,
                     'error' => 'El cliente no se encuentra registrado en el sistema o esta inhabilitado.',
                     'status' => 1004
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             $_cliente = $Cliente->first();
 
@@ -352,7 +320,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data'      => null,
                     'error' => 'El vehiculo no se encuentra registrado en el sistema o esta inhabilitado.',
                     'status' => 1005
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             $_vehiculo = $Vehiculo->first();
 
@@ -367,7 +335,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data'      => null,
                     'error' => 'La ruta no se encuentra registrado en el sistema o esta inhabilitado.',
                     'status' => 1006
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             $_ruta = $Ruta->first();
 
@@ -383,7 +351,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data'      => null,
                     'error' => 'El viaje no se encuentra registrado en el sistema o esta inhabilitado.',
                     'status' => 1003
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             $_paradero = $Paradero->first();
 
@@ -398,25 +366,25 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data'      => null,
                     'error' => 'La caja no se encuentra registrado en el sistema o esta inhabilitado.',
                     'status' => 1007
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             $_caja = $Caja->first();
 
             // Validar apertura de caja
-            $cajaApertura = \App\Models\V2\CajaDiario::where('id_caja')->limit(1)->orderBy('f_apertura', 'DESC');
+            $cajaApertura = \App\Models\V2\CajaDiario::where('id_caja', $_caja->id)->orderBy('f_apertura', 'DESC')->limit(1);
             if($cajaApertura->count() === 0){
                 return response()->json([
                     'data'      => null,
-                    'error' => 'No existe ninguna apertura de caja',
+                    'error' => 'No existe ninguna apertura de caja ' . $_caja->id,
                     'status' => 1020
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             if(!is_null($cajaApertura->first()->f_cierre)){
                 return response()->json([
                     'data'      => null,
                     'error' => 'Debe cerrar primero la caja',
                     'status' => 1021
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
 
 
@@ -430,7 +398,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data'      => null,
                     'error' => 'El equipo POS no se encuentra registrado en el sistema o esta inhabilitado.',
                     'status' => 1008
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             $_pos = $Pos->first();
 
@@ -440,15 +408,15 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data'      => null,
                     'error' => 'El viaje '. $_paradero->paraderoOrigen->nombre . ' - ' . $_paradero->paraderoDestino->nombre .' no esta registrado en la ruta ' . $_ruta->nombre,
                     'status' => 1009
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             /******* Verificar que que la caja insertada pertenece al equipo POS ******************/
             if($_caja->id_pos !== $_pos->id){
                 return response()->json([
-                    'data'      => null,
+                    'data'  => null,
                     'error' => 'La caja ' . $_caja->nombre . ' no esta asignada al Equipo POS ' . $_pos->nombre,
                     'status' => 1010
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
 
 
@@ -490,11 +458,6 @@ Route::middleware('auth:sanctum')->group(function() {
 
             /******* Validar que el boleto  ******************/
             if($model->where('codigo',$request->input('codigoBoleto'))->count() > 0){
-//                return response()->json([
-//                    'data' => null,
-//                    'error' => 'El boleto fue registrado con exito',
-//                    'status' => Response::HTTP_CREATED
-//                ]);
                 return response()->json([
                     'data' => null,
                     'error' => 'El código del boleto ya fue registrado',
@@ -507,7 +470,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data' => null,
                     'error' => 'La serie y el número de comprobante ya fueron registrados',
                     'status' => 1002
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
 
             /******* Validar viaje  ******************/
@@ -521,7 +484,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data' => null,
                     'error' => 'El viaje no se encuentra registrado en el sistema',
                     'status' => 1003
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             $viaje = \App\Models\V2\BoletoPrecio::select('id', 'id_paradero_origen', 'id_paradero_destino')->where('id_cliente', $_cliente->id)->where('id_ruta', $request->input('idRuta'))->first();
 
@@ -540,13 +503,13 @@ Route::middleware('auth:sanctum')->group(function() {
 //                ]);
                 return response()->json([
                     'data' => null,
-                    'error' => 'El código del boleto ya fue registrado',
+                    'error' => 'El codigo del boleto ya fue registrado',
                     'status' => 1001
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
 
             /************ Validar comprobante *****************/
-            $comprobanteValido = $model->select('id')
+            $comprobanteValido = \App\Models\V2\ComprobanteElectronico::select('id')
                 ->where('id_tipo_comprobante', $request->input('idTipoComprobante'))
                 ->where('serie', $request->input('serieComprobante'))
                 ->where('numero', $request->input('numeroComprobante'))
@@ -562,7 +525,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'data' => null,
                     'error' => 'El comprobante ya fue registrado',
                     'status' => 1002
-                ]);
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
 
             $model->create([
@@ -722,7 +685,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
                 'id_estado' => 1,
                 'id_usu_registro' => $user->getId(),
-                'id_usu_modifico' => $user->getId(),
+//                'id_usu_modifico' => $user->getId(),
             ]);
 
                 \App\Models\V2\ComprobanteElectronicoItem::create([
@@ -753,7 +716,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
                     'id_usu_registro' => $user->getId(),
-                    'id_usu_modifico' => $user->getId(),
+//                    'id_usu_modifico' => $user->getId(),
                 ]);
 
 
@@ -766,14 +729,14 @@ Route::middleware('auth:sanctum')->group(function() {
                 'data' => null,
                 'error' => null,
                 'status' => Response::HTTP_CREATED
-            ]);
+            ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
 
         }catch ( InvalidArgumentException | Exception $e ){
             return response()->json([
                 'data' => null,
                 'error' => $e->getMessage(),
                 'status' => Response::HTTP_BAD_REQUEST
-            ]);
+            ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
         }
 
     });
