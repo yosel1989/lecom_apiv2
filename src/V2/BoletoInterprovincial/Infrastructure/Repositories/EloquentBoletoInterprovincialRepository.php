@@ -103,7 +103,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         return $arrVehicles;
     }
 
-    public function reportByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): array
+    public function reportByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idRuta): array
     {
 
         $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
@@ -115,8 +115,13 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 //            )
 //            ->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos', 'vehiculo:id,placa', 'destino:id,nombre')
             ->whereDate('f_registro','>=',$fechaDesde->value())
-            ->whereDate('f_registro','<=',$fechaHasta->value())
-            ->orderBy('f_registro', 'DESC')
+            ->whereDate('f_registro','>=',$fechaDesde->value());
+
+        if(!is_null($idRuta->value())){
+            $models->where('id_ruta',$idRuta->value());
+        }
+
+        $models = $models->orderBy('f_registro', 'DESC')
             ->get();
 
         $arrVehicles = array();

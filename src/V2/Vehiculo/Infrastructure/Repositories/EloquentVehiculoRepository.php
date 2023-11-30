@@ -96,10 +96,12 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
 
     public function listByUsuario(Id $idUsuario): array
     {
+        $arrVehicles = [];
+
         $relation = $this->eloquentUserVehicleModel->with(
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos'
-        )->where('idUsuario',$idUsuario->value())->get();
+        )->where('id_usuario',$idUsuario->value())->get();
 
         if($relation->isEmpty()){
             return [];
@@ -109,10 +111,12 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
 
         $rel = json_decode($relation->vehiculos);
 
+//        dd($rel);
+
         foreach ( $rel as $model ){
 
             if($model->id !== '0'){
-                $vehicle = $this->eloquentModelVehiculo->findOrFail($rel->id);
+                $vehicle = $this->eloquentModelVehiculo->findOrFail($model->id);
 
                 $OModel = new UsuarioVehiculo(
                     new Id($vehicle->id , false, 'El id del vehiculo no tiene el formato correcto'),
@@ -137,7 +141,6 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
 
             $OModel->setUsuarioRegistro(new Text(!is_null($relation->usuarioRegistro) ? ( $relation->usuarioRegistro->nombres . ' ' . $relation->usuarioRegistro->apellidos ) : null, true, -1));
             $OModel->setUsuarioModifico(new Text(!is_null($relation->usuarioModifico) ? ( $relation->usuarioModifico->nombres . ' ' . $relation->usuarioModifico->apellidos ) : null, true, -1));
-
 
             $arrVehicles[] = $OModel;
         }

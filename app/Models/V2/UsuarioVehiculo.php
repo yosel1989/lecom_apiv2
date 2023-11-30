@@ -15,8 +15,8 @@ class UsuarioVehiculo extends Model
     protected $table = "usuario_vehiculos";
     public $timestamps = true;
 
-    const CREATED_AT = 'fechaRegistro';
-    const UPDATED_AT = 'fechaModifico';
+    const CREATED_AT = 'f_registro';
+    const UPDATED_AT = 'f_modifico';
     /**
      * The attributes that are mass assignable.
      *
@@ -24,12 +24,12 @@ class UsuarioVehiculo extends Model
      */
     protected $fillable = [
         'id',
-        'idUsuario',
+        'id_usuario',
         'vehiculos',
-        'idUsuarioRegistro',
-        'idUsuarioModifico',
-        'fechaRegistro',
-        'fechaModifico',
+        'id_usu_registro',
+        'id_usu_modifico',
+        'f_registro',
+        'f_modifico',
     ];
 
     /**
@@ -38,17 +38,17 @@ class UsuarioVehiculo extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'fechaRegistro' =>  'string',
-        'fechaModifico' =>  'string',
+        'f_registro' =>  'string',
+        'f_modifico' =>  'string',
         'vehiculos' => 'array'
     ];
 
 
     public function usuarioRegistro(){
-        return $this->hasOne('App\Models\User','id','idUsuarioRegistro');
+        return $this->hasOne('App\Models\User','id','id_usu_registro');
     }
 
     public function usuarioModifico(){
-        return $this->hasOne('App\Models\User','id','idUsuarioModifico');
+        return $this->hasOne('App\Models\User','id','id_usu_modifico');
     }
 }
