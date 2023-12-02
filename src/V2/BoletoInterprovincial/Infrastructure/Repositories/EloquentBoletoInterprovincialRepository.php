@@ -103,7 +103,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         return $arrVehicles;
     }
 
-    public function reportByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idRuta): array
+    public function reportByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idRuta, Id $idUsuario): array
     {
 
         $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());

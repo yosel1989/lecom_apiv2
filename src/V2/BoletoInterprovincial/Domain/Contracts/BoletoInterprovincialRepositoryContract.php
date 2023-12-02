@@ -14,7 +14,7 @@ interface BoletoInterprovincialRepositoryContract
 {
 
     public function collectionByCliente(Id $idCliente): array;
-    public function reportByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idRuta): array;
+    public function reportByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idRuta, Id $idUsuario): array;
     public function reportePuntoVentaByCliente(Id $idCliente, Id $idSede, DateFormat $fecha): array;
 
     public function changeState(
