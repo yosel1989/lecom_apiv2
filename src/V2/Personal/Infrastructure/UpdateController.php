@@ -50,6 +50,8 @@ final class UpdateController
             }
         }
 
+//        dd($request->input('apellido'));
+
         $user = Auth::user();
         $idPersonal      = $request->id;
         $foto            = $fileName ? ("uploads/" . $cliente->id . "/" .$fileName) : null;
@@ -87,13 +89,13 @@ final class UpdateController
 
         // verificar que la carpeta existe, sino crearla
         if(!file_exists(public_path("uploads"))){
-            mkdir(public_path("uploads"), 666, true);
+            mkdir(public_path("uploads"), 0755, true);
         }
 
         // verificar que la carpeta cliente, sino crearla
         if(!file_exists(public_path("uploads/" . $cliente->id))){
             // Crear folder para el cliente
-            mkdir(public_path("uploads/" . $cliente->id ), 666, true);
+            mkdir(public_path("uploads/" . $cliente->id ), 0755, true);
             // Crear archivo de información
             $info = '';
             $info .= 'Id Cliente: ' . $cliente->id . PHP_EOL;

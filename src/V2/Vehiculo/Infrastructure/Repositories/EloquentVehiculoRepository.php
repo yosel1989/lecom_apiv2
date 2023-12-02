@@ -7,7 +7,6 @@ namespace Src\V2\Vehiculo\Infrastructure\Repositories;
 use App\Models\V2\Vehiculo as EloquentModelVehiculo;
 use App\Models\V2\UsuarioVehiculo as EloquentModelUsuarioVehiculo;
 use Illuminate\Support\Facades\DB;
-use InvalidArgumentException;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
@@ -15,7 +14,8 @@ use Src\Core\Domain\ValueObjects\Text;
 use Src\V2\Vehiculo\Domain\Contracts\VehiculoRepositoryContract;
 use Src\V2\Vehiculo\Domain\UsuarioVehiculo;
 use Src\V2\Vehiculo\Domain\Vehiculo;
-use Src\V2\Vehiculo\Domain\VehiculoList;
+use Src\V2\Vehiculo\Domain\VehiculoShort;
+use Src\V2\Vehiculo\Domain\VehiculoShortList;
 
 final class EloquentVehiculoRepository implements VehiculoRepositoryContract
 {
@@ -82,7 +82,7 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
 
         foreach ( $vehicles as $model ){
 
-            $OModel = new VehiculoList(
+            $OModel = new VehiculoShort(
                 new Id($model->id , false, 'El id del vehiculo no tiene el formato correcto'),
                 new Text($model->placa, false, 7, 'La placa excede los 7 caracteres'),
                 new Text($model->unidad, false, 10, 'La unidad excede los 10 caracteres'),
@@ -94,7 +94,7 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
     }
 
 
-    public function listByUsuario(Id $idUsuario): array
+    public function collectionByUsuario(Id $idUsuario): array
     {
         $arrVehicles = [];
 
@@ -147,6 +147,84 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
 
         return $arrVehicles;
     }
+
+
+    public function listByUsuario(Id $idUsuario, Id $idCliente): VehiculoShortList
+    {
+        $arrVehicles = new VehiculoShortList();
+
+        $relation = $this->eloquentUserVehicleModel->with(
+            'usuarioRegistro:id,nombres,apellidos',
+            'usuarioModifico:id,nombres,apellidos'
+        )->where('id_usuario',$idUsuario->value());
+
+        if($relation->count() == 0){
+            return $arrVehicles;
+        }
+
+        $relation = $relation->first();
+
+        $rel = json_decode($relation->vehiculos);
+
+        if(count($rel) === 1){
+            if($rel[0]->id !== '0'){
+                $vehicle = $this->eloquentModelVehiculo->findOrFail($rel[0]->id);
+
+                $OModel = new VehiculoShort(
+                    new Id($vehicle->id , false, 'El id del vehiculo no tiene el formato correcto'),
+                    new Text($vehicle->placa, false, -1, ''),
+                    new Text($vehicle->unidad, false, -1, '')
+                );
+
+                $arrVehicles->add($OModel);
+            }else{
+
+                $vehicles = $this->eloquentModelVehiculo
+                    ->select('id','placa','unidad')
+                    ->where('id_estado', 1)
+                    ->where('id_eliminado', 0)
+                    ->where('id_cliente',$idCliente->value())
+                    ->get();
+
+                foreach ( $vehicles as $model) {
+                    $OModel = new VehiculoShort(
+                        new Id($model->id , false, 'El id del vehiculo no tiene el formato correcto'),
+                        new Text($model->placa, false, -1, ''),
+                        new Text($model->unidad, false, -1, '')
+                    );
+                    $arrVehicles->add($OModel);
+                }
+            }
+        }else{
+            $ids = array_map(function($val){
+                return $val->id;
+            }, $rel);
+
+            $vehicles = $this->eloquentModelVehiculo
+                ->select('id','placa','unidad')
+                ->where('id_estado', 1)
+                ->where('id_eliminado', 0)
+                ->where('id_cliente',$idCliente->value())
+                ->whereIn('id',$ids);
+
+            if($vehicles->count() > 0){
+                foreach ( $vehicles as $model) {
+                    $OModel = new VehiculoShort(
+                        new Id($model->id , false, 'El id del vehiculo no tiene el formato correcto'),
+                        new Text($model->placa, false, -1, ''),
+                        new Text($model->unidad, false, -1, '')
+                    );
+                    $arrVehicles->add($OModel);
+                }
+            }
+
+
+
+        }
+
+        return $arrVehicles;
+    }
+
 
     public function asignarUsuario(Id $idUsuario, Text $vehiculos, Id $idUsuarioRegistro): void
     {

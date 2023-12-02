@@ -3,19 +3,19 @@ declare(strict_types=1);
 
 namespace Src\V2\Vehiculo\Domain;
 
-final class VehiculoList
+final class VehiculoShortList
 {
     /**
-     * @var Vehiculo[] The vehiculos
+     * @var VehiculoShort[] The vehiculos
      */
     private array $list;
 
     /**
      * The constructor.
      *
-     * @param Vehiculo ...$vehiculo The vehiculos
+     * @param VehiculoShort ...$vehiculo The vehiculos
      */
-    public function __construct(Vehiculo ...$vehiculo)
+    public function __construct(VehiculoShort ...$vehiculo)
     {
         $this->list = $vehiculo;
     }
@@ -23,11 +23,11 @@ final class VehiculoList
     /**
      * Add vehiculo to list.
      *
-     * @param Vehiculo $vehiculo The vehiculo
+     * @param VehiculoShort $vehiculo The vehiculo
      *
      * @return void
      */
-    public function add(Vehiculo $vehiculo): void
+    public function add(VehiculoShort $vehiculo): void
     {
         $this->list[] = $vehiculo;
     }
@@ -35,7 +35,7 @@ final class VehiculoList
     /**
      * Get all vehiculos.
      *
-     * @return Vehiculo[] The vehiculos
+     * @return VehiculoShort[] The vehiculos
      */
     public function all(): array
     {

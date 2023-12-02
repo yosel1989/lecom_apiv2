@@ -1,0 +1,4 @@
+Id Cliente: d0d66272-786c-4095-bc39-3631d92006a0
+Código Cliente: 2
+Nombre Cliente: EMPRESA DE TRANSPORTES NORTE CHICO BARRANCA S.A.C.
+Fecha Registro: 2023-10-16 18:50:35

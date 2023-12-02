@@ -6,6 +6,7 @@ use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\V2\Vehiculo\Domain\Vehiculo;
+use Src\V2\Vehiculo\Domain\VehiculoShortList;
 
 interface VehiculoRepositoryContract
 {
@@ -18,7 +19,8 @@ interface VehiculoRepositoryContract
     ): void;
     public function collectionByCliente(Id $idCliente): array;
     public function listByCliente(Id $idCliente): array;
-    public function listByUsuario(Id $idUsuario): array;
+    public function listByUsuario(Id $idUsuario, Id $idCliente): VehiculoShortList;
+    public function collectionByUsuario(Id $idUsuario): array;
     public function asignarUsuario(Id $idUsuario, Text $vehiculos, Id $idUsuarioRegistro): void;
 
     public function update(

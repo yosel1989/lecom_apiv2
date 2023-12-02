@@ -60,16 +60,16 @@ Route::get('time',function(){
 
 
 //
-include 'Modules/coldMachine.php';
-include 'Modules/vehicleTicketing.php';
-include 'Modules/dashboard.php';
-include 'Modules/auth.php';
-include 'Modules/despacho.php';
-include 'Modules/general.php';
-include 'Modules/administracion.php';
-include 'Modules/coldMachine.php';
-include 'Modules/transportePersonal.php';
-include 'Modules/transporteInterprovincial.php';
+//include 'Modules/coldMachine.php';
+//include 'Modules/vehicleTicketing.php';
+//include 'Modules/dashboard.php';
+//include 'Modules/auth.php';
+//include 'Modules/despacho.php';
+//include 'Modules/general.php';
+//include 'Modules/administracion.php';
+//include 'Modules/coldMachine.php';
+//include 'Modules/transportePersonal.php';
+//include 'Modules/transporteInterprovincial.php';
 
 
 include 'V2/auth-route.php';

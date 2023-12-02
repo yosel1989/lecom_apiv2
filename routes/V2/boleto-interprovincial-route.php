@@ -16,6 +16,7 @@ Route::namespace('App\Http\Controllers\Api\V2\BoletoInterprovincial')->middlewar
 
 
     Route::get('cliente/{id}/boleto-interprovincial/reporte-venta/{fechaDesde}/{fechaHasta}/{idRuta}', 'GetReportByClienteController');
+    Route::get('cliente/{id}/usuario/boleto-interprovincial/reporte-venta/{fechaDesde}/{fechaHasta}/{idRuta}', 'GetReportByUsuarioClienteController');
     Route::get('cliente/{id}/boleto-interprovincial/reporte-punto-venta/sede/{idSede}', 'GetReportePuntoVentaByClienteController');
     Route::post('cliente/{id}/boleto-interprovincial/punto-venta', 'PuntoVentaController');
 });
@@ -55,6 +56,10 @@ Route::middleware('auth:sanctum')->group(function() {
 
             $Cliente = \App\Models\V2\Cliente::where('id', $request->idCliente)->where('idEstado',1)->where('idEliminado',0)->get();
             if( $Cliente->isEmpty() ){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error cliente',
+                    'descripcion' => 'El id ' . $request->idCliente . ' no se encuentra registrado o el cliente se encuentra inhabilitado.'
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'El cliente no se encuentra registrado en el sistema o esta inhabilitado.',
@@ -70,6 +75,10 @@ Route::middleware('auth:sanctum')->group(function() {
                 ->where('idCliente',$_cliente->id)
                 ->get();
             if( $Vehiculo->isEmpty() ){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error vehiculo',
+                    'descripcion' => 'El id ' . $request->input('idVehiculo') . ' no se encuentra registrado o el vehiculo se encuentra inhabilitado.'
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'El vehiculo no se encuentra registrado en el sistema o esta inhabilitado.',
@@ -86,6 +95,10 @@ Route::middleware('auth:sanctum')->group(function() {
                 ->where('idCliente',$_cliente->id)
                 ->get();
             if( $Ruta->isEmpty() ){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error ruta',
+                    'descripcion' => 'El id ' . $request->input('idRuta') . ' no se encuentra registrada o la ruta se encuentra inhabilitada.'
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'La ruta no se encuentra registrado en el sistema o esta inhabilitado.',
@@ -102,6 +115,10 @@ Route::middleware('auth:sanctum')->group(function() {
                 ->where('idCliente',$_cliente->id)
                 ->get();
             if( $Paradero->isEmpty() ){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Boleto Precio',
+                    'descripcion' => 'El id ' . $request->input('idParadero') . ' no se encuentra registrada o el precio del boleto se encuentra inhabilitada.'
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'El viaje no se encuentra registrado en el sistema o esta inhabilitado.',
@@ -117,6 +134,10 @@ Route::middleware('auth:sanctum')->group(function() {
                 ->where('idCliente',$_cliente->id)
                 ->get();
             if( $Caja->isEmpty() ){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Caja',
+                    'descripcion' => 'El id ' . $request->input('idCaja') . ' no se encuentra registrada o la caja se encuentra inhabilitada.'
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'La caja no se encuentra registrado en el sistema o esta inhabilitado.',
@@ -131,6 +152,10 @@ Route::middleware('auth:sanctum')->group(function() {
                 ->where('idCliente',$_cliente->id)
                 ->get();
             if( $Pos->isEmpty() ){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error POS',
+                    'descripcion' => 'El id ' . $request->input('idPos') . ' no se encuentra registrada o el POS se encuentra inhabilitada.'
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'El equipo POS no se encuentra registrado en el sistema o esta inhabilitado.',
@@ -141,6 +166,10 @@ Route::middleware('auth:sanctum')->group(function() {
 
             /******* Verificar que el paradero insertado pertenece a la ruta ******************/
             if($_paradero->idRuta !== $_ruta->id){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error viaje',
+                    'descripcion' => 'El viaje '. $_paradero->paraderoOrigen->nombre . ' - ' . $_paradero->paraderoDestino->nombre .' no esta registrado en la ruta ' . $_ruta->nombre
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'El viaje '. $_paradero->paraderoOrigen->nombre . ' - ' . $_paradero->paraderoDestino->nombre .' no esta registrado en la ruta ' . $_ruta->nombre,
@@ -149,6 +178,10 @@ Route::middleware('auth:sanctum')->group(function() {
             }
             /******* Verificar que que la caja insertada pertenece al equipo POS ******************/
             if($_caja->idPos !== $_pos->id){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Caja',
+                    'descripcion' => 'La caja ' . $_caja->nombre . ' no esta asignada al Equipo POS ' . $_pos->nombre,
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'La caja ' . $_caja->nombre . ' no esta asignada al Equipo POS ' . $_pos->nombre,
@@ -301,6 +334,10 @@ Route::middleware('auth:sanctum')->group(function() {
 
             $Cliente = \App\Models\V2\Cliente::where('id', $request->input('idCliente'))->where('idEstado',1)->where('idEliminado',0)->get();
             if( $Cliente->isEmpty() ){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Cliente',
+                    'descripcion' => 'El cliente ' . $request->input('idCliente') . ' no se encuentra registrado en el sistema o esta inhabilitado.',
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'El cliente no se encuentra registrado en el sistema o esta inhabilitado.',
@@ -316,6 +353,10 @@ Route::middleware('auth:sanctum')->group(function() {
                 ->where('id_cliente',$_cliente->id)
                 ->get();
             if( $Vehiculo->isEmpty() ){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Vehiculo',
+                    'descripcion' => 'El vehiculo ' . $request->input('idVehiculo') . ' no se encuentra registrado en el sistema o esta inhabilitado.',
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'El vehiculo no se encuentra registrado en el sistema o esta inhabilitado.',
@@ -331,6 +372,10 @@ Route::middleware('auth:sanctum')->group(function() {
                 ->where('id_cliente',$_cliente->id)
                 ->get();
             if( $Ruta->isEmpty() ){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Ruta',
+                    'descripcion' => 'La ruta ' . $request->input('idRuta') . ' no se encuentra registrada en el sistema o esta inhabilitada.',
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'La ruta no se encuentra registrado en el sistema o esta inhabilitado.',
@@ -347,6 +392,10 @@ Route::middleware('auth:sanctum')->group(function() {
                 ->where('id_cliente',$_cliente->id)
                 ->get();
             if( $Paradero->isEmpty() ){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Viaje',
+                    'descripcion' => 'El viaje ' . $request->input('idParadero') . ' no se encuentra registrada en el sistema o esta inhabilitada.',
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'El viaje no se encuentra registrado en el sistema o esta inhabilitado.',
@@ -362,6 +411,10 @@ Route::middleware('auth:sanctum')->group(function() {
                 ->where('id_cliente',$_cliente->id)
                 ->get();
             if( $Caja->isEmpty() ){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Caja',
+                    'descripcion' => 'El caja ' . $request->input('idCaja') . ' no se encuentra registrada en el sistema o esta inhabilitada.',
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'La caja no se encuentra registrado en el sistema o esta inhabilitado.',
@@ -373,6 +426,10 @@ Route::middleware('auth:sanctum')->group(function() {
             // Validar apertura de caja
             $cajaApertura = \App\Models\V2\CajaDiario::where('id_caja', $_caja->id)->orderBy('f_apertura', 'DESC')->limit(1);
             if($cajaApertura->count() === 0){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Apertura Caja',
+                    'descripcion' => 'No existe ninguna apertura de caja ' . $_caja->id
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'No existe ninguna apertura de caja ' . $_caja->id,
@@ -380,6 +437,10 @@ Route::middleware('auth:sanctum')->group(function() {
                 ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             if(!is_null($cajaApertura->first()->f_cierre)){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Caja',
+                    'descripcion' => 'Debe cerrar primero la caja ' . $request->input('idCaja')
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'Debe cerrar primero la caja',
@@ -394,6 +455,10 @@ Route::middleware('auth:sanctum')->group(function() {
                 ->where('id_cliente',$_cliente->id)
                 ->get();
             if( $Pos->isEmpty() ){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error POS',
+                    'descripcion' => 'El equipo POS ' . $request->input('idPos') . ' no se encuentra registrado en el sistema o esta inhabilitado.',
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'El equipo POS no se encuentra registrado en el sistema o esta inhabilitado.',
@@ -404,6 +469,10 @@ Route::middleware('auth:sanctum')->group(function() {
 
             /******* Verificar que el paradero insertado pertenece a la ruta ******************/
             if($_paradero->id_ruta !== $_ruta->id){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Viaje',
+                    'descripcion' => 'El viaje '. $_paradero->paraderoOrigen->nombre . ' - ' . $_paradero->paraderoDestino->nombre .' no esta registrado en la ruta ' . $_ruta->nombre,
+                ]);
                 return response()->json([
                     'data'      => null,
                     'error' => 'El viaje '. $_paradero->paraderoOrigen->nombre . ' - ' . $_paradero->paraderoDestino->nombre .' no esta registrado en la ruta ' . $_ruta->nombre,
@@ -412,6 +481,10 @@ Route::middleware('auth:sanctum')->group(function() {
             }
             /******* Verificar que que la caja insertada pertenece al equipo POS ******************/
             if($_caja->id_pos !== $_pos->id){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Caja',
+                    'descripcion' => 'La caja ' . $_caja->nombre . ' no esta asignada al Equipo POS ' . $_pos->nombre,
+                ]);
                 return response()->json([
                     'data'  => null,
                     'error' => 'La caja ' . $_caja->nombre . ' no esta asignada al Equipo POS ' . $_pos->nombre,
@@ -458,6 +531,10 @@ Route::middleware('auth:sanctum')->group(function() {
 
             /******* Validar que el boleto  ******************/
             if($model->where('codigo',$request->input('codigoBoleto'))->count() > 0){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Boleto',
+                    'descripcion' => 'El código del boleto ya fue registrado: ' . $request->input('codigoBoleto'),
+                ]);
                 return response()->json([
                     'data' => null,
                     'error' => 'El código del boleto ya fue registrado',
@@ -466,6 +543,10 @@ Route::middleware('auth:sanctum')->group(function() {
             }
             /******* Validar que el comprobante  ******************/
             if(\App\Models\V2\ComprobanteElectronico::where('serie',$request->input('serie'))->where('numero',$request->input('numero'))->get()->count()){
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Comprobante',
+                    'descripcion' => 'La serie y el número de comprobante ya fueron registrados :' . $request->input('serie') . ' - ' . $request->input('numero'),
+                ]);
                 return response()->json([
                     'data' => null,
                     'error' => 'La serie y el número de comprobante ya fueron registrados',
@@ -480,6 +561,10 @@ Route::middleware('auth:sanctum')->group(function() {
                 ->where('id_ruta', $request->input('idRuta'))->count();
             if($existe == 0){
 //                throw new InvalidArgumentException('El viaje no se encuentra registrado en el sistema');
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Viaje',
+                    'descripcion' =>  'El viaje no se encuentra registrado en el sistema: ' . $request->input('idParadero'),
+                ]);
                 return response()->json([
                     'data' => null,
                     'error' => 'El viaje no se encuentra registrado en el sistema',
@@ -501,6 +586,11 @@ Route::middleware('auth:sanctum')->group(function() {
 //                    'error' => null,
 //                    'status' => Response::HTTP_CREATED
 //                ]);
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Boleto',
+                    'descripcion' =>  'El codigo del boleto ya fue registrado: ' . $request->input('codigoBoleto'),
+                ]);
+
                 return response()->json([
                     'data' => null,
                     'error' => 'El codigo del boleto ya fue registrado',
@@ -521,6 +611,12 @@ Route::middleware('auth:sanctum')->group(function() {
 //                    'error' => null,
 //                    'status' => Response::HTTP_CREATED
 //                ]);
+
+                \App\Models\V2\LogBoletoInterprovincial::create([
+                    'motivo' => 'Error Comprobante',
+                    'descripcion' =>  'El comprobante ya fue registrado: ' . $request->input('serieComprobante') . '-' . $request->input('numeroComprobante') . ' al cliente: ' . $_cliente->id,
+                ]);
+
                 return response()->json([
                     'data' => null,
                     'error' => 'El comprobante ya fue registrado',

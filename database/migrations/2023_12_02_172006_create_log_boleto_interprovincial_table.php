@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tipo_comprobante', function (Blueprint $table) {
+        Schema::create('log_boleto_interprovincial', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre', 50);
-            $table->string('abreviatura', 50);
-            $table->smallInteger('bl_punto_venta')->default(0);
-
-            $table->index(['id', 'nombre', 'bl_punto_venta']);
+            $table->string('motivo');
+            $table->string('descripcion');
+            $table->timestamps();
         });
     }
 
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tipo_comprobante');
+        Schema::dropIfExists('log_boleto_interprovincial');
     }
 };

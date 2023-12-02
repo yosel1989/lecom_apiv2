@@ -47,7 +47,7 @@ final class BoletoInterprovincialOficial
     private NumericInteger $porPagar;
 
 
-
+    // optional
     private Text $tipoDocumento;
     private Text $sede;
     private Text $caja;
@@ -61,6 +61,8 @@ final class BoletoInterprovincialOficial
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
     private Text $tipoComprobante;
+    private Text $comprobanteSerie;
+    private NumericInteger $comprobanteNumero;
     private Text $tipoBoleto;
     private Text $cliente;
 
@@ -942,5 +944,39 @@ final class BoletoInterprovincialOficial
     {
         $this->cliente = $cliente;
     }
+
+    /**
+     * @return Text
+     */
+    public function getComprobanteSerie(): Text
+    {
+        return $this->comprobanteSerie;
+    }
+
+    /**
+     * @param Text $comprobanteSerie
+     */
+    public function setComprobanteSerie(Text $comprobanteSerie): void
+    {
+        $this->comprobanteSerie = $comprobanteSerie;
+    }
+
+    /**
+     * @return NumericInteger
+     */
+    public function getComprobanteNumero(): NumericInteger
+    {
+        return $this->comprobanteNumero;
+    }
+
+    /**
+     * @param NumericInteger $comprobanteNumero
+     */
+    public function setComprobanteNumero(NumericInteger $comprobanteNumero): void
+    {
+        $this->comprobanteNumero = $comprobanteNumero;
+    }
+
+
 
 }

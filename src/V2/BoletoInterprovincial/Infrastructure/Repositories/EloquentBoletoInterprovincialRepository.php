@@ -10,6 +10,7 @@ use App\Models\V2\BoletoInterprovincialOficial as EloquentModelBoletoInterprovin
 use App\Models\V2\Caja;
 use App\Models\V2\Cliente;
 use App\Models\V2\Cliente as EloquentModelClient;
+use App\Models\V2\ComprobanteElectronico;
 use App\Models\V2\ComprobanteSerie;
 use App\Models\V2\Paradero;
 use App\Models\V2\Ruta;
@@ -30,6 +31,7 @@ use Src\Core\Domain\ValueObjects\TimeFormat;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
 use Src\V2\BoletoInterprovincial\Domain\Contracts\BoletoInterprovincialRepositoryContract;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincial;
+use Src\V2\Vehiculo\Domain\VehiculoShortList;
 
 final class EloquentBoletoInterprovincialRepository implements BoletoInterprovincialRepositoryContract
 {
@@ -200,6 +202,104 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         return $arrVehicles;
     }
 
+    public function reportByUsuarioCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idRuta, VehiculoShortList $vehiculos): array
+    {
+        /** @var array $idVehiculos */
+        $idVehiculos = array_map(function($v){
+            return $v->getId()->value();
+        }, $vehiculos->all());
+
+        $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
+        $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
+
+        $models = $this->eloquentModelBoletoInterprovincial
+            ->whereIn('id_vehiculo', $idVehiculos)
+            ->whereDate('f_registro','>=',$fechaDesde->value())
+            ->whereDate('f_registro','>=',$fechaDesde->value());
+
+        if(!is_null($idRuta->value())) $models->where('id_ruta',$idRuta->value());
+
+        $models = $models->orderBy('f_registro', 'DESC')->get();
+
+        $arrVehicles = array();
+
+        foreach ( $models as $model ){
+
+            $OModel = new BoletoInterprovincialOficial(
+                new Id($model->id, false, 'El id del boleto no tiene el formato correcto'),
+                new Id($model->id_cliente, true, 'El id del cliente no tiene el formato correcto'),
+                new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
+                new Id($model->id_caja, true, 'El id de la caja no tiene el formato correcto'),
+                new NumericInteger($model->id_tipo_documento->value),
+                new Text($model->numero_documento, false, -1, ''),
+                new Text($model->nombres, false, -1, ''),
+                new Text($model->apellidos, false, -1, ''),
+                new NumericInteger((int)$model->menor_edad),
+                new Id($model->id_vehiculo, true, 'El id del vehiculo no tiene el formato correcto'),
+                new Id($model->id_asiento, true, 'El id del asiento no tiene el formato correcto'),
+                new DateFormat($model->f_partida, true, 'La fecha de partida no tiene el formato correcto'),
+                new TimeFormat($model->h_partida, true, 'La hora de partida no tiene el formato correcto'),
+                new Id($model->id_ruta, true, 'El id de la ruta no tiene el formato correcto'),
+                new Id($model->id_paradero_origen, true, 'El id del paradero origen no tiene el formato correcto'),
+                new Id($model->id_paradero_destino, true, 'El id del paradero destino no tiene el formato correcto'),
+                new NumericFloat($model->precio),
+                new NumericInteger($model->id_tipo_moneda->value),
+                new NumericInteger($model->id_forma_pago->value),
+                new NumericInteger((int)$model->obsequio),
+                new Id($model->id_pos, true, 'El id del pos no tiene el formato correcto'),
+                new Text($model->codigo, false, -1),
+                new NumericFloat($model->latitud),
+                new NumericFloat($model->longitud),
+                new DateTimeFormat($model->f_emision),
+                new NumericInteger($model->idEstado),
+                new Id($model->id_usu_registro, false, 'El id del usuario que registro no tiene el formato correcto'),
+                new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+                new DateTimeFormat($model->f_registro),
+                new DateTimeFormat($model->f_modifico),
+                new NumericInteger($model->id_tipo_comprobante->value),
+                new NumericInteger($model->id_tipo_boleto->value),
+                new NumericInteger((int)$model->por_pagar),
+            );
+
+            $Vehiculo = $model->id_vehiculo ? Vehiculo::findOrFail($model->id_vehiculo, ['placa']) : null;
+            $OModel->setVehiculoPlaca(new Text(($Vehiculo?->placa), true, -1));
+
+            $Ruta = $model->id_ruta ? Ruta::findOrFail($model->id_ruta, ['nombre']) : null;
+            $OModel->setRuta(new Text(($Ruta?->nombre), true, -1));
+
+            $TipoDocumento = $model->id_tipo_documento ? TipoDocumento::findOrFail($model->id_tipo_documento->value, ['nombre_corto']) : null;
+            $OModel->setTipoDocumento(new Text(($TipoDocumento?->nombre_corto), true, -1));
+
+            $Sede = $model->id_sede ? Sede::findOrFail($model->id_sede, ['nombre']) : null;
+            $OModel->setSede(new Text(($Sede?->nombre), true, -1));
+
+            $Caja = $model->id_caja ? Caja::findOrFail($model->id_caja, ['nombre']) : null;
+            $OModel->setCaja(new Text(($Caja?->nombre), true, -1));
+
+            $ParaderoOrigen = $model->id_paradero_origen ? Paradero::findOrFail($model->id_paradero_origen, ['nombre']) : null;
+            $OModel->setParaderoOrigen(new Text(($ParaderoOrigen?->nombre), true, -1));
+
+            $ParaderoDestino = $model->id_paradero_destino ? Paradero::findOrFail($model->id_paradero_destino, ['nombre']) : null;
+            $OModel->setParaderoDestino(new Text(($ParaderoDestino?->nombre), true, -1));
+
+            $UsuarioRegistro = $model->id_usu_registro ? User::findOrFail($model->id_usu_registro, ['nombres','apellidos']) : null;
+            $OModel->setUsuarioRegistro(new Text(($UsuarioRegistro?->nombres . ' ' . $UsuarioRegistro?->apellidos), true, -1));
+
+            $UsuarioModifico = $model->id_usu_modifico ? User::findOrFail($model->id_usu_modifico, ['nombres','apellidos']) : null;
+            $OModel->setUsuarioModifico(new Text(($UsuarioModifico?->nombres . ' ' . $UsuarioModifico?->apellidos), true, -1));
+
+            $TipoComprobante = $model->id_tipo_comprobante ? TipoComprobante::findOrFail($model->id_tipo_comprobante->value, ['abreviatura']) : null;
+            $OModel->setTipoComprobante(new Text(($TipoComprobante?->abreviatura), true, -1));
+
+            $Comprobante = ComprobanteElectronico::select('serie','numero')->where('id_producto', $model->id)->where('id_estado',1);
+            $OModel->setComprobanteSerie(new Text($Comprobante->count() ? $Comprobante->first()->serie : null , true, -1));
+            $OModel->setComprobanteNumero(new NumericInteger($Comprobante->count() ? $Comprobante->first()->numero : null));
+
+            $arrVehicles[] = $OModel;
+        }
+
+        return $arrVehicles;
+    }
 
     public function reportePuntoVentaByCliente(Id $idCliente, Id $idSede, DateFormat $fecha): array
     {

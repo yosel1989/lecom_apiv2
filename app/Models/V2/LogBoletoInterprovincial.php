@@ -2,16 +2,13 @@
 
 namespace App\Models\V2;
 
-use App\Enums\EnumPuntoVenta;
 use Illuminate\Database\Eloquent\Model;
 
-class TipoComprobante extends Model
+class LogBoletoInterprovincial extends Model
 {
-    public $incrementing = true;
 
-    protected $table = "tipo_comprobante";
-    public $timestamps = false;
-
+    protected $table = "log_boleto_interprovincial";
+    public $timestamps = true;
     /**
      * The attributes that are mass assignable.
      *
@@ -19,9 +16,8 @@ class TipoComprobante extends Model
      */
     protected $fillable = [
         'id',
-        'nombre',
-        'abreviatura',
-        'bl_punto_venta',
+        'motivo',
+        'descripcion'
     ];
 
     /**
@@ -30,8 +26,9 @@ class TipoComprobante extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'bl_punto_venta' => EnumPuntoVenta::class,
-
+        'created_at' =>  'string',
+        'updated_at' =>  'string',
     ];
+
 
 }
