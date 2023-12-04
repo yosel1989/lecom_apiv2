@@ -16,6 +16,7 @@ class LogBoletoInterprovincial extends Model
      */
     protected $fillable = [
         'id',
+        'id_cliente',
         'motivo',
         'descripcion'
     ];

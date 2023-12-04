@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('log_boleto_interprovincial', function (Blueprint $table) {
             $table->id();
+            $table->uuid('id_cliente');
             $table->string('motivo');
             $table->string('descripcion');
             $table->timestamps();

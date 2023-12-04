@@ -96,6 +96,7 @@ include 'V2/tipo-comprobante-route.php';
 include 'V2/tipo-pago-route.php';
 include 'V2/tipo-moneda-route.php';
 include 'V2/boleto-precio-route.php';
+include 'V2/log-boleto-interprovincial-route.php';
 
 
 Route::get('v1/erts', function(){

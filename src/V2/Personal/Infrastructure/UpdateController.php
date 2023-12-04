@@ -89,13 +89,15 @@ final class UpdateController
 
         // verificar que la carpeta existe, sino crearla
         if(!file_exists(public_path("uploads"))){
-            mkdir(public_path("uploads"), 0755, true);
+            File::makeDirectory(public_path('uploads'));
+//            mkdir(public_path("uploads"), 0755, true);
         }
 
         // verificar que la carpeta cliente, sino crearla
         if(!file_exists(public_path("uploads/" . $cliente->id))){
             // Crear folder para el cliente
-            mkdir(public_path("uploads/" . $cliente->id ), 0755, true);
+//            mkdir(public_path("uploads/" . $cliente->id ), 0755, true);
+            File::makeDirectory(public_path("uploads/" . $cliente->id));
             // Crear archivo de información
             $info = '';
             $info .= 'Id Cliente: ' . $cliente->id . PHP_EOL;
