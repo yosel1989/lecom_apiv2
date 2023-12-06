@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Src\V2\LogBoletoInterprovincial\Infrastructure\Repositories;
 
 use App\Models\V2\LogBoletoInterprovincial as EloquentModelLogBoletoInterprovincial;
+use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
@@ -23,9 +24,12 @@ final class EloquentLogBoletoInterprovincialRepository implements LogBoletoInter
     }
 
 
-    public function collectionByCliente(Id $idCliente): LogBoletoInterprovincialList
+    public function collectionByCliente(Id $idCliente, DateFormat $fecha): LogBoletoInterprovincialList
     {
-        $models = $this->eloquentModelLogBoletoInterprovincial->where('id_cliente',$idCliente->value())->orderBy('created_at', 'DESC')->get();
+        $models = $this->eloquentModelLogBoletoInterprovincial
+            ->where('id_cliente',$idCliente->value())
+            ->whereDate('created_at', $fecha->value())
+            ->orderBy('created_at', 'DESC')->get();
 
         $arrVehicles = new LogBoletoInterprovincialList();
 
@@ -33,7 +37,7 @@ final class EloquentLogBoletoInterprovincialRepository implements LogBoletoInter
 
             $OModel = new LogBoletoInterprovincial(
                 new NumericInteger($model->id),
-                new Id($model->idCliente , false, 'El id del cliente no tiene el formato correcto'),
+                new Id($model->id_cliente , false, 'El id del cliente no tiene el formato correcto'),
                 new Text($model->motivo, false, -1, ''),
                 new Text($model->descripcion, false, -1, ''),
                 new DateTimeFormat($model->created_at, false, 'El formato de la fecha de registro no tiene el formato correcto'),

@@ -24,8 +24,9 @@ final class GetCollectionByClienteController
     public function __invoke( Request $request ): LogBoletoInterprovincialList
     {
         $idClient = $request->id;
+        $fecha = $request->fecha;
         $getVehicleCollectionByClientUseCase = new GetCollectionByClienteUseCase($this->reLogBoletoInterprovincialitory);
-        return $getVehicleCollectionByClientUseCase->__invoke($idClient);
+        return $getVehicleCollectionByClientUseCase->__invoke($idClient, $fecha);
     }
 
 }

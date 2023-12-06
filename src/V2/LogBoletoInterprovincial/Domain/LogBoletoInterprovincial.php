@@ -38,4 +38,86 @@ final class LogBoletoInterprovincial
         $this->fecha = $fecha;
     }
 
+    /**
+     * @return NumericInteger
+     */
+    public function getId(): NumericInteger
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param NumericInteger $id
+     */
+    public function setId(NumericInteger $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdCliente(): Id
+    {
+        return $this->idCliente;
+    }
+
+    /**
+     * @param Id $idCliente
+     */
+    public function setIdCliente(Id $idCliente): void
+    {
+        $this->idCliente = $idCliente;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getMotivo(): Text
+    {
+        return $this->motivo;
+    }
+
+    /**
+     * @param Text $motivo
+     */
+    public function setMotivo(Text $motivo): void
+    {
+        $this->motivo = $motivo;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getDescripcion(): Text
+    {
+        return $this->descripcion;
+    }
+
+    /**
+     * @param Text $descripcion
+     */
+    public function setDescripcion(Text $descripcion): void
+    {
+        $this->descripcion = $descripcion;
+    }
+
+    /**
+     * @return DateTimeFormat
+     */
+    public function getFecha(): DateTimeFormat
+    {
+        return $this->fecha;
+    }
+
+    /**
+     * @param DateTimeFormat $fecha
+     */
+    public function setFecha(DateTimeFormat $fecha): void
+    {
+        $this->fecha = $fecha;
+    }
+
+
+
 }
