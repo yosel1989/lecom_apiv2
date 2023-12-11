@@ -34,7 +34,7 @@ final class EloquentTipoDocumentoRepository implements TipoDocumentoRepositoryCo
                 new Text($model->nombre_corto, false, -1, ''),
                 new NumericInteger($model->num_digitos),
                 new NumericInteger($model->apl_factura),
-                new NumericInteger($model->apl_boleto),
+                new NumericInteger($model->apl_boleta),
                 new NumericInteger($model->apl_pasajero),
             );
 

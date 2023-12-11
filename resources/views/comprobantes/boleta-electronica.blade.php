@@ -226,9 +226,11 @@ $medidaTicket = 180;
     <div class="w-100 text-center">
         <p>Representación impresa de la <span class="text-uppercase">{{ $boleto->getTipoComprobante()->value()  }}</span>, visita cpe.lecomperu.com</p>
 {{--        <p>Autorizado mediante Resolución de Intendencia No.034-005-0005315</p>--}}
-        <img src="data:image/png;base64, {{ $qrcode }}" alt="" width="80" height="80" style="display:block; margin:0;width:80px; height: 80px" >
+        <p style="margin-top:30px">Código QR del Boleto</p>
+        <img src="data:image/png;base64, {{ $qrcode }}" alt="" width="50" height="50" style="display:block; margin:0;width:80px; height: 80px" >
 {{--        <p>Emitido desde cp.lecomperu.com</p>--}}
         <p>Emitido por {{ $usuario->nombres }}</p>
+        <p>{{ $boleto->getFechaRegistro()->value()}}</p>
 
     </div>
 </div>

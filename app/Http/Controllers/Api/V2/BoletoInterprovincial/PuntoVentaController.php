@@ -44,14 +44,18 @@ class PuntoVentaController extends Controller
             $comprobante = $this->controllerComprobante->__invoke($request, $boleto);
 
             // generando el qr
-            $qrcode = base64_encode(QrCode::encoding('UTF-8')->format('svg')->size(100)->errorCorrection('M')->generate(
-                $comprobante->getSerie()->value() . ' | ' .
-                $comprobante->getNumero()->value() . ' | ' .
-                $comprobante->getIdProducto()->value() . ' | ' .
-                $comprobante->getFechaRegistro()->value() . ' | ' .
-                $boleto->getNumeroDocumento()->value()
-            ));
+//            $qrcode = base64_encode(QrCode::encoding('UTF-8')->format('svg')->size(100)->errorCorrection('M')->generate(
+//                $comprobante->getSerie()->value() . ' | ' .
+//                $comprobante->getNumero()->value() . ' | ' .
+//                $comprobante->getIdProducto()->value() . ' | ' .
+//                $comprobante->getFechaRegistro()->value() . ' | ' .
+//                $boleto->getNumeroDocumento()->value()
+//            ));
 //            $qrcode = base64_encode(QrCode::encoding('UTF-8')->format('svg')->size(100)->errorCorrection('M')->generate('ddddddd'));
+
+            $qrcode = base64_encode(QrCode::encoding('UTF-8')->format('svg')->size(80)->errorCorrection('M')->generate(
+                $comprobante->getId()->value()
+            ));
 
             // Creando pdf boleto
             $formatter = new NumeroALetras();
@@ -62,7 +66,7 @@ class PuntoVentaController extends Controller
 //            dd($pdf->getCanvas( ));
             unset( $pdf );
             $pdf = PDF::loadView('comprobantes.boleta-electronica', compact('boleto', 'configuracion', 'comprobante', 'usuario', 'formatter', 'qrcode'))
-                ->setPaper(array( 0 , 0 , 226.77 * $page_count + 320 , 226.77 ), 'landscape')->setOption( 'dpi' , '72' );
+                ->setPaper(array( 0 , 0 , 226.77 * $page_count + 400 , 226.77 ), 'landscape')->setOption( 'dpi' , '72' );
             return response()->json([
                 'data' => null,
                 'error' =>  null,
