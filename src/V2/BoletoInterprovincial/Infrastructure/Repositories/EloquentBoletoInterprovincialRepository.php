@@ -209,11 +209,13 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             return $v->getId()->value();
         }, $vehiculos->all());
 
+
         $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
         $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
 
         $models = $this->eloquentModelBoletoInterprovincial
-            ->whereIn('id_vehiculo', $idVehiculos)
+//            ->whereIn('id_vehiculo', $idVehiculos)
+//            ->whereNull('id_vehiculo')
             ->whereDate('f_registro','>=',$fechaDesde->value())
             ->whereDate('f_registro','>=',$fechaDesde->value());
 

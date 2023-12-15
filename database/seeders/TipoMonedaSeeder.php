@@ -13,6 +13,7 @@ class TipoMonedaSeeder extends Seeder
      */
     public function run()
     {
+        \App\Models\V2\TipoMoneda::truncate();
         \App\Models\V2\TipoMoneda::create([
             'nombre' => 'Soles',
             'simbolo' => 'S/',

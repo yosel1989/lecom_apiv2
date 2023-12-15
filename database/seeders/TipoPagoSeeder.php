@@ -13,6 +13,7 @@ class TipoPagoSeeder extends Seeder
      */
     public function run()
     {
+        \App\Models\V2\TipoPago::truncate();
         \App\Models\V2\TipoPago::create([
             'nombre' => 'Contado',
             'valor' => '1',

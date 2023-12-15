@@ -53,7 +53,7 @@ class PuntoVentaController extends Controller
 //            ));
 //            $qrcode = base64_encode(QrCode::encoding('UTF-8')->format('svg')->size(100)->errorCorrection('M')->generate('ddddddd'));
 
-            $qrcode = base64_encode(QrCode::encoding('UTF-8')->format('svg')->size(80)->errorCorrection('M')->generate(
+            $qrcode = base64_encode(QrCode::encoding('UTF-8')->format('svg')->size(80)->errorCorrection('L')->generate(
                 $comprobante->getId()->value()
             ));
 
