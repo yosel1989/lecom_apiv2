@@ -13,6 +13,7 @@ interface RutaRepositoryContract
         Text $nombre,
         NumericInteger $idTipo,
         Id $idCliente,
+        Id $idSede,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;

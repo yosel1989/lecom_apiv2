@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nombre',100);
             $table->uuid('id_cliente');
             $table->tinyInteger('id_tipo');
+            $table->uuid('id_sede')->nullable();
             $table->uuid('id_categoria')->nullable();
             $table->tinyInteger('id_estado')->default(1);
             $table->tinyInteger('id_eliminado')->default(0);

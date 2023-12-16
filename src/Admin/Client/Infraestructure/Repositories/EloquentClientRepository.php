@@ -71,24 +71,28 @@ final class EloquentClientRepository implements ClientRepositoryContract
             'id_parent_client'=>$idParent->value()
         ]);
 
-        Schema::create('boleto_interprovincial_' . ($count + 1), function (Blueprint $table) {
-            $table->uuid('id')->unique()->primary();
-            $table->uuid('idDestino')->nullable();
-            $table->uuid('idVehiculo')->nullable();
-            $table->uuid('idCliente')->nullable();
-            $table->string('numeroDocumento',20)->nullable();
-            $table->string('codigoBoleto',30)->nullable();
-            $table->decimal('latitud',10,8)->nullable();
-            $table->decimal('longitud',10,8)->nullable();
-            $table->decimal('precio',5,2);
-            $table->dateTime('fecha');
-            $table->tinyInteger('idEstado')->default(1);
-            $table->tinyInteger('idEliminado')->default(0);
-            $table->uuid('idUsuarioRegistro');
-            $table->uuid('idUsuarioModifico')->nullable();
-            $table->timestamp('fechaRegistro');
-            $table->timestamp('fechaModifico')->nullable();
-        });
+        if (!Schema::hasTable('boleto_interprovincial_cliente_' . ($count + 1))) {
+            DB::statement("CREATE TABLE boleto_interprovincial_cliente_' . ($count + 1) . ' LIKE boleto_interprovincial");
+        }
+
+//        Schema::create('boleto_interprovincial_' . ($count + 1), function (Blueprint $table) {
+//            $table->uuid('id')->unique()->primary();
+//            $table->uuid('idDestino')->nullable();
+//            $table->uuid('idVehiculo')->nullable();
+//            $table->uuid('idCliente')->nullable();
+//            $table->string('numeroDocumento',20)->nullable();
+//            $table->string('codigoBoleto',30)->nullable();
+//            $table->decimal('latitud',10,8)->nullable();
+//            $table->decimal('longitud',10,8)->nullable();
+//            $table->decimal('precio',5,2);
+//            $table->dateTime('fecha');
+//            $table->tinyInteger('idEstado')->default(1);
+//            $table->tinyInteger('idEliminado')->default(0);
+//            $table->uuid('idUsuarioRegistro');
+//            $table->uuid('idUsuarioModifico')->nullable();
+//            $table->timestamp('fechaRegistro');
+//            $table->timestamp('fechaModifico')->nullable();
+//        });
 
         $count = DB::table('clientes')->count();
         $this->eloquentClienteModel->create([

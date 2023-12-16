@@ -30,6 +30,7 @@ class Ruta extends Model
         'nombre',
         'id_tipo',
         'id_categoria',
+        'id_sede',
         'id_cliente',
         'id_estado',
         'id_eliminado',
@@ -65,6 +66,10 @@ class Ruta extends Model
 
     public function tipo(){
         return $this->hasOne('App\Models\V2\TipoRuta','id','id_tipo');
+    }
+
+    public function sede(){
+        return $this->hasOne('App\Models\V2\Sede','id','id_sede');
     }
 
 //    public function paraderos(){

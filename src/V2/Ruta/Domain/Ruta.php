@@ -14,6 +14,7 @@ final class Ruta
     private Text $nombre;
     private NumericInteger $idTipo;
     private Id $idCliente;
+    private Id $idSede;
     private NumericInteger $idEstado;
     private NumericInteger $idEliminado;
     private Id $idUsuarioRegistro;
@@ -24,11 +25,13 @@ final class Ruta
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
     private Text $tipo;
+    private Text $sede;
 
     /**
      * @param Id $id
      * @param Text $nombre
      * @param NumericInteger $idTipo
+     * @param Id $idSede
      * @param Id $idCliente
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
@@ -41,6 +44,7 @@ final class Ruta
         Id $id,
         Text $nombre,
         NumericInteger $idTipo,
+        Id $idSede,
         Id $idCliente,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
@@ -61,6 +65,7 @@ final class Ruta
         $this->idUsuarioModifico = $idUsuarioModifico;
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
+        $this->idSede = $idSede;
     }
 
     /**
@@ -271,6 +276,36 @@ final class Ruta
         $this->tipo = $tipo;
     }
 
+    /**
+     * @return Id
+     */
+    public function getIdSede(): Id
+    {
+        return $this->idSede;
+    }
 
+    /**
+     * @param Id $idSede
+     */
+    public function setIdSede(Id $idSede): void
+    {
+        $this->idSede = $idSede;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getSede(): Text
+    {
+        return $this->sede;
+    }
+
+    /**
+     * @param Text $sede
+     */
+    public function setSede(Text $sede): void
+    {
+        $this->sede = $sede;
+    }
 
 }
