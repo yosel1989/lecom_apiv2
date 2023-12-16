@@ -18,8 +18,8 @@ class ModuloListResource extends JsonResource
         return [
             'id'            => $this->getId()->value(),
             'nombre'          => $this->getNombre()->value(),
-            'icono'          => $this->getIcono()->value(),
-            'codigo'          => $this->getCodigo()->value(),
+//            'icono'          => $this->getIcono()->value(),
+//            'codigo'          => $this->getCodigo()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),
         ];

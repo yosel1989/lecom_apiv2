@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Src\V2\Modulo\Domain;
 
+use App\Enums\EnumModulo;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
@@ -23,10 +24,12 @@ final class Modulo
     private Id $idUsuarioModifico;
     private DateTimeFormat $fechaRegistro;
     private DateTimeFormat $fechaModifico;
+    private Text $link;
 
     /**
      * @param Id $id
      * @param Text $nombre
+     * @param Text $link
      * @param Text $icono
      * @param Text $codigo
      * @param NumericInteger $idEstado
@@ -39,6 +42,7 @@ final class Modulo
     public function __construct(
         Id $id,
         Text $nombre,
+        Text $link,
         Text $icono,
         Text $codigo,
         NumericInteger $idEstado,
@@ -60,6 +64,7 @@ final class Modulo
         $this->idUsuarioModifico = $idUsuarioModifico;
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
+        $this->link = $link;
     }
 
     /**
@@ -252,6 +257,46 @@ final class Modulo
     public function setFechaModifico(DateTimeFormat $fechaModifico): void
     {
         $this->fechaModifico = $fechaModifico;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getLink(): Text
+    {
+        return $this->link;
+    }
+
+    /**
+     * @param Text $link
+     */
+    public function setLink(Text $link): void
+    {
+        $this->link = $link;
+    }
+
+
+
+
+
+
+    public function getModules(): array{
+        return array([
+            'id' => 1,
+            'nombre' => 'Adminitración',
+            'icon' => asset('assets/img/icons/modulo-administracion.png'),
+            'link' => 'administracion'
+        ],[
+            'id' => 2,
+            'nombre' => 'Boletaje Interprovincial',
+            'icon' => asset('assets/img/icons/modulo-boletaje-interprovincial.png'),
+            'link' => 'boletaje-interprovincial'
+        ],[
+            'id' => 3,
+            'nombre' => 'Contabilidad',
+            'icon' => asset('assets/img/icons/modulo-facturacion-electronica.png'),
+            'link' => 'contabilidad'
+        ]);
     }
 
 

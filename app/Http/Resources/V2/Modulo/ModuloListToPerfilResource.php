@@ -4,7 +4,7 @@ namespace App\Http\Resources\V2\Modulo;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ModuloResource extends JsonResource
+class ModuloListToPerfilResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,17 +18,11 @@ class ModuloResource extends JsonResource
         return [
             'id'            => $this->getId()->value(),
             'nombre'          => $this->getNombre()->value(),
+            'icono'          => $this->getIcono()->value(),
             'link'          => $this->getLink()->value(),
-            'icono'       => $this->getIcono()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),
-            'fechaRegistro'       => $this->getFechaRegistro()->value(),
-            'fechaModifico'     => $this->getFechaModifico()->value(),
-            'idUsuarioRegistro'     => $this->getIdUsuarioModifico()->value(),
-            'usuarioRegistro'     => $this->getUsuarioRegistro()->value(),
-            'idUsuarioModifico'     => $this->getIdUsuarioModifico()->value(),
-            'usuarioModifico'     => $this->getUsuarioModifico()->value(),
+            'activado'       => $this->isActivado(),
         ];
-
     }
 }

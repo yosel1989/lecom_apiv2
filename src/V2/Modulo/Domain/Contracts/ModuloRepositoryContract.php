@@ -11,6 +11,7 @@ interface ModuloRepositoryContract
 {
     public function create(
         Text $nombre,
+        Text $link,
         Text $icono,
         Text $codigo,
         NumericInteger $idEstado,
@@ -19,10 +20,13 @@ interface ModuloRepositoryContract
 
     public function collection(): array;
     public function list(): array;
+    public function listToPerfil(Id $idPerfil): array;
+    public function listToUsuarioPerfil(Id $idPerfil): array;
 
     public function update(
         Id $id,
         Text $nombre,
+        Text $link,
         Text $icono,
         Text $codigo,
         NumericInteger $idEstado,

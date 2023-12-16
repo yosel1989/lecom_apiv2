@@ -2,15 +2,17 @@
 
 namespace App\Models\V2;
 
-use App\Enums\IdEliminado;
-use App\Enums\IdEstado;
+use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
-class Modulo extends Model
+class PerfilModulo extends Model
 {
-//    use UUID;
+    use UUID;
 
-    protected $table = "modulo";
+    protected $keyType = 'string';
+    public $incrementing = false;
+
+    protected $table = "perfil_modulo";
     public $timestamps = true;
 
     const CREATED_AT = 'f_registro';
@@ -22,12 +24,9 @@ class Modulo extends Model
      */
     protected $fillable = [
         'id',
-        'nombre',
-        'link',
-        'codigo',
-        'icono',
-        'id_estado',
-        'id_eliminado',
+        'id_cliente',
+        'id_perfil',
+        'modulos',
         'id_usu_registro',
         'id_usu_modifico',
         'f_registro',
@@ -40,10 +39,9 @@ class Modulo extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'modulos' =>  'array',
         'f_registro' =>  'string',
         'f_modifico' =>  'string',
-        'id_estado' => IdEstado::class,
-        'id_eliminado' => IdEliminado::class
     ];
 
     public function usuarioRegistro(){

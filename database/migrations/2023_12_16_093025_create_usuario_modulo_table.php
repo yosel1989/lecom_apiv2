@@ -11,17 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('modulo', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre',100)->unique();
-            $table->string('link',255)->nullable();
-            $table->string('codigo',15)->unique();
-            $table->string('icono',150)->nullable();
-            $table->tinyInteger('id_estado')->default(1);
-            $table->tinyInteger('id_eliminado')->default(0);
+        Schema::create('perfil_modulo', function (Blueprint $table) {
+            $table->uuid('id')->unique()->primary();
+            $table->uuid('id_perfil');
+            $table->uuid('id_modulo');
             $table->uuid('id_usu_registro')->nullable();
             $table->uuid('id_usu_modifico')->nullable();
-            $table->timestamp('f_registro');
+            $table->timestamp('f_registro')->nullable();
             $table->timestamp('f_modifico')->nullable();
         });
     }
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('modulo');
+        Schema::dropIfExists('perfil_modulo');
     }
 };

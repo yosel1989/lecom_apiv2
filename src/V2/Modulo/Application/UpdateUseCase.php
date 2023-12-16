@@ -22,6 +22,7 @@ final class UpdateUseCase
     public function __invoke(
         string $idModulo,
         string $nombre,
+        string $link,
         string $icono,
         string $codigo,
         int $idEstado,
@@ -30,6 +31,7 @@ final class UpdateUseCase
     {
         $_idModulo = new Id($idModulo,false,'El id del modulo no tiene el formato correcto');
         $_nombre = new Text($nombre,false, 100,'El nombre de la modulo excede los 100 caracteres');
+        $_link = new Text($link,true, 255,'El link de la modulo excede los 255 caracteres');
         $_icono = new Text($icono,false,150, 'El nombre del icono excede los 150 caracteres');
         $_codigo = new Text($codigo,false,15,'El código excede los 15 caracteres');
         $_idEstado = new NumericInteger($idEstado);
@@ -38,6 +40,7 @@ final class UpdateUseCase
         $this->repository->update(
             $_idModulo,
             $_nombre,
+            $_link,
             $_icono,
             $_codigo,
             $_idEstado,

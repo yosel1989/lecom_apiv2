@@ -9,22 +9,30 @@ use Src\Core\Domain\ValueObjects\Text;
 
 final class ModuloShort
 {
-    private Id $id;
+    private NumericInteger $id;
     private Text $nombre;
     private Text $icono;
     private NumericInteger $idEstado;
     private NumericInteger $idEliminado;
 
+
+
+
+    private bool $activado;
+    private Text $link;
+
     /**
-     * @param Id $id
+     * @param NumericInteger $id
      * @param Text $nombre
+     * @param Text $link
      * @param Text $icono
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      */
     public function __construct(
-        Id $id,
+        NumericInteger $id,
         Text $nombre,
+        Text $link,
         Text $icono,
         NumericInteger $idEstado,
         NumericInteger $idEliminado
@@ -36,20 +44,21 @@ final class ModuloShort
         $this->icono = $icono;
         $this->idEstado = $idEstado;
         $this->idEliminado = $idEliminado;
+        $this->link = $link;
     }
 
     /**
-     * @return Id
+     * @return NumericInteger
      */
-    public function getId(): Id
+    public function getId(): NumericInteger
     {
         return $this->id;
     }
 
     /**
-     * @param Id $id
+     * @param NumericInteger $id
      */
-    public function setId(Id $id): void
+    public function setId(NumericInteger $id): void
     {
         $this->id = $id;
     }
@@ -118,4 +127,57 @@ final class ModuloShort
         $this->idEliminado = $idEliminado;
     }
 
+    /**
+     * @return bool
+     */
+    public function isActivado(): bool
+    {
+        return $this->activado;
+    }
+
+    /**
+     * @param bool $activado
+     */
+    public function setActivado(bool $activado): void
+    {
+        $this->activado = $activado;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getLink(): Text
+    {
+        return $this->link;
+    }
+
+    /**
+     * @param Text $link
+     */
+    public function setLink(Text $link): void
+    {
+        $this->link = $link;
+    }
+
+
+
+
+    public function getModules(): array{
+        return array([
+            'id' => 1,
+            'nombre' => 'Adminitración',
+            'icon' => asset('assets/img/icons/modulo-administracion.png'),
+            'link' => 'administracion'
+        ],[
+            'id' => 2,
+            'nombre' => 'Boletaje Interprovincial',
+            'icon' => asset('assets/img/icons/modulo-boletaje-interprovincial.png'),
+            'link' => 'boletaje-interprovincial'
+        ],[
+            'id' => 3,
+            'nombre' => 'Contabilidad',
+            'icon' => asset('assets/img/icons/modulo-facturacion-electronica.png'),
+            'link' => 'contabilidad'
+        ]);
+    }
 }
