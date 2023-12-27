@@ -5,6 +5,7 @@ namespace Src\V2\Caja\Domain;
 
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
 
 final class CajaSede
 {
@@ -12,6 +13,9 @@ final class CajaSede
     private Text $nombre;
     private Id $idSede;
     private Id $idCliente;
+
+
+    private ValueBoolean $aperturado;
 
     /**
      * @param Id $id
@@ -96,6 +100,24 @@ final class CajaSede
     {
         $this->idCliente = $idCliente;
     }
+
+    /**
+     * @return ValueBoolean
+     */
+    public function getAperturado(): ValueBoolean
+    {
+        return $this->aperturado;
+    }
+
+    /**
+     * @param ValueBoolean $aperturado
+     */
+    public function setAperturado(ValueBoolean $aperturado): void
+    {
+        $this->aperturado = $aperturado;
+    }
+
+
 
 
 }

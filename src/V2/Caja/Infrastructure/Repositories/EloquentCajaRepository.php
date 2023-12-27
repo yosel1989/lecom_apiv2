@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Src\V2\Caja\Infrastructure\Repositories;
 
 use App\Models\V2\Caja as EloquentModelCaja;
+use App\Models\V2\CajaDiario;
 use Illuminate\Support\Facades\DB;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
 use Src\V2\Caja\Domain\CajaSede;
 use Src\V2\Caja\Domain\Contracts\CajaRepositoryContract;
 use Src\V2\Caja\Domain\Caja;
@@ -86,6 +88,16 @@ final class EloquentCajaRepository implements CajaRepositoryContract
                 new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
             );
 
+            $aperturado = CajaDiario::where('id_caja',$model->id)->orderBy('f_apertura', 'desc')->limit(1);
+            if($aperturado->count() === 0){
+                $OModel->setAperturado(new ValueBoolean(false));
+            }else{
+                if(is_null($aperturado->first()->f_cierre)){
+                    $OModel->setAperturado(new ValueBoolean(true));
+                }else{
+                    $OModel->setAperturado(new ValueBoolean(false));
+                }
+            }
 
             $arr[] = $OModel;
         }
