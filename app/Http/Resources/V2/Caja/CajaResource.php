@@ -31,6 +31,7 @@ class CajaResource extends JsonResource
             'usuarioRegistro'     => $this->getUsuarioRegistro()->value(),
             'idUsuarioModifico'     => $this->getIdUsuarioModifico()->value(),
             'usuarioModifico'     => $this->getUsuarioModifico()->value(),
+            'aperturado'     => $this->getAperturado()->value(),
         ];
 
     }

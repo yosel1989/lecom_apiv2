@@ -59,6 +59,19 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             $OModel->setSede(new Text(!is_null($model->sede) ? $model->sede->nombre : null, true, -1));
             $OModel->setPos(new Text(!is_null($model->pos) ? $model->pos->nombre : null, true, -1));
 
+
+            $aperturado = CajaDiario::where('id_caja',$model->id)->orderBy('f_apertura', 'desc')->limit(1);
+            if($aperturado->count() === 0){
+                $OModel->setAperturado(new ValueBoolean(false));
+            }else{
+                if(is_null($aperturado->first()->f_cierre)){
+                    $OModel->setAperturado(new ValueBoolean(true));
+                }else{
+                    $OModel->setAperturado(new ValueBoolean(false));
+                }
+            }
+
+
             $arrVehicles[] = $OModel;
         }
 
@@ -227,6 +240,19 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
         $OModel->setSede(new Text(!is_null($model->sede) ? $model->sede->nombre : null, true, -1));
         $OModel->setPos(new Text(!is_null($model->pos) ? $model->pos->nombre : null, true, -1));
+
+
+
+        $aperturado = CajaDiario::where('id_caja',$model->id)->orderBy('f_apertura', 'desc')->limit(1);
+        if($aperturado->count() === 0){
+            $OModel->setAperturado(new ValueBoolean(false));
+        }else{
+            if(is_null($aperturado->first()->f_cierre)){
+                $OModel->setAperturado(new ValueBoolean(true));
+            }else{
+                $OModel->setAperturado(new ValueBoolean(false));
+            }
+        }
 
 
         return $OModel;

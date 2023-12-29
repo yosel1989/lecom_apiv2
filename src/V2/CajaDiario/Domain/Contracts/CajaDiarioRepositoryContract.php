@@ -14,7 +14,7 @@ interface CajaDiarioRepositoryContract
         Id $idCliente,
         NumericFloat $montoInicial,
         DateTimeFormat $fechaApertura,
-        Id $idUsuarioRegistro,
+        Id $idUsuarioRegistro
     ): void;
 
     public function close(
@@ -23,6 +23,20 @@ interface CajaDiarioRepositoryContract
         Id $idCliente,
         NumericFloat $montoFinal,
         DateTimeFormat $fechaCierre,
-        Id $idUsuarioRegistro,
+        Id $idUsuarioRegistro
+    ): void;
+
+    public function abrir(
+        Id $idCaja,
+        Id $idCliente,
+        NumericFloat $monto,
+        Id $idUsuarioRegistro
+    ): void;
+
+    public function cerrar(
+        Id $idCaja,
+        Id $idCliente,
+        NumericFloat $monto,
+        Id $idUsuarioRegistro
     ): void;
 }

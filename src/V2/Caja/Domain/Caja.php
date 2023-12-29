@@ -7,6 +7,7 @@ use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
 
 final class Caja
 {
@@ -25,6 +26,7 @@ final class Caja
     private Text $usuarioModifico;
     private Text $sede;
     private Id $idSede;
+    private ValueBoolean $aperturado;
 
 
     /**
@@ -306,6 +308,22 @@ final class Caja
     public function setPos(Text $pos): void
     {
         $this->pos = $pos;
+    }
+
+    /**
+     * @return ValueBoolean
+     */
+    public function getAperturado(): ValueBoolean
+    {
+        return $this->aperturado;
+    }
+
+    /**
+     * @param ValueBoolean $aperturado
+     */
+    public function setAperturado(ValueBoolean $aperturado): void
+    {
+        $this->aperturado = $aperturado;
     }
 
 

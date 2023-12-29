@@ -58,4 +58,47 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
             ]);
     }
 
+    public function abrir(
+        Id $idCaja,
+        Id $idCliente,
+        NumericFloat $monto,
+        Id $idUsuarioRegistro,
+    ): void
+    {
+        $fecha = (new \DateTime('now'))->format('Y-m-d H:i:s');
+
+        $this->eloquentModelCajaDiario->create([
+            'id_caja' =>  $idCaja->value(),
+            'id_cliente' =>  $idCliente->value(),
+            'monto_inicial' =>  $monto->value(),
+            'f_apertura' =>  $fecha,
+            'id_usu_registro' =>  $idUsuarioRegistro->value(),
+        ]);
+    }
+
+    public function cerrar(
+        Id $idCaja,
+        Id $idCliente,
+        NumericFloat $monto,
+        Id $idUsuarioRegistro,
+    ): void
+    {
+        $fecha = (new \DateTime('now'))->format('Y-m-d H:i:s');
+
+        $select = $this->eloquentModelCajaDiario
+            ->where('id_caja',$idCaja->value())
+            ->where('id_cliente',$idCliente->value())
+            ->whereNull('f_cierre');
+
+        if($select->count() === 0){
+            throw new \InvalidArgumentException('La caja ya se encuentra cerrada');
+        }
+
+        $select->firstOrFail()->update([
+                'monto_final' =>  $monto->value(),
+                'f_cierre' =>  $fecha,
+                'id_usu_modifico' =>  $idUsuarioRegistro->value(),
+            ]);
+    }
+
 }
