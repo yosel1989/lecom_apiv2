@@ -22,12 +22,12 @@ class ModuloMenu extends Model
      */
     protected $fillable = [
         'id',
-        'id_modulo',
         'texto',
-        'icon',
+        'icono',
         'id_tipo_menu',
         'padre',
         'link',
+        'id_modulo',
         'id_estado',
         'id_usu_registro',
         'id_usu_modifico',
@@ -55,6 +55,14 @@ class ModuloMenu extends Model
 
     public function usuarioModifico(){
         return $this->hasOne('App\Models\User','id','id_usu_modifico');
+    }
+
+    public function modulo(){
+        return $this->hasOne('App\Models\V2\Modulo','id','id_modulo');
+    }
+
+    public function hijos(){
+        return $this->hasMany( 'App\Models\V2\ModuloMenu', 'padre');
     }
 
 }

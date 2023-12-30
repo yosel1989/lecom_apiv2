@@ -1,17 +1,17 @@
 <?php
 
-namespace Src\V2\Ruta\Infrastructure;
+namespace Src\V2\ModuloMenu\Infrastructure;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Src\V2\Ruta\Application\UpdateUseCase;
-use Src\V2\Ruta\Infrastructure\Repositories\EloquentRutaRepository;
+use Src\V2\ModuloMenu\Application\UpdateUseCase;
+use Src\V2\ModuloMenu\Infrastructure\Repositories\EloquentModuloMenuRepository;
 
 final class UpdateController
 {
-    private EloquentRutaRepository $repository;
+    private EloquentModuloMenuRepository $repository;
 
-    public function __construct( EloquentRutaRepository $repository )
+    public function __construct( EloquentModuloMenuRepository $repository )
     {
         $this->repository = $repository;
     }
@@ -19,18 +19,18 @@ final class UpdateController
     public function __invoke( Request $request ): void
     {
         $user = Auth::user();
-        $idRuta     = $request->id;
+        $idModuloMenu     = $request->id;
         $nombre          = $request->input('nombre');
-        $idTipo          = $request->input('idTipo');
-        $idSede          = $request->input('idSede');
+        $icono          = $request->input('icono');
+        $codigo          = $request->input('codigo');
         $idEstado   = $request->input('idEstado');
 
         $useCase = new UpdateUseCase( $this->repository );
         $useCase->__invoke(
-            $idRuta,
+            $idModuloMenu,
             $nombre,
-            $idTipo,
-            $idSede,
+            $icono,
+            $codigo,
             $idEstado,
             $user->getId()
         );

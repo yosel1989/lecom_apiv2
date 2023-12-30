@@ -112,6 +112,7 @@ final class EloquentBoletoPrecioRepository implements BoletoPrecioRepositoryCont
             )
             ->where('id_cliente',$idCliente->value())
             ->where('id_ruta',$idRuta->value())
+            ->where('id_estado',1)
             ->get();
 
         $arrVehicles = array();

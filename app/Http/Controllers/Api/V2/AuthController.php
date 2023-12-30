@@ -6,6 +6,7 @@ use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\V2\Sede;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,8 +57,8 @@ class AuthController extends Controller
                             'idEstado' => $user->idEstado,
                             'idCliente' => $user->id_cliente,
                             'cliente' => $user->id_cliente ? $user->cliente->nombre : null,
-                            'idSede' => $user->id_sede,
-                            'sede' => $user->sede ? $user->sede->nombre : null,
+                            'idSede' => $user->personal ? $user->personal->id_sede : null,
+                            'sede' => $user->personal ? Sede::findOrFail($user->personal->id_sede)->nombre : null,
                         ],
 //                        'client' => $user->client ? $user->client()->first(['id','bussiness_name', 'first_name', 'last_name']) : null,
 //                        'permissions' => $user->modules()->pluck('short_name')

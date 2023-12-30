@@ -31,7 +31,9 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
             'usuarioRegistro:id,nombres,apellidos',
             'tipoComprobante:id,nombre',
             'sede:id,nombre'
-        )->where('id_cliente',$idCliente->value())->get();
+        )->where('id_cliente',$idCliente->value())
+            ->orderBy('f_registro','desc')
+            ->get();
 
         $arrVehicles = array();
 

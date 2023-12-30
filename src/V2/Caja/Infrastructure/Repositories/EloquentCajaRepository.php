@@ -66,6 +66,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             }else{
                 if(is_null($aperturado->first()->f_cierre)){
                     $OModel->setAperturado(new ValueBoolean(true));
+                    $OModel->setIdCajaDiario(new Id($aperturado->first()->id, true, 'El id del historial de la caja no tiene el formato correcto'));
                 }else{
                     $OModel->setAperturado(new ValueBoolean(false));
                 }
@@ -107,6 +108,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             }else{
                 if(is_null($aperturado->first()->f_cierre)){
                     $OModel->setAperturado(new ValueBoolean(true));
+                    $OModel->setIdCajaDiario(new Id($aperturado->first()->id, true, 'El id del historial de la caja no tiene el formato correcto'));
                 }else{
                     $OModel->setAperturado(new ValueBoolean(false));
                 }
@@ -249,6 +251,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         }else{
             if(is_null($aperturado->first()->f_cierre)){
                 $OModel->setAperturado(new ValueBoolean(true));
+                $OModel->setIdCajaDiario(new Id($aperturado->first()->id, true, 'El id del historial de la caja no tiene el formato correcto'));
             }else{
                 $OModel->setAperturado(new ValueBoolean(false));
             }

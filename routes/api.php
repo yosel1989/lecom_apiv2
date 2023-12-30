@@ -81,6 +81,7 @@ include 'V2/perfil-route.php';
 include 'V2/sede-route.php';
 include 'V2/caja-route.php';
 include 'V2/modulo-route.php';
+include 'V2/modulo-menu-route.php';
 include 'V2/pos-route.php';
 include 'V2/destino-route.php';
 include 'V2/boleto-interprovincial-route.php';

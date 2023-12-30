@@ -19,6 +19,8 @@ class RutaResource extends JsonResource
             'id'            => $this->getId()->value(),
             'nombre'          => $this->getNombre()->value(),
             'idTipo'       => $this->getIdTipo()->value(),
+            'idSede'       => $this->getIdSede()->value(),
+            'sede'       => $this->getSede()->value(),
             'tipo'       => $this->getTipo()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),

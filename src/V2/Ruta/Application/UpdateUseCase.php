@@ -23,6 +23,7 @@ final class UpdateUseCase
         string $idRuta,
         string $nombre,
         int $idTipo,
+        ?string $idSede,
         int $idEstado,
         string $idUsuarioRegistro
     ): void
@@ -30,6 +31,7 @@ final class UpdateUseCase
         $_idRuta = new Id($idRuta,false,'El id del Ruta no tiene el formato correcto');
         $_nombre = new Text($nombre, false,100,'El nombre del Ruta excede los 100 caracteres');
         $_idTipo = new NumericInteger($idTipo);
+        $_idSede = new Id($idSede,true,'El id de la sede no tiene el formato correcto');
         $_idEstado = new NumericInteger($idEstado);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
@@ -37,6 +39,7 @@ final class UpdateUseCase
             $_idRuta,
             $_nombre,
             $_idTipo,
+            $_idSede,
             $_idEstado,
             $_idUsuarioRegistro
         );

@@ -26,7 +26,9 @@ final class Caja
     private Text $usuarioModifico;
     private Text $sede;
     private Id $idSede;
+
     private ValueBoolean $aperturado;
+    private Id $idCajaDiario;
 
 
     /**
@@ -324,7 +326,19 @@ final class Caja
     public function setAperturado(ValueBoolean $aperturado): void
     {
         $this->aperturado = $aperturado;
-    }
+    }/**
+ * @return Id
+ */
+public function getIdCajaDiario(): Id
+{
+    return $this->idCajaDiario;
+}/**
+ * @param Id $idCajaDiario
+ */
+public function setIdCajaDiario(Id $idCajaDiario): void
+{
+    $this->idCajaDiario = $idCajaDiario;
+}
 
 
 

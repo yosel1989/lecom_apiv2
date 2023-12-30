@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\V2\Caja;
+namespace App\Http\Resources\V2\ModuloMenu;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CajaResource extends JsonResource
+class ModuloMenuResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,22 +17,22 @@ class CajaResource extends JsonResource
         // Map Domain User model values
         return [
             'id'            => $this->getId()->value(),
-            'nombre'          => $this->getNombre()->value(),
+            'texto'          => $this->getTexto()->value(),
+            'icono'          => $this->getIcono()->value(),
+            'idTipoMenu'       => $this->getIdTipoMenu()->value(),
+            'tipoMenu'       => $this->getTipoMenu()->value(),
+            'padre'       => $this->getPadre()->value(),
+            'link'       => $this->getLink()->value(),
+            'idModulo'       => $this->getIdModulo()->value(),
+            'modulo'       => $this->getModulo()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
-            'idCliente'       => $this->getIdCliente()->value(),
-            'idSede'       => $this->getIdSede()->value(),
-            'idPos'       => $this->getIdPos()->value(),
-            'pos'       => $this->getPos()->value(),
-            'sede'       => $this->getSede()->value(),
-            'idEliminado'       => $this->getIdEliminado()->value(),
             'fechaRegistro'       => $this->getFechaRegistro()->value(),
             'fechaModifico'     => $this->getFechaModifico()->value(),
             'idUsuarioRegistro'     => $this->getIdUsuarioModifico()->value(),
             'usuarioRegistro'     => $this->getUsuarioRegistro()->value(),
             'idUsuarioModifico'     => $this->getIdUsuarioModifico()->value(),
             'usuarioModifico'     => $this->getUsuarioModifico()->value(),
-            'aperturado'     => $this->getAperturado()->value(),
-            'idCajaHistorial'     => $this->getAperturado()->value() ? $this->getIdCajaDiario()->value() : null,
+            'hijos'     => ModuloMenuResource::collection($this->getHijos()),
         ];
 
     }

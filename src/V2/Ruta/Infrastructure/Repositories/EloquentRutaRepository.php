@@ -33,7 +33,11 @@ final class EloquentRutaRepository implements RutaRepositoryContract
         $models = $this->eloquentModelRuta->with(
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
-            'tipo:id,nombre')->where('id_cliente',$idCliente->value())->get();
+            'tipo:id,nombre',
+            'sede:id,nombre'
+        )->where('id_cliente',$idCliente->value())
+            ->orderBy('f_registro','desc')
+            ->get();
 
         $arrVehicles = array();
 
@@ -43,8 +47,8 @@ final class EloquentRutaRepository implements RutaRepositoryContract
                 new Id($model->id , false, 'El id de la Ruta no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la Ruta excede los 100 caracteres'),
                 new NumericInteger($model->id_tipo->value),
-                new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
                 new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
+                new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
                 new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
@@ -56,6 +60,7 @@ final class EloquentRutaRepository implements RutaRepositoryContract
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
             $OModel->setTipo(new Text(!is_null($model->tipo) ? $model->tipo->nombre : null, true, -1));
+            $OModel->setSede(new Text(!is_null($model->sede) ? $model->sede->nombre : null, true, -1));
 //            $OModel->setTipo(new Text(!is_null($model->tipo) ? $model->tipo->nombre : null, true, -1));
 
             $arrVehicles[] = $OModel;
@@ -75,6 +80,7 @@ final class EloquentRutaRepository implements RutaRepositoryContract
             'id',
             'nombre',
             'id_tipo',
+            'id_sede',
             'id_estado',
             'id_eliminado'
         )->where('id_cliente',$idCliente->value())->get();
@@ -87,6 +93,7 @@ final class EloquentRutaRepository implements RutaRepositoryContract
                 new Id($model->id , false, 'El id del Ruta no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la Ruta excede los 100 caracteres'),
                 new NumericInteger($model->id_tipo->value),
+                new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
             );
@@ -110,6 +117,7 @@ final class EloquentRutaRepository implements RutaRepositoryContract
                 'id',
                 'nombre',
                 'id_tipo',
+                'id_sede',
                 'id_estado',
                 'id_eliminado'
             )
@@ -125,6 +133,7 @@ final class EloquentRutaRepository implements RutaRepositoryContract
                 new Id($model->id , false, 'El id del Ruta no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la Ruta excede los 100 caracteres'),
                 new NumericInteger($model->id_tipo->value),
+                new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
             );
@@ -178,6 +187,7 @@ final class EloquentRutaRepository implements RutaRepositoryContract
         Id $id,
         Text $nombre,
         NumericInteger $idTipo,
+        Id $idSede,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -192,6 +202,7 @@ final class EloquentRutaRepository implements RutaRepositoryContract
         $this->eloquentModelRuta->findOrFail($id->value())->update([
             'nombre' => $nombre->value(),
             'id_tipo' => $idTipo->value(),
+            'id_sede' => $idSede->value(),
             'id_estado' => $idEstado->value(),
             'id_usu_modifico' => $idUsuarioRegistro->value()
         ]);
@@ -218,8 +229,8 @@ final class EloquentRutaRepository implements RutaRepositoryContract
             new Id($model->id , false, 'El id del Ruta no tiene el formato correcto'),
             new Text($model->nombre, false, 100, 'El nombre del Ruta excede los 100 caracteres'),
             new NumericInteger($model->id_tipo->value),
-            new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
             new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
+            new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
             new NumericInteger($model->id_estado->value),
             new NumericInteger($model->id_eliminado->value),
             new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
@@ -230,7 +241,7 @@ final class EloquentRutaRepository implements RutaRepositoryContract
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
         $OModel->setTipo(new Text(!is_null($model->tipo) ? $model->tipo->nombre : null, true, -1));
-
+        $OModel->setSede(new Text(!is_null($model->sede) ? $model->sede->nombre : null, true, -1));
 
         return $OModel;
     }

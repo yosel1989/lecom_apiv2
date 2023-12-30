@@ -1,35 +1,39 @@
 <?php
 declare(strict_types=1);
 
-namespace Src\V2\Ruta\Domain;
+namespace Src\V2\ModuloMenu\Domain;
 
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 
-final class RutaShort
+final class ModuloMenuShort
 {
-    private Id $id;
+    private NumericInteger $id;
     private Text $nombre;
-    private NumericInteger $idTipo;
-    private Id $idCliente;
+    private Text $icono;
     private NumericInteger $idEstado;
     private NumericInteger $idEliminado;
-    private Id $idSede;
+
+
+
+
+    private bool $activado;
+    private Text $link;
 
     /**
-     * @param Id $id
+     * @param NumericInteger $id
      * @param Text $nombre
-     * @param NumericInteger $idTipo
-     * @param Id $idSede
+     * @param Text $link
+     * @param Text $icono
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      */
     public function __construct(
-        Id $id,
+        NumericInteger $id,
         Text $nombre,
-        NumericInteger $idTipo,
-        Id $idSede,
+        Text $link,
+        Text $icono,
         NumericInteger $idEstado,
         NumericInteger $idEliminado
     )
@@ -37,24 +41,24 @@ final class RutaShort
 
         $this->id = $id;
         $this->nombre = $nombre;
-        $this->idTipo = $idTipo;
+        $this->icono = $icono;
         $this->idEstado = $idEstado;
         $this->idEliminado = $idEliminado;
-        $this->idSede = $idSede;
+        $this->link = $link;
     }
 
     /**
-     * @return Id
+     * @return NumericInteger
      */
-    public function getId(): Id
+    public function getId(): NumericInteger
     {
         return $this->id;
     }
 
     /**
-     * @param Id $id
+     * @param NumericInteger $id
      */
-    public function setId(Id $id): void
+    public function setId(NumericInteger $id): void
     {
         $this->id = $id;
     }
@@ -76,21 +80,20 @@ final class RutaShort
     }
 
     /**
-     * @return NumericInteger
+     * @return Text
      */
-    public function getIdTipo(): NumericInteger
+    public function getIcono(): Text
     {
-        return $this->idTipo;
+        return $this->icono;
     }
 
     /**
-     * @param NumericInteger $idTipo
+     * @param Text $icono
      */
-    public function setIdTipo(NumericInteger $idTipo): void
+    public function setIcono(Text $icono): void
     {
-        $this->idTipo = $idTipo;
+        $this->icono = $icono;
     }
-
 
     /**
      * @return NumericInteger
@@ -125,36 +128,56 @@ final class RutaShort
     }
 
     /**
-     * @return Id
+     * @return bool
      */
-    public function getIdCliente(): Id
+    public function isActivado(): bool
     {
-        return $this->idCliente;
+        return $this->activado;
     }
 
     /**
-     * @param Id $idCliente
+     * @param bool $activado
      */
-    public function setIdCliente(Id $idCliente): void
+    public function setActivado(bool $activado): void
     {
-        $this->idCliente = $idCliente;
+        $this->activado = $activado;
     }
 
     /**
-     * @return Id
+     * @return Text
      */
-    public function getIdSede(): Id
+    public function getLink(): Text
     {
-        return $this->idSede;
+        return $this->link;
     }
 
     /**
-     * @param Id $idSede
+     * @param Text $link
      */
-    public function setIdSede(Id $idSede): void
+    public function setLink(Text $link): void
     {
-        $this->idSede = $idSede;
+        $this->link = $link;
     }
 
 
+
+
+    public function getModules(): array{
+        return array([
+            'id' => 1,
+            'nombre' => 'Adminitración',
+            'icon' => asset('assets/img/icons/modulo-administracion.png'),
+            'link' => 'administracion'
+        ],[
+            'id' => 2,
+            'nombre' => 'Boletaje Interprovincial',
+            'icon' => asset('assets/img/icons/modulo-boletaje-interprovincial.png'),
+            'link' => 'boletaje-interprovincial'
+        ],[
+            'id' => 3,
+            'nombre' => 'Contabilidad',
+            'icon' => asset('assets/img/icons/modulo-facturacion-electronica.png'),
+            'link' => 'contabilidad'
+        ]);
+    }
 }

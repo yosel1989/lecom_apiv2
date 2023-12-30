@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\V2\Ruta;
+namespace App\Http\Resources\V2\Modulo;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RutaListResource extends JsonResource
+class ModuloListToPerfilResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,13 +18,11 @@ class RutaListResource extends JsonResource
         return [
             'id'            => $this->getId()->value(),
             'nombre'          => $this->getNombre()->value(),
-            'idTipo'          => $this->getIdTipo()->value(),
-            'idSede'          => $this->getIdSede()->value(),
-//            'direccion'          => $this->getDireccion()->value(),
+            'icono'          => $this->getIcono()->value(),
+            'link'          => $this->getLink()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),
-
+            'activado'       => $this->isActivado(),
         ];
-
     }
 }

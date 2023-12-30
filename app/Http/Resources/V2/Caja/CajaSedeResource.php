@@ -20,7 +20,8 @@ class CajaSedeResource extends JsonResource
             'nombre'          => $this->getNombre()->value(),
             'idCliente'          => $this->getIdCliente()->value(),
             'idSede'          => $this->getIdSede()->value(),
-            'aperturado'          => $this->getAperturado()->value()
+            'aperturado'          => $this->getAperturado()->value(),
+            'idCajaHistorial'     => $this->getAperturado()->value() ? $this->getIdCajaDiario()->value() : null,
         ];
     }
 }
