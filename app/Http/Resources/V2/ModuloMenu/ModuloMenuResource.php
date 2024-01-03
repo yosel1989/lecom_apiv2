@@ -33,6 +33,7 @@ class ModuloMenuResource extends JsonResource
             'idUsuarioModifico'     => $this->getIdUsuarioModifico()->value(),
             'usuarioModifico'     => $this->getUsuarioModifico()->value(),
             'hijos'     => ModuloMenuResource::collection($this->getHijos()),
+            'activado'     => $this->getActivado()->value()
         ];
 
     }

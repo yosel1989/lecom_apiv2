@@ -16,4 +16,6 @@ interface PerfilModuloMenuRepositoryContract
     ): void;
 
     public function collectionByClientePerfil(Id $idCliente, Id $idPerfil, NumericInteger $idModulo): array;
+
+    public function collectionByClientePerfilUsuario(Id $idCliente, Id $idPerfil, NumericInteger $idModulo): array;
 }

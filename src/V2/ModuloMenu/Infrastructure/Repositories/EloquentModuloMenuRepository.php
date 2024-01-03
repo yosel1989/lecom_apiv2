@@ -34,7 +34,7 @@ final class EloquentModuloMenuRepository implements ModuloMenuRepositoryContract
         )->where('id_modulo', $idModulo->value())
             ->whereNull('padre')->get();
 
-        $arrVehicles = array();
+        $collection = array();
 
         foreach ( $models as $model ){
 
@@ -69,10 +69,10 @@ final class EloquentModuloMenuRepository implements ModuloMenuRepositoryContract
 
             $this->addHijos($OModel, $model->hijos);
 
-            $arrVehicles[] = $OModel;
+            $collection[] = $OModel;
         }
 
-        return $arrVehicles;
+        return $collection;
     }
 
 

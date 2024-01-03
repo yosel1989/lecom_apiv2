@@ -7,6 +7,7 @@ use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
 
 final class ModuloMenu
 {
@@ -30,6 +31,8 @@ final class ModuloMenu
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
     private array $hijos = [];
+
+    private ValueBoolean $activado;
 
     /**
      * @param Id $id
@@ -72,6 +75,9 @@ final class ModuloMenu
         $this->idUsuarioModifico = $idUsuarioModifico;
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
+
+
+        $this->activado = new ValueBoolean(false);
     }
 
     /**
@@ -346,5 +352,20 @@ final class ModuloMenu
         $this->hijos = $hijos;
     }
 
+    /**
+     * @return ValueBoolean
+     */
+    public function getActivado(): ValueBoolean
+    {
+        return $this->activado;
+    }
+
+    /**
+     * @param ValueBoolean $activado
+     */
+    public function setActivado(ValueBoolean $activado): void
+    {
+        $this->activado = $activado;
+    }
 
 }
