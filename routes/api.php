@@ -99,6 +99,7 @@ include 'V2/tipo-moneda-route.php';
 include 'V2/boleto-precio-route.php';
 include 'V2/log-boleto-interprovincial-route.php';
 include 'V2/perfil-modulo-route.php';
+include 'V2/perfil-modulo-menu-route.php';
 
 
 Route::get('v1/erts', function(){
