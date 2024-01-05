@@ -19,6 +19,12 @@ class ModuloMenuSeeder extends Seeder
      */
     public function run()
     {
+        \App\Models\V2\ModuloMenu::truncate();
+
+
+
+        /// Administración
+
         \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::Administracion,
             'texto'=>'Administración',
@@ -157,6 +163,135 @@ class ModuloMenuSeeder extends Seeder
                 'id_estado'=> IdEstado::Habilitado
             ]);
 
+
+
+        /// Boletaje Interprovincial
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::BoletajeInterprovincial,
+            'texto'=>'Boletaje Interprovincial',
+            'icono'=>null,
+            'id_tipo_menu'=> EnumTipoMenu::Titulo,
+            'padre'=>null,
+            'link'=>null,
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::BoletajeInterprovincial,
+            'texto'=>'Dashboard',
+            'icono'=> 'fa-duotone fa-grid-2',
+            'id_tipo_menu'=> EnumTipoMenu::Link,
+            'padre'=>null,
+            'link'=> 'boletaje-interprovincial/dashboard',
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::BoletajeInterprovincial,
+            'texto'=>'Registros',
+            'icono'=>null,
+            'id_tipo_menu'=> EnumTipoMenu::Subtitulo,
+            'padre'=>null,
+            'link'=>null,
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::BoletajeInterprovincial,
+            'texto'=>'Registro',
+            'icono'=> 'fa-duotone fa-floppy-disk',
+            'id_tipo_menu'=> EnumTipoMenu::SubMenu,
+            'padre'=>null,
+            'link'=>null,
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+
+            \App\Models\V2\ModuloMenu::create([
+                'id_modulo'=> EnumModulo::BoletajeInterprovincial,
+                'texto'=>'Rutas',
+                'icono'=>null,
+                'id_tipo_menu'=> EnumTipoMenu::Link,
+                'padre'=>18,
+                'link'=>'boletaje-interprovincial/rutas',
+                'id_estado'=> IdEstado::Habilitado
+            ]);
+
+            \App\Models\V2\ModuloMenu::create([
+                'id_modulo'=> EnumModulo::BoletajeInterprovincial,
+                'texto'=>'Paraderos',
+                'icono'=>null,
+                'id_tipo_menu'=> EnumTipoMenu::Link,
+                'padre'=>18,
+                'link'=>'boletaje-interprovincial/paraderos',
+                'id_estado'=> IdEstado::Habilitado
+            ]);
+
+
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::BoletajeInterprovincial,
+            'texto'=>'Reportes',
+            'icono'=>null,
+            'id_tipo_menu'=> EnumTipoMenu::Subtitulo,
+            'padre'=>null,
+            'link'=>null,
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::BoletajeInterprovincial,
+            'texto'=>'Reportes',
+            'icono'=> 'fa-duotone fa-floppy-disk',
+            'id_tipo_menu'=> EnumTipoMenu::SubMenu,
+            'padre'=>null,
+            'link'=>null,
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+
+                \App\Models\V2\ModuloMenu::create([
+                    'id_modulo'=> EnumModulo::BoletajeInterprovincial,
+                    'texto'=>'Boletos Vendidos',
+                    'icono'=>null,
+                    'id_tipo_menu'=> EnumTipoMenu::Link,
+                    'padre'=>22,
+                    'link'=>'boletaje-interprovincial/reporte-boletos',
+                    'id_estado'=> IdEstado::Habilitado
+                ]);
+
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::BoletajeInterprovincial,
+            'texto'=>'Operaciones',
+            'icono'=>null,
+            'id_tipo_menu'=> EnumTipoMenu::Subtitulo,
+            'padre'=>null,
+            'link'=>null,
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::BoletajeInterprovincial,
+            'texto'=>'Operaciones',
+            'icono'=> 'fa-duotone fa-floppy-disk',
+            'id_tipo_menu'=> EnumTipoMenu::SubMenu,
+            'padre'=>null,
+            'link'=>null,
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+
+                \App\Models\V2\ModuloMenu::create([
+                    'id_modulo'=> EnumModulo::BoletajeInterprovincial,
+                    'texto'=>'Venta de Boletos',
+                    'icono'=>null,
+                    'id_tipo_menu'=> EnumTipoMenu::Link,
+                    'padre'=>25,
+                    'link'=>'boletaje-interprovincial/venta-boletos',
+                    'id_estado'=> IdEstado::Habilitado
+                ]);
+                \App\Models\V2\ModuloMenu::create([
+                    'id_modulo'=> EnumModulo::BoletajeInterprovincial,
+                    'texto'=>'Encomienda',
+                    'icono'=>null,
+                    'id_tipo_menu'=> EnumTipoMenu::Link,
+                    'padre'=>25,
+                    'link'=>'boletaje-interprovincial/registrar-encomienda',
+                    'id_estado'=> IdEstado::Habilitado
+                ]);
 
     }
 }
