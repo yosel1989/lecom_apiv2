@@ -5,6 +5,7 @@ namespace Src\V2\Caja\Domain\Contracts;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
 use Src\V2\Caja\Domain\Caja;
 
 interface CajaRepositoryContract
@@ -14,6 +15,7 @@ interface CajaRepositoryContract
         Id $idCliente,
         Id $idSede,
         Id $idPos,
+        ValueBoolean $blPuntoVenta,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;
@@ -27,6 +29,7 @@ interface CajaRepositoryContract
         Text $nombre,
         Id $idSede,
         Id $idPos,
+        ValueBoolean $blPuntoVenta,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;

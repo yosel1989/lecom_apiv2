@@ -19,6 +19,7 @@ return new class extends Migration
             $table->uuid('id_cliente');
             $table->tinyInteger('id_estado')->default(1);
             $table->tinyInteger('id_eliminado')->default(0);
+            $table->boolean('bl_punto_venta')->default(false);
             $table->uuid('id_usu_registro')->nullable();
             $table->uuid('id_usu_modifico')->nullable();
             $table->timestamp('f_registro');

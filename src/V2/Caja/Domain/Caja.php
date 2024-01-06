@@ -29,6 +29,7 @@ final class Caja
 
     private ValueBoolean $aperturado;
     private Id $idCajaDiario;
+    private ValueBoolean $blPuntoVenta;
 
 
     /**
@@ -37,6 +38,7 @@ final class Caja
      * @param Id $idCliente
      * @param Id $idSede
      * @param Id $idPos
+     * @param ValueBoolean $blPuntoVenta
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      * @param Id $idUsuarioRegistro
@@ -50,6 +52,7 @@ final class Caja
         Id $idCliente,
         Id $idSede,
         Id $idPos,
+        ValueBoolean $blPuntoVenta,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
         Id $idUsuarioRegistro,
@@ -70,6 +73,7 @@ final class Caja
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
         $this->idSede = $idSede;
+        $this->blPuntoVenta = $blPuntoVenta;
     }
 
     /**
@@ -326,20 +330,37 @@ final class Caja
     public function setAperturado(ValueBoolean $aperturado): void
     {
         $this->aperturado = $aperturado;
-    }/**
- * @return Id
- */
-public function getIdCajaDiario(): Id
-{
-    return $this->idCajaDiario;
-}/**
- * @param Id $idCajaDiario
- */
-public function setIdCajaDiario(Id $idCajaDiario): void
-{
-    $this->idCajaDiario = $idCajaDiario;
-}
+    }
 
+    /**
+     * @return Id
+     */
+    public function getIdCajaDiario(): Id
+    {
+        return $this->idCajaDiario;
+    }/**
+     * @param Id $idCajaDiario
+     */
+    public function setIdCajaDiario(Id $idCajaDiario): void
+    {
+        $this->idCajaDiario = $idCajaDiario;
+    }
+
+    /**
+     * @return ValueBoolean
+     */
+    public function getBlPuntoVenta(): ValueBoolean
+    {
+        return $this->blPuntoVenta;
+    }
+
+    /**
+     * @param ValueBoolean $blPuntoVenta
+     */
+    public function setBlPuntoVenta(ValueBoolean $blPuntoVenta): void
+    {
+        $this->blPuntoVenta = $blPuntoVenta;
+    }
 
 
 }

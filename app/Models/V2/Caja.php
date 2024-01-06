@@ -32,6 +32,7 @@ class Caja extends Model
         'id_pos',
         'id_estado',
         'id_eliminado',
+        'bl_punto_venta',
         'id_usu_registro',
         'id_usu_modifico',
         'f_registro',
@@ -46,6 +47,7 @@ class Caja extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'bl_punto_venta' =>  'boolean',
         'total' =>  'integer',
         'f_registro' =>  'string',
         'f_modifico' =>  'string',
