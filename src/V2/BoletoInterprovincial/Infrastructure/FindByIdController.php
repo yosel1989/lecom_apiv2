@@ -6,6 +6,7 @@ namespace Src\V2\BoletoInterprovincial\Infrastructure;
 use Illuminate\Http\Request;
 use Src\V2\BoletoInterprovincial\Application\FindByIdUseCase;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincial;
+use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
 use Src\V2\BoletoInterprovincial\Infrastructure\Repositories\EloquentBoletoInterprovincialRepository;
 
 final class FindByIdController
@@ -21,11 +22,12 @@ final class FindByIdController
      * @param Request $request
      * @return mixed
      */
-    public function __invoke( Request $request ): BoletoInterprovincial
+    public function __invoke( Request $request ): BoletoInterprovincialOficial
     {
         $idBoletoInterprovincial = $request->id;
+        $idCliente = $request->idCliente;
         $useCase = new FindByIdUseCase($this->repository);
-        return $useCase->__invoke($idBoletoInterprovincial);
+        return $useCase->__invoke($idBoletoInterprovincial, $idCliente);
     }
 
 }

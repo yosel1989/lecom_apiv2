@@ -23,7 +23,7 @@ final class FindByIdController
      */
     public function __invoke( Request $request ): ClienteConfiguracion
     {
-        $idCliente = $request->input('idCliente');
+        $idCliente = $request->has('idCliente') ? $request->input('idCliente') :  $request->idCliente;
         $useCase = new FindByIdUseCase($this->repository);
         return $useCase->__invoke($idCliente);
     }

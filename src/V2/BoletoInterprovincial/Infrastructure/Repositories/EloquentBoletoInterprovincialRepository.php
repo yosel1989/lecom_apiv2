@@ -303,18 +303,27 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         return $arrVehicles;
     }
 
-    public function reportePuntoVentaByCliente(Id $idCliente, Id $idSede, DateFormat $fecha): array
+    public function reportePuntoVentaByCliente(Id $idCliente, Id $idUsuario, DateFormat $fecha): array
     {
         $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
         $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
 
         $models = $this->eloquentModelBoletoInterprovincial
+                ->select(
+                    'boleto_interprovincial_cliente_' . $OCliente->codigo .'.*',
+                    'ce_comprobante_electronico.serie as serie',
+                    'ce_comprobante_electronico.numero as numero',
+                    'tipo_comprobante.nombre as tipoComprobante'
+                )
 //            ->with(
 //                'ruta:id,nombre'
 //            )
 //            ->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos', 'vehiculo:id,placa', 'destino:id,nombre')
-            ->whereDate('f_registro','=',$fecha->value())
-            ->where('id_sede', $idSede->value())
+            ->leftjoin('ce_comprobante_electronico',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id', '=', 'ce_comprobante_electronico.id_producto')
+            ->leftjoin('tipo_comprobante',  'ce_comprobante_electronico.id_tipo_comprobante', '=', 'tipo_comprobante.id')
+            ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo .'.f_registro','=',$fecha->value())
+            ->where('boleto_interprovincial_cliente_' . $OCliente->codigo .'.id_usu_registro', $idUsuario->value())
+            ->orderBy('f_registro','desc')
             ->get();
 
         $arrVehicles = array();
@@ -387,6 +396,10 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             $TipoComprobante = $model->id_tipo_comprobante ? TipoComprobante::findOrFail($model->id_tipo_comprobante->value, ['nombre']) : null;
             $OModel->setTipoComprobante(new Text(($TipoComprobante?->nombre), true, -1));
 
+            $OModel->setTipoComprobante(new Text($model->tipoComprobante, true, -1 , ''));
+            $OModel->setComprobanteNumero(new NumericInteger($model->numero));
+            $OModel->setComprobanteSerie(new Text($model->serie, true, -1, ''));
+
 
             $arrVehicles[] = $OModel;
         }
@@ -409,40 +422,85 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
     public function find(
         Id $idBoletoInterprovincial,
-    ): BoletoInterprovincial
+        Id $idCliente
+    ): BoletoInterprovincialOficial
     {
-        $model = $this->eloquentModelBoletoInterprovincial->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos', 'vehiculo:id,placa', 'destino:id,nombre')->findOrFail($idBoletoInterprovincial->value());
-        $OModel = new BoletoInterprovincial(
+
+        $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
+        $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
+
+
+        $model = $this->eloquentModelBoletoInterprovincial
+            ->select(
+                'boleto_interprovincial_cliente_' . $OCliente->codigo.'.*',
+                'users.nombres as nombres',
+                'users.apellidos as apellidos',
+                'ce_comprobante_electronico.serie as serie',
+                'ce_comprobante_electronico.numero as numero',
+                'tipo_comprobante.nombre as tipoComprobante',
+                'rutas.nombre as ruta',
+                'po.nombre as paraderoOrigen',
+                'pd.nombre as paraderoDestino',
+                'caja.nombre as caja',
+                'clientes.nombre as cliente',
+            )
+            ->leftJoin('users','boleto_interprovincial_cliente_' . $OCliente->codigo.'.id_usu_registro', 'users.id')
+            ->leftjoin('ce_comprobante_electronico',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id', '=', 'ce_comprobante_electronico.id_producto')
+            ->leftjoin('tipo_comprobante',  'ce_comprobante_electronico.id_tipo_comprobante', '=', 'tipo_comprobante.id')
+            ->leftjoin('rutas',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_ruta', '=', 'rutas.id')
+            ->leftjoin('paradero as po',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_paradero_origen', '=', 'po.id')
+            ->leftjoin('paradero as pd',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_paradero_destino', '=', 'pd.id')
+            ->leftjoin('caja',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_caja', '=', 'caja.id')
+            ->leftjoin('clientes',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_cliente', '=', 'clientes.id')
+//            ->leftjoin('tipo_documento',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_tipo_documento', '=', 'caja.id')
+            ->findOrFail($idBoletoInterprovincial->value());
+        $OModel = new BoletoInterprovincialOficial(
             new Id($model->id, false, 'El id del boleto no tiene el formato correcto'),
+            new Id($model->id_cliente, true, 'El id del cliente no tiene el formato correcto'),
             new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
-            new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
-            new Id($model->id_vehiculo, false, 'El id del vehiculo no tiene el formato correcto'),
-            new Id($model->id_ruta, false, 'El id de la ruta no tiene el formato correcto'),
-            new Id($model->idParadero, false, 'El id del paradero no tiene el formato correcto'),
-            new Id($model->idCaja, false, 'El id de la caja no tiene el formato correcto'),
-            new Id($model->idPos, false, 'El id del pos no tiene el formato correcto'),
-            new NumericInteger($model->idTipoDocumento->value),
-            new Text($model->numeroDocumento, false, -1, ''),
-            new Text($model->nombre, true, -1, ''),
-            new Text($model->direccion, true, -1, ''),
-            new Text($model->serie, true, -1, ''),
-            new Text($model->numeroBoleto, true, -1, ''),
-            new Text($model->codigoBoleto, false, -1, ''),
+            new Id($model->id_caja, true, 'El id de la caja no tiene el formato correcto'),
+            new NumericInteger($model->id_tipo_documento->value),
+            new Text($model->numero_documento, false, -1, ''),
+            new Text($model->nombres, false, -1, ''),
+            new Text($model->apellidos, false, -1, ''),
+            new NumericInteger((int)$model->menor_edad),
+            new Id($model->id_vehiculo, true, 'El id del vehiculo no tiene el formato correcto'),
+            new Id($model->id_asiento, true, 'El id del asiento no tiene el formato correcto'),
+            new DateFormat($model->f_partida, true, 'La fecha de partida no tiene el formato correcto'),
+            new TimeFormat($model->h_partida, true, 'La hora de partida no tiene el formato correcto'),
+            new Id($model->id_ruta, true, 'El id de la ruta no tiene el formato correcto'),
+            new Id($model->id_paradero_origen, true, 'El id del paradero origen no tiene el formato correcto'),
+            new Id($model->id_paradero_destino, true, 'El id del paradero destino no tiene el formato correcto'),
+            new NumericFloat($model->precio),
+            new NumericInteger($model->id_tipo_moneda->value),
+            new NumericInteger($model->id_forma_pago->value),
+            new NumericInteger((int)$model->obsequio),
+            new Id($model->id_pos, true, 'El id del pos no tiene el formato correcto'),
+            new Text($model->codigo, false, -1),
             new NumericFloat($model->latitud),
             new NumericFloat($model->longitud),
-            new NumericFloat($model->precio),
-            new DateTimeFormat($model->fecha),
-            new NumericInteger($model->idEstado->value),
-            new NumericInteger($model->idEliminado->value),
-            new NumericInteger($model->enBlanco->value),
-            new Id($model->idUsuarioRegistro, false, 'El id del usuario que registro no tiene el formato correcto'),
-            new Id($model->idUsuarioModifico, true, 'El id del boleto no tiene el formato correcto'),
-            new DateTimeFormat($model->fechaRegistro),
-            new DateTimeFormat($model->fechaModifico)
+            new DateTimeFormat($model->f_emision),
+            new NumericInteger($model->idEstado),
+            new Id($model->id_usu_registro, false, 'El id del usuario que registro no tiene el formato correcto'),
+            new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+            new DateTimeFormat($model->f_registro),
+            new DateTimeFormat($model->f_modifico),
+            new NumericInteger($model->id_tipo_comprobante->value),
+            new NumericInteger($model->id_tipo_boleto->value),
+            new NumericInteger((int)$model->por_pagar),
         );
-        $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
-        $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
-        $OModel->setVehiculo(new Text(!is_null($model->vehiculo) ? ( $model->vehiculo->placa . ' ' . $model->vehiculo->placa ) : null, true, -1));
+        $OModel->setUsuarioRegistro(new Text(( $model->nombres . ' ' . substr($model->apellidos, 0, 2).'***' ) , true, -1));
+        $OModel->setTipoComprobante(new Text($model->tipoComprobante, true, -1 , ''));
+        $OModel->setComprobanteNumero(new NumericInteger($model->numero));
+        $OModel->setComprobanteSerie(new Text($model->serie, true, -1, ''));
+        $OModel->setRuta(new Text($model->ruta, true, -1, ''));
+        $OModel->setParaderoOrigen(new Text($model->paraderoOrigen, true, -1, ''));
+        $OModel->setParaderoDestino(new Text($model->paraderoDestino, true, -1, ''));
+        $OModel->setCaja(new Text($model->caja, true, -1, ''));
+        $OModel->setCliente(new Text($model->cliente, true, -1, ''));
+//        $OModel->setTipoDocumento(new Text($model->tipoDocumento, true, -1, ''));
+//        $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
+//        $OModel->setVehiculo(new Text(!is_null($model->vehiculo) ? ( $model->vehiculo->placa . ' ' . $model->vehiculo->placa ) : null, true, -1));
 //        $OModel->setDestino(new Text(!is_null($model->destino) ? ( $model->destino->nombre . ' ' . $model->destino->apellido ) : null, true, -1));
 
 

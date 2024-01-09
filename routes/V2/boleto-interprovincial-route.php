@@ -12,12 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 Route::namespace('App\Http\Controllers\Api\V2\BoletoInterprovincial')->middleware('auth:sanctum')->group( function (){
     Route::get('cliente/{id}/boleto-interprovincial', 'GetCollectionByClienteController');
     Route::post('boleto-interprovincial/{id}/cambiar-estado', 'ChangeStateController');
-    Route::get('boleto-interprovincial/{id}', 'FindByIdController');
+    Route::get('boleto-interprovincial/{id}/{idCliente}', 'FindByIdController');
+    Route::get('boleto-interprovincial/show/{id}/{idCliente}', 'ShowByIdController');
 
 
     Route::get('cliente/{id}/boleto-interprovincial/reporte-venta/{fechaDesde}/{fechaHasta}/{idRuta}', 'GetReportByClienteController');
     Route::get('cliente/{id}/usuario/boleto-interprovincial/reporte-venta/{fechaDesde}/{fechaHasta}/{idRuta}', 'GetReportByUsuarioClienteController');
-    Route::get('cliente/{id}/boleto-interprovincial/reporte-punto-venta/sede/{idSede}', 'GetReportePuntoVentaByClienteController');
+    Route::get('cliente/{id}/boleto-interprovincial/reporte-punto-venta/usuario', 'GetReportePuntoVentaByClienteController');
     Route::post('cliente/{id}/boleto-interprovincial/punto-venta', 'PuntoVentaController');
 });
 

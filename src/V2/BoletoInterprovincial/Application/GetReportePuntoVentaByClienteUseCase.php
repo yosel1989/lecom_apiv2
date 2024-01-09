@@ -17,11 +17,11 @@ final class GetReportePuntoVentaByClienteUseCase
         $this->repository = $repository;
     }
 
-    public function __invoke(string $idCliente, string $idSede, string $fecha): array
+    public function __invoke(string $idCliente, string $idUsuario, string $fecha): array
     {
         $_idCliente = new Id($idCliente,false, 'El id del cliente no tiene el formato correcto');
-        $_idSede = new Id($idSede,false, 'El id de la sede no tiene el formato correcto');
+        $_idUsuario = new Id($idUsuario,false, 'El id del usuario no tiene el formato correcto');
         $_fecha = new DateFormat($fecha,false, 'El fecha inicio no tiene el formato correcto');
-        return $this->repository->reportePuntoVentaByCliente($_idCliente, $_idSede, $_fecha);
+        return $this->repository->reportePuntoVentaByCliente($_idCliente, $_idUsuario, $_fecha);
     }
 }
