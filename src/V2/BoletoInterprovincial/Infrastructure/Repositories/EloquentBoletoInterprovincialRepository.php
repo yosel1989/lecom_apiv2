@@ -396,14 +396,37 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
 
     public function changeState(
-        Id $idBoletoInterprovincial,
+        Id $idCliente,
         NumericInteger $idEstado,
-        Id $idUsuarioModifico
+        Id $idUsuarioModifico,
     ): void
     {
+
         $this->eloquentModelBoletoInterprovincial->findOrFail($idBoletoInterprovincial->value())->update([
            'idEstado' => $idEstado->value(),
            'idUsuarioModifico' => $idUsuarioModifico->value()
+        ]);
+    }
+
+    public function scanById(
+        Id $idCliente,
+        Id $idVehiculo,
+        Id $idBoletoInterprovincial,
+        Id $idUsuario
+    ): void
+    {
+        $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
+        $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
+
+
+        $boleto = $this->eloquentModelBoletoInterprovincial->where('id', $idBoletoInterprovincial->value());
+        if($boleto->count() == 0){
+            throw new \InvalidArgumentException('El boleto no se encuentra registrado');
+        }
+
+        $boleto->first()->update([
+            'id_vehiculo' => $idVehiculo->value(),
+            'idUsuarioModifico' => $idUsuario->value()
         ]);
     }
 

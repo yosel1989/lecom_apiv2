@@ -29,6 +29,13 @@ interface BoletoInterprovincialRepositoryContract
         Id $idBoletoInterprovincial,
     ): BoletoInterprovincial;
 
+    public function scanById(
+        Id $idCliente,
+        Id $idVehiculo,
+        Id $idBoletoInterprovincial,
+        Id $idUsuario
+    ): void;
+
 
     public function puntoVenta(
         Id $_id,

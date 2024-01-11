@@ -115,7 +115,7 @@ final class EloquentBoletoPrecioRepository implements BoletoPrecioRepositoryCont
             ->where('id_estado',1)
             ->get();
 
-        $arrVehicles = array();
+        $arr = array();
 
         foreach ( $models as $model ){
 
