@@ -7,7 +7,6 @@ use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
-use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincial;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
 use Src\V2\Vehiculo\Domain\VehiculoShortList;
 
@@ -17,7 +16,7 @@ interface BoletoInterprovincialRepositoryContract
     public function collectionByCliente(Id $idCliente): array;
     public function reportByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idRuta, Id $idUsuario): array;
     public function reportByUsuarioCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idRuta, VehiculoShortList $vehiculos): array;
-    public function reportePuntoVentaByCliente(Id $idCliente, Id $idSede, DateFormat $fecha): array;
+    public function reportePuntoVentaByCliente(Id $idCliente, Id $idUsuario, DateFormat $fecha): array;
 
     public function changeState(
         Id $idBoletoInterprovincial,
@@ -27,7 +26,8 @@ interface BoletoInterprovincialRepositoryContract
 
     public function find(
         Id $idBoletoInterprovincial,
-    ): BoletoInterprovincial;
+        Id $idCliente
+    ): BoletoInterprovincialOficial;
 
     public function scanById(
         Id $idCliente,
