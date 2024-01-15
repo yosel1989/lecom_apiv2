@@ -431,10 +431,17 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
         $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
 
-
         $boleto = $this->eloquentModelBoletoInterprovincial->where('id', $idBoletoInterprovincial->value());
         if($boleto->count() == 0){
             throw new \InvalidArgumentException('El boleto no se encuentra registrado');
+        }
+
+        if(!is_null($boleto->first()->id_vehiculo)){
+            throw new \InvalidArgumentException('El boleto ya fue escaneado');
+        }
+
+        if($boleto->first()->id_estado == 2){
+            throw new \InvalidArgumentException('El boleto fue anulado');
         }
 
         $boleto->first()->update([
