@@ -100,6 +100,8 @@ include 'V2/boleto-precio-route.php';
 include 'V2/log-boleto-interprovincial-route.php';
 include 'V2/perfil-modulo-route.php';
 include 'V2/perfil-modulo-menu-route.php';
+include 'V2/motivo-traslado-route.php';
+include 'V2/origen-boleto-route.php';
 
 
 Route::get('v1/erts', function(){

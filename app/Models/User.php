@@ -67,6 +67,10 @@ class User extends Authenticatable
         return $this->id;
     }
 
+    public function getIdCliente(): string{
+        return $this->id_cliente;
+    }
+
     /**
      * The attributes that should be cast.
      *

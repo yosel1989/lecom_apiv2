@@ -76,7 +76,8 @@ class BoletoInterprovincialOficial extends Model
 
         'id_tipo_comprobante',
         'id_tipo_boleto',
-        'por_pagar'
+        'por_pagar',
+        'id_origen',
     ];
 
     /**
@@ -101,6 +102,7 @@ class BoletoInterprovincialOficial extends Model
         'f_registro' => 'string',
         'f_modifico' => 'string',
         'total' => 'integer',
+        'id_origen' => 'integer',
 //        'anulado' => IdAnulado::class,
 //        'enBlanco' => IdEnBlanco::class,
         'por_pagar' => 'boolean',

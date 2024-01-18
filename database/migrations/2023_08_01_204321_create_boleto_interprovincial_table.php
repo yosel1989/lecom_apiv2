@@ -55,6 +55,7 @@ return new class extends Migration
                 $table->integer('id_tipo_comprobante');
                 $table->integer('id_tipo_boleto');
                 $table->boolean('por_pagar')->default(false);
+                $table->boolean('id_origen')->default(0);
 
 //
                 $table->index([
@@ -83,7 +84,8 @@ return new class extends Migration
                     'f_modifico',
                     'id_tipo_comprobante',
                     'id_tipo_boleto',
-                    'por_pagar'
+                    'por_pagar',
+                    'id_origen'
                 ]);
         });
     }

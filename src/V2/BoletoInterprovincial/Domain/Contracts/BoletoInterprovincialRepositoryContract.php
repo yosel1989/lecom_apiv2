@@ -36,6 +36,14 @@ interface BoletoInterprovincialRepositoryContract
         Id $idUsuario
     ): void;
 
+    public function traslateById(
+        Id $idCliente,
+        Id $idVehiculo,
+        Id $idBoletoInterprovincial,
+        Id $idUsuario,
+        NumericInteger $idMotivo
+    ): void;
+
 
     public function puntoVenta(
         Id $_id,

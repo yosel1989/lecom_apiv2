@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\V2\Vehiculo;
+namespace App\Http\Resources\V2\MotivoTraslado;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class VehiculoListResource extends JsonResource
+class MotivoTrasladoListResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,8 @@ class VehiculoListResource extends JsonResource
     {
         // Map Domain User model values
         return [
-            'id'           => $this->getId()->value(),
-            'placa'        => $this->getPlaca()->value(),
-            'unidad'       => $this->getUnidad()->value()
+            'id'            => $this->getId()->value(),
+            'nombre'          => $this->getNombre()->value(),
         ];
-
     }
 }

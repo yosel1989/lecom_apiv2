@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Src\V2\BoletoInterprovincial\Infrastructure\Repositories;
 
+use App\Enums\EnumAcciones;
+use App\Enums\EnumOrigenBoleto;
 use App\Enums\IdTipoBoleto;
 use App\Models\User;
+use App\Models\V2\Cliente as EloquentModelClient;
+use App\Models\V2\HistorialBoletoInterprovincial as EloquentModelHistorialBoletoInterprovincial;
 use App\Models\V2\BoletoInterprovincialOficial as EloquentModelBoletoInterprovincial;
 use App\Models\V2\Caja;
 use App\Models\V2\Cliente;
-use App\Models\V2\Cliente as EloquentModelClient;
 use App\Models\V2\ComprobanteElectronico;
 use App\Models\V2\ComprobanteSerie;
 use App\Models\V2\Paradero;
@@ -30,18 +33,19 @@ use Src\Core\Domain\ValueObjects\Text;
 use Src\Core\Domain\ValueObjects\TimeFormat;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
 use Src\V2\BoletoInterprovincial\Domain\Contracts\BoletoInterprovincialRepositoryContract;
-use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincial;
 use Src\V2\Vehiculo\Domain\VehiculoShortList;
 
 final class EloquentBoletoInterprovincialRepository implements BoletoInterprovincialRepositoryContract
 {
     private EloquentModelBoletoInterprovincial $eloquentModelBoletoInterprovincial;
     private EloquentModelClient $eloquentClientModel;
+    private EloquentModelHistorialBoletoInterprovincial $eloquentModelHistorialBoletoInterprovincial;
 
     public function __construct()
     {
         $this->eloquentModelBoletoInterprovincial = new EloquentModelBoletoInterprovincial;
         $this->eloquentClientModel = new EloquentModelClient;
+        $this->eloquentModelHistorialBoletoInterprovincial = new EloquentModelHistorialBoletoInterprovincial;
     }
 
 
@@ -214,12 +218,21 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
 
         $models = $this->eloquentModelBoletoInterprovincial
-//            ->whereIn('id_vehiculo', $idVehiculos)
-//            ->whereNull('id_vehiculo')
-            ->whereDate('f_registro','>=',$fechaDesde->value())
-            ->whereDate('f_registro','>=',$fechaDesde->value());
+            ->select(
+                'boleto_interprovincial_cliente_' . $OCliente->codigo .'.*',
+                'ce_comprobante_electronico.serie as serie',
+                'ce_comprobante_electronico.numero as numero',
+                'tipo_comprobante.nombre as tipoComprobante',
+                'origen_boleto.nombre as origen'
+            )
+            ->leftjoin('ce_comprobante_electronico',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id', '=', 'ce_comprobante_electronico.id_producto')
+            ->leftjoin('origen_boleto',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_origen', '=', 'origen_boleto.id')
+            ->leftjoin('tipo_comprobante',  'ce_comprobante_electronico.id_tipo_comprobante', '=', 'tipo_comprobante.id')
 
-        if(!is_null($idRuta->value())) $models->where('id_ruta',$idRuta->value());
+            ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo .'.f_registro','>=',$fechaDesde->value())
+            ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo .'.f_registro','<=',$fechaDesde->value());
+
+        if(!is_null($idRuta->value())) $models->where('boleto_interprovincial_cliente_' . $OCliente->codigo .'.id_ruta',$idRuta->value());
 
         $models = $models->orderBy('f_registro', 'DESC')->get();
 
@@ -296,6 +309,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             $Comprobante = ComprobanteElectronico::select('serie','numero')->where('id_producto', $model->id)->where('id_estado',1);
             $OModel->setComprobanteSerie(new Text($Comprobante->count() ? $Comprobante->first()->serie : null , true, -1));
             $OModel->setComprobanteNumero(new NumericInteger($Comprobante->count() ? $Comprobante->first()->numero : null));
+            $OModel->setOrigen(new Text($model->origen, true, -1, ''));
 
             $arrVehicles[] = $OModel;
         }
@@ -309,17 +323,15 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
 
         $models = $this->eloquentModelBoletoInterprovincial
-                ->select(
-                    'boleto_interprovincial_cliente_' . $OCliente->codigo .'.*',
-                    'ce_comprobante_electronico.serie as serie',
-                    'ce_comprobante_electronico.numero as numero',
-                    'tipo_comprobante.nombre as tipoComprobante'
-                )
-//            ->with(
-//                'ruta:id,nombre'
-//            )
-//            ->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos', 'vehiculo:id,placa', 'destino:id,nombre')
+            ->select(
+                'boleto_interprovincial_cliente_' . $OCliente->codigo .'.*',
+                'ce_comprobante_electronico.serie as serie',
+                'ce_comprobante_electronico.numero as numero',
+                'tipo_comprobante.nombre as tipoComprobante',
+                'origen_boleto.nombre as origen'
+            )
             ->leftjoin('ce_comprobante_electronico',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id', '=', 'ce_comprobante_electronico.id_producto')
+            ->leftjoin('origen_boleto',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_origen', '=', 'origen_boleto.id')
             ->leftjoin('tipo_comprobante',  'ce_comprobante_electronico.id_tipo_comprobante', '=', 'tipo_comprobante.id')
             ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo .'.f_registro','=',$fecha->value())
             ->where('boleto_interprovincial_cliente_' . $OCliente->codigo .'.id_usu_registro', $idUsuario->value())
@@ -399,6 +411,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             $OModel->setTipoComprobante(new Text($model->tipoComprobante, true, -1 , ''));
             $OModel->setComprobanteNumero(new NumericInteger($model->numero));
             $OModel->setComprobanteSerie(new Text($model->serie, true, -1, ''));
+            $OModel->setOrigen(new Text($model->origen, true, -1, ''));
 
 
             $arrVehicles[] = $OModel;
@@ -446,7 +459,63 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
         $boleto->first()->update([
             'id_vehiculo' => $idVehiculo->value(),
-            'idUsuarioModifico' => $idUsuario->value()
+            'id_usu_modifico' => $idUsuario->value()
+        ]);
+
+        $this->eloquentModelHistorialBoletoInterprovincial->create([
+            'id_boleto' => $boleto->first()->id,
+            'id_cliente' => $boleto->first()->id_cliente,
+            'id_accion' => EnumAcciones::BoletoEscaneado->value,
+            'descripcion' => '',
+            'id_usu_registro' => $idUsuario->value(),
+            'f_registro' => (new \DateTime('now'))->format('Y-m-d H:i:s')
+        ]);
+    }
+
+
+    public function traslateById(
+        Id $idCliente,
+        Id $idVehiculo,
+        Id $idBoletoInterprovincial,
+        Id $idUsuario,
+        NumericInteger $idMotivo
+    ): void
+    {
+        $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
+        $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
+
+        $boleto = $this->eloquentModelBoletoInterprovincial->where('id', $idBoletoInterprovincial->value());
+        if($boleto->count() == 0){
+            throw new \InvalidArgumentException('El boleto no se encuentra registrado');
+        }
+
+        if(is_null($boleto->first()->id_vehiculo)){
+            throw new \InvalidArgumentException('El boleto no fue escaneado', 400);
+        }
+
+        if($boleto->first()->id_estado == 2){
+            throw new \InvalidArgumentException('El boleto fue anulado');
+        }
+
+        if($boleto->first()->id_cliente !== $idCliente){
+            throw new \InvalidArgumentException('No se puede escanear el boleto de otro cliente');
+        }
+
+        $_oldVehiculo = Vehiculo::findOrFail($boleto->first()->id_vehiculo);
+        $_currentVehiculo = Vehiculo::findOrFail($idVehiculo->value());
+
+        $boleto->first()->update([
+            'id_vehiculo' => $idVehiculo->value(),
+            'id_usu_modifico' => $idUsuario->value()
+        ]);
+
+        $this->eloquentModelHistorialBoletoInterprovincial->create([
+            'id_boleto' => $boleto->first()->id,
+            'id_cliente' => $boleto->first()->id_cliente,
+            'id_accion' => EnumAcciones::TraspasoBoleto->value,
+            'descripcion' => 'De ' . $_oldVehiculo->placa . ' a ' . $_currentVehiculo->placa,
+            'id_usu_registro' => $idUsuario->value(),
+            'f_registro' => (new \DateTime('now'))->format('Y-m-d H:i:s')
         ]);
     }
 
@@ -686,6 +755,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             'obsequio' => $_obsequio->value(),
             'f_emision' => (new \DateTime('now'))->format('Y-m-d H:m:s'),
             'id_estado' => 1,
+            'id_origen' => EnumOrigenBoleto::COUNTER->value
         ]);
 
 

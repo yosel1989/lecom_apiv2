@@ -63,6 +63,8 @@ class BoletoInterprovincialOficialResource extends JsonResource
             'tipoComprobante'            => $this->getTipoComprobante()->value(),
             'comprobanteSerie'            => $this->getComprobanteSerie()->value(),
             'comprobanteNumero'            => $this->getComprobanteNumero()->value(),
+
+            'origen'            => $this->getOrigen()->value()
         ];
 
     }
