@@ -55,7 +55,7 @@ class ModuloMenuSeeder extends Seeder
             'id_estado'=> IdEstado::Habilitado
         ]);
 
-        \App\Models\V2\ModuloMenu::create([
+        $menuRegistro = \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::Administracion,
             'texto'=>'Registro',
             'icono'=> 'fa-duotone fa-floppy-disk',
@@ -70,7 +70,7 @@ class ModuloMenuSeeder extends Seeder
             'texto'=>'Vehiculos',
             'icono'=>null,
             'id_tipo_menu'=> EnumTipoMenu::Link,
-            'padre'=>4,
+            'padre'=> $menuRegistro->id,
             'link'=>'administracion/vehiculos',
             'id_estado'=> IdEstado::Habilitado
         ]);
@@ -80,7 +80,7 @@ class ModuloMenuSeeder extends Seeder
             'texto'=>'Personal',
             'icono'=>null,
             'id_tipo_menu'=> EnumTipoMenu::Link,
-            'padre'=>4,
+            'padre'=> $menuRegistro->id,
             'link'=>'administracion/personal',
             'id_estado'=> IdEstado::Habilitado
         ]);
@@ -90,7 +90,7 @@ class ModuloMenuSeeder extends Seeder
             'texto'=>'Sedes / Terminales',
             'icono'=>null,
             'id_tipo_menu'=> EnumTipoMenu::Link,
-            'padre'=>4,
+            'padre'=>$menuRegistro->id,
             'link'=>'administracion/sedes',
             'id_estado'=> IdEstado::Habilitado
         ]);
@@ -100,7 +100,7 @@ class ModuloMenuSeeder extends Seeder
             'texto'=>'Cajas',
             'icono'=>null,
             'id_tipo_menu'=> EnumTipoMenu::Link,
-            'padre'=>4,
+            'padre'=>$menuRegistro->id,
             'link'=>'administracion/cajas',
             'id_estado'=> IdEstado::Habilitado
         ]);
@@ -110,7 +110,7 @@ class ModuloMenuSeeder extends Seeder
             'texto'=>'Equipos POS',
             'icono'=>null,
             'id_tipo_menu'=> EnumTipoMenu::Link,
-            'padre'=>4,
+            'padre'=>$menuRegistro->id,
             'link'=>'administracion/pos',
             'id_estado'=> IdEstado::Habilitado
         ]);
@@ -120,11 +120,48 @@ class ModuloMenuSeeder extends Seeder
             'texto'=>'Serie (Comprobante)',
             'icono'=>null,
             'id_tipo_menu'=> EnumTipoMenu::Link,
-            'padre'=>4,
+            'padre'=>$menuRegistro->id,
             'link'=>'administracion/comprobante-serie',
             'id_estado'=> IdEstado::Habilitado
         ]);
 
+    $menuEgresos = \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Administracion,
+            'texto'=>'Egresos',
+            'icono'=>'fa-duotone fa-hand-holding-circle-dollar',
+            'id_tipo_menu'=> EnumTipoMenu::SubMenu,
+            'padre'=>null,
+            'link'=>null,
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Administracion,
+            'texto'=>'Categorias',
+            'icono'=>null,
+            'id_tipo_menu'=> EnumTipoMenu::Link,
+            'padre'=>$menuEgresos->id,
+            'link'=>'administracion/egreso/categoria',
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Administracion,
+            'texto'=>'Tipos',
+            'icono'=>null,
+            'id_tipo_menu'=> EnumTipoMenu::Link,
+            'padre'=>$menuEgresos->id,
+            'link'=> 'administracion/egreso/tipo',
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Administracion,
+            'texto'=>'Nuevo',
+            'icono'=>null,
+            'id_tipo_menu'=> EnumTipoMenu::Link,
+            'padre'=>$menuEgresos->id,
+            'link'=> 'administracion/egreso/nuevo',
+            'id_estado'=> IdEstado::Habilitado
+        ]);
 
         \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::Administracion,
@@ -135,7 +172,7 @@ class ModuloMenuSeeder extends Seeder
             'link'=>null,
             'id_estado'=> IdEstado::Habilitado
         ]);
-        \App\Models\V2\ModuloMenu::create([
+        $menuSeguridad = \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::Administracion,
             'texto'=>'Seguridad',
             'icono'=> 'fa-duotone fa-shield-quartered',
@@ -149,7 +186,7 @@ class ModuloMenuSeeder extends Seeder
                 'texto'=>'Peril',
                 'icono'=>null,
                 'id_tipo_menu'=> EnumTipoMenu::Link,
-                'padre'=>12,
+                'padre'=>$menuSeguridad->id,
                 'link'=>'administracion/perfiles',
                 'id_estado'=> IdEstado::Habilitado
             ]);
@@ -158,14 +195,16 @@ class ModuloMenuSeeder extends Seeder
                 'texto'=>'Usuarios',
                 'icono'=>null,
                 'id_tipo_menu'=> EnumTipoMenu::Link,
-                'padre'=>12,
+                'padre'=>$menuSeguridad->id,
                 'link'=>'administracion/usuarios',
                 'id_estado'=> IdEstado::Habilitado
             ]);
 
 
+        /**********************************************************************************
+         * Boletaje Interprovincial
+         */
 
-        /// Boletaje Interprovincial
         \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::BoletajeInterprovincial,
             'texto'=>'Boletaje Interprovincial',
@@ -195,7 +234,7 @@ class ModuloMenuSeeder extends Seeder
             'id_estado'=> IdEstado::Habilitado
         ]);
 
-        \App\Models\V2\ModuloMenu::create([
+        $menuRegistro = \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::BoletajeInterprovincial,
             'texto'=>'Registro',
             'icono'=> 'fa-duotone fa-floppy-disk',
@@ -210,7 +249,7 @@ class ModuloMenuSeeder extends Seeder
                 'texto'=>'Rutas',
                 'icono'=>null,
                 'id_tipo_menu'=> EnumTipoMenu::Link,
-                'padre'=>18,
+                'padre'=>$menuRegistro->id,
                 'link'=>'boletaje-interprovincial/rutas',
                 'id_estado'=> IdEstado::Habilitado
             ]);
@@ -220,7 +259,7 @@ class ModuloMenuSeeder extends Seeder
                 'texto'=>'Paraderos',
                 'icono'=>null,
                 'id_tipo_menu'=> EnumTipoMenu::Link,
-                'padre'=>18,
+                'padre'=>$menuRegistro->id,
                 'link'=>'boletaje-interprovincial/paraderos',
                 'id_estado'=> IdEstado::Habilitado
             ]);
@@ -235,7 +274,7 @@ class ModuloMenuSeeder extends Seeder
             'link'=>null,
             'id_estado'=> IdEstado::Habilitado
         ]);
-        \App\Models\V2\ModuloMenu::create([
+        $menuReportes = \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::BoletajeInterprovincial,
             'texto'=>'Reportes',
             'icono'=> 'fa-duotone fa-floppy-disk',
@@ -250,7 +289,7 @@ class ModuloMenuSeeder extends Seeder
                     'texto'=>'Boletos Vendidos',
                     'icono'=>null,
                     'id_tipo_menu'=> EnumTipoMenu::Link,
-                    'padre'=>22,
+                    'padre'=>$menuReportes->id,
                     'link'=>'boletaje-interprovincial/reporte-boletos',
                     'id_estado'=> IdEstado::Habilitado
                 ]);
@@ -264,7 +303,7 @@ class ModuloMenuSeeder extends Seeder
             'link'=>null,
             'id_estado'=> IdEstado::Habilitado
         ]);
-        \App\Models\V2\ModuloMenu::create([
+        $menuOperaciones = \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::BoletajeInterprovincial,
             'texto'=>'Operaciones',
             'icono'=> 'fa-duotone fa-floppy-disk',
@@ -279,7 +318,7 @@ class ModuloMenuSeeder extends Seeder
                     'texto'=>'Venta de Boletos',
                     'icono'=>null,
                     'id_tipo_menu'=> EnumTipoMenu::Link,
-                    'padre'=>25,
+                    'padre'=>$menuOperaciones->id,
                     'link'=>'boletaje-interprovincial/venta-boletos',
                     'id_estado'=> IdEstado::Habilitado
                 ]);
@@ -288,7 +327,7 @@ class ModuloMenuSeeder extends Seeder
                     'texto'=>'Encomienda',
                     'icono'=>null,
                     'id_tipo_menu'=> EnumTipoMenu::Link,
-                    'padre'=>25,
+                    'padre'=>$menuOperaciones->id,
                     'link'=>'boletaje-interprovincial/registrar-encomienda',
                     'id_estado'=> IdEstado::Habilitado
                 ]);

@@ -222,7 +222,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
                 'boleto_interprovincial_cliente_' . $OCliente->codigo .'.*',
                 'ce_comprobante_electronico.serie as serie',
                 'ce_comprobante_electronico.numero as numero',
-                'tipo_comprobante.nombre as tipoComprobante',
+                'tipo_comprobante.abreviatura as tipoComprobante',
                 'origen_boleto.nombre as origen'
             )
             ->leftjoin('ce_comprobante_electronico',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id', '=', 'ce_comprobante_electronico.id_producto')
@@ -303,12 +303,9 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             $UsuarioModifico = $model->id_usu_modifico ? User::findOrFail($model->id_usu_modifico, ['nombres','apellidos']) : null;
             $OModel->setUsuarioModifico(new Text(($UsuarioModifico?->nombres . ' ' . $UsuarioModifico?->apellidos), true, -1));
 
-            $TipoComprobante = $model->id_tipo_comprobante ? TipoComprobante::findOrFail($model->id_tipo_comprobante->value, ['abreviatura']) : null;
-            $OModel->setTipoComprobante(new Text(($TipoComprobante?->abreviatura), true, -1));
-
-            $Comprobante = ComprobanteElectronico::select('serie','numero')->where('id_producto', $model->id)->where('id_estado',1);
-            $OModel->setComprobanteSerie(new Text($Comprobante->count() ? $Comprobante->first()->serie : null , true, -1));
-            $OModel->setComprobanteNumero(new NumericInteger($Comprobante->count() ? $Comprobante->first()->numero : null));
+            $OModel->setTipoComprobante(new Text($model->tipoComprobante, true, -1 , ''));
+            $OModel->setComprobanteNumero(new NumericInteger($model->numero));
+            $OModel->setComprobanteSerie(new Text($model->serie, true, -1, ''));
             $OModel->setOrigen(new Text($model->origen, true, -1, ''));
 
             $arrVehicles[] = $OModel;
@@ -404,9 +401,6 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
             $UsuarioModifico = $model->id_usu_modifico ? User::findOrFail($model->id_usu_modifico, ['nombres','apellidos']) : null;
             $OModel->setUsuarioModifico(new Text(($UsuarioModifico?->nombres . ' ' . $UsuarioModifico?->apellidos), true, -1));
-
-            $TipoComprobante = $model->id_tipo_comprobante ? TipoComprobante::findOrFail($model->id_tipo_comprobante->value, ['nombre']) : null;
-            $OModel->setTipoComprobante(new Text(($TipoComprobante?->nombre), true, -1));
 
             $OModel->setTipoComprobante(new Text($model->tipoComprobante, true, -1 , ''));
             $OModel->setComprobanteNumero(new NumericInteger($model->numero));
