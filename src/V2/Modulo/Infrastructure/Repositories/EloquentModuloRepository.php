@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Src\V2\Modulo\Infrastructure\Repositories;
 
+use App\Models\V2\Cliente;
 use App\Models\V2\Modulo as EloquentModelModulo;
+use App\Models\V2\Perfil;
 use App\Models\V2\PerfilModulo as EloquentModelPerfilModulo;
+use App\Models\V2\ClienteModulo as EloquentModelClienteModulo;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
@@ -18,11 +21,13 @@ final class EloquentModuloRepository implements ModuloRepositoryContract
 {
     private EloquentModelModulo $eloquentModelModulo;
     private EloquentModelPerfilModulo $eloquentModelPerfilModulo;
+    private EloquentModelClienteModulo $eloquentModelClienteModulo;
 
     public function __construct()
     {
         $this->eloquentModelModulo = new EloquentModelModulo;
         $this->eloquentModelPerfilModulo = new EloquentModelPerfilModulo;
+        $this->eloquentModelClienteModulo = new EloquentModelClienteModulo;
     }
 
 
@@ -35,7 +40,7 @@ final class EloquentModuloRepository implements ModuloRepositoryContract
         foreach ( $models as $model ){
 
             $OModel = new Modulo(
-                new Id($model->id , false, 'El id de la modulo no tiene el formato correcto'),
+                new NumericInteger($model->id , false, 'El id de la modulo no tiene el formato correcto'),
                 new Text($model->nombre, false, -1),
                 new Text($model->link, true, -1),
                 new Text($model->icono, false, -1),
@@ -90,6 +95,8 @@ final class EloquentModuloRepository implements ModuloRepositoryContract
 
     public function listToPerfil( Id $idPerfil): array
     {
+        $perfil = Perfil::findOrFail($idPerfil->value());
+
         $models = $this->eloquentModelModulo->select(
             'id',
             'nombre',
@@ -126,12 +133,79 @@ final class EloquentModuloRepository implements ModuloRepositoryContract
             }
         }
 
+        $moduloCliente = $this->eloquentModelClienteModulo->where('id_cliente', $perfil->id_cliente);
+        $modulosHabilitados = $moduloCliente->count() > 0 ? $moduloCliente->first()->modulos : [];
+
+        foreach ( $collection as $modulo ){
+            if(in_array($modulo->getId()->value(), $modulosHabilitados)){
+                $modulo->setHabilitado(true);
+            }else{
+                $modulo->setHabilitado(false);
+            }
+        }
+
+        return $collection;
+    }
+
+    public function listToCliente( Id $idCliente): array
+    {
+
+        $models = $this->eloquentModelModulo->select(
+            'id',
+            'nombre',
+            'link',
+            'icono',
+            'codigo',
+            'id_estado',
+            'id_eliminado',
+        )->get();
+
+        $collection = array();
+
+        foreach ( $models as $model ){
+
+            $OModel = new ModuloShort(
+                new NumericInteger($model->id),
+                new Text($model->nombre, false, -1),
+                new Text($model->link, true, -1),
+                new Text($model->icono, false, -1),
+                new NumericInteger($model->id_estado->value),
+                new NumericInteger($model->id_eliminado->value),
+            );
+
+            $collection[] = $OModel;
+        }
+
+        $moduloCliente = $this->eloquentModelClienteModulo->where('id_cliente',$idCliente->value());
+        $modulosActivados = $moduloCliente->count() > 0 ? $moduloCliente->first()->modulos : [];
+
+        foreach ( $collection as $modulo ){
+            if(in_array($modulo->getId()->value(), $modulosActivados)){
+                $modulo->setActivado(true);
+            }else{
+                $modulo->setActivado(false);
+            }
+        }
+
+        $moduloCliente = $this->eloquentModelClienteModulo->where('id_cliente', $idCliente->value());
+        $modulosHabilitados = $moduloCliente->count() > 0 ? $moduloCliente->first()->modulos : [];
+
+        foreach ( $collection as $modulo ){
+            if(in_array($modulo->getId()->value(), $modulosHabilitados)){
+                $modulo->setHabilitado(true);
+            }else{
+                $modulo->setHabilitado(false);
+            }
+        }
+
         return $collection;
     }
 
 
     public function listToUsuarioPerfil( Id $idPerfil): array
     {
+        $perfil = Perfil::findOrFail($idPerfil->value());
+
         $models = $this->eloquentModelModulo->select(
             'id',
             'nombre',
@@ -165,6 +239,17 @@ final class EloquentModuloRepository implements ModuloRepositoryContract
                 $modulo->setActivado(true);
             }else{
                 $modulo->setActivado(false);
+            }
+        }
+
+        $moduloCliente = $this->eloquentModelClienteModulo->where('id_cliente', $perfil->id_cliente);
+        $modulosHabilitados = $moduloCliente->count() > 0 ? $moduloCliente->first()->modulos : [];
+
+        foreach ( $collection as $modulo ){
+            if(in_array($modulo->getId()->value(), $modulosHabilitados)){
+                $modulo->setHabilitado(true);
+            }else{
+                $modulo->setHabilitado(false);
             }
         }
 
@@ -230,7 +315,7 @@ final class EloquentModuloRepository implements ModuloRepositoryContract
     {
         $model = $this->eloquentModelModulo->with('usuarioRegistro:id,nombres,apellidos', 'usuarioModifico:id,nombres,apellidos')->findOrFail($idModulo->value());
         $OModel = new Modulo(
-            new Id($model->id , false, 'El id del modulo no tiene el formato correcto'),
+            new NumericInteger($model->id , false, 'El id del modulo no tiene el formato correcto'),
             new Text($model->nombre, false, 100, 'El nombre del modulo excede los 100 caracteres'),
             new Text($model->link, true, -1),
             new Text($model->icono, false, -1),

@@ -14,7 +14,7 @@ use Src\V2\PerfilModulo\Domain\PerfilModulo;
 
 final class EloquentPerfilModuloRepository implements PerfilModuloRepositoryContract
 {
-    private EloquentModelPerfilModulo $eloquentVehicleModel;
+    private EloquentModelPerfilModulo $eloquent;
 
     public function __construct()
     {

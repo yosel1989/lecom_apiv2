@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\V2\Modulo;
+namespace App\Http\Resources\V2\ModuloMenu;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,6 +23,7 @@ class ModuloListToPerfilResource extends JsonResource
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),
             'activado'       => $this->isActivado(),
+            'habilitado'       => $this->isHabilitado(),
         ];
     }
 }

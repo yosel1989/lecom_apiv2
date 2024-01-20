@@ -14,7 +14,7 @@ final class Modulo
 
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
-    private Id $id;
+    private NumericInteger $id;
     private Text $nombre;
     private Text $icono;
     private Text $codigo;
@@ -27,7 +27,7 @@ final class Modulo
     private Text $link;
 
     /**
-     * @param Id $id
+     * @param NumericInteger $id
      * @param Text $nombre
      * @param Text $link
      * @param Text $icono
@@ -40,7 +40,7 @@ final class Modulo
      * @param DateTimeFormat $fechaModifico
      */
     public function __construct(
-        Id $id,
+        NumericInteger $id,
         Text $nombre,
         Text $link,
         Text $icono,
@@ -100,17 +100,17 @@ final class Modulo
     }
 
     /**
-     * @return Id
+     * @return NumericInteger
      */
-    public function getId(): Id
+    public function getId(): NumericInteger
     {
         return $this->id;
     }
 
     /**
-     * @param Id $id
+     * @param NumericInteger $id
      */
-    public function setId(Id $id): void
+    public function setId(NumericInteger $id): void
     {
         $this->id = $id;
     }
@@ -274,30 +274,5 @@ final class Modulo
     {
         $this->link = $link;
     }
-
-
-
-
-
-
-    public function getModules(): array{
-        return array([
-            'id' => 1,
-            'nombre' => 'Adminitración',
-            'icon' => asset('assets/img/icons/modulo-administracion.png'),
-            'link' => 'administracion'
-        ],[
-            'id' => 2,
-            'nombre' => 'Boletaje Interprovincial',
-            'icon' => asset('assets/img/icons/modulo-boletaje-interprovincial.png'),
-            'link' => 'boletaje-interprovincial'
-        ],[
-            'id' => 3,
-            'nombre' => 'Contabilidad',
-            'icon' => asset('assets/img/icons/modulo-facturacion-electronica.png'),
-            'link' => 'contabilidad'
-        ]);
-    }
-
 
 }

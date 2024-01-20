@@ -21,6 +21,7 @@ interface ModuloRepositoryContract
     public function collection(): array;
     public function list(): array;
     public function listToPerfil(Id $idPerfil): array;
+    public function listToCliente(Id $idPerfil): array;
     public function listToUsuarioPerfil(Id $idPerfil): array;
 
     public function update(

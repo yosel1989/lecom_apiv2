@@ -33,6 +33,7 @@ final class ModuloMenu
     private array $hijos = [];
 
     private ValueBoolean $activado;
+    private ValueBoolean $habilitado;
 
     /**
      * @param Id $id
@@ -367,5 +368,22 @@ final class ModuloMenu
     {
         $this->activado = $activado;
     }
+
+    /**
+     * @return ValueBoolean
+     */
+    public function getHabilitado(): ValueBoolean
+    {
+        return $this->habilitado;
+    }
+
+    /**
+     * @param ValueBoolean $habilitado
+     */
+    public function setHabilitado(ValueBoolean $habilitado): void
+    {
+        $this->habilitado = $habilitado;
+    }
+
 
 }

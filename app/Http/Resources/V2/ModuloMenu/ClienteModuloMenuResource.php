@@ -4,7 +4,7 @@ namespace App\Http\Resources\V2\ModuloMenu;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ModuloMenuResource extends JsonResource
+class ClienteModuloMenuResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -34,7 +34,6 @@ class ModuloMenuResource extends JsonResource
             'usuarioModifico'     => $this->getUsuarioModifico()->value(),
             'hijos'     => ModuloMenuResource::collection($this->getHijos()),
             'activado'     => $this->getActivado()->value(),
-            'habilitado'     => $this->getHabilitado()->value(),
         ];
 
     }

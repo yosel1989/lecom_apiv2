@@ -7,6 +7,7 @@ namespace Src\V2\PerfilModuloMenu\Infrastructure\Repositories;
 use App\Enums\EnumTipoMenu;
 use App\Models\V2\ModuloMenu as EloquentModelModuloMenu;
 use App\Models\V2\PerfilModuloMenu as EloquentModelPerfilModuloMenu;
+use App\Models\V2\ClienteModuloMenu as EloquentModelClienteModuloMenu;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
@@ -19,18 +20,22 @@ final class EloquentPerfilModuloMenuRepository implements PerfilModuloMenuReposi
 {
     private EloquentModelPerfilModuloMenu $eloquentVehicleModel;
     private EloquentModelModuloMenu $eloquentModelModuloMenu;
+    private EloquentModelClienteModuloMenu $eloquentModelClienteModuloMenu;
 
     public function __construct()
     {
         $this->eloquent = new EloquentModelPerfilModuloMenu;
         $this->eloquentModelModuloMenu = new EloquentModelModuloMenu;
+        $this->eloquentModelClienteModuloMenu = new EloquentModelClienteModuloMenu;
     }
 
 
     public function collectionByClientePerfil(Id $idCliente, Id $idPerfil, NumericInteger $idModulo): array
     {
 
+
         $ids = [];
+
         $perfilMenu = $this->eloquent->with(
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos'
@@ -49,6 +54,11 @@ final class EloquentPerfilModuloMenuRepository implements PerfilModuloMenuReposi
             'hijos'
         )->where('id_modulo', $idModulo->value())
             ->whereNull('padre')->get();
+
+
+        $clienteModuloMenu = $this->eloquentModelClienteModuloMenu->where('id_cliente', $idCliente->value());
+        $menuHabilitado = $clienteModuloMenu->count() > 0 ? $clienteModuloMenu->first()->menu : [];
+
 
         $collection = array();
 
@@ -70,6 +80,7 @@ final class EloquentPerfilModuloMenuRepository implements PerfilModuloMenuReposi
             );
 
             $OModel->setActivado( new ValueBoolean(in_array($model->id, $ids)) );
+            $OModel->setHabilitado( new ValueBoolean(in_array($model->id, $menuHabilitado)) );
 
             $tipoMenu = '';
             switch ($model->id_tipo_menu){
@@ -85,7 +96,7 @@ final class EloquentPerfilModuloMenuRepository implements PerfilModuloMenuReposi
             $OModel->setModulo(new Text(!is_null($model->modulo) ? $model->modulo->nombre  : null, false, -1));
             $OModel->setTipoMenu(new Text($tipoMenu, false, -1));
 
-            $this->addHijos($OModel, $model->hijos, $ids);
+            $this->addHijos($OModel, $model->hijos, $ids, $menuHabilitado);
 
             $collection[] = $OModel;
         }
@@ -118,6 +129,9 @@ final class EloquentPerfilModuloMenuRepository implements PerfilModuloMenuReposi
         )->where('id_modulo', $idModulo->value())
             ->whereNull('padre')->get();
 
+        $clienteModuloMenu = $this->eloquentModelClienteModuloMenu->where('id_cliente', $idCliente->value());
+        $menuHabilitado = $clienteModuloMenu->count() > 0 ? $clienteModuloMenu->first()->menu : [];
+
         $collection = array();
 
         foreach ( $models as $model ){
@@ -137,8 +151,8 @@ final class EloquentPerfilModuloMenuRepository implements PerfilModuloMenuReposi
                     new DateTimeFormat($model->f_registro, false, 'La fecha de registro no tiene el formato correcto'),
                     new DateTimeFormat($model->f_modifico, true, 'La fecha de modificación no tiene el formato correcto')
                 );
-
                 $OModel->setActivado( new ValueBoolean(in_array($model->id, $ids)) );
+                $OModel->setHabilitado( new ValueBoolean(in_array($model->id, $menuHabilitado)) );
 
                 $tipoMenu = '';
                 switch ($model->id_tipo_menu){
@@ -154,7 +168,7 @@ final class EloquentPerfilModuloMenuRepository implements PerfilModuloMenuReposi
                 $OModel->setModulo(new Text(!is_null($model->modulo) ? $model->modulo->nombre  : null, false, -1));
                 $OModel->setTipoMenu(new Text($tipoMenu, false, -1));
 
-                $this->addHijosUsuario($OModel, $model->hijos, $ids);
+                $this->addHijosUsuario($OModel, $model->hijos, $ids, $menuHabilitado);
 
                 $collection[] = $OModel;
             }
@@ -167,7 +181,7 @@ final class EloquentPerfilModuloMenuRepository implements PerfilModuloMenuReposi
     }
 
 
-    private function addHijos(ModuloMenu $padre, $hijos, array $idsActivos){
+    private function addHijos(ModuloMenu $padre, $hijos, array $idsActivos, array $menuHabilitado){
         $collection = [];
         if(!is_null($hijos)){
             foreach ($hijos as $model) {
@@ -195,7 +209,7 @@ final class EloquentPerfilModuloMenuRepository implements PerfilModuloMenuReposi
                 }
 
                 $OModel->setActivado( new ValueBoolean(in_array($model->id, $idsActivos)) );
-
+                $OModel->setHabilitado( new ValueBoolean(in_array($model->id, $menuHabilitado)) );
 
                 $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
                 $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
@@ -209,7 +223,7 @@ final class EloquentPerfilModuloMenuRepository implements PerfilModuloMenuReposi
 
     }
 
-    private function addHijosUsuario(ModuloMenu $padre, $hijos, array $idsActivos){
+    private function addHijosUsuario(ModuloMenu $padre, $hijos, array $idsActivos, array $menuHabilitado){
         $collection = [];
         if(!is_null($hijos)){
             foreach ($hijos as $model) {
@@ -238,7 +252,7 @@ final class EloquentPerfilModuloMenuRepository implements PerfilModuloMenuReposi
                     }
 
                     $OModel->setActivado( new ValueBoolean(in_array($model->id, $idsActivos)) );
-
+                    $OModel->setHabilitado( new ValueBoolean(in_array($model->id, $menuHabilitado)) );
 
                     $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
                     $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));

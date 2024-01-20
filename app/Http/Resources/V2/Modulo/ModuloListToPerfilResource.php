@@ -23,6 +23,7 @@ class ModuloListToPerfilResource extends JsonResource
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),
             'activado'       => $this->isActivado(),
+            'habilitado'       => $this->isHabilitado(),
         ];
     }
 }

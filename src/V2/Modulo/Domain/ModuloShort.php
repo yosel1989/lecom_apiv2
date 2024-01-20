@@ -19,6 +19,7 @@ final class ModuloShort
 
 
     private bool $activado;
+    private bool $habilitado;
     private Text $link;
 
     /**
@@ -157,6 +158,22 @@ final class ModuloShort
     public function setLink(Text $link): void
     {
         $this->link = $link;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHabilitado(): bool
+    {
+        return $this->habilitado;
+    }
+
+    /**
+     * @param bool $habilitado
+     */
+    public function setHabilitado(bool $habilitado): void
+    {
+        $this->habilitado = $habilitado;
     }
 
 
