@@ -20,8 +20,10 @@ use App\Models\V2\Ruta;
 use App\Models\V2\Sede;
 use App\Models\V2\TipoComprobante;
 use App\Models\V2\TipoDocumento;
+use App\Models\V2\UsuarioVehiculo;
 use App\Models\V2\Vehiculo;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 use Src\Core\Domain\ValueObjects\DateFormat;
@@ -32,6 +34,7 @@ use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\Core\Domain\ValueObjects\TimeFormat;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
+use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialVehiculo;
 use Src\V2\BoletoInterprovincial\Domain\Contracts\BoletoInterprovincialRepositoryContract;
 use Src\V2\Vehiculo\Domain\VehiculoShortList;
 
@@ -206,6 +209,8 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         return $arrVehicles;
     }
 
+
+
     public function reportByUsuarioCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idRuta, VehiculoShortList $vehiculos): array
     {
         /** @var array $idVehiculos */
@@ -234,7 +239,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
         if(!is_null($idRuta->value())) $models->where('boleto_interprovincial_cliente_' . $OCliente->codigo .'.id_ruta',$idRuta->value());
 
-        $models = $models->orderBy('f_registro', 'DESC')->get();
+        $models = $models->orderBy('boleto_interprovincial_cliente_' . $OCliente->codigo .'.f_registro', 'DESC')->get();
 
         $arrVehicles = array();
 
@@ -307,6 +312,48 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             $OModel->setComprobanteNumero(new NumericInteger($model->numero));
             $OModel->setComprobanteSerie(new Text($model->serie, true, -1, ''));
             $OModel->setOrigen(new Text($model->origen, true, -1, ''));
+
+            $arrVehicles[] = $OModel;
+        }
+
+        return $arrVehicles;
+    }
+
+    public function reportByClienteGroupVehiculo(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idRuta, VehiculoShortList $vehiculos): array
+    {
+        /** @var array $idVehiculos */
+        $idVehiculos = array_map(function($v){
+            return $v->getId()->value();
+        }, $vehiculos->all());
+
+
+        $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
+        $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
+
+        $models = $this->eloquentModelBoletoInterprovincial
+            ->select(
+                'id_vehiculo',
+                DB::raw('SUM(precio) as total'),
+                'placa'
+            )
+            ->innerJoin('vehiculos','id_vehiculo','=','vehiculos.id')
+            ->whereDate('f_registro','>=',$fechaDesde->value())
+            ->whereDate('f_registro','<=',$fechaDesde->value())
+            ->whereIn('id_vehiculo', $idVehiculos);
+
+        if(!is_null($idRuta->value())) $models->where('id_ruta',$idRuta->value());
+
+        $models = $models->orderBy('f_registro', 'DESC')->get();
+
+        $arrVehicles = array();
+
+        foreach ( $models as $model ){
+
+            $OModel = new BoletoInterprovincialVehiculo(
+                new Id($model->id_vehiculo, false, 'El id del vehiculo no tiene el formato correcto'),
+                new Text($model->placa, false, -1 ,''),
+                new NumericFloat($model->total),
+            );
 
             $arrVehicles[] = $OModel;
         }
@@ -824,6 +871,77 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         $OUTPUT->setTipoComprobante(new Text(($TipoComprobante?->nombre), true, -1));
 
         return $OUTPUT;
+    }
+
+
+    public function reportTotalByCliente(
+        Id $idCliente,
+        Id $idUsuario,
+        DateFormat $fechaDesde,
+        DateFormat $fechaHasta,
+        Id $idRuta,
+        array $vehiculos
+    ): array
+    {
+        /** @var array $idVehiculos */
+        $idVehiculos = array();
+        if(count($vehiculos) > 0){
+            $idVehiculos = $vehiculos;
+        }else{
+            $usuarioVehiculo = UsuarioVehiculo::where('id_usuario',$idUsuario->value())->get();
+            if(!$usuarioVehiculo->isEmpty()){
+                $vehiculos = json_decode($usuarioVehiculo->first()->vehiculos);
+                if(count($vehiculos) > 1 ){
+                    $idVehiculos = array_map(function($v){ return $v->id; }, $vehiculos);
+                }else{
+                    if($vehiculos[0]->id === '0'){
+                        $vv = Vehiculo::select('id')->where('id_cliente', $idCliente->value())->get();
+                        foreach ($vv as $v) {
+                            $idVehiculos[] = $v->id;
+                        }
+                    }else{
+                        $idVehiculos[] = $vehiculos[0]->id;
+                    }
+
+                }
+            }
+        }
+
+
+        $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
+        $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
+
+        $models = $this->eloquentModelBoletoInterprovincial
+            ->select(
+                'id_vehiculo',
+                DB::raw('SUM(precio) as total'),
+                'placa'
+            )
+            ->join('vehiculos','id_vehiculo','=','vehiculos.id')
+            ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo . '.f_registro','>=',$fechaDesde->value())
+            ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo . '.f_registro','<=',$fechaDesde->value())
+            ->whereIn('id_vehiculo', $idVehiculos);
+
+        if(!is_null($idRuta->value())) $models->where('id_ruta',$idRuta->value());
+
+        $models->groupBy('id_vehiculo', 'vehiculos.placa');
+
+        $models = $models->orderBy('boleto_interprovincial_cliente_' . $OCliente->codigo . '.f_registro', 'DESC')->get();
+
+        $arrVehicles = array();
+
+        foreach ( $models as $model ){
+
+            $OModel = new BoletoInterprovincialVehiculo(
+                new Id($model->id_vehiculo, false, 'El id del vehiculo no tiene el formato correcto'),
+                new Text($model->placa, false, -1 ,''),
+                new NumericFloat($model->total),
+            );
+
+            $arrVehicles[] = $OModel;
+        }
+
+        return $arrVehicles;
     }
 
 }

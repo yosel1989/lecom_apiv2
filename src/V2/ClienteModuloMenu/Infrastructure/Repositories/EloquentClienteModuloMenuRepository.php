@@ -37,8 +37,6 @@ final class EloquentClienteModuloMenuRepository implements ClienteModuloMenuRepo
         )->where('id_cliente',$idCliente->value())
             ->where('id_modulo',$idModulo->value());
         $ids = $perfilMenu->count() > 0 ? $perfilMenu->first()->menu : [];
-//        dd($ids);
-
         // Buscar los menus del modulo
 
         $models = $this->eloquentModelModuloMenu->with(

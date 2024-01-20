@@ -32,7 +32,7 @@ class ClienteModuloMenuResource extends JsonResource
             'usuarioRegistro'     => $this->getUsuarioRegistro()->value(),
             'idUsuarioModifico'     => $this->getIdUsuarioModifico()->value(),
             'usuarioModifico'     => $this->getUsuarioModifico()->value(),
-            'hijos'     => ModuloMenuResource::collection($this->getHijos()),
+            'hijos'     => ClienteModuloMenuResource::collection($this->getHijos()),
             'activado'     => $this->getActivado()->value(),
         ];
 

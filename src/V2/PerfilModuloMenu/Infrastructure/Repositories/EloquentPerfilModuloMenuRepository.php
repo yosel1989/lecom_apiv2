@@ -18,7 +18,7 @@ use Src\V2\PerfilModuloMenu\Domain\Contracts\PerfilModuloMenuRepositoryContract;
 
 final class EloquentPerfilModuloMenuRepository implements PerfilModuloMenuRepositoryContract
 {
-    private EloquentModelPerfilModuloMenu $eloquentVehicleModel;
+    private EloquentModelPerfilModuloMenu $eloquent;
     private EloquentModelModuloMenu $eloquentModelModuloMenu;
     private EloquentModelClienteModuloMenu $eloquentModelClienteModuloMenu;
 
@@ -56,8 +56,10 @@ final class EloquentPerfilModuloMenuRepository implements PerfilModuloMenuReposi
             ->whereNull('padre')->get();
 
 
-        $clienteModuloMenu = $this->eloquentModelClienteModuloMenu->where('id_cliente', $idCliente->value());
+        $clienteModuloMenu = $this->eloquentModelClienteModuloMenu->where('id_cliente', $idCliente->value())->where('id_modulo', $idModulo->value());
         $menuHabilitado = $clienteModuloMenu->count() > 0 ? $clienteModuloMenu->first()->menu : [];
+
+//        dd($menuHabilitado);
 
 
         $collection = array();
@@ -129,14 +131,16 @@ final class EloquentPerfilModuloMenuRepository implements PerfilModuloMenuReposi
         )->where('id_modulo', $idModulo->value())
             ->whereNull('padre')->get();
 
-        $clienteModuloMenu = $this->eloquentModelClienteModuloMenu->where('id_cliente', $idCliente->value());
+        $clienteModuloMenu = $this->eloquentModelClienteModuloMenu->where('id_cliente', $idCliente->value())->where('id_modulo', $idModulo->value());
         $menuHabilitado = $clienteModuloMenu->count() > 0 ? $clienteModuloMenu->first()->menu : [];
+
+//        dd($menuHabilitado);
 
         $collection = array();
 
         foreach ( $models as $model ){
 
-            if(in_array($model->id, $ids)){
+            if(in_array($model->id, $ids) && in_array($model->id, $menuHabilitado)){
                 $OModel = new ModuloMenu(
                     new NumericInteger($model->id),
                     new Text($model->texto, false, -1 , ''),
@@ -227,7 +231,7 @@ final class EloquentPerfilModuloMenuRepository implements PerfilModuloMenuReposi
         $collection = [];
         if(!is_null($hijos)){
             foreach ($hijos as $model) {
-                if(in_array($model->id, $idsActivos)){
+                if(in_array($model->id, $idsActivos) && in_array($model->id, $menuHabilitado)){
                     $OModel = new ModuloMenu(
                         new NumericInteger($model->id),
                         new Text($model->texto, false, -1 , ''),

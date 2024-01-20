@@ -15,8 +15,10 @@ interface BoletoInterprovincialRepositoryContract
 
     public function collectionByCliente(Id $idCliente): array;
     public function reportByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idRuta, Id $idUsuario): array;
+    public function reportByClienteGroupVehiculo(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idRuta, VehiculoShortList $vehiculos): array;
     public function reportByUsuarioCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idRuta, VehiculoShortList $vehiculos): array;
     public function reportePuntoVentaByCliente(Id $idCliente, Id $idUsuario, DateFormat $fecha): array;
+
 
     public function changeState(
         Id $idBoletoInterprovincial,
@@ -79,4 +81,16 @@ interface BoletoInterprovincialRepositoryContract
 
 
     ): BoletoInterprovincialOficial;
+
+
+
+    public function reportTotalByCliente(
+        Id $idCliente,
+        Id $idUsuario,
+        DateFormat $fechaDesde,
+        DateFormat $fechaHasta,
+        Id $idRuta,
+        array $vehiculos
+    ): array;
+
 }
