@@ -32,6 +32,7 @@ class HistorialBoletoInterprovincial extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'fecha' =>  'string',
         'f_registro' =>  'string',
         'id_accion' => 'integer',
     ];

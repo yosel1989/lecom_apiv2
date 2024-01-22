@@ -31,7 +31,7 @@ final class GetReportTotalByClienteController
         $fechaDesde = $request->input('fechaDesde');
         $fechaHasta = $request->input('fechaHasta');
         $idRuta = $request->input('$idRuta') === 'null' ? null : $request->input('$idRuta');
-        $idVehiculo = $request->input('idVehiculo') === 'null' ? null : $request->input('idVehiculos');
+        $idVehiculo = $request->input('idVehiculos') === 'null' ? null : $request->input('idVehiculos');
         $useCase = new GetReportTotalByClienteUseCase($this->repository);
         return $useCase->__invoke($idClient, $idUsuario, $fechaDesde, $fechaHasta, $idRuta, $idVehiculo);
     }
