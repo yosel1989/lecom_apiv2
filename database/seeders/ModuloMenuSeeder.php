@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Enums\EnumEstado;
 use App\Enums\EnumModulo;
 use App\Enums\EnumTipoMenu;
 use App\Enums\IdEstado;
@@ -332,5 +331,53 @@ class ModuloMenuSeeder extends Seeder
                     'id_estado'=> IdEstado::Habilitado
                 ]);
 
+
+        /// Administración
+
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Reportes,
+            'texto'=>'Reportes',
+            'icono'=>null,
+            'id_tipo_menu'=> EnumTipoMenu::Titulo,
+            'padre'=>null,
+            'link'=>null,
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+        $menuReporte1 = \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Reportes,
+            'texto'=>'Boletaje Interprovincial',
+            'icono'=> 'fa-duotone fa-file-chart-column',
+            'id_tipo_menu'=> EnumTipoMenu::SubMenu,
+            'padre'=>null,
+            'link'=>null,
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+            \App\Models\V2\ModuloMenu::create([
+                'id_modulo'=> EnumModulo::Reportes,
+                'texto'=>'Reporte Total de Ventas',
+                'icono'=>null,
+                'id_tipo_menu'=> EnumTipoMenu::Link,
+                'padre'=>$menuReporte1->id,
+                'link'=>'reportes/boletaje-interprovincial/venta-total',
+                'id_estado'=> IdEstado::Habilitado
+            ]);
+//            \App\Models\V2\ModuloMenu::create([
+//                'id_modulo'=> EnumModulo::Reportes,
+//                'texto'=>'Reporte Total de Ventas por Vehiculo',
+//                'icono'=>null,
+//                'id_tipo_menu'=> EnumTipoMenu::Link,
+//                'padre'=>$menuReporte1->id,
+//                'link'=>'reportes/boletaje-inteprovincial/reporte-venta-total-por-vehiculo',
+//                'id_estado'=> IdEstado::Habilitado
+//            ]);
+//            \App\Models\V2\ModuloMenu::create([
+//                'id_modulo'=> EnumModulo::Reportes,
+//                'texto'=>'Reporte Total de Ventas por Fecha',
+//                'icono'=>null,
+//                'id_tipo_menu'=> EnumTipoMenu::Link,
+//                'padre'=>$menuReporte1->id,
+//                'link'=>'reportes/boletaje-inteprovincial/reporte-venta-total-por-fecha',
+//                'id_estado'=> IdEstado::Habilitado
+//            ]);
     }
 }
