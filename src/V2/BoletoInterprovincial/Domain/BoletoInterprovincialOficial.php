@@ -65,6 +65,7 @@ final class BoletoInterprovincialOficial
     private NumericInteger $comprobanteNumero;
     private Text $tipoBoleto;
     private Text $cliente;
+    private NumericInteger $idOrigen;
     private Text $origen;
 
     /**
@@ -994,6 +995,20 @@ final class BoletoInterprovincialOficial
         $this->origen = $origen;
     }
 
+    /**
+     * @return NumericInteger
+     */
+    public function getIdOrigen(): NumericInteger
+    {
+        return $this->idOrigen;
+    }
 
+    /**
+     * @param NumericInteger $idOrigen
+     */
+    public function setIdOrigen(NumericInteger $idOrigen): void
+    {
+        $this->idOrigen = $idOrigen;
+    }
 
 }

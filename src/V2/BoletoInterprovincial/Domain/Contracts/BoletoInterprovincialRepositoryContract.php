@@ -93,4 +93,17 @@ interface BoletoInterprovincialRepositoryContract
         array $vehiculos
     ): array;
 
+    public function reporteTotalByVehiculoRangoFecha(
+        Id $idCliente,
+        Id $idVehiculo,
+        DateFormat $fechaDesde,
+        DateFormat $fechaHasta
+    ): array;
+
+    public function reporteTotalByVehiculoFecha(
+        Id $idCliente,
+        Id $idVehiculo,
+        DateFormat $fecha
+    ): array;
+
 }

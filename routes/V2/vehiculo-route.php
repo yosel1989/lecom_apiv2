@@ -9,9 +9,13 @@ Route::namespace('App\Http\Controllers\Api\V2\Vehiculo')->middleware('auth:sanct
     Route::get('cliente/{id}/vehiculos/lista', 'GetListByClienteController');
     Route::post('cliente/{idCliente}/vehiculo', 'CreateController');
     Route::post('vehiculo/{idVehiculo}/cambiar-estado', 'ChangeStateController');
+    Route::put('vehiculo/{id}', 'UpdateController');
     Route::get('vehiculo/{id}', 'FindByIdController');
     Route::get('vehiculo-qr/{id}', 'FindQrByIdController');
-    Route::put('vehiculo/{id}', 'UpdateController');
 
     Route::post('usuario/{id}/asignar-vehiculos', 'AsignarUsuarioController');
+});
+
+Route::namespace('App\Http\Controllers\Api\V2\Vehiculo')->group( function (){
+    Route::get('vehiculo/{id}', 'FindByIdController');
 });

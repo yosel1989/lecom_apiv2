@@ -99,6 +99,7 @@ class BoletoInterprovincialOficial extends Model
         'h_partida' => 'string',
         'f_emision' => 'string',
 //        'numeroComprobante' => 'integer',
+        'fecha' => 'string',
         'f_registro' => 'string',
         'f_modifico' => 'string',
         'total' => 'integer',
