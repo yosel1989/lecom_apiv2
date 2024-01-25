@@ -311,6 +311,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             $OModel->setTipoComprobante(new Text($model->tipoComprobante, true, -1 , ''));
             $OModel->setComprobanteNumero(new NumericInteger($model->numero));
             $OModel->setComprobanteSerie(new Text($model->serie, true, -1, ''));
+            $OModel->setIdOrigen(new NumericInteger($model->id_origen));
             $OModel->setOrigen(new Text($model->origen, true, -1, ''));
 
             $arrVehicles[] = $OModel;
@@ -452,6 +453,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             $OModel->setTipoComprobante(new Text($model->tipoComprobante, true, -1 , ''));
             $OModel->setComprobanteNumero(new NumericInteger($model->numero));
             $OModel->setComprobanteSerie(new Text($model->serie, true, -1, ''));
+            $OModel->setIdOrigen(new NumericInteger($model->id_origen));
             $OModel->setOrigen(new Text($model->origen, true, -1, ''));
 
 
@@ -883,7 +885,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         array $vehiculos
     ): array
     {
-        /** @var array $idVehiculos */
+
         $idVehiculos = array();
         if(count($vehiculos) > 0){
             $idVehiculos = $vehiculos;
@@ -1004,7 +1006,8 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             ->leftjoin('origen_boleto',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_origen', '=', 'origen_boleto.id')
             ->leftjoin('tipo_comprobante',  'ce_comprobante_electronico.id_tipo_comprobante', '=', 'tipo_comprobante.id')
 
-            ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo .'.f_registro','=',$fecha->value());
+            ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo .'.f_registro','=',$fecha->value())
+            ->where('boleto_interprovincial_cliente_' . $OCliente->codigo .'.id_vehiculo','=',$idVehiculo->value());
 
         $models = $models->orderBy('boleto_interprovincial_cliente_' . $OCliente->codigo .'.f_registro', 'DESC')->get();
 
@@ -1078,6 +1081,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             $OModel->setTipoComprobante(new Text($model->tipoComprobante, true, -1 , ''));
             $OModel->setComprobanteNumero(new NumericInteger($model->numero));
             $OModel->setComprobanteSerie(new Text($model->serie, true, -1, ''));
+            $OModel->setIdOrigen(new NumericInteger($model->id_origen));
             $OModel->setOrigen(new Text($model->origen, true, -1, ''));
 
             $arrVehicles[] = $OModel;
