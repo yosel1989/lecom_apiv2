@@ -26,7 +26,6 @@ return new class extends Migration
             $table->index([
                 'id',
                 'id_cliente',
-                'modulos',
                 'id_usu_registro',
                 'id_usu_modifico',
                 'f_registro',
