@@ -23,6 +23,7 @@ interface EgresoTipoRepositoryContract
 
     public function collectionByCliente(Id $idCliente): EgresoTipoList;
     public function listByCliente(Id $idCliente): EgresoTipoShortList;
+    public function listByClienteByCategoria(Id $idCliente, Id $idCategoria): EgresoTipoShortList;
 
     public function update(
         Id $id,
