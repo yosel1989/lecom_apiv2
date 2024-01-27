@@ -49,6 +49,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
                 new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
                 new Id($model->id_pos, true, 'El id del pos no tiene el formato correcto'),
                 new ValueBoolean($model->bl_punto_venta),
+                new ValueBoolean($model->bl_despacho),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
                 new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
@@ -154,12 +155,48 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         return $arrVehicles;
     }
 
+    public function listByClienteDespacho(Id $idCliente): array
+    {
+        $models = $this->eloquentModelCaja
+            ->select(
+                'id',
+                'nombre',
+                'id_sede',
+                'id_pos',
+                'id_estado',
+                'id_eliminado'
+            )
+            ->where('id_cliente',$idCliente->value())
+            ->where('bl_despacho', true)
+            ->where('id_estado', 1)
+            ->get();
+
+        $arrVehicles = array();
+
+        foreach ( $models as $model ){
+
+            $OModel = new CajaShort(
+                new Id($model->id , false, 'El id del caja no tiene el formato correcto'),
+                new Text($model->nombre, false, 100, 'El nombre de la caja excede los 100 caracteres'),
+                new Id($model->id_sede , true, 'El id de la sede no tiene el formato correcto'),
+                new Id($model->id_pos , true, 'El id del pos no tiene el formato correcto'),
+                new NumericInteger($model->id_estado->value),
+                new NumericInteger($model->id_eliminado->value),
+            );
+
+            $arrVehicles[] = $OModel;
+        }
+
+        return $arrVehicles;
+    }
+
     public function create(
         Text $nombre,
         Id $idCliente,
         Id $idSede,
         Id $idPos,
         ValueBoolean $blPuntoVenta,
+        ValueBoolean $blDespacho,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -190,6 +227,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         Id $idSede,
         Id $idPos,
         ValueBoolean $blPuntoVenta,
+        ValueBoolean $blDespacho,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -239,6 +277,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
             new Id($model->id_pos, true, 'El id del pos no tiene el formato correcto'),
             new ValueBoolean($model->bl_punto_venta),
+            new ValueBoolean($model->bl_despacho),
             new NumericInteger($model->id_estado->value),
             new NumericInteger($model->id_eliminado->value),
             new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),

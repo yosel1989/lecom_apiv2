@@ -101,7 +101,7 @@ final class EloquentEgresoTipoRepository implements EgresoTipoRepositoryContract
         $models = $this->eloquent->select(
             'id',
             'nombre',
-            'id_egreso_categoria',
+            'id_categoria_egreso',
             'precio_base',
             'id_estado',
             'id_eliminado'
@@ -118,7 +118,7 @@ final class EloquentEgresoTipoRepository implements EgresoTipoRepositoryContract
             $OModel = new EgresoTipoShort(
                 new Id($model->id , false, 'El id del EgresoTipo no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la EgresoTipo excede los 100 caracteres'),
-                new Id($model->id_egreso_categoria, false, 'El id de la categoria no tiene el formato correcto'),
+                new Id($model->id_categoria_egreso, false, 'El id de la categoria no tiene el formato correcto'),
                 new NumericFloat($model->precio_base),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),

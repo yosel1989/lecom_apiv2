@@ -24,6 +24,7 @@ final class CreateController
         $idPos             = $request->input('idPos');
         $idCliente          = $id;
         $blPuntoVenta           = $request->input('blPuntoVenta');
+        $blDespacho           = $request->input('blDespacho');
         $idEstado           = $request->input('idEstado');
 
         $useCase = new CreateUseCase( $this->repository );
@@ -33,6 +34,7 @@ final class CreateController
             $idSede,
             $idPos,
             $blPuntoVenta,
+            $blDespacho,
             $idEstado,
             $user->getId()
         );

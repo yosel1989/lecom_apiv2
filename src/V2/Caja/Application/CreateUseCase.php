@@ -26,6 +26,7 @@ final class CreateUseCase
         string | null $idSede,
         string | null $idPos,
         bool $blPuntoVenta,
+        bool $blDespacho,
         int $idEstado,
         string $idUsuarioRegistro
     ): void
@@ -35,6 +36,7 @@ final class CreateUseCase
         $_idSede = new Id($idSede,true,'El id de la sede no tiene el formato correcto');
         $_idPos = new Id($idPos,true,'El id del pos no tiene el formato correcto');
         $_blPuntoVenta = new ValueBoolean($blPuntoVenta);
+        $_blDespacho= new ValueBoolean($blDespacho);
         $_idEstado = new NumericInteger($idEstado);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
@@ -44,6 +46,7 @@ final class CreateUseCase
             $_idSede,
             $_idPos,
             $_blPuntoVenta,
+            $_blDespacho,
             $_idEstado,
             $_idUsuarioRegistro
         );
