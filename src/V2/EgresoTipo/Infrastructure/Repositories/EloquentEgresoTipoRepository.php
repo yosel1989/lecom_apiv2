@@ -71,6 +71,8 @@ final class EloquentEgresoTipoRepository implements EgresoTipoRepositoryContract
         $models = $this->eloquent->select(
             'id',
             'nombre',
+            'id_egreso_categoria',
+            'precio_base',
             'id_estado',
             'id_eliminado'
         )->where('id_cliente',$idCliente->value())->orderBy('nombre', 'asc')->get();
@@ -83,6 +85,40 @@ final class EloquentEgresoTipoRepository implements EgresoTipoRepositoryContract
                 new Id($model->id , false, 'El id del EgresoTipo no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la EgresoTipo excede los 100 caracteres'),
                 new Id($model->id_egreso_categoria, false, 'El id de la categoria no tiene el formato correcto'),
+                new NumericFloat($model->precio_base),
+                new NumericInteger($model->id_estado->value),
+                new NumericInteger($model->id_eliminado->value),
+            );
+
+            $collection->add($OModel);
+        }
+
+        return $collection;
+    }
+
+    public function listByClienteByCategoria(Id $idCliente, Id $idCategoria): EgresoTipoShortList
+    {
+        $models = $this->eloquent->select(
+            'id',
+            'nombre',
+            'id_categoria_egreso',
+            'precio_base',
+            'id_estado',
+            'id_eliminado'
+        )->where('id_cliente',$idCliente->value())
+            ->where('id_categoria_egreso',$idCategoria->value())
+            ->where('id_estado',1)
+            ->where('id_eliminado',0)
+            ->orderBy('nombre', 'asc')->get();
+
+        $collection = new EgresoTipoShortList();
+
+        foreach ( $models as $model ){
+
+            $OModel = new EgresoTipoShort(
+                new Id($model->id , false, 'El id del EgresoTipo no tiene el formato correcto'),
+                new Text($model->nombre, false, 100, 'El nombre de la EgresoTipo excede los 100 caracteres'),
+                new Id($model->id_categoria_egreso, false, 'El id de la categoria no tiene el formato correcto'),
                 new NumericFloat($model->precio_base),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),

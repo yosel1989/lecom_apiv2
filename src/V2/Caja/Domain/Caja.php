@@ -30,6 +30,7 @@ final class Caja
     private ValueBoolean $aperturado;
     private Id $idCajaDiario;
     private ValueBoolean $blPuntoVenta;
+    private ValueBoolean $blDespacho;
 
 
     /**
@@ -39,6 +40,7 @@ final class Caja
      * @param Id $idSede
      * @param Id $idPos
      * @param ValueBoolean $blPuntoVenta
+     * @param ValueBoolean $blDespacho
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      * @param Id $idUsuarioRegistro
@@ -53,6 +55,7 @@ final class Caja
         Id $idSede,
         Id $idPos,
         ValueBoolean $blPuntoVenta,
+        ValueBoolean $blDespacho,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
         Id $idUsuarioRegistro,
@@ -74,6 +77,7 @@ final class Caja
         $this->fechaModifico = $fechaModifico;
         $this->idSede = $idSede;
         $this->blPuntoVenta = $blPuntoVenta;
+        $this->blDespacho = $blDespacho;
     }
 
     /**
@@ -360,6 +364,22 @@ final class Caja
     public function setBlPuntoVenta(ValueBoolean $blPuntoVenta): void
     {
         $this->blPuntoVenta = $blPuntoVenta;
+    }
+
+    /**
+     * @return ValueBoolean
+     */
+    public function getBlDespacho(): ValueBoolean
+    {
+        return $this->blDespacho;
+    }
+
+    /**
+     * @param ValueBoolean $blDespacho
+     */
+    public function setBlDespacho(ValueBoolean $blDespacho): void
+    {
+        $this->blDespacho = $blDespacho;
     }
 
 

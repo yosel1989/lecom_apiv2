@@ -21,8 +21,9 @@ class ModuloMenuSeeder extends Seeder
         \App\Models\V2\ModuloMenu::truncate();
 
 
-
-        /// Administración
+        /*********************************************************************************************
+         * Administración
+         */
 
         \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::Administracion,
@@ -124,7 +125,7 @@ class ModuloMenuSeeder extends Seeder
             'id_estado'=> IdEstado::Habilitado
         ]);
 
-    $menuEgresos = \App\Models\V2\ModuloMenu::create([
+        $menuEgresos = \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::Administracion,
             'texto'=>'Egresos',
             'icono'=>'fa-duotone fa-hand-holding-circle-dollar',
@@ -171,6 +172,7 @@ class ModuloMenuSeeder extends Seeder
             'link'=>null,
             'id_estado'=> IdEstado::Habilitado
         ]);
+
         $menuSeguridad = \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::Administracion,
             'texto'=>'Seguridad',
@@ -332,7 +334,9 @@ class ModuloMenuSeeder extends Seeder
                 ]);
 
 
-        /// Administración
+        /**********************************************************************************************
+         * Reportes
+         */
 
         \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::Reportes,
@@ -361,23 +365,39 @@ class ModuloMenuSeeder extends Seeder
                 'link'=>'reportes/boletaje-interprovincial/venta-total',
                 'id_estado'=> IdEstado::Habilitado
             ]);
-//            \App\Models\V2\ModuloMenu::create([
-//                'id_modulo'=> EnumModulo::Reportes,
-//                'texto'=>'Reporte Total de Ventas por Vehiculo',
-//                'icono'=>null,
-//                'id_tipo_menu'=> EnumTipoMenu::Link,
-//                'padre'=>$menuReporte1->id,
-//                'link'=>'reportes/boletaje-inteprovincial/reporte-venta-total-por-vehiculo',
-//                'id_estado'=> IdEstado::Habilitado
-//            ]);
-//            \App\Models\V2\ModuloMenu::create([
-//                'id_modulo'=> EnumModulo::Reportes,
-//                'texto'=>'Reporte Total de Ventas por Fecha',
-//                'icono'=>null,
-//                'id_tipo_menu'=> EnumTipoMenu::Link,
-//                'padre'=>$menuReporte1->id,
-//                'link'=>'reportes/boletaje-inteprovincial/reporte-venta-total-por-fecha',
-//                'id_estado'=> IdEstado::Habilitado
-//            ]);
+
+
+        /**********************************************************************************************
+         * Operaciones
+         */
+
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Operaciones,
+            'texto'=>'Operaciones',
+            'icono'=>null,
+            'id_tipo_menu'=> EnumTipoMenu::Titulo,
+            'padre'=>null,
+            'link'=>null,
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+        $menuOperaciones1 = \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Operaciones,
+            'texto'=>'Despacho',
+            'icono'=> 'fa-duotone fa-file-chart-column',
+            'id_tipo_menu'=> EnumTipoMenu::SubMenu,
+            'padre'=>null,
+            'link'=>null,
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Reportes,
+            'texto'=>'Administrar Egresos',
+            'icono'=>null,
+            'id_tipo_menu'=> EnumTipoMenu::Link,
+            'padre'=>$menuOperaciones1->id,
+            'link'=>'operaciones/egresos',
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+
     }
 }

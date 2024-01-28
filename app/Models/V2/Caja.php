@@ -48,6 +48,7 @@ class Caja extends Model
      */
     protected $casts = [
         'bl_punto_venta' =>  'boolean',
+        'bl_despacho' =>  'boolean',
         'total' =>  'integer',
         'f_registro' =>  'string',
         'f_modifico' =>  'string',

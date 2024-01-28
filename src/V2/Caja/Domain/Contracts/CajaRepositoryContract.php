@@ -16,6 +16,7 @@ interface CajaRepositoryContract
         Id $idSede,
         Id $idPos,
         ValueBoolean $blPuntoVenta,
+        ValueBoolean $blDespacho,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;
@@ -23,6 +24,7 @@ interface CajaRepositoryContract
     public function collectionByCliente(Id $idCliente): array;
     public function listBySede(Id $idCliente, Id $idSede): array;
     public function listByCliente(Id $idCliente): array;
+    public function listByClienteDespacho(Id $idCliente): array;
 
     public function update(
         Id $id,
@@ -30,6 +32,7 @@ interface CajaRepositoryContract
         Id $idSede,
         Id $idPos,
         ValueBoolean $blPuntoVenta,
+        ValueBoolean $blDespacho,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;
