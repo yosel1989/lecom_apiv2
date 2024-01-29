@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\V2\Caja;
+namespace App\Http\Resources\V2\EgresoDetalle;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CajaResource extends JsonResource
+class EgresoDetalleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,16 +16,13 @@ class CajaResource extends JsonResource
     {
         // Map Domain User model values
         return [
-            'id'            => $this->getId()->value(),
-            'nombre'          => $this->getNombre()->value(),
+            'idEgreso'            => $this->getIdEgreso()->value(),
+            'idCliente'          => $this->getIdCliente()->value(),
+            'idTipo'          => $this->getIdEgresoTipo()->value(),
+            'tipo'          => $this->getEgresoTipo()->value(),
+            'fecha'          => $this->getFecha()->value(),
+            'importe'          => $this->getImporte()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
-            'idCliente'       => $this->getIdCliente()->value(),
-            'idSede'       => $this->getIdSede()->value(),
-            'idPos'       => $this->getIdPos()->value(),
-            'pos'       => $this->getPos()->value(),
-            'sede'       => $this->getSede()->value(),
-            'blPuntoVenta'       => $this->getBlPuntoVenta()->value(),
-            'blDespacho'       => $this->getBlDespacho()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),
             'fechaRegistro'       => $this->getFechaRegistro()->value(),
             'fechaModifico'     => $this->getFechaModifico()->value(),
@@ -33,8 +30,6 @@ class CajaResource extends JsonResource
             'usuarioRegistro'     => $this->getUsuarioRegistro()->value(),
             'idUsuarioModifico'     => $this->getIdUsuarioModifico()->value(),
             'usuarioModifico'     => $this->getUsuarioModifico()->value(),
-            'aperturado'     => $this->getAperturado()->value(),
-            'idCajaHistorial'     => $this->getAperturado()->value() ? $this->getIdCajaDiario()->value() : null,
         ];
 
     }

@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('egreso_detalle', function (Blueprint $table) {
             $table->uuid('id_egreso');
             $table->uuid('id_cliente');
-            $table->uuid('id_vehiculo')->nullable();
-            $table->uuid('id_personal')->nullable();
-            $table->decimal('precio',10,2);
+            $table->uuid('id_egreso_tipo');
+            $table->dateTime('fecha');
+            $table->decimal('importe',10,2);
             $table->tinyInteger('id_estado')->default(1);
             $table->tinyInteger('id_eliminado')->default(0);
             $table->uuid('id_usu_registro')->nullable();
@@ -27,16 +27,17 @@ return new class extends Migration
             $table->index([
                 'id_egreso',
                 'id_cliente',
-                'id_vehiculo',
-                'id_personal',
-                'precio',
+                'id_egreso_tipo',
+                'fecha',
+                'importe',
                 'id_estado',
                 'id_eliminado',
                 'id_usu_registro',
                 'id_usu_modifico',
                 'f_registro',
-                'f_modifico',
+                'f_modifico'
             ]);
+
         });
     }
 

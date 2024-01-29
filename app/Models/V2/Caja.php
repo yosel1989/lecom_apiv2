@@ -33,6 +33,7 @@ class Caja extends Model
         'id_estado',
         'id_eliminado',
         'bl_punto_venta',
+        'bl_despacho',
         'id_usu_registro',
         'id_usu_modifico',
         'f_registro',

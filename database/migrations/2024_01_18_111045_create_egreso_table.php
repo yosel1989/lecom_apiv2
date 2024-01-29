@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('total',10,2);
             $table->tinyInteger('id_estado')->default(1);
             $table->tinyInteger('id_eliminado')->default(0);
+            $table->uuid('id_caja_diario');
             $table->uuid('id_usu_registro')->nullable();
             $table->uuid('id_usu_modifico')->nullable();
             $table->timestamp('f_registro');
@@ -32,6 +33,7 @@ return new class extends Migration
                 'total',
                 'id_estado',
                 'id_eliminado',
+                'id_caja_diario',
                 'id_usu_registro',
                 'id_usu_modifico',
                 'f_registro',

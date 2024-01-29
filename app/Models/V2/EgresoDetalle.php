@@ -4,17 +4,14 @@ namespace App\Models\V2;
 
 use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
-use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
-class Egreso extends Model
+class EgresoDetalle extends Model
 {
-    use UUID;
 
-    protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $table = "egreso";
+    protected $table = "egreso_detalle";
     public $timestamps = true;
 
     const CREATED_AT = 'f_registro';
@@ -25,14 +22,13 @@ class Egreso extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'id',
-        'id_vehiculo',
-        'id_personal',
-        'total',
+        'id_egreso',
         'id_cliente',
+        'id_egreso_tipo',
+        'fecha',
+        'importe',
         'id_estado',
         'id_eliminado',
-        'id_caja_diario',
         'id_usu_registro',
         'id_usu_modifico',
         'f_registro',
@@ -45,7 +41,7 @@ class Egreso extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'total' =>  'float',
+        'importe' =>  'float',
         'f_registro' =>  'string',
         'f_modifico' =>  'string',
         'id_estado' => IdEstado::class,
@@ -60,12 +56,9 @@ class Egreso extends Model
         return $this->hasOne('App\Models\User','id','id_usu_modifico');
     }
 
-    public function vehiculo(){
-        return $this->hasOne('App\Models\V2\Vehiculo','id','id_vehiculo');
+    public function egresoTipo(){
+        return $this->hasOne('App\Models\V2\EgresoTipo','id','id_egreso_tipo');
     }
 
-    public function personal(){
-        return $this->hasOne('App\Models\V2\Personal','id','id_personal');
-    }
 
 }

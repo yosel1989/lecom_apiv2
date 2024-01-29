@@ -7,7 +7,7 @@ namespace Src\V2\Caja\Application;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\V2\Caja\Domain\Contracts\CajaRepositoryContract;
 
-final class GetListByClienteDespachoUseCase
+final class GetListBySedeDespachoUseCase
 {
     private CajaRepositoryContract $repository;
 
@@ -16,9 +16,10 @@ final class GetListByClienteDespachoUseCase
         $this->repository = $repository;
     }
 
-    public function __invoke(string $idCliente): array
+    public function __invoke(string $idCliente, string $idSede): array
     {
         $_idCliente = new Id($idCliente,false, 'El id del cliente no tiene el formato correcto');
-        return $this->repository->listByClienteDespacho($_idCliente);
+        $_idSede = new Id($idSede,false, 'El id de la sede no tiene el formato correcto');
+        return $this->repository->listBySedeDespacho($_idCliente, $_idSede);
     }
 }

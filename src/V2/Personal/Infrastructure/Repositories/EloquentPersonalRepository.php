@@ -30,7 +30,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             'sede:id,nombre',
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
-            'tipoDocumento:id,nombre'
+            'tipoDocumento:id,nombre,nombre_corto'
         )->where('id_cliente',$idCliente->value())
         ->orderBy('nombre','ASC')
         ->get();
@@ -59,7 +59,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
             $OModel->setSede( new Text( !is_null($model->sede) ? $model->sede->nombre : null,true, -1 ) );
-            $OModel->setTipoDocumento(new Text(!is_null($model->tipoDocumento) ? $model->tipoDocumento->nombre : null, true, -1));
+            $OModel->setTipoDocumento(new Text(!is_null($model->tipoDocumento) ? $model->tipoDocumento->nombre_corto : null, true, -1));
             $OModel->setFotoBase64(new Text(null, true, -1));
 
             $arrVehicles[] = $OModel;

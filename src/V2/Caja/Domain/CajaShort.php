@@ -121,6 +121,22 @@ final class CajaShort
         $this->idSede = $idSede;
     }
 
+    /**
+     * @return Id
+     */
+    public function getIdPos(): Id
+    {
+        return $this->idPos;
+    }
+
+    /**
+     * @param Id $idPos
+     */
+    public function setIdPos(Id $idPos): void
+    {
+        $this->idPos = $idPos;
+    }
+
 
 
 }

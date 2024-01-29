@@ -4,10 +4,10 @@
 namespace Src\V2\Caja\Infrastructure;
 
 use Illuminate\Http\Request;
-use Src\V2\Caja\Application\GetListByClienteDespachoUseCase;
+use Src\V2\Caja\Application\GetListBySedeDespachoUseCase;
 use Src\V2\Caja\Infrastructure\Repositories\EloquentCajaRepository;
 
-final class GetListByClienteDespachoController
+final class GetListBySedeDespachoController
 {
     private EloquentCajaRepository $repository;
 
@@ -23,8 +23,9 @@ final class GetListByClienteDespachoController
     public function __invoke( Request $request ): array
     {
         $idClient = $request->id;
-        $getVehicleCollectionByClientUseCase = new GetListByClienteDespachoUseCase($this->repository);
-        return $getVehicleCollectionByClientUseCase->__invoke($idClient);
+        $idSede = $request->idSede;
+        $getVehicleCollectionByClientUseCase = new GetListBySedeDespachoUseCase($this->repository);
+        return $getVehicleCollectionByClientUseCase->__invoke($idClient, $idSede);
     }
 
 }

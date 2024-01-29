@@ -24,7 +24,7 @@ interface CajaRepositoryContract
     public function collectionByCliente(Id $idCliente): array;
     public function listBySede(Id $idCliente, Id $idSede): array;
     public function listByCliente(Id $idCliente): array;
-    public function listByClienteDespacho(Id $idCliente): array;
+    public function listBySedeDespacho(Id $idCliente, Id $idSede): array;
 
     public function update(
         Id $id,

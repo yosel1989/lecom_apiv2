@@ -155,7 +155,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         return $arrVehicles;
     }
 
-    public function listByClienteDespacho(Id $idCliente): array
+    public function listBySedeDespacho(Id $idCliente, Id $idSede): array
     {
         $models = $this->eloquentModelCaja
             ->select(
@@ -167,6 +167,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
                 'id_eliminado'
             )
             ->where('id_cliente',$idCliente->value())
+            ->where('id_sede',$idSede->value())
             ->where('bl_despacho', true)
             ->where('id_estado', 1)
             ->get();
@@ -215,6 +216,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             'id_sede' => $idSede->value(),
             'id_pos' => $idPos->value(),
             'bl_punto_venta' => $blPuntoVenta->value(),
+            'bl_despacho' => $blDespacho->value(),
             'id_estado' => $idEstado->value(),
             'id_usu_registro' => $idUsuarioRegistro->value()
         ]);
@@ -248,6 +250,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             'id_sede' => $idSede->value(),
             'id_pos' => $idPos->value(),
             'bl_punto_venta' => $blPuntoVenta->value(),
+            'bl_despacho' => $blDespacho->value(),
             'id_estado' => $idEstado->value(),
             'id_usu_modifico' => $idUsuarioRegistro->value()
         ]);

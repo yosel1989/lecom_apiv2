@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Api\V2\Caja;
+namespace App\Http\Controllers\Api\V2\EgresoDetalle;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V2\Caja\CajaListResource;
+use App\Http\Resources\V2\EgresoDetalle\EgresoDetalleResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
 
-class GetListByClienteDespachoController extends Controller
+class GetCollectionByClienteController extends Controller
 {
-    private \Src\V2\Caja\Infrastructure\GetListByClienteDespachoController $controller;
+    private \Src\V2\EgresoDetalle\Infrastructure\GetCollectionByClienteController $controller;
 
-    public function __construct(\Src\V2\Caja\Infrastructure\GetListByClienteDespachoController $controller)
+    public function __construct(\Src\V2\EgresoDetalle\Infrastructure\GetCollectionByClienteController $controller)
     {
         $this->controller = $controller;
     }
@@ -23,9 +23,9 @@ class GetListByClienteDespachoController extends Controller
     {
         try {
 
-            //return response()->json(Caja::all());
+            //return response()->json(EgresoDetalle::all());
 
-            $collection = CajaListResource::collection($this->controller->__invoke($request));
+            $collection = EgresoDetalleResource::collection($this->controller->__invoke($request)->all());
             return response()->json([
                 'data' => $collection,
                 'error' =>  null,
