@@ -26,17 +26,20 @@ final class Egreso
     private DateTimeFormat $fechaModifico;
 
     // secondary
+    private Text $caja;
     private Text $vehiculo;
     private Text $personal;
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
     private EgresoDetalleList $detalle;
+    private Id $idCaja;
 
     /**
      * @param Id $id
      * @param Id $idCliente
      * @param Id $idVehiculo
      * @param Id $idPersonal
+     * @param Id $idCaja
      * @param Id $idCajaDiario
      * @param NumericFloat $total
      * @param NumericInteger $idEstado
@@ -51,6 +54,7 @@ final class Egreso
         Id $idCliente,
         Id $idVehiculo,
         Id $idPersonal,
+        Id $idCaja,
         Id $idCajaDiario,
         NumericFloat $total,
         NumericInteger $idEstado,
@@ -73,6 +77,7 @@ final class Egreso
         $this->idUsuarioModifico = $idUsuarioModifico;
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
+        $this->idCaja = $idCaja;
     }
 
     /**
@@ -345,6 +350,38 @@ final class Egreso
     public function setDetalle(EgresoDetalleList $detalle): void
     {
         $this->detalle = $detalle;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdCaja(): Id
+    {
+        return $this->idCaja;
+    }
+
+    /**
+     * @param Id $idCaja
+     */
+    public function setIdCaja(Id $idCaja): void
+    {
+        $this->idCaja = $idCaja;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getCaja(): Text
+    {
+        return $this->caja;
+    }
+
+    /**
+     * @param Text $caja
+     */
+    public function setCaja(Text $caja): void
+    {
+        $this->caja = $caja;
     }
 
 

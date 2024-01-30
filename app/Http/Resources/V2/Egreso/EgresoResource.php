@@ -17,10 +17,11 @@ class EgresoResource extends JsonResource
         // Map Domain User model values
         return [
             'id'            => $this->getId()->value(),
-            'nombre'          => $this->getNombre()->value(),
-            'idCategoria'          => $this->getIdCategoria()->value(),
-            'categoria'          => $this->getCategoria()->value(),
-            'precioBase'          => $this->getPrecioBase()->value(),
+            'vehiculo'          => $this->getVehiculo()->value(),
+            'personal'          => $this->getPersonal()->value(),
+            'total'          => $this->getTotal()->value(),
+            'idCaja'          => $this->getIdCaja()->value(),
+            'caja'          => $this->getCaja()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),
             'fechaRegistro'       => $this->getFechaRegistro()->value(),

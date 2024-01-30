@@ -57,7 +57,10 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
         $models = $this->eloquent->with(
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
-        )->where('id_cliente',$idCliente->value())
+            'vehiculo:id,placa',
+            'personal:id,nombre,apellido'
+        )
+            ->where('id_cliente',$idCliente->value())
             ->orderBy('nombre', 'asc')
             ->get();
 
@@ -70,7 +73,8 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
                 new Id($model->id_cliente , false, 'El id del cliente no tiene el formato correcto'),
                 new Id($model->id_vehiculo , true, 'El id del vehiculo tipo no tiene el formato correcto'),
                 new Id($model->id_personal , true, 'El id del personal tipo no tiene el formato correcto'),
-                new Id($model->id_caja_diario , false, 'El id del personal tipo no tiene el formato correcto'),
+                new Id($model->id_caja , false, 'El id de la caja  no tiene el formato correcto'),
+                new Id($model->id_caja_diario , false, 'El id de la caja diario tipo no tiene el formato correcto'),
                 new NumericFloat($model->total),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
@@ -82,6 +86,8 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
 
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
+            $OModel->setVehiculo(new Text($model->vehiculo?->placa, true, -1));
+            $OModel->setPersonal(new Text($model->personal?->nombre, true, -1));
 
             $collection->add($OModel);
         }
@@ -95,7 +101,8 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
             'vehiculo:id,placa',
-            'personal:id,nombre,apellido'
+            'personal:id,nombre,apellido',
+            'caja:id,nombre'
         )
             ->where('id_cliente',$idCliente->value())
             ->where('id_usu_registro',$idUsuario->value())
@@ -112,7 +119,8 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
                 new Id($model->id_cliente , false, 'El id del cliente no tiene el formato correcto'),
                 new Id($model->id_vehiculo , true, 'El id del vehiculo tipo no tiene el formato correcto'),
                 new Id($model->id_personal , true, 'El id del personal tipo no tiene el formato correcto'),
-                new Id($model->id_caja_diario , false, 'El id del personal tipo no tiene el formato correcto'),
+                new Id($model->id_caja , false, 'El id de la caja  no tiene el formato correcto'),
+                new Id($model->id_caja_diario , false, 'El id de la caja diario tipo no tiene el formato correcto'),
                 new NumericFloat($model->total),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
@@ -124,6 +132,9 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
 
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
+            $OModel->setVehiculo(new Text($model->vehiculo?->placa, true, -1));
+            $OModel->setPersonal(new Text($model->personal?->nombre, true, -1));
+            $OModel->setCaja(new Text($model->caja?->nombre, true, -1));
 
             $collection->add($OModel);
         }
@@ -143,9 +154,10 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
         $OModel = new Egreso(
             new Id($model->id , false, 'El id del egreso no tiene el formato correcto'),
             new Id($model->id_cliente , false, 'El id del cliente no tiene el formato correcto'),
-            new Id($model->id_vehiculo , false, 'El id del vehiculo tipo no tiene el formato correcto'),
-            new Id($model->id_personal , false, 'El id del personal tipo no tiene el formato correcto'),
-            new Id($model->id_caja_diario , false, 'El id del personal tipo no tiene el formato correcto'),
+            new Id($model->id_vehiculo , true, 'El id del vehiculo tipo no tiene el formato correcto'),
+            new Id($model->id_personal , true, 'El id del personal tipo no tiene el formato correcto'),
+            new Id($model->id_caja , false, 'El id de la caja  no tiene el formato correcto'),
+            new Id($model->id_caja_diario , false, 'El id de la caja diario tipo no tiene el formato correcto'),
             new NumericFloat($model->total),
             new NumericInteger($model->id_estado->value),
             new NumericInteger($model->id_eliminado->value),
