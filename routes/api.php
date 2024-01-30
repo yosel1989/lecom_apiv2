@@ -104,6 +104,7 @@ include 'V2/motivo-traslado-route.php';
 include 'V2/origen-boleto-route.php';
 include 'V2/egreso-categoria-route.php';
 include 'V2/egreso-tipo-route.php';
+include 'V2/egreso-route.php';
 include 'V2/cliente-modulo-route.php';
 include 'V2/cliente-modulo-menu-route.php';
 

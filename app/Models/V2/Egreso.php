@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Egreso extends Model
 {
-    use UUID;
-
     protected $keyType = 'string';
     public $incrementing = false;
 
@@ -32,6 +30,7 @@ class Egreso extends Model
         'id_cliente',
         'id_estado',
         'id_eliminado',
+        'id_caja',
         'id_caja_diario',
         'id_usu_registro',
         'id_usu_modifico',
@@ -66,6 +65,10 @@ class Egreso extends Model
 
     public function personal(){
         return $this->hasOne('App\Models\V2\Personal','id','id_personal');
+    }
+
+    public function caja(){
+        return $this->hasOne('App\Models\V2\Caja','id','id_caja');
     }
 
 }

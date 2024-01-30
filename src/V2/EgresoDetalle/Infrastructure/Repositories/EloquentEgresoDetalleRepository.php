@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Src\V2\EgresoDetalle\Infrastructure\Repositories;
 
 use App\Models\V2\EgresoDetalle as EloquentModelEgresoDetalle;
+use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
@@ -44,7 +45,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
                 new Id($model->id_egreso , false, 'El id de la egreso no tiene el formato correcto'),
                 new Id($model->id_cliente , false, 'El id de la cliente no tiene el formato correcto'),
                 new Id($model->id_egreso_tipo , false, 'El id del egreso tipo no tiene el formato correcto'),
-                new DateTimeFormat($model->fecha, false, 'La fecha no tiene el formato correcto'),
+                new DateFormat($model->fecha, false, 'La fecha no tiene el formato correcto'),
                 new NumericFloat($model->importe),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
@@ -68,11 +69,15 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
         Id $idEgreso,
         Id $idCliente,
         Id $idEgresoTipo,
-        DateTimeFormat $fecha,
+        DateFormat $fecha,
         NumericFloat $importe,
         Id $idUsuarioRegistro
     ): void
     {
+
+        if($importe->value() === 0){
+            throw new \HttpInvalidParamException('El importe debe ser mayor a 0');
+        }
 
         $this->eloquent->create([
             'id_egreso' => $idEgreso->value(),

@@ -2,26 +2,28 @@
 
 namespace Src\V2\Egreso\Domain\Contracts;
 
-use Src\Core\Domain\ValueObjects\DateTimeFormat;
+use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
-use Src\ModelBase\Domain\ValueObjects\DateFormat;
 use Src\V2\Egreso\Domain\Egreso;
 use Src\V2\Egreso\Domain\EgresoList;
 
 interface EgresoRepositoryContract
 {
     public function create(
-        Id $idEgreso,
+        Id $id,
         Id $idCliente,
-        Id $idEgresoTipo,
-        DateTimeFormat $fecha,
-        array $detalle,
+        Id $idVehiculo,
+        Id $idPersonal,
         NumericFloat $total,
-        Id $idUsuarioRegistro,
+        Id $idCaja,
+        Id $idCajaDiario,
+        Id $idUsuarioRegistro
     ): void;
 
     public function collectionByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idVehiculo, Id $idPersonal): EgresoList;
+
+    public function reporteDespachoByCliente(Id $idCliente, Id $idUsuario, DateFormat $fecha): EgresoList;
 
     public function find(
         Id $idEgreso,

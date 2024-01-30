@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Src\V2\EgresoDetalle\Domain;
 
+use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
@@ -14,7 +15,7 @@ final class EgresoDetalle
     private Id $idEgreso;
     private Id $idCliente;
     private Id $idEgresoTipo;
-    private DateTimeFormat $fecha;
+    private DateFormat $fecha;
     private NumericFloat $importe;
     private NumericInteger $idEstado;
     private NumericInteger $idEliminado;
@@ -31,7 +32,7 @@ final class EgresoDetalle
      * @param Id $idEgreso
      * @param Id $idCliente
      * @param Id $idEgresoTipo
-     * @param DateTimeFormat $fecha
+     * @param DateFormat $fecha
      * @param NumericFloat $importe
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
@@ -44,7 +45,7 @@ final class EgresoDetalle
         Id $idEgreso,
         Id $idCliente,
         Id $idEgresoTipo,
-        DateTimeFormat $fecha,
+        DateFormat $fecha,
         NumericFloat $importe,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
@@ -100,17 +101,17 @@ final class EgresoDetalle
     }
 
     /**
-     * @return DateTimeFormat
+     * @return DateFormat
      */
-    public function getFecha(): DateTimeFormat
+    public function getFecha(): DateFormat
     {
         return $this->fecha;
     }
 
     /**
-     * @param DateTimeFormat $fecha
+     * @param DateFormat $fecha
      */
-    public function setFecha(DateTimeFormat $fecha): void
+    public function setFecha(DateFormat $fecha): void
     {
         $this->fecha = $fecha;
     }

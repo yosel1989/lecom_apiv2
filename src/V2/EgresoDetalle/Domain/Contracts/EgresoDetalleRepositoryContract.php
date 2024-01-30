@@ -2,7 +2,7 @@
 
 namespace Src\V2\EgresoDetalle\Domain\Contracts;
 
-use Src\Core\Domain\ValueObjects\DateTimeFormat;
+use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\V2\EgresoDetalle\Domain\EgresoDetalleList;
@@ -13,7 +13,7 @@ interface EgresoDetalleRepositoryContract
         Id $idEgreso,
         Id $idCliente,
         Id $idEgresoTipo,
-        DateTimeFormat $fecha,
+        DateFormat $fecha,
         NumericFloat $importe,
         Id $idUsuarioRegistro
     ): void;

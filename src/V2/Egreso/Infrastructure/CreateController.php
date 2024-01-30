@@ -4,37 +4,65 @@ namespace Src\V2\Egreso\Infrastructure;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Ramsey\Uuid\Uuid;
 use Src\V2\Egreso\Application\CreateUseCase;
 use Src\V2\Egreso\Infrastructure\Repositories\EloquentEgresoRepository;
+use Src\V2\EgresoDetalle\Infrastructure\Repositories\EloquentEgresoDetalleRepository;
 
 final class CreateController
 {
     private EloquentEgresoRepository $repository;
+    private EloquentEgresoDetalleRepository $detalleRepository;
 
-    public function __construct( EloquentEgresoRepository $repository )
+    public function __construct( EloquentEgresoRepository $repository, EloquentEgresoDetalleRepository $detalleRepository )
     {
         $this->repository = $repository;
+        $this->detalleRepository = $detalleRepository;
     }
 
     public function __invoke( Request $request): void
     {
+        $Id         = Uuid::uuid4();
+
         $user = Auth::user();
-        $idEgreso             = $request->input('idEgreso');
         $idCliente          = $request->input('idCliente');
-        $idEgresoTipo          = $request->input('idEgresoTipo');
-        $fecha          = $request->input('fecha');
+        $idVehiculo          = $request->input('idVehiculo');
+        $idPersonal          = $request->input('idPersonal');
+        $total          = $request->input('total');
+        $idCaja          = $request->input('idCaja');
+        $idCajaDiario           = $request->input('idCajaDiario');
+
+
         $detalle           = $request->input('detalle');
-        $total           = $request->input('total');
 
         $useCase = new CreateUseCase( $this->repository );
         $useCase->__invoke(
-            $idEgreso,
+            $Id->toString(),
             $idCliente,
-            $idEgresoTipo,
-            $fecha,
-            $detalle,
+            $idVehiculo,
+            $idPersonal,
             $total,
+            $idCaja,
+            $idCajaDiario,
             $user->getId()
         );
+
+        $createDetalleUseCase = new \Src\V2\EgresoDetalle\Application\CreateUseCase($this->detalleRepository);
+
+        foreach ($detalle as $det) {
+            $d = (object) $det;
+
+            $createDetalleUseCase->__invoke(
+                $Id->toString(),
+                $idCliente,
+                $d->idTipoEgreso,
+                $d->fecha,
+                $d->importe,
+                $user->getId()
+            );
+
+        }
+
+
     }
 }

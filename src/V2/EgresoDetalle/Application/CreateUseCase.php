@@ -2,11 +2,9 @@
 
 namespace Src\V2\EgresoDetalle\Application;
 
-use Src\Core\Domain\ValueObjects\DateTimeFormat;
+use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
-use Src\Core\Domain\ValueObjects\NumericInteger;
-use Src\Core\Domain\ValueObjects\Text;
 use Src\V2\EgresoDetalle\Domain\Contracts\EgresoDetalleRepositoryContract;
 
 final class CreateUseCase
@@ -33,7 +31,7 @@ final class CreateUseCase
         $_idEgreso = new Id($idEgreso,false, 'El id del egreso no tiene el formato correcto');
         $_idCliente = new Id($idCliente,false, 'El id del cliente no tiene el formato correcto');
         $_idEgresoTipo = new Id($idEgresoTipo,false, 'El id del egreso tipo no tiene el formato correcto');
-        $_fecha = new DateTimeFormat($fecha,false,'La fecha no tiene el formato correcto');
+        $_fecha = new DateFormat($fecha,false,'La fecha no tiene el formato correcto');
         $_importe = new NumericFloat($importe);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 

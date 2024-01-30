@@ -2,11 +2,8 @@
 
 namespace Src\V2\Egreso\Application;
 
-use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
-use Src\Core\Domain\ValueObjects\NumericInteger;
-use Src\Core\Domain\ValueObjects\Text;
 use Src\V2\Egreso\Domain\Contracts\EgresoRepositoryContract;
 
 final class CreateUseCase
@@ -22,29 +19,34 @@ final class CreateUseCase
     }
 
     public function __invoke(
-        string $idEgreso,
+        string $id,
         string $idCliente,
-        string $idEgresoTipo,
-        string $fecha,
-        array $detalle,
+        ?string $idVehiculo,
+        ?string $idPersonal,
         float $total,
+        string $idCaja,
+        string $idCajaDiario,
         string $idUsuarioRegistro
     ): void
     {
-        $_idEgreso = new Id($idEgreso,false, 'El id del egreso no tiene el formato correcto');
+
+        $_id = new Id($id,false, 'El id del egreso no tiene el formato correcto');
         $_idCliente = new Id($idCliente,false,'El id del cliente no tiene el formato correcto');
-        $_idEgresoTipo = new Id($idEgresoTipo,false,'El id de la egreso tipo no tiene el formato correcto');
-        $_fecha = new DateTimeFormat($fecha);
+        $_idVehiculo = new Id($idVehiculo,true,'El id del vehiculo no tiene el formato correcto');
+        $_idPersonal = new Id($idPersonal,true,'El id del personal no tiene el formato correcto');
         $_total = new NumericFloat($total);
+        $_idCaja = new Id($idCaja,false,'El id de la caja no tiene el formato correcto');
+        $_idCajaDiario = new Id($idCajaDiario,false,'El id de la caja diario no tiene el formato correcto');
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
         $this->repository->create(
-            $_idEgreso,
+            $_id,
             $_idCliente,
-            $_idEgresoTipo,
-            $_fecha,
-            $detalle,
+            $_idVehiculo,
+            $_idPersonal,
             $_total,
+            $_idCaja,
+            $_idCajaDiario,
             $_idUsuarioRegistro
         );
 
