@@ -265,36 +265,6 @@ class ModuloMenuSeeder extends Seeder
                 'id_estado'=> IdEstado::Habilitado
             ]);
 
-
-        \App\Models\V2\ModuloMenu::create([
-            'id_modulo'=> EnumModulo::BoletajeInterprovincial,
-            'texto'=>'Reportes',
-            'icono'=>null,
-            'id_tipo_menu'=> EnumTipoMenu::Subtitulo,
-            'padre'=>null,
-            'link'=>null,
-            'id_estado'=> IdEstado::Habilitado
-        ]);
-        $menuReportes = \App\Models\V2\ModuloMenu::create([
-            'id_modulo'=> EnumModulo::BoletajeInterprovincial,
-            'texto'=>'Reportes',
-            'icono'=> 'fa-duotone fa-floppy-disk',
-            'id_tipo_menu'=> EnumTipoMenu::SubMenu,
-            'padre'=>null,
-            'link'=>null,
-            'id_estado'=> IdEstado::Habilitado
-        ]);
-
-                \App\Models\V2\ModuloMenu::create([
-                    'id_modulo'=> EnumModulo::BoletajeInterprovincial,
-                    'texto'=>'Boletos Vendidos',
-                    'icono'=>null,
-                    'id_tipo_menu'=> EnumTipoMenu::Link,
-                    'padre'=>$menuReportes->id,
-                    'link'=>'boletaje-interprovincial/reporte-boletos',
-                    'id_estado'=> IdEstado::Habilitado
-                ]);
-
         \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::BoletajeInterprovincial,
             'texto'=>'Operaciones',
@@ -363,6 +333,24 @@ class ModuloMenuSeeder extends Seeder
                 'id_tipo_menu'=> EnumTipoMenu::Link,
                 'padre'=>$menuReporte1->id,
                 'link'=>'reportes/boletaje-interprovincial/venta-total',
+                'id_estado'=> IdEstado::Habilitado
+            ]);
+        $menuReporte2 = \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Reportes,
+            'texto'=>'Administración',
+            'icono'=> 'fa-duotone fa-file-chart-column',
+            'id_tipo_menu'=> EnumTipoMenu::SubMenu,
+            'padre'=>null,
+            'link'=>null,
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+            \App\Models\V2\ModuloMenu::create([
+                'id_modulo'=> EnumModulo::Reportes,
+                'texto'=>'Reporte de Egresos',
+                'icono'=>null,
+                'id_tipo_menu'=> EnumTipoMenu::Link,
+                'padre'=>$menuReporte2->id,
+                'link'=>'reportes/administracion/egreso',
                 'id_estado'=> IdEstado::Habilitado
             ]);
 

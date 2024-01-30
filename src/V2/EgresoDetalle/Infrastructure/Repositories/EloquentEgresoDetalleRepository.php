@@ -34,7 +34,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
         )
             ->where('id_cliente',$idCliente->value())
             ->where('id_egreso',$idEgreso->value())
-            ->orderBy('nombre', 'asc')
+            ->orderBy('f_registro', 'desc')
             ->get();
 
         $collection = new EgresoDetalleList();

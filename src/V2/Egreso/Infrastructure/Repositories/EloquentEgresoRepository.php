@@ -52,17 +52,29 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
         ]);
     }
 
-    public function collectionByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idVehiculo, Id $idPersonal): EgresoList
+    public function reporteByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idVehiculo, Id $idPersonal): EgresoList
     {
         $models = $this->eloquent->with(
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
             'vehiculo:id,placa',
-            'personal:id,nombre,apellido'
+            'personal:id,nombre,apellido',
+            'caja:id,nombre'
         )
             ->where('id_cliente',$idCliente->value())
-            ->orderBy('nombre', 'asc')
+            ->whereDate('f_registro','>=', $fechaDesde->value())
+            ->whereDate('f_registro','<=', $fechaHasta->value());
+
+        if(!is_null($idVehiculo->value())){
+            $models = $models->where('id_vehiculo', $idVehiculo->value());
+        }
+        if(!is_null($idPersonal->value())){
+            $models = $models->where('id_personal', $idPersonal->value());
+        }
+
+        $models = $models->orderBy('f_registro', 'desc')
             ->get();
+
 
         $collection = new EgresoList();
 
@@ -88,6 +100,7 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
             $OModel->setVehiculo(new Text($model->vehiculo?->placa, true, -1));
             $OModel->setPersonal(new Text($model->personal?->nombre, true, -1));
+            $OModel->setCaja(new Text($model->caja?->nombre, true, -1));
 
             $collection->add($OModel);
         }

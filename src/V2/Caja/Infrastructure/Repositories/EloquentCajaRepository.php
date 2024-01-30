@@ -161,10 +161,8 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             ->select(
                 'id',
                 'nombre',
-                'id_sede',
-                'id_pos',
-                'id_estado',
-                'id_eliminado'
+                'id_cliente',
+                'id_sede'
             )
             ->where('id_cliente',$idCliente->value())
             ->where('id_sede',$idSede->value())
@@ -176,17 +174,29 @@ final class EloquentCajaRepository implements CajaRepositoryContract
 
         foreach ( $models as $model ){
 
-            $OModel = new CajaShort(
+            $OModel = new CajaSede(
                 new Id($model->id , false, 'El id del caja no tiene el formato correcto'),
                 new Text($model->nombre, false, 100, 'El nombre de la caja excede los 100 caracteres'),
+                new Id($model->id_cliente , true, 'El id del cliente no tiene el formato correcto'),
                 new Id($model->id_sede , true, 'El id de la sede no tiene el formato correcto'),
-                new Id($model->id_pos , true, 'El id del pos no tiene el formato correcto'),
-                new NumericInteger($model->id_estado->value),
-                new NumericInteger($model->id_eliminado->value),
             );
 
             $arrVehicles[] = $OModel;
+
+
+            $aperturado = CajaDiario::where('id_caja',$model->id)->orderBy('f_apertura', 'desc')->limit(1);
+            if($aperturado->count() === 0){
+                $OModel->setAperturado(new ValueBoolean(false));
+            }else{
+                if(is_null($aperturado->first()->f_cierre)){
+                    $OModel->setAperturado(new ValueBoolean(true));
+                    $OModel->setIdCajaDiario(new Id($aperturado->first()->id, true, 'El id del historial de la caja no tiene el formato correcto'));
+                }else{
+                    $OModel->setAperturado(new ValueBoolean(false));
+                }
+            }
         }
+
 
         return $arrVehicles;
     }

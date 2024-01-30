@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Api\V2\Caja;
+namespace App\Http\Controllers\Api\V2\Egreso;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V2\Caja\CajaSedeResource;
+use App\Http\Resources\V2\Egreso\EgresoReporteResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
 
-class GetListBySedeDespachoController extends Controller
+class GetReporteByClienteController extends Controller
 {
-    private \Src\V2\Caja\Infrastructure\GetListBySedeDespachoController $controller;
+    private \Src\V2\Egreso\Infrastructure\GetReporteByClienteController $controller;
 
-    public function __construct(\Src\V2\Caja\Infrastructure\GetListBySedeDespachoController $controller)
+    public function __construct(\Src\V2\Egreso\Infrastructure\GetReporteByClienteController $controller)
     {
         $this->controller = $controller;
     }
@@ -23,9 +23,9 @@ class GetListBySedeDespachoController extends Controller
     {
         try {
 
-            //return response()->json(Caja::all());
+            //return response()->json(Egreso::all());
 
-            $collection = CajaSedeResource::collection($this->controller->__invoke($request));
+            $collection = EgresoReporteResource::collection($this->controller->__invoke($request)->all());
             return response()->json([
                 'data' => $collection,
                 'error' =>  null,
@@ -48,7 +48,7 @@ class GetListBySedeDespachoController extends Controller
                 'data' => [],
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
-                'status' => $e->getCode()
+                'status' => Response::HTTP_BAD_REQUEST
             ]);
 
         }
