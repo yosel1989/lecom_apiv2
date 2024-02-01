@@ -8,6 +8,7 @@ use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
+use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialShortFechaList;
 use Src\V2\Vehiculo\Domain\VehiculoShortList;
 
 interface BoletoInterprovincialRepositoryContract
@@ -18,6 +19,8 @@ interface BoletoInterprovincialRepositoryContract
     public function reportByClienteGroupVehiculo(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idRuta, VehiculoShortList $vehiculos): array;
     public function reportByUsuarioCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idRuta, VehiculoShortList $vehiculos): array;
     public function reportePuntoVentaByCliente(Id $idCliente, Id $idUsuario, DateFormat $fecha): array;
+    public function reporteTotalByClienteFecha(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): BoletoInterprovincialShortFechaList;
+    public function reporteTotalByClienteFechaGroupVehiculo(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): BoletoInterprovincialShortFechaList;
 
 
     public function changeState(

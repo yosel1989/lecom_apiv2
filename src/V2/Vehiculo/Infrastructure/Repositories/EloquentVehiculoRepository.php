@@ -94,6 +94,36 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
     }
 
 
+    public function listByClienteArray(Id $idCliente, array $idVehiculos): VehiculoShortList
+    {
+        $collection = new VehiculoShortList();
+
+        $vehicles = $this->eloquentModelVehiculo
+            ->select(
+                'id',
+                'placa',
+                'unidad'
+            )
+            ->whereIn('id',$idVehiculos)
+            ->where('id_estado', 1)
+            ->where('id_cliente', $idCliente->value())
+            ->get();
+        
+
+        foreach ( $vehicles as $model ){
+
+            $OModel = new VehiculoShort(
+                new Id($model->id , false, 'El id del vehiculo no tiene el formato correcto'),
+                new Text($model->placa, false, 7, 'La placa excede los 7 caracteres'),
+                new Text($model->unidad, false, 10, 'La unidad excede los 10 caracteres'),
+            );
+            $collection->add($OModel);
+        }
+
+        return $collection;
+    }
+
+
     public function collectionByUsuario(Id $idUsuario): array
     {
         $arrVehicles = [];

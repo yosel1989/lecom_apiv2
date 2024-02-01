@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id_egreso');
             $table->uuid('id_cliente');
             $table->uuid('id_egreso_tipo');
-            $table->dateTime('fecha');
+            $table->date('fecha');
             $table->decimal('importe',10,2);
             $table->tinyInteger('id_estado')->default(1);
             $table->tinyInteger('id_eliminado')->default(0);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Src\V2\Egreso\Infrastructure\Repositories;
 
 use App\Models\V2\Egreso as EloquentModelEgreso;
+use Illuminate\Support\Facades\DB;
 use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
@@ -13,6 +14,8 @@ use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\V2\Egreso\Domain\Contracts\EgresoRepositoryContract;
 use Src\V2\Egreso\Domain\Egreso;
+use Src\V2\Egreso\Domain\EgresoGroupTipoFechaShort;
+use Src\V2\Egreso\Domain\EgresoGroupTipoFechaShortList;
 use Src\V2\Egreso\Domain\EgresoList;
 
 final class EloquentEgresoRepository implements EgresoRepositoryContract
@@ -155,7 +158,6 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
         return $collection;
     }
 
-
     public function find(
         Id $idEgreso,
     ): Egreso
@@ -184,6 +186,82 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
 
 
         return $OModel;
+    }
+
+    public function reporteByClienteGroupTipoFecha(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): EgresoGroupTipoFechaShortList
+    {
+        $collection = new EgresoGroupTipoFechaShortList();
+
+        $models = $this->eloquent
+            ->select(
+                'egreso.id_cliente',
+                'egreso_detalle.id_egreso_tipo',
+                'egreso_tipo.nombre as tipo',
+                DB::raw('SUM(egreso_detalle.importe) as total'),
+                DB::raw('DATE(egreso_detalle.fecha) as fecha')
+            )
+            ->join('egreso_detalle', 'egreso.id','=','egreso_detalle.id_egreso')
+            ->join('egreso_tipo', 'egreso_detalle.id_egreso_tipo','=','egreso_tipo.id')
+            ->where('egreso.id_cliente',$idCliente->value())
+            ->whereDate('egreso_detalle.fecha','>=', $fechaDesde->value())
+            ->whereDate('egreso_detalle.fecha','<=', $fechaHasta->value())
+            ->groupBy('egreso.id_cliente', 'egreso_detalle.fecha', 'egreso_detalle.id_egreso_tipo', 'egreso_tipo.nombre')
+            ->get();
+
+
+        foreach ( $models as $model ){
+
+            $OModel = new EgresoGroupTipoFechaShort(
+                new Id($model->id_cliente , false, 'El id del egreso no tiene el formato correcto'),
+                new Id($model->id_egreso_tipo , false, 'El id del cliente no tiene el formato correcto'),
+                new Text($model->tipo , true, -1, ''),
+                new NumericFloat($model->total ),
+                new DateFormat($model->fecha , false, 'El id de la caja  no tiene el formato correcto')
+            );
+
+            $collection->add($OModel);
+        }
+
+        return $collection;
+    }
+
+    public function reporteByClienteGroupTipoFechaVehiculo(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): EgresoGroupTipoFechaShortList
+    {
+        $collection = new EgresoGroupTipoFechaShortList();
+
+        $models = $this->eloquent
+            ->select(
+                'egreso.id_cliente',
+                'egreso.id_vehiculo',
+                'egreso_detalle.id_egreso_tipo',
+                'egreso_tipo.nombre as tipo',
+                DB::raw('SUM(egreso_detalle.importe) as total'),
+                DB::raw('DATE(egreso_detalle.fecha) as fecha')
+            )
+            ->join('egreso_detalle', 'egreso.id','=','egreso_detalle.id_egreso')
+            ->join('egreso_tipo', 'egreso_detalle.id_egreso_tipo','=','egreso_tipo.id')
+            ->where('egreso.id_cliente',$idCliente->value())
+            ->whereDate('egreso_detalle.fecha','>=', $fechaDesde->value())
+            ->whereDate('egreso_detalle.fecha','<=', $fechaHasta->value())
+            ->groupBy('egreso.id_cliente', 'egreso_detalle.fecha', 'egreso_detalle.id_egreso_tipo', 'egreso_tipo.nombre', 'egreso.id_vehiculo')
+            ->get();
+
+
+        foreach ( $models as $model ){
+
+            $OModel = new EgresoGroupTipoFechaShort(
+                new Id($model->id_cliente , false, 'El id del egreso no tiene el formato correcto'),
+                new Id($model->id_egreso_tipo , false, 'El id del cliente no tiene el formato correcto'),
+                new Text($model->tipo , true, -1, ''),
+                new NumericFloat($model->total ),
+                new DateFormat($model->fecha , false, 'El id de la caja  no tiene el formato correcto')
+            );
+            $OModel->setIdVehiculo(new Id($model->id_vehiculo, true, 'El id del vehiculo no tiene el formato correcto'));
+
+            $collection->add($OModel);
+        }
+
+        return $collection;
     }
 
 }

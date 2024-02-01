@@ -6,6 +6,7 @@ use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\V2\Egreso\Domain\Egreso;
+use Src\V2\Egreso\Domain\EgresoGroupTipoFechaShortList;
 use Src\V2\Egreso\Domain\EgresoList;
 
 interface EgresoRepositoryContract
@@ -22,6 +23,9 @@ interface EgresoRepositoryContract
     ): void;
 
     public function reporteByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idVehiculo, Id $idPersonal): EgresoList;
+
+    public function reporteByClienteGroupTipoFecha(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): EgresoGroupTipoFechaShortList;
+    public function reporteByClienteGroupTipoFechaVehiculo(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): EgresoGroupTipoFechaShortList;
 
     public function reporteDespachoByCliente(Id $idCliente, Id $idUsuario, DateFormat $fecha): EgresoList;
 

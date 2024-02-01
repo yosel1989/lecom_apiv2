@@ -33,6 +33,8 @@ use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\Core\Domain\ValueObjects\TimeFormat;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
+use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialShortFecha;
+use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialShortFechaList;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialVehiculo;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialVehiculoRangoFecha;
 use Src\V2\BoletoInterprovincial\Domain\Contracts\BoletoInterprovincialRepositoryContract;
@@ -1088,6 +1090,73 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         }
 
         return $arrVehicles;
+    }
+
+
+    public function reporteTotalByClienteFecha(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): BoletoInterprovincialShortFechaList
+    {
+        $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
+        $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
+
+        $collection = new BoletoInterprovincialShortFechaList();
+
+        $models = $this->eloquentModelBoletoInterprovincial
+            ->select(
+                'id_cliente',
+                DB::raw('SUM(precio) as total'),
+                DB::raw('DATE(f_registro) as fecha')
+            )
+            ->where('id_estado', 1)
+            ->whereNotNull('id_vehiculo')
+            ->whereDate('f_registro','>=', $fechaDesde->value())
+            ->whereDate('f_registro','<=', $fechaHasta->value())
+            ->groupBy('id_cliente',DB::raw('DATE(f_registro)'))
+            ->get();
+
+        foreach ( $models as $model ) {
+            $Omodel = new BoletoInterprovincialShortFecha(
+                new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+                new DateFormat($model->fecha,false,'La fecha no tiene el formato correcto'),
+                new NumericFloat($model->total)
+            );
+            $collection->add($Omodel);
+        }
+
+        return $collection;
+    }
+
+
+    public function reporteTotalByClienteFechaGroupVehiculo(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): BoletoInterprovincialShortFechaList
+    {
+        $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
+        $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
+
+        $collection = new BoletoInterprovincialShortFechaList();
+
+        $models = $this->eloquentModelBoletoInterprovincial
+            ->select(
+                'id_vehiculo',
+                'id_cliente',
+                DB::raw('SUM(precio) as total'),
+                DB::raw('DATE(f_registro) as fecha')
+            )
+            ->where('id_estado', 1)
+            ->whereNotNull('id_vehiculo')
+            ->whereDate('f_registro','>=', $fechaDesde->value())
+            ->whereDate('f_registro','<=', $fechaHasta->value())
+            ->groupBy('id_vehiculo','id_cliente',DB::raw('DATE(f_registro)'))->get();
+
+        foreach ( $models as $model ) {
+            $Omodel = new BoletoInterprovincialShortFecha(
+                new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+                new DateFormat($model->fecha,false,'La fecha no tiene el formato correcto'),
+                new NumericFloat($model->total)
+            );
+            $Omodel->setIdVehiculo(new Id($model->id_vehiculo, false, 'El id del vehiculo no tiene el formato correcto'));
+            $collection->add($Omodel);
+        }
+
+        return $collection;
     }
 
 }

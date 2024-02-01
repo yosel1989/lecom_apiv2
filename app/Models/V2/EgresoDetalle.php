@@ -42,6 +42,7 @@ class EgresoDetalle extends Model
      */
     protected $casts = [
         'importe' =>  'float',
+        'fecha' =>  'string',
         'f_registro' =>  'string',
         'f_modifico' =>  'string',
         'id_estado' => IdEstado::class,

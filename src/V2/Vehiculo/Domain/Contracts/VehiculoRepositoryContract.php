@@ -18,6 +18,7 @@ interface VehiculoRepositoryContract
         Id $idUsuarioRegistro
     ): void;
     public function collectionByCliente(Id $idCliente): array;
+    public function listByClienteArray(Id $idCliente, array $idVehiculos): VehiculoShortList;
     public function listByCliente(Id $idCliente): array;
     public function listByUsuario(Id $idUsuario, Id $idCliente): VehiculoShortList;
     public function collectionByUsuario(Id $idUsuario): array;

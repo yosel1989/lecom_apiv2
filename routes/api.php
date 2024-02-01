@@ -108,6 +108,7 @@ include 'V2/egreso-route.php';
 include 'V2/egreso-detalle-route.php';
 include 'V2/cliente-modulo-route.php';
 include 'V2/cliente-modulo-menu-route.php';
+include 'V2/export-route.php';
 
 
 Route::get('v1/erts', function(){
