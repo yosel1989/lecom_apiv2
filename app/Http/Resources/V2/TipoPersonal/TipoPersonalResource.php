@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\V2\Personal;
+namespace App\Http\Resources\V2\TipoPersonal;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PersonalResource extends JsonResource
+class TipoPersonalResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,29 +14,11 @@ class PersonalResource extends JsonResource
      */
     public function toArray($request)
     {
-//        $image = file_get_contents($this->getFoto()->value());
-//        $urlImage = '';
-//        if ($image !== false){
-//            $urlImage = 'data:image/jpg;base64,'.base64_encode($image);
-//        }
-
-
         // Map Domain User model values
         return [
             'id'            => $this->getId()->value(),
-            'foto'          => $this->getFoto()->value() ? asset($this->getFoto()->value()) : null,
-            'fotoBase64'    =>  $this->getFotoBase64()->value(),
             'nombre'          => $this->getNombre()->value(),
-            'apellido'       => $this->getApellido()->value(),
             'idCliente'       => $this->getIdCliente()->value(),
-            'idSede'       => $this->getIdSede()->value(),
-            'sede'       => $this->getSede()->value(),
-            'idTipoPersonal'       => $this->getIdTipoPersonal()->value(),
-            'tipoPersonal'       => $this->getTipoPersonal()->value(),
-            'correo'       => $this->getCorreo()->value(),
-            'idTipoDocumento'       => $this->getIdTipoDocumento()->value(),
-            'tipoDocumento'       => $this->getTipoDocumento()->value(),
-            'numeroDocumento'       => $this->getNumeroDocumento()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),
             'fechaRegistro'       => $this->getFechaRegistro()->value(),

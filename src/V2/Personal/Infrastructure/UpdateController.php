@@ -61,6 +61,7 @@ final class UpdateController
         $numeroDocumento = $request->input('numeroDocumento');
         $correo          = $request->input('correo');
         $idSede          = $request->input('idSede');
+        $idTipoPersonal          = $request->input('idTipoPersonal');
         $idEstado        = $request->input('idEstado');
 
         $useCase = new UpdateUseCase( $this->repository );
@@ -73,6 +74,7 @@ final class UpdateController
             $numeroDocumento,
             $correo,
             $idSede,
+            $idTipoPersonal,
             $idEstado,
             $user->getId()
         );

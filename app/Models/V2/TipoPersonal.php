@@ -2,24 +2,22 @@
 
 namespace App\Models\V2;
 
-use App\Enums\IdEliminado;
-use App\Enums\IdEstado;
-use App\Enums\IdTipoDocumento;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
-class Personal extends Model
+class TipoPersonal extends Model
 {
-//    use UUID;
+    use UUID;
 
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $table = "personal";
+    protected $table = "personal_tipo";
     public $timestamps = true;
 
     const CREATED_AT = 'f_registro';
     const UPDATED_AT = 'f_modifico';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,15 +25,8 @@ class Personal extends Model
      */
     protected $fillable = [
         'id',
-        'foto',
-        'nombre',
-        'apellido',
-        'correo',
         'id_cliente',
-        'id_sede',
-        'id_personal_tipo',
-        'id_tipo_documento',
-        'numero_documento',
+        'nombre',
         'id_estado',
         'id_eliminado',
         'id_usu_registro',
@@ -50,16 +41,11 @@ class Personal extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'id_estado' =>  'integer',
+        'id_eliminado' =>  'boolean',
         'f_registro' =>  'string',
         'f_modifico' =>  'string',
-        'id_tipo_documento' => IdTipoDocumento::class,
-        'id_estado' => IdEstado::class,
-        'id_eliminado' => IdEliminado::class,
     ];
-
-    public function sede(){
-        return $this->hasOne('App\Models\V2\Sede','id','id_sede');
-    }
 
     public function usuarioRegistro(){
         return $this->hasOne('App\Models\User','id','id_usu_registro');
@@ -67,14 +53,6 @@ class Personal extends Model
 
     public function usuarioModifico(){
         return $this->hasOne('App\Models\User','id','id_usu_modifico');
-    }
-
-    public function tipoDocumento(){
-        return $this->hasOne('App\Models\V2\TipoDocumento','id','id_tipo_documento');
-    }
-
-    public function tipoPersonal(){
-        return $this->hasOne('App\Models\V2\TipoPersonal','id','id_personal_tipo');
     }
 
 }

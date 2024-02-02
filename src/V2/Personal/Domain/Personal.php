@@ -26,6 +26,7 @@ final class Personal
     private DateTimeFormat $fechaRegistro;
     private DateTimeFormat $fechaModifico;
     private Id $idSede;
+    private Id $idTipoPersonal;
 
 
     private Text $usuarioModifico;
@@ -33,6 +34,7 @@ final class Personal
     private Text $sede;
     private Text $tipoDocumento;
     private Text $fotoBase64;
+    private Text $tipoPersonal;
 
     /**
      * @param Id $id
@@ -44,6 +46,7 @@ final class Personal
      * @param Text $correo
      * @param Id $idCliente
      * @param Id $idSede
+     * @param Id $idTipoPersonal
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      * @param Id $idUsuarioRegistro
@@ -61,6 +64,7 @@ final class Personal
         Text $correo,
         Id $idCliente,
         Id $idSede,
+        Id $idTipoPersonal,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
         Id $idUsuarioRegistro,
@@ -85,6 +89,7 @@ final class Personal
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
         $this->idSede = $idSede;
+        $this->idTipoPersonal = $idTipoPersonal;
     }
 
     /**
@@ -407,6 +412,37 @@ final class Personal
         $this->fotoBase64 = $fotoBase64;
     }
 
+    /**
+     * @return Id
+     */
+    public function getIdTipoPersonal(): Id
+    {
+        return $this->idTipoPersonal;
+    }
+
+    /**
+     * @param Id $idTipoPersonal
+     */
+    public function setIdTipoPersonal(Id $idTipoPersonal): void
+    {
+        $this->idTipoPersonal = $idTipoPersonal;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getTipoPersonal(): Text
+    {
+        return $this->tipoPersonal;
+    }
+
+    /**
+     * @param Text $tipoPersonal
+     */
+    public function setTipoPersonal(Text $tipoPersonal): void
+    {
+        $this->tipoPersonal = $tipoPersonal;
+    }
 
 
 

@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace Src\V2\BoletoPrecio\Domain;
 
+use Dotenv\Parser\Value;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
 
 final class BoletoPrecio
 {
@@ -31,6 +33,7 @@ final class BoletoPrecio
     private Text $paraderoDestino;
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
+    private ValueBoolean $predeterminado;
 
 
     /**
@@ -43,6 +46,7 @@ final class BoletoPrecio
      * @param NumericFloat $precioBase
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
+     * @param ValueBoolean $predeterminado
      * @param Id $idUsuarioRegistro
      * @param Id $idUsuarioModifico
      * @param DateTimeFormat $fechaRegistro
@@ -60,6 +64,7 @@ final class BoletoPrecio
 
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
+        ValueBoolean $predeterminado,
         Id $idUsuarioRegistro,
         Id $idUsuarioModifico,
         DateTimeFormat $fechaRegistro,
@@ -80,6 +85,7 @@ final class BoletoPrecio
         $this->idUsuarioModifico = $idUsuarioModifico;
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
+        $this->predeterminado = $predeterminado;
     }
 
     /**
@@ -384,6 +390,22 @@ final class BoletoPrecio
     public function setUsuarioModifico(Text $usuarioModifico): void
     {
         $this->usuarioModifico = $usuarioModifico;
+    }
+
+    /**
+     * @return ValueBoolean
+     */
+    public function getPredeterminado(): ValueBoolean
+    {
+        return $this->predeterminado;
+    }
+
+    /**
+     * @param ValueBoolean $predeterminado
+     */
+    public function setPredeterminado(ValueBoolean $predeterminado): void
+    {
+        $this->predeterminado = $predeterminado;
     }
 
 

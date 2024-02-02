@@ -40,6 +40,12 @@ interface BoletoPrecioRepositoryContract
         Id $idUsuarioModifico
     ): void;
 
+    public function changePredeterminado(
+        Id $idBoletoPrecio,
+        Id $idRuta,
+        Id $idUsuarioModifico
+    ): void;
+
     public function find(
         Id $idBoletoPrecio,
     ): BoletoPrecio;

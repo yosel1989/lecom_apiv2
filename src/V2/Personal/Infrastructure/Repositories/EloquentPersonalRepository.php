@@ -30,9 +30,10 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             'sede:id,nombre',
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
-            'tipoDocumento:id,nombre,nombre_corto'
+            'tipoDocumento:id,nombre,nombre_corto',
+            'tipoPersonal:id,nombre',
         )->where('id_cliente',$idCliente->value())
-        ->orderBy('nombre','ASC')
+        ->orderBy('f_registro','DESC')
         ->get();
         $arrVehicles = array();
 
@@ -48,6 +49,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
                 new Text($model->correo,true, 150,'El correo excede los 150 caracteres'),
                 new Id($model->id_cliente,false,'El id del cliente no tiene el formato correcto'),
                 new Id($model->id_sede,true,'El id de la sede no tiene el formato correcto'),
+                new Id($model->id_personal_tipo,true,'El id del tipo de personal no tiene el formato correcto'),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
                 new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
@@ -61,6 +63,8 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             $OModel->setSede( new Text( !is_null($model->sede) ? $model->sede->nombre : null,true, -1 ) );
             $OModel->setTipoDocumento(new Text(!is_null($model->tipoDocumento) ? $model->tipoDocumento->nombre_corto : null, true, -1));
             $OModel->setFotoBase64(new Text(null, true, -1));
+            $OModel->setTipoPersonal( new Text( $model->tipoPersonal?->nombre,true, -1 ) );
+
 
             $arrVehicles[] = $OModel;
         }
@@ -79,7 +83,12 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
                 'id_sede',
                 'id_estado',
                 'id_eliminado'
-            )->where('id_cliente',$idCliente->value())->orderBy('nombre','ASC')->get();
+            )
+            ->where('id_cliente',$idCliente->value())
+            ->where('id_estado', 1)
+            ->where('id_eliminado', 0)
+            ->orderBy('nombre','ASC')
+            ->get();
 
         $arrVehicles = array();
 
@@ -111,11 +120,11 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
         Text $correo,
         Id $idCliente,
         Id $idSede,
+        Id $idTipoPersonal,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
     {
-
         $this->eloquentModelPersonal->create([
             'id' => $id->value(),
             'foto' => $foto->value(),
@@ -126,6 +135,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             'correo' => $correo->value(),
             'id_cliente' => $idCliente->value(),
             'id_sede' => $idSede->value(),
+            'id_personal_tipo' => $idTipoPersonal->value(),
             'id_estado' => $idEstado->value(),
             'id_usu_registro' => $idUsuarioRegistro->value()
         ]);
@@ -141,6 +151,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
         Text $numeroDocumento,
         Text $correo,
         Id $idSede,
+        Id $idTipoPersonal,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -153,6 +164,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             'numero_documento' => $numeroDocumento->value(),
             'correo' => $correo->value(),
             'id_sede' => $idSede->value(),
+            'id_personal_tipo' => $idTipoPersonal->value(),
             'id_estado' => $idEstado->value(),
             'id_usu_modifico' => $idUsuarioRegistro->value()
         ]);
@@ -181,6 +193,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
             'tipoDocumento:id,nombre',
+            'tipoPersonal:id,nombre',
         )->findOrFail($idPersonal->value());
         $OModel = new Personal(
             new Id($model->id , false, 'El id del personal no tiene el formato correcto'),
@@ -192,6 +205,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             new Text($model->correo,true, 150,'El correo excede los 150 caracteres'),
             new Id($model->id_cliente,false,'El id del cliente no tiene el formato correcto'),
             new Id($model->id_sede,true,'El id de la sede no tiene el formato correcto'),
+            new Id($model->id_personal_tipo,true,'El id del tipo de personal no tiene el formato correcto'),
             new NumericInteger($model->id_estado->value),
             new NumericInteger($model->id_eliminado->value),
             new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
@@ -215,6 +229,8 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
         $OModel->setSede( new Text( !is_null($model->sede) ? $model->sede->nombre : null,true, -1 ) );
         $OModel->setTipoDocumento(new Text(!is_null($model->tipoDocumento) ? $model->tipoDocumento->nombre : null, true, -1));
         $OModel->setFotoBase64(new Text(!is_null($fotoBase64) ? $fotoBase64 : null, true, -1));
+        $OModel->setTipoPersonal( new Text( $model->tipoPersonal?->nombre,true, -1 ) );
+
 
         return $OModel;
     }

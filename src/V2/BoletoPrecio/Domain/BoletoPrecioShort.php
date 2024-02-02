@@ -7,6 +7,7 @@ use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
 
 final class BoletoPrecioShort
 {
@@ -19,6 +20,7 @@ final class BoletoPrecioShort
     private NumericFloat $precioBase;
     private NumericInteger $idEstado;
     private NumericInteger $idEliminado;
+    private ValueBoolean $predeterminado;
 
 
     /**
@@ -28,6 +30,7 @@ final class BoletoPrecioShort
      * @param NumericFloat $precioBase
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
+     * @param ValueBoolean $predeterminado
      */
     public function __construct(
         Id $id,
@@ -36,7 +39,8 @@ final class BoletoPrecioShort
         NumericFloat $precioBase,
 
         NumericInteger $idEstado,
-        NumericInteger $idEliminado
+        NumericInteger $idEliminado,
+        ValueBoolean $predeterminado
     )
     {
 
@@ -46,6 +50,7 @@ final class BoletoPrecioShort
         $this->precioBase = $precioBase;
         $this->idEstado = $idEstado;
         $this->idEliminado = $idEliminado;
+        $this->predeterminado = $predeterminado;
     }
 
     /**
@@ -174,6 +179,22 @@ final class BoletoPrecioShort
     public function setIdEliminado(NumericInteger $idEliminado): void
     {
         $this->idEliminado = $idEliminado;
+    }
+
+    /**
+     * @return ValueBoolean
+     */
+    public function getPredeterminado(): ValueBoolean
+    {
+        return $this->predeterminado;
+    }
+
+    /**
+     * @param ValueBoolean $predeterminado
+     */
+    public function setPredeterminado(ValueBoolean $predeterminado): void
+    {
+        $this->predeterminado = $predeterminado;
     }
 
 

@@ -53,6 +53,7 @@ final class CreateController
         $numeroDocumento = $request->input('numeroDocumento');
         $correo          = $request->input('correo');
         $idSede        = $request->input('idSede');
+        $idTipoPersonal        = $request->input('idTipoPersonal');
         $idEstado        = $request->input('idEstado');
 
         $useCase = new CreateUseCase( $this->repository );
@@ -66,6 +67,7 @@ final class CreateController
             $correo,
             $idCliente,
             $idSede,
+            $idTipoPersonal,
             $idEstado,
             $user->getId()
         );

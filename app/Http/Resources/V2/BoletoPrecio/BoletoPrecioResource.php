@@ -25,6 +25,7 @@ class BoletoPrecioResource extends JsonResource
             'paraderoDestino'           => $this->getParaderoDestino()->value(),
             'precioBase'          => $this->getPrecioBase()->value(),
             'idEstado'            => $this->getIdEstado()->value(),
+            'predeterminado'            => $this->getPredeterminado()->value(),
             'idUsuarioRegistro'   => $this->getIdUsuarioRegistro()->value(),
             'idUsuarioModifico'   => $this->getIdUsuarioModifico()->value(),
             'fechaRegistro'       => $this->getFechaRegistro()->value(),

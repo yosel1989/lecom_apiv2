@@ -19,6 +19,7 @@ interface PersonalRepositoryContract
         Text $correo,
         Id $idCliente,
         Id $idSede,
+        Id $idTipoPersonal,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;
@@ -34,6 +35,7 @@ interface PersonalRepositoryContract
         Text $numeroDocumento,
         Text $correo,
         Id $idSede,
+        Id $idTipoPersonal,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;

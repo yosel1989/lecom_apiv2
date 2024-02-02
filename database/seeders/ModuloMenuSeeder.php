@@ -77,6 +77,16 @@ class ModuloMenuSeeder extends Seeder
 
         \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::Administracion,
+            'texto'=>'Tipo Personal',
+            'icono'=>null,
+            'id_tipo_menu'=> EnumTipoMenu::Link,
+            'padre'=> $menuRegistro->id,
+            'link'=>'administracion/tipo-personal',
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Administracion,
             'texto'=>'Personal',
             'icono'=>null,
             'id_tipo_menu'=> EnumTipoMenu::Link,

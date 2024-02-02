@@ -44,7 +44,8 @@ class BoletoPrecio extends Model
         'id_usu_registro',
         'id_usu_modifico',
         'f_registro',
-        'f_modifico'
+        'f_modifico',
+        'predeterminado',
     ];
 
     /**
@@ -56,6 +57,7 @@ class BoletoPrecio extends Model
         'id_tipo_ruta' => IdTipoRuta::class,
         'id_estado' => EnumEstadoBoleto::class,
         'id_eliminado' => IdEliminado::class,
+        'predeterminado' => 'boolean',
         'precio_base' => 'float',
         'f_registro' => 'string',
         'f_modifico' => 'string',

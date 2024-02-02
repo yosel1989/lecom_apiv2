@@ -1,14 +1,8 @@
 <?php
 
-//use App\Events\AlertColdMachineHistoryEvent;
 use App\Http\Controllers\Older\RegisterErtStateController;
-use App\Models\V2\Destino;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Schema;
 
 Route::post('register', [App\Http\Controllers\AuthController::class, 'register']);
 Route::post('login', [App\Http\Controllers\AuthController::class, 'login']);
@@ -109,6 +103,7 @@ include 'V2/egreso-detalle-route.php';
 include 'V2/cliente-modulo-route.php';
 include 'V2/cliente-modulo-menu-route.php';
 include 'V2/export-route.php';
+include 'V2/tipo-personal-route.php';
 
 
 Route::get('v1/erts', function(){

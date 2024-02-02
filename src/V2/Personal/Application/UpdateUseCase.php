@@ -28,6 +28,7 @@ final class UpdateUseCase
         ?string $numeroDocumento,
         ?string $correo,
         ?string $idSede,
+        ?string $idTipoPersonal,
         int $idEstado,
         string $idUsuarioRegistro
     ): void
@@ -40,6 +41,7 @@ final class UpdateUseCase
         $_numeroDocumento = new Text($numeroDocumento,true, 150,'El numero de documento excede los 150 caracteres');
         $_correo = new Text($correo,true, 150,'El correo excede los 150 caracteres');
         $_idSede = new Id($idSede,true,'El id de la sede no tiene el formato correcto');
+        $_idTipoPersonal = new Id($idTipoPersonal,true,'El id del tipo de personal no tiene el formato correcto');
         $_idEstado = new NumericInteger($idEstado);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
@@ -52,6 +54,7 @@ final class UpdateUseCase
             $_numeroDocumento,
             $_correo,
             $_idSede,
+            $_idTipoPersonal,
             $_idEstado,
             $_idUsuarioRegistro
         );

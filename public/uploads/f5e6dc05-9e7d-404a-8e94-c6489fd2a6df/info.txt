@@ -1,0 +1,4 @@
+Id Cliente: f5e6dc05-9e7d-404a-8e94-c6489fd2a6df
+Código Cliente: 3
+Nombre Cliente: GRUPO EMPRESARIAL L & Q S.A.C.
+Fecha Registro: 2023-11-09 10:59:56
