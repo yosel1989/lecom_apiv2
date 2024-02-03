@@ -108,7 +108,6 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
             ->where('id_estado', 1)
             ->where('id_cliente', $idCliente->value())
             ->get();
-        
 
         foreach ( $vehicles as $model ){
 
@@ -118,6 +117,7 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
                 new Text($model->unidad, false, 10, 'La unidad excede los 10 caracteres'),
             );
             $collection->add($OModel);
+
         }
 
         return $collection;

@@ -21,6 +21,10 @@ interface EgresoDetalleRepositoryContract
         Id $idUsuarioRegistro
     ): void;
 
+    public function deleteByEgreso(
+        Id $idEgreso
+    ): void;
+
     public function collectionByCliente(Id $idCliente, Id $idEgreso): EgresoDetalleList;
 
 }

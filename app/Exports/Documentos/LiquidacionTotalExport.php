@@ -9,8 +9,11 @@ use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Src\Utility\Utilidades;
 use Src\V2\Liquidacion\Domain\Liquidacion;
 
 class LiquidacionTotalExport implements FromView, ShouldAutoSize, WithEvents, WithTitle
@@ -18,11 +21,14 @@ class LiquidacionTotalExport implements FromView, ShouldAutoSize, WithEvents, Wi
     use RegistersEventListeners;
 
     private Liquidacion $liquidacion;
+    private Utilidades $utilidades;
 
-    public function __construct($liquidacion)
+    public function __construct($liquidacion, $utilidades)
     {
         $this->liquidacion = $liquidacion;
+        $this->utilidades = $utilidades;
     }
+
 
     public function title(): string
     {
@@ -33,6 +39,7 @@ class LiquidacionTotalExport implements FromView, ShouldAutoSize, WithEvents, Wi
     {
         return view('documentos.liquidacion', [
             'liquidacion' => $this->liquidacion,
+            'utilidades' => $this->utilidades,
         ]);
     }
 
@@ -40,7 +47,7 @@ class LiquidacionTotalExport implements FromView, ShouldAutoSize, WithEvents, Wi
     {
         // Create Style Arrays
         $default_font_style = [
-            'font' => ['name' => 'Calibri']
+            'font' => ['name' => 'Arial', 'size' => 10]
         ];
 
         $strikethrough = [

@@ -22,6 +22,8 @@ interface BoletoInterprovincialRepositoryContract
     public function reporteTotalByClienteFecha(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): BoletoInterprovincialShortFechaList;
     public function reporteTotalByClienteFechaGroupVehiculo(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): BoletoInterprovincialShortFechaList;
 
+    public function liquidacionTotalByVehiculoRangoFecha(Id $idCliente, array $idVehiculos, DateFormat $fechaDesde, DateFormat $fechaHasta): BoletoInterprovincialShortFechaList;
+
 
     public function changeState(
         Id $idBoletoInterprovincial,

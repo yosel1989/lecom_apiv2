@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
+use Src\Utility\Utilidades;
 use Src\V2\Liquidacion\Domain\Liquidacion;
 use Src\V2\Vehiculo\Domain\VehiculoShort;
 
@@ -20,11 +21,13 @@ class LiquidacionVehiculoFechaExport implements FromView, ShouldAutoSize, WithEv
 
     private VehiculoShort $vehiculo;
     private Liquidacion $liquidacion;
+    private Utilidades $utilidades;
 
-    public function __construct($vehiculo, $liquidacion)
+    public function __construct($vehiculo, $liquidacion, $utilidades)
     {
         $this->vehiculo = $vehiculo;
         $this->liquidacion = $liquidacion;
+        $this->utilidades = $utilidades;
     }
 
     public function title(): string
@@ -37,6 +40,7 @@ class LiquidacionVehiculoFechaExport implements FromView, ShouldAutoSize, WithEv
         return view('documentos.liquidacion-vehiculo-fecha', [
             'vehiculo' => $this->vehiculo,
             'liquidacion' => $this->liquidacion,
+            'utilidades' => $this->utilidades,
         ]);
     }
 

@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace Src\V2\Egreso\Infrastructure\Repositories;
 
+use App\Enums\EnumTipoComprobante;
+use App\Models\V2\Caja;
+use App\Models\V2\CajaDiario;
+use App\Models\V2\ComprobanteSerie;
 use App\Models\V2\Egreso as EloquentModelEgreso;
+use App\Models\V2\Sede;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
@@ -40,7 +46,61 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
     ): void
     {
         if($total->value() === 0){
-            throw new \InvalidArgumentException('El total debe ser mayor a 0');
+            throw new InvalidArgumentException('El total debe ser mayor a 0');
+        }
+
+        // Validar sede
+        $Sede = Sede::where('id', $idSede->value())->where('id_estado', 1)->where('id_eliminado',0)->where('id_cliente',$idCliente->value());
+        if( $Sede->count() === 0 ){
+            throw new InvalidArgumentException( 'La sede no se encuentra registrado en el sistema o esta inhabilitado.' );
+        }
+
+        // Validar codigo sede
+        if( is_null($Sede->first()->codigo) ){
+            throw new InvalidArgumentException( 'Falta ingresar el código de la sede' );
+        }
+
+        // Validar serie
+        $Serie = ComprobanteSerie::where('id_estado', 1)->where('id_cliente',$idCliente->value())->where('id_tipo_comprobante',EnumTipoComprobante::TicketEgreso);
+        if( $Serie->count() === 0 ){
+            throw new InvalidArgumentException( 'Falta registrar la serie en el sistema' );
+        }
+        if( $Serie->count() > 1 ){
+            throw new InvalidArgumentException( 'Existe más de una serie registrada' );
+        }
+
+        // Validar caja
+        $Caja = Caja::selectRaw('count(*) as total')->where('id', $idCaja->value())->where('id_estado', 1)->where('id_cliente',$idCliente->value())->where('id_eliminado',0)->first();
+        if( $Caja->total === 0 ){
+            throw new InvalidArgumentException( 'La caja no se encuentra registrado en el sistema o esta inhabilitado.' );
+        }
+
+        // Validar caja diario
+        $CajaDiario = CajaDiario::selectRaw('count(*) as total')->where('id', $idCajaDiario->value())->where('id_cliente',$idCliente->value())->where('id_estado', 1)->where('id_eliminado',0)->whereNull('f_cierre')->first();
+        if( $CajaDiario->total === 0 ){
+            throw new InvalidArgumentException( 'La caja no se encuentra aperturada' );
+        }
+
+        // Validar cliente
+        $Cliente = \App\Models\V2\Cliente::where('id', $idCliente->value())->where('idEstado',1)->where('idEliminado',0);
+        if( $Cliente->count() === 0 ){
+            throw new InvalidArgumentException( 'El cliente no se encuentra registrado en el sistema o esta inhabilitado.' );
+        }
+
+        // Validar vehiculo
+        if(!is_null($idVehiculo->value())){
+            $Vehiculo = \App\Models\V2\Vehiculo::where('id', $idVehiculo->value())->where('id', $idCliente->value())->where('idEstado',1)->where('idEliminado',0);
+            if( $Vehiculo->count() === 0 ){
+                throw new InvalidArgumentException( 'El vehiculo no se encuentra registrado en el sistema o esta inhabilitado.' );
+            }
+        }
+
+        // Validar vehiculo
+        if(!is_null($idPersonal->value())){
+            $Personal = \App\Models\V2\Personal::where('id', $idPersonal->value())->where('id', $idCliente->value())->where('idEstado',1)->where('idEliminado',0);
+            if( $Personal->count() === 0 ){
+                throw new InvalidArgumentException( 'El vehiculo no se encuentra registrado en el sistema o esta inhabilitado.' );
+            }
         }
 
         $this->eloquent->create([
@@ -55,6 +115,13 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
             'id_estado' => 1,
             'id_usu_registro' => $idUsuarioRegistro->value()
         ]);
+    }
+
+    public function delete(
+        Id $id
+    ): void
+    {
+        $this->eloquent->where('id',$id->value())->delete();
     }
 
     public function reporteByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idVehiculo, Id $idPersonal): EgresoList

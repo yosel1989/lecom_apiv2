@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\Id;
+use Src\V2\BoletoInterprovincial\Application\GetLiquidacionTotalByVehiculoRangoFechaUseCase;
 use Src\V2\BoletoInterprovincial\Application\GetReporteTotalByClienteFechagGroupVehiculoUseCase;
 use Src\V2\BoletoInterprovincial\Application\GetReporteTotalByClienteFechaUseCase;
 use Src\V2\BoletoInterprovincial\Infrastructure\Repositories\EloquentBoletoInterprovincialRepository;
@@ -67,16 +68,24 @@ final class GetReporteByClienteController
         $egresoVehiculoUseCase = new GetListByClienteGroupTipoFechaVehiculoUseCase($this->egresoRepository);
         $_egresoVehiculo = $egresoVehiculoUseCase->__invoke($_idCliente->value(), $_fechaDesde->value(), $_fechaHasta->value());
 
-        $vehiculoUseCase = new GetListByClienteArrayUseCase($this->vehiculoRepository);
-        $_vehiculos = $vehiculoUseCase->__invoke($_idCliente->value(), ['c241a502-2448-448c-80ca-c51a7c4abddf', '085e8b03-5219-459c-80cb-997e52fcdd24']);
-
         $boletoInterprovincialTotalUseCase = new GetReporteTotalByClienteFechaUseCase($this->boletoInterprovincialRepository);
         $_ingresoTotalBoleto = $boletoInterprovincialTotalUseCase->__invoke($_idCliente->value(), $_fechaDesde->value(), $_fechaHasta->value());
 
         $boletoInterprovincialPorVehiculoUseCase = new GetReporteTotalByClienteFechagGroupVehiculoUseCase($this->boletoInterprovincialRepository);
         $_ingresoTotalBoletoVehiculo = $boletoInterprovincialPorVehiculoUseCase->__invoke($_idCliente->value(), $_fechaDesde->value(), $_fechaHasta->value());
 
-        return new Liquidacion(
+
+        // Liquidación total agrupado por vehiculo y fecha
+        $liquidacionTotalPorVehiculoYFechaUseCase = new GetLiquidacionTotalByVehiculoRangoFechaUseCase($this->boletoInterprovincialRepository);
+        $liquidacionTotalPorVehiculoYFecha = $liquidacionTotalPorVehiculoYFechaUseCase->__invoke($_idCliente->value(), ['c241a502-2448-448c-80ca-c51a7c4abddf', '085e8b03-5219-459c-80cb-997e52fcdd24'], $_fechaDesde->value(), $_fechaHasta->value());
+
+        // $vehiculos
+        $vehiculoUseCase = new GetListByClienteArrayUseCase($this->vehiculoRepository);
+        $_vehiculos = $vehiculoUseCase->__invoke($_idCliente->value(), ['c241a502-2448-448c-80ca-c51a7c4abddf', '085e8b03-5219-459c-80cb-997e52fcdd24']);
+
+//        dd($liquidacionTotalPorVehiculoYFecha->all());
+
+        $liquidacion =  new Liquidacion(
             $_idCliente,
             $_fechaDesde,
             $_fechaHasta,
@@ -84,10 +93,12 @@ final class GetReporteByClienteController
             $_egresoTipos,
             $_egresoTotal,
             $_egresoVehiculo,
-            $_ingresoTotalBoleto,
+            $liquidacionTotalPorVehiculoYFecha,
             $_ingresoTotalBoletoVehiculo,
             $_vehiculos
         );
+
+        return $liquidacion;
 
     }
 

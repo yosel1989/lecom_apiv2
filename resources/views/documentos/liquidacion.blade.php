@@ -5,7 +5,6 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 </head>
 <body>
     <table class="table table-sm">
@@ -14,26 +13,27 @@
                 <td colspan="8"><b>REPORTE TOTAL DE INGRESOS </b></td>
             </tr>
             <tr>
-                <td><b>T. INGRESO</b></td>
+                <td style="background-color: #F0F2F9; color: #4056ae; border:solid 4px #4056ae"><b>PLACA/FECHA</b></td>
                 @foreach($liquidacion->getFechaPeriodo() as $fecha)
-                <td><b>{{ $fecha->format('d/m/Y') }}</b></td>
+                <td style="background-color: #F0F2F9; color: #4056ae; border:solid 4px  #4056ae">{{ $fecha->format('d-') . mb_strtolower($utilidades->mesCorto($fecha->format('m'))) }}</td>
                 @endforeach
             </tr>
         </thead>
         <tbody>
+            @foreach($liquidacion->getVehiculos()->all() as $vehiculo)
             <tr>
-                <td>V. BOLETOS</td>
-                @foreach($liquidacion->getFechaPeriodo() as $fecha)
-                    @php $total = 0;
-                        foreach ($liquidacion->getIngresoTotalBoleto()->all() as $item) {
-                            if($item->getFecha()->value() === $fecha->format('Y-m-d') ){
-                                $total = $item->getTotal()->value();
-                            }
-                        }
+                <td style="border: 10px solid #4056ae">{{ $vehiculo->getPlaca()->value() }}</td>
+                @foreach($liquidacion->getFechaPeriodo() as $fechas)
+                    @php
+                        $encontrado = array_filter($liquidacion->getIngresoTotalBoleto()->all(), function ($obj) use ($fechas, $vehiculo) {
+                          return $obj->getFecha()->value() == $fechas->format('Y-m-d') && $obj->getIdVehiculo()->value() === $vehiculo->getId()->value();
+                        });
+                         $encontrado = (count($encontrado) > 0) ? reset($encontrado) : null;
                     @endphp
-                    <td>{{ $total }}</td>
+                    <td style="border: 10px solid #4056ae">{{ !is_null($encontrado) ? $encontrado->getTotal()->value() : 0 }}</td>
                 @endforeach
             </tr>
+            @endforeach
             <tr></tr>
             <tr>
                 <td><b>TOTAL INGRESOS</b></td>
@@ -55,9 +55,9 @@
             <td colspan="8"><b>REPORTE TOTAL DE EGRESOS </b></td>
         </tr>
         <tr>
-            <td><b>T. EGRESO</b></td>
+            <td style="background-color: #F0F2F9; color: #4056ae; border: 1px solid #4056ae"><b>PLACA/FECHA</b></td>
             @foreach($liquidacion->getFechaPeriodo() as $fecha)
-                <td><b>{{ $fecha->format('d/m/Y') }}</b></td>
+            <td style="background-color: #F0F2F9; color: #4056ae; border: 1px solid #4056ae">{{ $fecha->format('d-') . mb_strtolower($utilidades->mesCorto($fecha->format('m'))) }}</td>
             @endforeach
         </tr>
         </thead>

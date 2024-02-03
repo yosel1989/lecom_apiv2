@@ -54,6 +54,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
                 new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
                 new DateTimeFormat($model->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
                 new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+                new Id($model->id_liquidacion, true, 'El id de la liquidacion no tiene el formato correcto'),
             );
 
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
@@ -93,6 +94,13 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
             'id_estado' => 1,
             'id_usu_registro' => $idUsuarioRegistro->value()
         ]);
+    }
+
+    public function deleteByEgreso(
+        Id $idEgreso
+    ): void
+    {
+        $this->eloquent->where('id_egreso',$idEgreso->value())->delete();
     }
 
 

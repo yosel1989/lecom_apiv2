@@ -3,12 +3,10 @@
 namespace App\Models\V2;
 
 use App\Enums\EnumEstado;
-use App\Enums\EnumEstadoBoletoInterprovincial;
 use App\Enums\IdEliminado;
 use App\Enums\IdTipoRuta;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class BoletoPrecio extends Model
 {

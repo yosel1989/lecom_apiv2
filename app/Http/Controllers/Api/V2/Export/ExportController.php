@@ -6,6 +6,7 @@ use App\Exports\Documentos\LiquidacionExport;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Excel;
+use Src\Utility\Utilidades;
 
 class ExportController extends Controller
 {
@@ -29,6 +30,8 @@ class ExportController extends Controller
 
         $liquidacion = $this->controller->__invoke($request);
 
-        return $this->excel->download(new LiquidacionExport($liquidacion), 'users.xlsx');
+        $utilidades = new Utilidades();
+
+        return $this->excel->download(new LiquidacionExport($liquidacion, $utilidades), 'users.xlsx');
     }
 }

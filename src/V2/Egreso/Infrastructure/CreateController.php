@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Src\V2\Egreso\Infrastructure;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Uuid;
 use Src\V2\Egreso\Application\CreateUseCase;
+use Src\V2\Egreso\Application\DeleteUseCase;
 use Src\V2\Egreso\Infrastructure\Repositories\EloquentEgresoRepository;
+use Src\V2\EgresoDetalle\Application\DeleteByEgresoUseCase;
 use Src\V2\EgresoDetalle\Infrastructure\Repositories\EloquentEgresoDetalleRepository;
 
 final class CreateController
@@ -51,18 +55,28 @@ final class CreateController
 
         $createDetalleUseCase = new \Src\V2\EgresoDetalle\Application\CreateUseCase($this->detalleRepository);
 
-        foreach ($detalle as $det) {
-            $d = (object) $det;
-            $createDetalleUseCase->__invoke(
-                $Id->toString(),
-                $idCliente,
-                $d->idTipoEgreso,
-                $d->detalle,
-                $d->fecha,
-                $d->importe,
-                $d->numeroDocumento,
-                $user->getId()
-            );
+        try {
+            foreach ($detalle as $det) {
+                $d = (object) $det;
+                $createDetalleUseCase->__invoke(
+                    $Id->toString(),
+                    $idCliente,
+                    $d->idTipoEgreso,
+                    $d->detalle,
+                    $d->fecha,
+                    $d->importe,
+                    $d->numeroDocumento,
+                    $user->getId()
+                );
+            }
+        }catch(\Exception $e){
+            $deleteUseCase = new DeleteUseCase($this->repository);
+            $deleteUseCase->__invoke($Id->toString());
+
+            $deleteByEgresoUseCase = new DeleteByEgresoUseCase($this->repository);
+            $deleteByEgresoUseCase->__invoke($Id->toString());
+
+            throw new \InvalidArgumentException('Ocurrio un error al registrar los detalles');
         }
 
 
