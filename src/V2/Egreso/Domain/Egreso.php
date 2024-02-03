@@ -26,6 +26,8 @@ final class Egreso
     private DateTimeFormat $fechaModifico;
 
     // secondary
+    private Text $estado;
+    private Text $sede;
     private Text $caja;
     private Text $vehiculo;
     private Text $personal;
@@ -33,10 +35,12 @@ final class Egreso
     private Text $usuarioModifico;
     private EgresoDetalleList $detalle;
     private Id $idCaja;
+    private Id $idSede;
 
     /**
      * @param Id $id
      * @param Id $idCliente
+     * @param Id $idSede
      * @param Id $idVehiculo
      * @param Id $idPersonal
      * @param Id $idCaja
@@ -52,6 +56,7 @@ final class Egreso
     public function __construct(
         Id $id,
         Id $idCliente,
+        Id $idSede,
         Id $idVehiculo,
         Id $idPersonal,
         Id $idCaja,
@@ -78,6 +83,7 @@ final class Egreso
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
         $this->idCaja = $idCaja;
+        $this->idSede = $idSede;
     }
 
     /**
@@ -382,6 +388,54 @@ final class Egreso
     public function setCaja(Text $caja): void
     {
         $this->caja = $caja;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getSede(): Text
+    {
+        return $this->sede;
+    }
+
+    /**
+     * @param Text $sede
+     */
+    public function setSede(Text $sede): void
+    {
+        $this->sede = $sede;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdSede(): Id
+    {
+        return $this->idSede;
+    }
+
+    /**
+     * @param Id $idSede
+     */
+    public function setIdSede(Id $idSede): void
+    {
+        $this->idSede = $idSede;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getEstado(): Text
+    {
+        return $this->estado;
+    }
+
+    /**
+     * @param Text $estado
+     */
+    public function setEstado(Text $estado): void
+    {
+        $this->estado = $estado;
     }
 
 

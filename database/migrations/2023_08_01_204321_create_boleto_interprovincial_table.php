@@ -56,6 +56,8 @@ return new class extends Migration
                 $table->integer('id_tipo_boleto');
                 $table->boolean('por_pagar')->default(false);
                 $table->boolean('id_origen')->default(0);
+                $table->uuid('id_caja_diario')->nullable();
+                $table->uuid('id_liquidacion')->nullable();
 
 //
                 $table->index([
@@ -85,7 +87,9 @@ return new class extends Migration
                     'id_tipo_comprobante',
                     'id_tipo_boleto',
                     'por_pagar',
-                    'id_origen'
+                    'id_origen',
+                    'id_caja_diario',
+                    'id_liquidacion'
                 ]);
         });
     }

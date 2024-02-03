@@ -163,15 +163,16 @@ class ModuloMenuSeeder extends Seeder
             'link'=> 'administracion/egreso/tipo',
             'id_estado'=> IdEstado::Habilitado
         ]);
-        \App\Models\V2\ModuloMenu::create([
-            'id_modulo'=> EnumModulo::Administracion,
-            'texto'=>'Nuevo',
-            'icono'=>null,
-            'id_tipo_menu'=> EnumTipoMenu::Link,
-            'padre'=>$menuEgresos->id,
-            'link'=> 'administracion/egreso/nuevo',
-            'id_estado'=> IdEstado::Habilitado
-        ]);
+
+//        \App\Models\V2\ModuloMenu::create([
+//            'id_modulo'=> EnumModulo::Administracion,
+//            'texto'=>'Nuevo',
+//            'icono'=>null,
+//            'id_tipo_menu'=> EnumTipoMenu::Link,
+//            'padre'=>$menuEgresos->id,
+//            'link'=> 'administracion/egreso/nuevo',
+//            'id_estado'=> IdEstado::Habilitado
+//        ]);
 
         \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::Administracion,

@@ -56,6 +56,7 @@ interface BoletoInterprovincialRepositoryContract
         Id $_idCliente,
         Id $_idSede,
         Id $_idCaja,
+        Id $_idCajaDiario,
         NumericInteger $_idTipoDocumento,
         Text $_numeroDocumento,
         Text $_nombres,

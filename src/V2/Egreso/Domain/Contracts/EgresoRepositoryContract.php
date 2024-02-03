@@ -14,6 +14,7 @@ interface EgresoRepositoryContract
     public function create(
         Id $id,
         Id $idCliente,
+        Id $idSede,
         Id $idVehiculo,
         Id $idPersonal,
         NumericFloat $total,

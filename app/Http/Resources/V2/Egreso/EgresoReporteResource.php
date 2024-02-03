@@ -25,6 +25,7 @@ class EgresoReporteResource extends JsonResource
             'idCaja'          => $this->getIdCaja()->value(),
             'caja'          => $this->getCaja()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
+            'estado'       => $this->getEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),
             'fechaRegistro'       => $this->getFechaRegistro()->value(),
             'fechaModifico'     => $this->getFechaModifico()->value(),

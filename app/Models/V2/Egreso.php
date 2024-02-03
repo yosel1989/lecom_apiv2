@@ -28,6 +28,7 @@ class Egreso extends Model
         'id_personal',
         'total',
         'id_cliente',
+        'id_sede',
         'id_estado',
         'id_eliminado',
         'id_caja',
@@ -69,6 +70,14 @@ class Egreso extends Model
 
     public function caja(){
         return $this->hasOne('App\Models\V2\Caja','id','id_caja');
+    }
+
+    public function sede(){
+        return $this->hasOne('App\Models\V2\Sede','id','id_sede');
+    }
+
+    public function estado(){
+        return $this->hasOne('App\Models\V2\EstadoEgreso','id','id_estado');
     }
 
 }

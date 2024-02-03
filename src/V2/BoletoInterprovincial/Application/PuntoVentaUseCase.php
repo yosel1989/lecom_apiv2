@@ -28,6 +28,7 @@ final class PuntoVentaUseCase
         string $idCliente,
         string $idSede,
         string $idCaja,
+        string $idCajaDiario,
         int $idTipoDocumento,
         string $numeroDocumento,
         string $nombres,
@@ -59,6 +60,7 @@ final class PuntoVentaUseCase
         $_idCliente = new Id($idCliente,false, 'El id del cliente no tiene el formato correcto');
         $_idSede = new Id($idSede,false, 'El id de la sede no tiene el formato correcto');
         $_idCaja = new Id($idCaja,false, 'El id de la caja no tiene el formato correcto');
+        $_idCajaDiario = new Id($idCajaDiario,false, 'El id de la caja diario no tiene el formato correcto');
         $_idTipoDocumento = new NumericInteger($idTipoDocumento);
         $_numeroDocumento = new Text($numeroDocumento,false, -1, '');
         $_nombres = new Text($nombres,false, -1, '');
@@ -91,6 +93,7 @@ final class PuntoVentaUseCase
             $_idCliente,
             $_idSede,
             $_idCaja,
+            $_idCajaDiario,
             $_idTipoDocumento,
             $_numeroDocumento,
             $_nombres,

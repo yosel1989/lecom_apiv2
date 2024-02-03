@@ -49,6 +49,7 @@ class BoletoInterprovincialOficialResource extends JsonResource
             'longitud'            => $this->getLongitud()->value(),
             'fechaEmision'            => $this->getFechaEmision()->value(),
             'idEstado'            => $this->getIdEstado()->value(),
+            'estado'            => $this->getEstado()->value(),
             'idUsuarioRegistro'            => $this->getIdUsuarioRegistro()->value(),
             'usuarioRegistro'            => $this->getUsuarioRegistro()->value(),
             'idUsuarioModifico'            => $this->getIdUsuarioModifico()->value(),
@@ -65,7 +66,9 @@ class BoletoInterprovincialOficialResource extends JsonResource
             'comprobanteNumero'            => $this->getComprobanteNumero()->value(),
 
             'idOrigen'            => $this->getIdOrigen()->value(),
-            'origen'            => $this->getOrigen()->value()
+            'origen'            => $this->getOrigen()->value(),
+            'idCajaDiario'            => $this->getIdCajaDiario()->value(),
+            'idLiquidacion'            => $this->getIdLiquidacion()->value()
         ];
 
     }

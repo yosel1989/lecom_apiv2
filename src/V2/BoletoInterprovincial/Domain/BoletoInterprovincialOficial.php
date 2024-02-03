@@ -45,9 +45,13 @@ final class BoletoInterprovincialOficial
     private NumericInteger $idTipoComprobante;
     private NumericInteger $idTipoBoleto;
     private NumericInteger $porPagar;
+    private NumericInteger $idOrigen;
+    private Id $idCajaDiario;
+    private Id $idLiquidacion;
 
 
     // optional
+    private Text $estado;
     private Text $tipoDocumento;
     private Text $sede;
     private Text $caja;
@@ -65,7 +69,6 @@ final class BoletoInterprovincialOficial
     private NumericInteger $comprobanteNumero;
     private Text $tipoBoleto;
     private Text $cliente;
-    private NumericInteger $idOrigen;
     private Text $origen;
 
     /**
@@ -1010,5 +1013,54 @@ final class BoletoInterprovincialOficial
     {
         $this->idOrigen = $idOrigen;
     }
+
+    /**
+     * @return Id
+     */
+    public function getIdCajaDiario(): Id
+    {
+        return $this->idCajaDiario;
+    }
+
+    /**
+     * @param Id $idCajaDiario
+     */
+    public function setIdCajaDiario(Id $idCajaDiario): void
+    {
+        $this->idCajaDiario = $idCajaDiario;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdLiquidacion(): Id
+    {
+        return $this->idLiquidacion;
+    }
+
+    /**
+     * @param Id $idLiquidacion
+     */
+    public function setIdLiquidacion(Id $idLiquidacion): void
+    {
+        $this->idLiquidacion = $idLiquidacion;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getEstado(): Text
+    {
+        return $this->estado;
+    }
+
+    /**
+     * @param Text $estado
+     */
+    public function setEstado(Text $estado): void
+    {
+        $this->estado = $estado;
+    }
+
 
 }

@@ -27,32 +27,41 @@ final class EgresoDetalle
     private Text $egresoTipo;
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
+    private Text $detalle;
+    private Text $numeroDocumento;
+    private Id $idLiquidacion;
 
     /**
      * @param Id $idEgreso
      * @param Id $idCliente
      * @param Id $idEgresoTipo
+     * @param Text $detalle
      * @param DateFormat $fecha
      * @param NumericFloat $importe
+     * @param Text $numeroDocumento
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      * @param Id $idUsuarioRegistro
      * @param Id $idUsuarioModifico
      * @param DateTimeFormat $fechaRegistro
      * @param DateTimeFormat $fechaModifico
+     * @param Id $idLiquidacion
      */
     public function __construct(
         Id $idEgreso,
         Id $idCliente,
         Id $idEgresoTipo,
+        Text $detalle,
         DateFormat $fecha,
         NumericFloat $importe,
+        Text $numeroDocumento,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
         Id $idUsuarioRegistro,
         Id $idUsuarioModifico,
         DateTimeFormat $fechaRegistro,
-        DateTimeFormat $fechaModifico
+        DateTimeFormat $fechaModifico,
+        Id $idLiquidacion
     )
     {
         $this->idEgreso = $idEgreso;
@@ -66,6 +75,9 @@ final class EgresoDetalle
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
         $this->idCliente = $idCliente;
+        $this->detalle = $detalle;
+        $this->numeroDocumento = $numeroDocumento;
+        $this->idLiquidacion = $idLiquidacion;
     }
 
     /**
@@ -290,6 +302,54 @@ final class EgresoDetalle
     public function setIdCliente(Id $idCliente): void
     {
         $this->idCliente = $idCliente;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getDetalle(): Text
+    {
+        return $this->detalle;
+    }
+
+    /**
+     * @param Text $detalle
+     */
+    public function setDetalle(Text $detalle): void
+    {
+        $this->detalle = $detalle;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getNumeroDocumento(): Text
+    {
+        return $this->numeroDocumento;
+    }
+
+    /**
+     * @param Text $numeroDocumento
+     */
+    public function setNumeroDocumento(Text $numeroDocumento): void
+    {
+        $this->numeroDocumento = $numeroDocumento;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdLiquidacion(): Id
+    {
+        return $this->idLiquidacion;
+    }
+
+    /**
+     * @param Id $idLiquidacion
+     */
+    public function setIdLiquidacion(Id $idLiquidacion): void
+    {
+        $this->idLiquidacion = $idLiquidacion;
     }
 
 

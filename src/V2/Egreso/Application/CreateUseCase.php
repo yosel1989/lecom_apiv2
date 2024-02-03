@@ -21,6 +21,7 @@ final class CreateUseCase
     public function __invoke(
         string $id,
         string $idCliente,
+        string $idSede,
         ?string $idVehiculo,
         ?string $idPersonal,
         float $total,
@@ -32,6 +33,7 @@ final class CreateUseCase
 
         $_id = new Id($id,false, 'El id del egreso no tiene el formato correcto');
         $_idCliente = new Id($idCliente,false,'El id del cliente no tiene el formato correcto');
+        $_idSede = new Id($idSede,false,'El id de la sede no tiene el formato correcto');
         $_idVehiculo = new Id($idVehiculo,true,'El id del vehiculo no tiene el formato correcto');
         $_idPersonal = new Id($idPersonal,true,'El id del personal no tiene el formato correcto');
         $_total = new NumericFloat($total);
@@ -42,6 +44,7 @@ final class CreateUseCase
         $this->repository->create(
             $_id,
             $_idCliente,
+            $_idSede,
             $_idVehiculo,
             $_idPersonal,
             $_total,

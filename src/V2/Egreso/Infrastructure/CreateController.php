@@ -26,6 +26,7 @@ final class CreateController
 
         $user = Auth::user();
         $idCliente          = $request->input('idCliente');
+        $idSede          = $request->input('idSede');
         $idVehiculo          = $request->input('idVehiculo');
         $idPersonal          = $request->input('idPersonal');
         $total          = $request->input('total');
@@ -39,6 +40,7 @@ final class CreateController
         $useCase->__invoke(
             $Id->toString(),
             $idCliente,
+            $idSede,
             $idVehiculo,
             $idPersonal,
             $total,
@@ -51,16 +53,16 @@ final class CreateController
 
         foreach ($detalle as $det) {
             $d = (object) $det;
-
             $createDetalleUseCase->__invoke(
                 $Id->toString(),
                 $idCliente,
                 $d->idTipoEgreso,
+                $d->detalle,
                 $d->fecha,
                 $d->importe,
+                $d->numeroDocumento,
                 $user->getId()
             );
-
         }
 
 

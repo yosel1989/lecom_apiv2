@@ -2,9 +2,9 @@
 
 namespace App\Enums;
 
-enum EnumEstadoBoleto: int
+enum EnumEstadoEgreso: int
 {
-    case Inactivo = 0;
     case Activo = 1;
     case Anulado = 2;
+    case Liquidado = 3;
 }

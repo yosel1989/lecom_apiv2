@@ -2,13 +2,12 @@
 
 namespace App\Models\V2;
 
-use App\Enums\EnumEstadoBoleto;
+use App\Enums\EnumEstadoBoletoInterprovincial;
 use App\Enums\EnumTipoMoneda;
 use App\Enums\EnumTipoPago;
 use App\Enums\IdTipoBoleto;
 use App\Enums\IdTipoComprobante;
 use App\Enums\IdTipoDocumento;
-use App\Traits\TableNameDynamic;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -39,6 +38,7 @@ class BoletoInterprovincialOficial extends Model
         'id_cliente',
         'id_sede',
         'id_caja',
+        'id_caja_diario',
         'id_tipo_documento',
         'numero_documento',
         'nombres',
@@ -78,6 +78,7 @@ class BoletoInterprovincialOficial extends Model
         'id_tipo_boleto',
         'por_pagar',
         'id_origen',
+        'id_liquidacion',
     ];
 
     /**
@@ -90,7 +91,7 @@ class BoletoInterprovincialOficial extends Model
         'id_tipo_documento' => IdTipoDocumento::class,
         'id_tipo_moneda' => EnumTipoMoneda::class,
         'id_forma_pago' => EnumTipoPago::class,
-        'id_estado' => EnumEstadoBoleto::class,
+        'id_estado' => EnumEstadoBoletoInterprovincial::class,
 //        'idEliminado' => IdEliminado::class,
         'precio' => 'float',
         'latitud' => 'float',

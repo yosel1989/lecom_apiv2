@@ -2,7 +2,7 @@
 
 namespace App\Models\V2;
 
-use App\Enums\EnumEstadoBoleto;
+use App\Enums\EnumEstadoBoletoInterprovincial;
 use App\Enums\EnumTipoMoneda;
 use App\Enums\EnumTipoPago;
 use App\Enums\IdAnulado;
@@ -92,7 +92,7 @@ class BoletoInterprovincial extends Model
         'idTipoDocumento' => IdTipoDocumento::class,
         'idTipoMoneda' => EnumTipoMoneda::class,
         'idFormaPago' => EnumTipoPago::class,
-        'idEstado' => EnumEstadoBoleto::class,
+        'idEstado' => EnumEstadoBoletoInterprovincial::class,
 //        'idEliminado' => IdEliminado::class,
         'precio' => 'float',
         'latitud' => 'float',

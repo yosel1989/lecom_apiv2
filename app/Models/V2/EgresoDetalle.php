@@ -25,14 +25,17 @@ class EgresoDetalle extends Model
         'id_egreso',
         'id_cliente',
         'id_egreso_tipo',
+        'detalle',
         'fecha',
         'importe',
+        'numero_documento',
         'id_estado',
         'id_eliminado',
         'id_usu_registro',
         'id_usu_modifico',
         'f_registro',
         'f_modifico',
+        'id_liquidacion'
     ];
 
     /**

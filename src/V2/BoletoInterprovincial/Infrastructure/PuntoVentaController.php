@@ -30,12 +30,12 @@ final class PuntoVentaController
         $idCliente = $request->input('idCliente');
         $idSede = $request->input('idSede');
         $idCaja = $request->input('idCaja');
+        $idCajaDiario = $request->input('idCajaDiario');
         $idTipoDocumento = $request->input('idTipoDocumento');
         $numeroDocumento = $request->input('numeroDocumento');
         $nombres = $request->input('nombres');
         $apellidos = $request->input('apellidos');
         $menorEdad = $request->input('menorEdad');
-
 
         $idVehiculo = $request->input('idVehiculo'); //null
         $idAsiento = $request->input('numeroAsiento'); //null
@@ -62,12 +62,12 @@ final class PuntoVentaController
             $idCliente,
             $idSede,
             $idCaja,
+            $idCajaDiario,
             $idTipoDocumento,
             $numeroDocumento,
             $nombres,
             $apellidos,
             $menorEdad,
-
 
             $idVehiculo,
             $idAsiento,

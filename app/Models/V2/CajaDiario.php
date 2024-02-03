@@ -39,6 +39,10 @@ class CajaDiario extends Model
         'f_cierre',
         'f_registro',
         'f_modifico',
+
+
+
+        'total'
     ];
 
     /**
@@ -47,6 +51,7 @@ class CajaDiario extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'total' =>  'integer',
         'monto_inicial' =>  'float',
         'monto_final' =>  'float',
         'f_apertura' =>  'string',

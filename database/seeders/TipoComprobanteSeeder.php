@@ -44,5 +44,11 @@ class TipoComprobanteSeeder extends Seeder
             'abreviatura' => 'N/D',
             'bl_punto_venta' => false
         ]);
+
+        \App\Models\V2\TipoComprobante::create([
+            'nombre' => 'Tcket Interno de Egresos',
+            'abreviatura' => 'TCE.',
+            'bl_punto_venta' => false
+        ]);
     }
 }

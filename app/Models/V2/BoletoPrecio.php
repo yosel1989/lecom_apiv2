@@ -2,7 +2,8 @@
 
 namespace App\Models\V2;
 
-use App\Enums\EnumEstadoBoleto;
+use App\Enums\EnumEstado;
+use App\Enums\EnumEstadoBoletoInterprovincial;
 use App\Enums\IdEliminado;
 use App\Enums\IdTipoRuta;
 use App\Traits\UUID;
@@ -55,7 +56,7 @@ class BoletoPrecio extends Model
      */
     protected $casts = [
         'id_tipo_ruta' => IdTipoRuta::class,
-        'id_estado' => EnumEstadoBoleto::class,
+        'id_estado' => EnumEstado::class,
         'id_eliminado' => IdEliminado::class,
         'predeterminado' => 'boolean',
         'precio_base' => 'float',

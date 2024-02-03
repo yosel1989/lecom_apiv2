@@ -24,7 +24,6 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
         $this->eloquent = new EloquentModelEgresoDetalle;
     }
 
-
     public function collectionByCliente(Id $idCliente, Id $idEgreso): EgresoDetalleList
     {
         $models = $this->eloquent->with(
@@ -45,8 +44,10 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
                 new Id($model->id_egreso , false, 'El id de la egreso no tiene el formato correcto'),
                 new Id($model->id_cliente , false, 'El id de la cliente no tiene el formato correcto'),
                 new Id($model->id_egreso_tipo , false, 'El id del egreso tipo no tiene el formato correcto'),
+                new Text($model->detalle , true, -1, ''),
                 new DateFormat($model->fecha, false, 'La fecha no tiene el formato correcto'),
                 new NumericFloat($model->importe),
+                new Text($model->numero_documento , true, -1, ''),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
                 new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
@@ -69,8 +70,10 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
         Id $idEgreso,
         Id $idCliente,
         Id $idEgresoTipo,
+        Text $detalle,
         DateFormat $fecha,
         NumericFloat $importe,
+        Text $numeroDocumento,
         Id $idUsuarioRegistro
     ): void
     {
@@ -83,8 +86,10 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
             'id_egreso' => $idEgreso->value(),
             'id_cliente' => $idCliente->value(),
             'id_egreso_tipo' => $idEgresoTipo->value(),
+            'detalle' => $detalle->value(),
             'fecha' => $fecha->value(),
             'importe' => $importe->value(),
+            'numero_documento' => $numeroDocumento->value(),
             'id_estado' => 1,
             'id_usu_registro' => $idUsuarioRegistro->value()
         ]);
