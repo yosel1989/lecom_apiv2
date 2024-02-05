@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('egreso', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->uuid('id_cliente');
+            $table->uuid('id_sede');
             $table->uuid('id_vehiculo')->nullable();
             $table->uuid('id_personal')->nullable();
             $table->decimal('total',10,2);
@@ -29,6 +30,7 @@ return new class extends Migration
             $table->index([
                 'id',
                 'id_cliente',
+                'id_sede',
                 'id_vehiculo',
                 'id_personal',
                 'total',

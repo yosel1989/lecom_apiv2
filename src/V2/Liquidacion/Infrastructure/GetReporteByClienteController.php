@@ -12,6 +12,7 @@ use Src\V2\BoletoInterprovincial\Application\GetLiquidacionTotalByVehiculoRangoF
 use Src\V2\BoletoInterprovincial\Application\GetReporteTotalByClienteFechagGroupVehiculoUseCase;
 use Src\V2\BoletoInterprovincial\Application\GetReporteTotalByClienteFechaUseCase;
 use Src\V2\BoletoInterprovincial\Infrastructure\Repositories\EloquentBoletoInterprovincialRepository;
+use Src\V2\Egreso\Application\GetLiquidacionEgresoTotalByVehiculoRangoFechaUseCase;
 use Src\V2\Egreso\Application\GetListByClienteGroupTipoFechaUseCase;
 use Src\V2\Egreso\Application\GetListByClienteGroupTipoFechaVehiculoUseCase;
 use Src\V2\Egreso\Infrastructure\Repositories\EloquentEgresoRepository;
@@ -75,9 +76,13 @@ final class GetReporteByClienteController
         $_ingresoTotalBoletoVehiculo = $boletoInterprovincialPorVehiculoUseCase->__invoke($_idCliente->value(), $_fechaDesde->value(), $_fechaHasta->value());
 
 
-        // Liquidación total agrupado por vehiculo y fecha
+        // Liquidación ingreso total agrupado por vehiculo y fecha
         $liquidacionTotalPorVehiculoYFechaUseCase = new GetLiquidacionTotalByVehiculoRangoFechaUseCase($this->boletoInterprovincialRepository);
         $liquidacionTotalPorVehiculoYFecha = $liquidacionTotalPorVehiculoYFechaUseCase->__invoke($_idCliente->value(), ['c241a502-2448-448c-80ca-c51a7c4abddf', '085e8b03-5219-459c-80cb-997e52fcdd24'], $_fechaDesde->value(), $_fechaHasta->value());
+
+        // Liquidación egreso total agrupado por vehiculo y fecha
+        $liquidacionEgresoTotalPorVehiculoYFechaUseCase = new GetLiquidacionEgresoTotalByVehiculoRangoFechaUseCase($this->egresoRepository);
+        $liquidacionEgresoTotalPorVehiculoYFecha = $liquidacionEgresoTotalPorVehiculoYFechaUseCase->__invoke($_idCliente->value(), ['c241a502-2448-448c-80ca-c51a7c4abddf', '085e8b03-5219-459c-80cb-997e52fcdd24'], $_fechaDesde->value(), $_fechaHasta->value());
 
         // $vehiculos
         $vehiculoUseCase = new GetListByClienteArrayUseCase($this->vehiculoRepository);
@@ -94,6 +99,7 @@ final class GetReporteByClienteController
             $_egresoTotal,
             $_egresoVehiculo,
             $liquidacionTotalPorVehiculoYFecha,
+            $liquidacionEgresoTotalPorVehiculoYFecha,
             $_ingresoTotalBoletoVehiculo,
             $_vehiculos
         );

@@ -26,7 +26,7 @@ class ExportController extends Controller
 
         $request['idCliente'] = 'f5e6dc05-9e7d-404a-8e94-c6489fd2a6df';
         $request['fechaDesde'] = '2024-01-01';
-        $request['fechaHasta'] = '2024-01-31';
+        $request['fechaHasta'] = '2024-02-04';
 
         $liquidacion = $this->controller->__invoke($request);
 

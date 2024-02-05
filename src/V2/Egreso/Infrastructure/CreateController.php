@@ -73,10 +73,10 @@ final class CreateController
             $deleteUseCase = new DeleteUseCase($this->repository);
             $deleteUseCase->__invoke($Id->toString());
 
-            $deleteByEgresoUseCase = new DeleteByEgresoUseCase($this->repository);
-            $deleteByEgresoUseCase->__invoke($Id->toString());
+            $deleteDetalleByEgresoUseCase = new DeleteByEgresoUseCase($this->detalleRepository);
+            $deleteDetalleByEgresoUseCase->__invoke($Id->toString());
 
-            throw new \InvalidArgumentException('Ocurrio un error al registrar los detalles');
+            throw new \InvalidArgumentException($e->getMessage());
         }
 
 

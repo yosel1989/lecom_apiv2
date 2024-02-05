@@ -37,6 +37,9 @@ class Egreso extends Model
         'id_usu_modifico',
         'f_registro',
         'f_modifico',
+        'id_tipo_comprobante',
+        'f_modifico',
+        'f_modifico',
     ];
 
     /**

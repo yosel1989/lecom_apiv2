@@ -41,11 +41,6 @@ class LiquidacionExport implements WithMultipleSheets, WithEvents
         // Create Style Arrays
         $default_font_style = [
             'font' => ['name' => 'Arial', 'size' => 10],
-            'borders' => [
-                'bottom' => [
-                    'borderStyle' => Border::BORDER_MEDIUM,
-                ]
-            ],
         ];
 
         $strikethrough = [

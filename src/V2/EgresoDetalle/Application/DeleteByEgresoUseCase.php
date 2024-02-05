@@ -3,16 +3,16 @@
 namespace Src\V2\EgresoDetalle\Application;
 
 use Src\Core\Domain\ValueObjects\Id;
-use Src\V2\Egreso\Domain\Contracts\EgresoRepositoryContract;
+use Src\V2\EgresoDetalle\Domain\Contracts\EgresoDetalleRepositoryContract;
 
 final class DeleteByEgresoUseCase
 {
     /**
-     * @var EgresoRepositoryContract
+     * @var EgresoDetalleRepositoryContract
      */
-    private EgresoRepositoryContract $repository;
+    private EgresoDetalleRepositoryContract $repository;
 
-    public function __construct( EgresoRepositoryContract $repository )
+    public function __construct( EgresoDetalleRepositoryContract $repository )
     {
         $this->repository = $repository;
     }

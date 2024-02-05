@@ -1,22 +1,19 @@
 <!doctype html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-</head>
-<body>
     <table class="table table-sm">
         <thead>
             <tr>
-                <td colspan="8"><b>REPORTE TOTAL DE INGRESOS </b></td>
+                <td colspan="10" style="font-size: 20px"><b>LIQUIDACIÓN DEL {{ $liquidacion->getFechaDesde()->value() }} AL {{ $liquidacion->getFechaHasta()->value() }}</b></td>
+            </tr>
+            <tr></tr>
+            <tr>
+                <td colspan="8" style="font-size: 14px; background: #B3EEA7"><b>INGRESOS </b></td>
             </tr>
             <tr>
-                <td style="background-color: #F0F2F9; color: #4056ae; border:solid 4px #4056ae"><b>PLACA/FECHA</b></td>
+                <td style="background-color: #F0F2F9; color: #4056ae; border:2cm solid #4056ae"><b>PLACA/FECHA</b></td>
                 @foreach($liquidacion->getFechaPeriodo() as $fecha)
-                <td style="background-color: #F0F2F9; color: #4056ae; border:solid 4px  #4056ae">{{ $fecha->format('d-') . mb_strtolower($utilidades->mesCorto($fecha->format('m'))) }}</td>
+                <td style="background-color: #F0F2F9; color: #4056ae; border:2cm solid #4056ae">{{ $fecha->format('d-') . mb_strtolower($utilidades->mesCorto($fecha->format('m'))) }}</td>
                 @endforeach
+                <td style="background-color: #F0F2F9; color: #4056ae; border:2cm solid #4056ae"><b>TOTAL</b></td>
             </tr>
         </thead>
         <tbody>
@@ -32,78 +29,86 @@
                     @endphp
                     <td style="border: 10px solid #4056ae">{{ !is_null($encontrado) ? $encontrado->getTotal()->value() : 0 }}</td>
                 @endforeach
-            </tr>
-            @endforeach
-            <tr></tr>
-            <tr>
-                <td><b>TOTAL INGRESOS</b></td>
                 @php
-                    $total = 0;
+                    $totalIngresoVehiculo = 0;
                     foreach ($liquidacion->getIngresoTotalBoleto()->all() as $item) {
-                        $total += $item->getTotal()->value();
+                        $totalIngresoVehiculo += $item->getIdVehiculo()->value() === $vehiculo->getId()->value() ? $item->getTotal()->value() : 0;
                     }
                 @endphp
-                <td><b>{{ $total }}</b></td>
+                <td style="border: 10px solid #4056ae"><b>{{ $totalIngresoVehiculo }}</b></td>
             </tr>
+            @endforeach
+            <tr>
+                @foreach($liquidacion->getFechaPeriodo() as $fechas)
+                <td></td>
+                @endforeach
+                <td style="border: 10px solid #4056ae"><b>INGRESOS</b></td>
+                @php
+                    $totalIngreso = 0;
+                    foreach ($liquidacion->getIngresoTotalBoleto()->all() as $item) {
+                        $totalIngreso +=  $item->getTotal()->value();
+                    }
+                @endphp
+                    <td style="border: 10px solid #4056ae"><b>{{ $totalIngreso }}</b></td>
+            </tr>
+            <tr></tr>
             <tr></tr>
         </tbody>
     </table>
 
+
+
+
     <table class="table table-sm">
         <thead>
         <tr>
-            <td colspan="8"><b>REPORTE TOTAL DE EGRESOS </b></td>
+            <td colspan="8" style="font-size: 14px; background: #FF8000"><b>EGRESOS </b></td>
         </tr>
         <tr>
             <td style="background-color: #F0F2F9; color: #4056ae; border: 1px solid #4056ae"><b>PLACA/FECHA</b></td>
             @foreach($liquidacion->getFechaPeriodo() as $fecha)
-            <td style="background-color: #F0F2F9; color: #4056ae; border: 1px solid #4056ae">{{ $fecha->format('d-') . mb_strtolower($utilidades->mesCorto($fecha->format('m'))) }}</td>
+                <td style="background-color: #F0F2F9; color: #4056ae; border:2cm solid #4056ae">{{ $fecha->format('d-') . mb_strtolower($utilidades->mesCorto($fecha->format('m'))) }}</td>
             @endforeach
+            <td style="background-color: #F0F2F9; color: #4056ae; border:2cm solid #4056ae"><b>TOTAL</b></td>
         </tr>
         </thead>
         <tbody>
-        @foreach($liquidacion->getEgresoTipos()->all() as $tipoEgreso)
-            <tr>
-                <td class="text-uppercase">{{ strtoupper($tipoEgreso->getNombre()->value()) }}</td>
-                @foreach($liquidacion->getFechaPeriodo() as $fecha)
-                    @php $total = 0;
-                        foreach ($liquidacion->getEgresoTotal()->all() as $item) {
-                            if($item->getFecha()->value() === $fecha->format('Y-m-d') && $item->getIdEgresoTipo()->value() === $tipoEgreso->getId()->value()){
-                                $total = $item->getTotal()->value();
-                            }
+            @foreach($liquidacion->getVehiculos()->all() as $vehiculo)
+                <tr>
+                    <td style="border: 10px solid #4056ae">{{ $vehiculo->getPlaca()->value() }}</td>
+                    @foreach($liquidacion->getFechaPeriodo() as $fechas)
+                        @php
+                            $encontrado = array_filter($liquidacion->getEgresoTotalPorVehiculo(), function ($obj) use ($fechas, $vehiculo) {
+                              return $obj->getFecha()->value() == $fechas->format('Y-m-d') && $obj->getIdVehiculo()->value() === $vehiculo->getId()->value();
+                            });
+                             $encontrado = (count($encontrado) > 0) ? reset($encontrado) : null;
+                        @endphp
+                        <td style="border: 10px solid #4056ae">{{ !is_null($encontrado) ? $encontrado->getTotal()->value() : 0 }}</td>
+                    @endforeach
+                    @php
+                        $totalIngresoVehiculo = 0;
+                        foreach ($liquidacion->getEgresoTotalPorVehiculo() as $item) {
+                            $totalIngresoVehiculo += $item->getIdVehiculo()->value() === $vehiculo->getId()->value() ? $item->getTotal()->value() : 0;
                         }
                     @endphp
-                    <td>{{ $total }}</td>
+                    <td style="border: 10px solid #4056ae"><b>{{ $totalIngresoVehiculo }}</b></td>
+                </tr>
+            @endforeach
+            <tr>
+                @foreach($liquidacion->getFechaPeriodo() as $fechas)
+                    <td></td>
                 @endforeach
-            </tr>
-        @endforeach
-        <tr>
-            <td></td>
-            @foreach($liquidacion->getFechaPeriodo() as $fecha)
+                <td style="border: 10px solid #4056ae"><b>EGRESOS</b></td>
                 @php
-                    $total = 0;
-                    foreach ($liquidacion->getEgresoTotal()->all() as $item) {
-                        if($item->getFecha()->value() === $fecha->format('Y-m-d')){
-                            $total += $item->getTotal()->value();
-                        }
+                    $totalIngreso = 0;
+                    foreach ($liquidacion->getEgresoTotalPorVehiculo() as $item) {
+                        $totalIngreso +=  $item->getTotal()->value();
                     }
                 @endphp
-                <td><b>{{ $total }}</b></td>
-            @endforeach
-        </tr>
-        <tr>
-            <td><b>TOTAL EGRESOS</b></td>
-            @php
-                $total = 0;
-                foreach ($liquidacion->getEgresoTotal()->all() as $item) {
-                    $total += $item->getTotal()->value();
-                }
-            @endphp
-            <td><b>{{ $total }}</b></td>
-        </tr>
-        <tr></tr>
-        <tr></tr>
-        <tr></tr>
+                <td style="border: 10px solid #4056ae"><b>{{ $totalIngreso }}</b></td>
+            </tr>
+            <tr></tr>
+            <tr></tr>
         </tbody>
     </table>
 
@@ -121,5 +126,4 @@
             @endforeach
         </tbody>
     </table>
-</body>
 </html>

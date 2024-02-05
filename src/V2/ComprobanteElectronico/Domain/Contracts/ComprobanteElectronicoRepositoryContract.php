@@ -7,6 +7,7 @@ use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
 use Src\V2\ComprobanteElectronico\Domain\ComprobanteElectronico;
+use Src\V2\Egreso\Domain\Egreso;
 
 interface ComprobanteElectronicoRepositoryContract
 {
@@ -18,6 +19,14 @@ interface ComprobanteElectronicoRepositoryContract
         Text $direccion,
         Id $idUsuario,
         BoletoInterprovincialOficial $boleto
+    ): ComprobanteElectronico;
+
+    public function createToEgreso(
+        NumericInteger $idTipoDocumento,
+        Text $numeroDocumento,
+        Text $nombre,
+        Id $idUsuario,
+        Egreso $egreso
     ): ComprobanteElectronico;
 
 }

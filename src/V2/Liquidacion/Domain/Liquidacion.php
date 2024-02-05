@@ -22,6 +22,7 @@ final class Liquidacion
     private EgresoGroupTipoFechaShortList $egresoVehiculo;
     private BoletoInterprovincialShortFechaList $ingresoTotalBoleto;
     private BoletoInterprovincialShortFechaList $ingresoTotalBoletoPorVehiculo;
+    private array $egresoTotalPorVehiculo;
 
     /**
      * @param Id $idCliente
@@ -32,6 +33,7 @@ final class Liquidacion
      * @param EgresoGroupTipoFechaShortList $egresoTotal
      * @param EgresoGroupTipoFechaShortList $egresoVehiculo
      * @param BoletoInterprovincialShortFechaList $ingresoTotalBoleto
+     * @param array $egresoTotalPorVehiculo
      * @param BoletoInterprovincialShortFechaList $ingresoTotalBoletoPorVehiculo
      * @param VehiculoShortList $vehiculos
      */
@@ -44,6 +46,7 @@ final class Liquidacion
         EgresoGroupTipoFechaShortList $egresoTotal,
         EgresoGroupTipoFechaShortList $egresoVehiculo,
         BoletoInterprovincialShortFechaList $ingresoTotalBoleto,
+        array $egresoTotalPorVehiculo,
         BoletoInterprovincialShortFechaList $ingresoTotalBoletoPorVehiculo,
         VehiculoShortList $vehiculos
     )
@@ -59,6 +62,7 @@ final class Liquidacion
         $this->egresoVehiculo = $egresoVehiculo;
         $this->ingresoTotalBoleto = $ingresoTotalBoleto;
         $this->ingresoTotalBoletoPorVehiculo = $ingresoTotalBoletoPorVehiculo;
+        $this->egresoTotalPorVehiculo = $egresoTotalPorVehiculo;
     }
 
     /**
@@ -219,6 +223,22 @@ final class Liquidacion
     public function setIngresoTotalBoletoPorVehiculo(BoletoInterprovincialShortFechaList $ingresoTotalBoletoPorVehiculo): void
     {
         $this->ingresoTotalBoletoPorVehiculo = $ingresoTotalBoletoPorVehiculo;
+    }
+
+    /**
+     * @return array
+     */
+    public function getEgresoTotalPorVehiculo(): array
+    {
+        return $this->egresoTotalPorVehiculo;
+    }
+
+    /**
+     * @param array $egresoTotalPorVehiculo
+     */
+    public function setEgresoTotalPorVehiculo(array $egresoTotalPorVehiculo): void
+    {
+        $this->egresoTotalPorVehiculo = $egresoTotalPorVehiculo;
     }
 
 

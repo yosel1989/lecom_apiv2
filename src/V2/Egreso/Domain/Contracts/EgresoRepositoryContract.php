@@ -37,4 +37,7 @@ interface EgresoRepositoryContract
     public function find(
         Id $idEgreso,
     ): Egreso;
+
+
+    public function liquidacionTotalByVehiculoRangoFecha(Id $idCliente, array $idVehiculos, DateFormat $fechaDesde, DateFormat $fechaHasta): array;
 }

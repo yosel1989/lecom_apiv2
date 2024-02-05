@@ -25,6 +25,7 @@ return new class extends Migration
             $table->uuid('id_usu_modifico')->nullable();
             $table->timestamp('f_registro');
             $table->timestamp('f_modifico')->nullable();
+            $table->timestamp('id_liquidacion')->nullable();
 
             $table->index([
                 'id_egreso',
@@ -39,7 +40,8 @@ return new class extends Migration
                 'id_usu_registro',
                 'id_usu_modifico',
                 'f_registro',
-                'f_modifico'
+                'f_modifico',
+                'id_liquidacion',
             ]);
 
         });

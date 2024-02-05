@@ -22,6 +22,7 @@ use Src\V2\Egreso\Domain\Contracts\EgresoRepositoryContract;
 use Src\V2\Egreso\Domain\Egreso;
 use Src\V2\Egreso\Domain\EgresoGroupTipoFechaShort;
 use Src\V2\Egreso\Domain\EgresoGroupTipoFechaShortList;
+use Src\V2\Egreso\Domain\EgresoLiquidacionRangoFechaVehiculo;
 use Src\V2\Egreso\Domain\EgresoList;
 
 final class EloquentEgresoRepository implements EgresoRepositoryContract
@@ -89,7 +90,7 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
 
         // Validar vehiculo
         if(!is_null($idVehiculo->value())){
-            $Vehiculo = \App\Models\V2\Vehiculo::where('id', $idVehiculo->value())->where('id', $idCliente->value())->where('idEstado',1)->where('idEliminado',0);
+            $Vehiculo = \App\Models\V2\Vehiculo::where('id', $idVehiculo->value())->where('id_cliente', $idCliente->value())->where('id_estado',1)->where('id_eliminado',0);
             if( $Vehiculo->count() === 0 ){
                 throw new InvalidArgumentException( 'El vehiculo no se encuentra registrado en el sistema o esta inhabilitado.' );
             }
@@ -97,7 +98,7 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
 
         // Validar vehiculo
         if(!is_null($idPersonal->value())){
-            $Personal = \App\Models\V2\Personal::where('id', $idPersonal->value())->where('id', $idCliente->value())->where('idEstado',1)->where('idEliminado',0);
+            $Personal = \App\Models\V2\Personal::where('id', $idPersonal->value())->where('id', $idCliente->value())->where('id_estado',1)->where('id_eliminado',0);
             if( $Personal->count() === 0 ){
                 throw new InvalidArgumentException( 'El vehiculo no se encuentra registrado en el sistema o esta inhabilitado.' );
             }
@@ -191,7 +192,6 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
             'vehiculo:id,placa',
             'personal:id,nombre,apellido',
             'caja:id,nombre',
-            'egreso:id,nombre',
         )
             ->where('id_cliente',$idCliente->value())
             ->where('id_usu_registro',$idUsuario->value())
@@ -334,6 +334,40 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
             $OModel->setIdVehiculo(new Id($model->id_vehiculo, true, 'El id del vehiculo no tiene el formato correcto'));
 
             $collection->add($OModel);
+        }
+
+        return $collection;
+    }
+
+    public function liquidacionTotalByVehiculoRangoFecha(Id $idCliente, array $idVehiculos, DateFormat $fechaDesde, DateFormat $fechaHasta): array
+    {
+        $collection = array();
+
+        $models = $this->eloquent
+            ->select(
+                'egreso.id_cliente',
+                'egreso.id_vehiculo',
+                DB::raw('SUM(egreso_detalle.importe) as total'),
+                DB::raw('DATE(egreso_detalle.fecha) as fecha')
+            )
+            ->join('egreso_detalle', 'egreso.id','=','egreso_detalle.id_egreso')
+            ->where('egreso.id_cliente',$idCliente->value())
+            ->whereDate('egreso_detalle.fecha','>=', $fechaDesde->value())
+            ->whereDate('egreso_detalle.fecha','<=', $fechaHasta->value())
+            ->groupBy('egreso.id_cliente', 'egreso_detalle.fecha', 'egreso.id_vehiculo')
+            ->get();
+
+
+        foreach ( $models as $model ){
+
+            $OModel = new EgresoLiquidacionRangoFechaVehiculo(
+                new Id($model->id_cliente , false, 'El id del egreso no tiene el formato correcto'),
+                new Id($model->id_vehiculo , false, 'El id del vehiculo no tiene el formato correcto'),
+                new DateFormat($model->fecha , false, 'La fecha no tiene el formato correcto'),
+                new NumericFloat($model->total),
+            );
+
+            $collection[] = $OModel;
         }
 
         return $collection;

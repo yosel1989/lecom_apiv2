@@ -47,7 +47,13 @@ class LiquidacionTotalExport implements FromView, ShouldAutoSize, WithEvents, Wi
     {
         // Create Style Arrays
         $default_font_style = [
-            'font' => ['name' => 'Arial', 'size' => 10]
+            'font' => ['name' => 'Arial', 'size' => 10],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '#000000'],
+                ],
+            ],
         ];
 
         $strikethrough = [
