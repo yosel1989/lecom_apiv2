@@ -3,6 +3,7 @@
 namespace Src\V2\BoletoInterprovincial\Domain\Contracts;
 
 use Src\Core\Domain\ValueObjects\DateFormat;
+use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
@@ -23,7 +24,7 @@ interface BoletoInterprovincialRepositoryContract
     public function reporteTotalByClienteFechaGroupVehiculo(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): BoletoInterprovincialShortFechaList;
 
     public function liquidacionTotalByVehiculoRangoFecha(Id $idCliente, array $idVehiculos, DateFormat $fechaDesde, DateFormat $fechaHasta): BoletoInterprovincialShortFechaList;
-
+    public function liquidacionByVehiculoFechaGroupRutaBoleto(Id $idCliente, array $idVehiculos, DateFormat $fechaDesde, DateFormat $fechaHasta): array;
 
     public function changeState(
         Id $idBoletoInterprovincial,
@@ -112,4 +113,10 @@ interface BoletoInterprovincialRepositoryContract
         DateFormat $fecha
     ): array;
 
+    public function pasajerosByVehiculoRangoFecha(
+        Id $idCliente,
+        Id $idVehiculo,
+        DateTimeFormat $fechaDesde,
+        DateTimeFormat $fechaHasta
+    ): array;
 }

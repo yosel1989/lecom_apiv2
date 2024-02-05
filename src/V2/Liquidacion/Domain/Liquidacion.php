@@ -21,7 +21,7 @@ final class Liquidacion
     private VehiculoShortList $vehiculos;
     private EgresoGroupTipoFechaShortList $egresoVehiculo;
     private BoletoInterprovincialShortFechaList $ingresoTotalBoleto;
-    private BoletoInterprovincialShortFechaList $ingresoTotalBoletoPorVehiculo;
+    private array $ingresoTotalBoletoPorVehiculo;
     private array $egresoTotalPorVehiculo;
 
     /**
@@ -34,7 +34,7 @@ final class Liquidacion
      * @param EgresoGroupTipoFechaShortList $egresoVehiculo
      * @param BoletoInterprovincialShortFechaList $ingresoTotalBoleto
      * @param array $egresoTotalPorVehiculo
-     * @param BoletoInterprovincialShortFechaList $ingresoTotalBoletoPorVehiculo
+     * @param array $ingresoTotalBoletoPorVehiculo
      * @param VehiculoShortList $vehiculos
      */
     public function __construct(
@@ -47,7 +47,7 @@ final class Liquidacion
         EgresoGroupTipoFechaShortList $egresoVehiculo,
         BoletoInterprovincialShortFechaList $ingresoTotalBoleto,
         array $egresoTotalPorVehiculo,
-        BoletoInterprovincialShortFechaList $ingresoTotalBoletoPorVehiculo,
+        array $ingresoTotalBoletoPorVehiculo,
         VehiculoShortList $vehiculos
     )
     {
@@ -210,17 +210,17 @@ final class Liquidacion
     }
 
     /**
-     * @return BoletoInterprovincialShortFechaList
+     * @return array
      */
-    public function getIngresoTotalBoletoPorVehiculo(): BoletoInterprovincialShortFechaList
+    public function getIngresoTotalBoletoPorVehiculo(): array
     {
         return $this->ingresoTotalBoletoPorVehiculo;
     }
 
     /**
-     * @param BoletoInterprovincialShortFechaList $ingresoTotalBoletoPorVehiculo
+     * @param array $ingresoTotalBoletoPorVehiculo
      */
-    public function setIngresoTotalBoletoPorVehiculo(BoletoInterprovincialShortFechaList $ingresoTotalBoletoPorVehiculo): void
+    public function setIngresoTotalBoletoPorVehiculo(array $ingresoTotalBoletoPorVehiculo): void
     {
         $this->ingresoTotalBoletoPorVehiculo = $ingresoTotalBoletoPorVehiculo;
     }

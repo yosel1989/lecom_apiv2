@@ -346,6 +346,15 @@ class ModuloMenuSeeder extends Seeder
                 'link'=>'reportes/boletaje-interprovincial/venta-total',
                 'id_estado'=> IdEstado::Habilitado
             ]);
+            \App\Models\V2\ModuloMenu::create([
+                'id_modulo'=> EnumModulo::Reportes,
+                'texto'=>'Reporte de Pasajeros',
+                'icono'=>null,
+                'id_tipo_menu'=> EnumTipoMenu::Link,
+                'padre'=>$menuReporte1->id,
+                'link'=>'reportes/boletaje-interprovincial/lista-pasajeros',
+                'id_estado'=> IdEstado::Habilitado
+            ]);
         $menuReporte2 = \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::Reportes,
             'texto'=>'Administración',

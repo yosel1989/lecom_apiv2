@@ -49,6 +49,7 @@ class Vehiculo extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'id' =>  'string',
         'codigo' =>  'integer',
         'total' =>  'integer',
         'f_registro' =>  'string',

@@ -35,6 +35,17 @@ final class DateTimeFormat
         return $this->value;
     }
 
+    public function date() : ?string
+    {
+        return (new \DateTime($this->value))->format('Y-m-d');
+    }
+
+    public function time() : ?string
+    {
+        return (new \DateTime($this->value))->format('H:m:s');
+    }
+
+
     /**
      * @param string|null $value
      */

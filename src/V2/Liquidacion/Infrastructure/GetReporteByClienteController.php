@@ -11,6 +11,7 @@ use Src\Core\Domain\ValueObjects\Id;
 use Src\V2\BoletoInterprovincial\Application\GetLiquidacionTotalByVehiculoRangoFechaUseCase;
 use Src\V2\BoletoInterprovincial\Application\GetReporteTotalByClienteFechagGroupVehiculoUseCase;
 use Src\V2\BoletoInterprovincial\Application\GetReporteTotalByClienteFechaUseCase;
+use Src\V2\BoletoInterprovincial\Application\LiquidacionByVehiculoFechaGroupRutaBoletoUseCase;
 use Src\V2\BoletoInterprovincial\Infrastructure\Repositories\EloquentBoletoInterprovincialRepository;
 use Src\V2\Egreso\Application\GetLiquidacionEgresoTotalByVehiculoRangoFechaUseCase;
 use Src\V2\Egreso\Application\GetListByClienteGroupTipoFechaUseCase;
@@ -84,6 +85,10 @@ final class GetReporteByClienteController
         $liquidacionEgresoTotalPorVehiculoYFechaUseCase = new GetLiquidacionEgresoTotalByVehiculoRangoFechaUseCase($this->egresoRepository);
         $liquidacionEgresoTotalPorVehiculoYFecha = $liquidacionEgresoTotalPorVehiculoYFechaUseCase->__invoke($_idCliente->value(), ['c241a502-2448-448c-80ca-c51a7c4abddf', '085e8b03-5219-459c-80cb-997e52fcdd24'], $_fechaDesde->value(), $_fechaHasta->value());
 
+        // Liquidación ingreso por vehiculo, ruta, fecha
+        $liquidacionVehiculoRutaFechaUseCase = new LiquidacionByVehiculoFechaGroupRutaBoletoUseCase($this->boletoInterprovincialRepository);
+        $liquidacionVehiculoRutaFecha = $liquidacionVehiculoRutaFechaUseCase->__invoke($_idCliente->value(), ['c241a502-2448-448c-80ca-c51a7c4abddf', '085e8b03-5219-459c-80cb-997e52fcdd24'], $_fechaDesde->value(), $_fechaHasta->value());
+
         // $vehiculos
         $vehiculoUseCase = new GetListByClienteArrayUseCase($this->vehiculoRepository);
         $_vehiculos = $vehiculoUseCase->__invoke($_idCliente->value(), ['c241a502-2448-448c-80ca-c51a7c4abddf', '085e8b03-5219-459c-80cb-997e52fcdd24']);
@@ -100,7 +105,7 @@ final class GetReporteByClienteController
             $_egresoVehiculo,
             $liquidacionTotalPorVehiculoYFecha,
             $liquidacionEgresoTotalPorVehiculoYFecha,
-            $_ingresoTotalBoletoVehiculo,
+            $liquidacionVehiculoRutaFecha,
             $_vehiculos
         );
 

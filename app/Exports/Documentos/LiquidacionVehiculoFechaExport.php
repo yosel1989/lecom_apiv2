@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Exports\Documentos;
 
 use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -18,6 +19,7 @@ use Src\V2\Vehiculo\Domain\VehiculoShort;
 class LiquidacionVehiculoFechaExport implements FromView, ShouldAutoSize, WithEvents, WithTitle
 {
     use RegistersEventListeners;
+    use Exportable;
 
     private VehiculoShort $vehiculo;
     private Liquidacion $liquidacion;

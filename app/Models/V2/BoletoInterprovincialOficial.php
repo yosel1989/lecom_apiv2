@@ -105,6 +105,7 @@ class BoletoInterprovincialOficial extends Model
         'f_modifico' => 'string',
         'total' => 'integer',
         'id_origen' => 'integer',
+        'id_vehiculo' => 'string',
 //        'anulado' => IdAnulado::class,
 //        'enBlanco' => IdEnBlanco::class,
         'por_pagar' => 'boolean',

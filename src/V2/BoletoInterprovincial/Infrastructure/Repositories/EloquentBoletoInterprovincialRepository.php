@@ -33,7 +33,9 @@ use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\Core\Domain\ValueObjects\TimeFormat;
+use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialLiquidacionVehiculoFecha;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
+use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialPasajero;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialShortFecha;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialShortFechaList;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialVehiculo;
@@ -1053,6 +1055,55 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
     }
 
 
+    public function liquidacionByVehiculoFechaGroupRutaBoleto(
+        Id $idCliente,
+        array $idVehiculos,
+        DateFormat $fechaDesde,
+        DateFormat $fechaHasta
+    ): array
+    {
+        $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
+        $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
+
+        $models = $this->eloquentModelBoletoInterprovincial
+            ->select(
+                'rutas.nombre as ruta',
+                'id_ruta',
+                'id_vehiculo',
+                DB::raw('COUNT(precio) as cantidad'),
+                'precio',
+                DB::raw('SUM(precio) as total'),
+                'f_partida as fecha'
+            )
+            ->join('rutas', 'boleto_interprovincial_cliente_' . $OCliente->codigo . '.id_ruta', '=', 'rutas.id')
+            ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo . '.f_partida','>=',$fechaDesde->value())
+            ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo . '.f_partida','<=',$fechaHasta->value())
+            ->whereIn('id_vehiculo', $idVehiculos)
+            ->groupBy('rutas.nombre', 'id_ruta', 'id_vehiculo', 'precio', 'f_partida')
+            ->orderBy('f_partida', 'asc')
+            ->get();
+
+        $collection = [];
+
+        foreach ( $models as $model ){
+
+            $OModel = new BoletoInterprovincialLiquidacionVehiculoFecha(
+                new Id($model->id_ruta, false, 'El id de la ruta no tiene el formato correcto'),
+                new Text($model->ruta, false, -1, ''),
+                new Id($model->id_vehiculo, false, 'El id del vehiculo no tiene el formato correcto'),
+                new NumericInteger($model->cantidad),
+                new NumericFloat($model->precio),
+                new NumericFloat($model->total),
+                new DateFormat($model->fecha, false, 'La fecha no tiene el formato correcto'),
+            );
+
+            $collection[] = $OModel;
+        }
+
+        return $collection;
+    }
+
+
     public function reporteTotalByVehiculoFecha(Id $idCliente, Id $idVehiculo, DateFormat $fecha): array
     {
 
@@ -1224,6 +1275,58 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             );
             $Omodel->setIdVehiculo(new Id($model->id_vehiculo, false, 'El id del vehiculo no tiene el formato correcto'));
             $collection->add($Omodel);
+        }
+
+        return $collection;
+    }
+
+    public function pasajerosByVehiculoRangoFecha(
+        Id $idCliente,
+        Id $idVehiculo,
+        DateTimeFormat $fechaDesde,
+        DateTimeFormat $fechaHasta
+    ): array
+    {
+        $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
+        $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
+
+        $collection =  array();
+
+        $models = $this->eloquentModelBoletoInterprovincial
+            ->select(
+                'nombres',
+                'apellidos',
+                'numero_documento',
+                'tipo_documento.nombre_corto as tipo_documento',
+                'paradero.nombre as destino',
+                'f_partida',
+                'h_partida'
+            )
+            ->join('tipo_documento', 'boleto_interprovincial_cliente_' . $OCliente->codigo . '.id_tipo_documento', '=', 'tipo_documento.id')
+            ->join('paradero', 'boleto_interprovincial_cliente_' . $OCliente->codigo . '.id_paradero_destino', '=', 'paradero.id')
+            ->where('boleto_interprovincial_cliente_' . $OCliente->codigo .'.id_estado', 1)
+            ->whereNotNull('f_partida')
+            ->whereNotNull('h_partida')
+            ->whereDate('f_partida', '>=', $fechaDesde->date())
+            ->whereDate('f_partida', '<=', $fechaHasta->date())
+            ->whereTime('h_partida', '>=', $fechaDesde->time())
+            ->whereTime('h_partida', '<=', $fechaHasta->time())
+            ->where('id_vehiculo','=', $idVehiculo->value())
+            ->orderBy('f_partida','asc')
+            ->orderBy('h_partida','asc')
+            ->get();
+
+        foreach ( $models as $model ) {
+            $Omodel = new BoletoInterprovincialPasajero(
+                new Text($model->nombres, true, -1, ''),
+                new Text($model->apellidos, true, -1, ''),
+                new Text($model->tipo_documento, true, -1, ''),
+                new Text($model->numero_documento, true, -1, ''),
+                new Text($model->destino, true, -1, ''),
+                new DateFormat($model->f_partida, false, ''),
+                new TimeFormat($model->h_partida, false, ''),
+            );
+            $collection[] = $Omodel;
         }
 
         return $collection;
