@@ -5,22 +5,26 @@ namespace Src\V2\TipoComprobante\Domain;
 
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
 
 final class TipoComprobante
 {
     private NumericInteger $id;
     private Text $nombre;
     private NumericInteger $puntoVenta;
+    private ValueBoolean $blDespacho;
 
     /**
      * @param NumericInteger $id
      * @param Text $nombre
      * @param NumericInteger $puntoVenta
+     * @param ValueBoolean $blDespacho
      */
     public function __construct(
         NumericInteger $id,
         Text $nombre,
-        NumericInteger $puntoVenta
+        NumericInteger $puntoVenta,
+        ValueBoolean $blDespacho
     )
     {
 
@@ -28,6 +32,7 @@ final class TipoComprobante
         $this->nombre = $nombre;
 
         $this->puntoVenta = $puntoVenta;
+        $this->blDespacho = $blDespacho;
     }
 
     /**
@@ -78,7 +83,20 @@ final class TipoComprobante
         $this->puntoVenta = $puntoVenta;
     }
 
+    /**
+     * @return ValueBoolean
+     */
+    public function getBlDespacho(): ValueBoolean
+    {
+        return $this->blDespacho;
+    }
 
-
+    /**
+     * @param ValueBoolean $blDespacho
+     */
+    public function setBlDespacho(ValueBoolean $blDespacho): void
+    {
+        $this->blDespacho = $blDespacho;
+    }
 
 }

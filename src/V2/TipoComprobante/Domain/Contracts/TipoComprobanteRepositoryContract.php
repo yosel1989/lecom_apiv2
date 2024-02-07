@@ -7,5 +7,6 @@ interface TipoComprobanteRepositoryContract
 
     public function list(): array;
     public function listPuntoVenta(): array;
+    public function listDespacho(): array;
 
 }

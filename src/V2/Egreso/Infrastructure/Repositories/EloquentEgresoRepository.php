@@ -345,24 +345,28 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
 
         $models = $this->eloquent
             ->select(
-                'egreso.id_cliente',
                 'egreso.id_vehiculo',
+                'egreso_detalle.id_egreso_tipo',
+                'egreso_detalle.detalle',
+                'egreso_tipo.nombre as egreso_tipo',
                 DB::raw('SUM(egreso_detalle.importe) as total'),
                 DB::raw('DATE(egreso_detalle.fecha) as fecha')
             )
             ->join('egreso_detalle', 'egreso.id','=','egreso_detalle.id_egreso')
+            ->join('egreso_tipo', 'egreso_detalle.id_egreso_tipo','=','egreso_tipo.id')
             ->where('egreso.id_cliente',$idCliente->value())
             ->whereDate('egreso_detalle.fecha','>=', $fechaDesde->value())
             ->whereDate('egreso_detalle.fecha','<=', $fechaHasta->value())
-            ->groupBy('egreso.id_cliente', 'egreso_detalle.fecha', 'egreso.id_vehiculo')
+            ->groupBy('egreso.id_vehiculo', 'egreso_detalle.id_egreso_tipo', 'egreso_detalle.detalle', 'egreso_tipo.nombre', 'egreso_detalle.fecha')
             ->get();
-
 
         foreach ( $models as $model ){
 
             $OModel = new EgresoLiquidacionRangoFechaVehiculo(
-                new Id($model->id_cliente , false, 'El id del egreso no tiene el formato correcto'),
                 new Id($model->id_vehiculo , false, 'El id del vehiculo no tiene el formato correcto'),
+                new Id($model->id_egreso_tipo , false, 'El id del egreso tipo no tiene el formato correcto'),
+                new Text($model->egreso_tipo , false, -1, ''),
+                new Text($model->detalle , false, -1, ''),
                 new DateFormat($model->fecha , false, 'La fecha no tiene el formato correcto'),
                 new NumericFloat($model->total),
             );

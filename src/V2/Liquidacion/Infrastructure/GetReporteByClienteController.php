@@ -85,6 +85,7 @@ final class GetReporteByClienteController
         $liquidacionEgresoTotalPorVehiculoYFechaUseCase = new GetLiquidacionEgresoTotalByVehiculoRangoFechaUseCase($this->egresoRepository);
         $liquidacionEgresoTotalPorVehiculoYFecha = $liquidacionEgresoTotalPorVehiculoYFechaUseCase->__invoke($_idCliente->value(), ['c241a502-2448-448c-80ca-c51a7c4abddf', '085e8b03-5219-459c-80cb-997e52fcdd24'], $_fechaDesde->value(), $_fechaHasta->value());
 
+
         // Liquidación ingreso por vehiculo, ruta, fecha
         $liquidacionVehiculoRutaFechaUseCase = new LiquidacionByVehiculoFechaGroupRutaBoletoUseCase($this->boletoInterprovincialRepository);
         $liquidacionVehiculoRutaFecha = $liquidacionVehiculoRutaFechaUseCase->__invoke($_idCliente->value(), ['c241a502-2448-448c-80ca-c51a7c4abddf', '085e8b03-5219-459c-80cb-997e52fcdd24'], $_fechaDesde->value(), $_fechaHasta->value());

@@ -19,6 +19,7 @@ class TipoComprobanteListResource extends JsonResource
             'id'            => $this->getId()->value(),
             'nombre'          => $this->getNombre()->value(),
             'puntoVenta'          => (boolean)$this->getPuntoVenta()->value(),
+            'blDespacho'          => $this->getBlDespacho()->value(),
         ];
 
     }

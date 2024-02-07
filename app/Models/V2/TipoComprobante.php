@@ -22,6 +22,7 @@ class TipoComprobante extends Model
         'nombre',
         'abreviatura',
         'bl_punto_venta',
+        'bl_despacho',
     ];
 
     /**
@@ -31,7 +32,7 @@ class TipoComprobante extends Model
      */
     protected $casts = [
         'bl_punto_venta' => EnumPuntoVenta::class,
-
+        'bl_despacho' => 'boolean',
     ];
 
 }
