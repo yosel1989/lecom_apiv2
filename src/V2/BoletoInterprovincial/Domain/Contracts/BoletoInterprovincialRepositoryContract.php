@@ -119,4 +119,17 @@ interface BoletoInterprovincialRepositoryContract
         DateTimeFormat $fechaDesde,
         DateTimeFormat $fechaHasta
     ): array;
+
+    public function liquidar(
+        Id $idCliente,
+        Id $idLiquidacion,
+        DateFormat $fechaDesde,
+        DateFormat $fechaHasta,
+        array $idVehiculos
+    ): void;
+
+    public function liberarLiquidacion(
+        Id $idCliente,
+        Id $idLiquidacion
+    ): void;
 }

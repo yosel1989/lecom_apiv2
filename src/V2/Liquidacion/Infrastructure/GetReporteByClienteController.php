@@ -1,39 +1,126 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Src\V2\Liquidacion\Infrastructure;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Src\V2\Liquidacion\Application\GetReporteByClienteUseCase;
-use Src\V2\Liquidacion\Domain\LiquidacionList;
-use Src\V2\Liquidacion\Infrastructure\Repositories\EloquentLiquidacionRepository;
+use Src\Core\Domain\ValueObjects\DateFormat;
+use Src\Core\Domain\ValueObjects\Id;
+use Src\V2\BoletoInterprovincial\Application\GetLiquidacionTotalByVehiculoRangoFechaUseCase;
+use Src\V2\BoletoInterprovincial\Application\GetReporteTotalByClienteFechagGroupVehiculoUseCase;
+use Src\V2\BoletoInterprovincial\Application\GetReporteTotalByClienteFechaUseCase;
+use Src\V2\BoletoInterprovincial\Application\LiquidacionByVehiculoFechaGroupRutaBoletoUseCase;
+use Src\V2\BoletoInterprovincial\Infrastructure\Repositories\EloquentBoletoInterprovincialRepository;
+use Src\V2\Egreso\Application\GetLiquidacionEgresoTotalByVehiculoRangoFechaUseCase;
+use Src\V2\Egreso\Application\GetListByClienteGroupTipoFechaUseCase;
+use Src\V2\Egreso\Application\GetListByClienteGroupTipoFechaVehiculoUseCase;
+use Src\V2\Egreso\Infrastructure\Repositories\EloquentEgresoRepository;
+use Src\V2\EgresoTipo\Application\GetListByClienteUseCase;
+use Src\V2\EgresoTipo\Infrastructure\Repositories\EloquentEgresoTipoRepository;
+use Src\V2\Liquidacion\Domain\LiquidacionExcel;
+use Src\V2\Vehiculo\Application\GetListByClienteArrayUseCase;
+use Src\V2\Vehiculo\Infrastructure\Repositories\EloquentVehiculoRepository;
 
 final class GetReporteByClienteController
 {
-    private EloquentLiquidacionRepository $repository;
+    private EloquentBoletoInterprovincialRepository $boletoInterprovincialRepository;
+    private EloquentEgresoTipoRepository $egresoTipoRepository;
+    private EloquentEgresoRepository $egresoRepository;
+    private EloquentVehiculoRepository $vehiculoRepository;
 
-    public function __construct(EloquentLiquidacionRepository $repository)
+    public function __construct(
+        EloquentBoletoInterprovincialRepository $boletoInterprovincialRepository,
+        EloquentEgresoTipoRepository $egresoTipoRepository,
+        EloquentEgresoRepository $egresoRepository,
+        EloquentVehiculoRepository $vehiculoRepository,
+    )
     {
-        $this->repository = $repository;
+        $this->boletoInterprovincialRepository = $boletoInterprovincialRepository;
+        $this->egresoTipoRepository = $egresoTipoRepository;
+        $this->egresoRepository = $egresoRepository;
+        $this->vehiculoRepository = $vehiculoRepository;
     }
 
     /**
      * @param Request $request
      * @return mixed
      */
-    public function __invoke( Request $request ): LiquidacionList
+    public function __invoke( Request $request ): LiquidacionExcel
     {
         $user = Auth::user();
-        $idUsuario = $user->getId();
+//        $idUsuario = $user->getId();
 
-        $idClient = $request->input('idCliente');
-        $fechaDesde = $request->input('fechaDesde');
-        $fechaHasta = $request->input('fechaHasta');
-        $idVehiculo = $request->input('idVehiculo');
-        $idPersonal = $request->input('idPersonal');
-        $useCase = new GetReporteByClienteUseCase($this->repository);
-        return $useCase->__invoke($idClient, $fechaDesde, $fechaHasta, $idVehiculo, $idPersonal);
+        $_idCliente = new Id($request->input('idCliente'), false, 'El id del cliente no tiene el formato correcto');
+        $_fechaDesde = new DateFormat($request->input('fechaDesde'), false, 'La fecha inicial no tiene el formato correcto');
+        $_fechaHasta = new DateFormat($request->input('fechaHasta'), false, 'La fecha final no tiene el formato correcto');
+        $_periodoFecha = new \DatePeriod(
+            new \DateTime($_fechaDesde->value()),
+            new \DateInterval('P1D'),
+            new \DateTime($_fechaHasta->value() . ' 23:59:59')
+        );
+
+        $egresoTipoUseCase = new GetListByClienteUseCase($this->egresoTipoRepository);
+        $_egresoTipos = $egresoTipoUseCase->__invoke($_idCliente->value());
+
+        $egresoUseCase = new GetListByClienteGroupTipoFechaUseCase($this->egresoRepository);
+        $_egresoTotal = $egresoUseCase->__invoke($_idCliente->value(), $_fechaDesde->value(), $_fechaHasta->value());
+
+        $egresoVehiculoUseCase = new GetListByClienteGroupTipoFechaVehiculoUseCase($this->egresoRepository);
+        $_egresoVehiculo = $egresoVehiculoUseCase->__invoke($_idCliente->value(), $_fechaDesde->value(), $_fechaHasta->value());
+
+        $boletoInterprovincialTotalUseCase = new GetReporteTotalByClienteFechaUseCase($this->boletoInterprovincialRepository);
+        $_ingresoTotalBoleto = $boletoInterprovincialTotalUseCase->__invoke($_idCliente->value(), $_fechaDesde->value(), $_fechaHasta->value());
+
+        $boletoInterprovincialPorVehiculoUseCase = new GetReporteTotalByClienteFechagGroupVehiculoUseCase($this->boletoInterprovincialRepository);
+        $_ingresoTotalBoletoVehiculo = $boletoInterprovincialPorVehiculoUseCase->__invoke($_idCliente->value(), $_fechaDesde->value(), $_fechaHasta->value());
+
+
+        // Liquidación ingreso total agrupado por vehiculo y fecha
+        $liquidacionTotalPorVehiculoYFechaUseCase = new GetLiquidacionTotalByVehiculoRangoFechaUseCase($this->boletoInterprovincialRepository);
+        $liquidacionTotalPorVehiculoYFecha = $liquidacionTotalPorVehiculoYFechaUseCase->__invoke($_idCliente->value(), ['c241a502-2448-448c-80ca-c51a7c4abddf', '085e8b03-5219-459c-80cb-997e52fcdd24'], $_fechaDesde->value(), $_fechaHasta->value());
+
+        // Liquidación egreso total agrupado por vehiculo y fecha
+        $liquidacionEgresoTotalPorVehiculoYFechaUseCase = new GetLiquidacionEgresoTotalByVehiculoRangoFechaUseCase($this->egresoRepository);
+        $liquidacionEgresoTotalPorVehiculoYFecha = $liquidacionEgresoTotalPorVehiculoYFechaUseCase->__invoke($_idCliente->value(), ['c241a502-2448-448c-80ca-c51a7c4abddf', '085e8b03-5219-459c-80cb-997e52fcdd24'], $_fechaDesde->value(), $_fechaHasta->value());
+
+
+        // Liquidación ingreso por vehiculo, ruta, fecha
+        $liquidacionVehiculoRutaFechaUseCase = new LiquidacionByVehiculoFechaGroupRutaBoletoUseCase($this->boletoInterprovincialRepository);
+        $liquidacionVehiculoRutaFecha = $liquidacionVehiculoRutaFechaUseCase->__invoke($_idCliente->value(), ['c241a502-2448-448c-80ca-c51a7c4abddf', '085e8b03-5219-459c-80cb-997e52fcdd24'], $_fechaDesde->value(), $_fechaHasta->value());
+
+        // $vehiculos
+        $vehiculoUseCase = new GetListByClienteArrayUseCase($this->vehiculoRepository);
+        $_vehiculos = $vehiculoUseCase->__invoke($_idCliente->value(), ['c241a502-2448-448c-80ca-c51a7c4abddf', '085e8b03-5219-459c-80cb-997e52fcdd24']);
+
+//        dd($liquidacionTotalPorVehiculoYFecha->all());
+
+        $liquidacion =  new LiquidacionExcel(
+            $_idCliente,
+            $_fechaDesde,
+            $_fechaHasta,
+            $_periodoFecha,
+            $_egresoTipos,
+            $_egresoTotal,
+            $_egresoVehiculo,
+            $liquidacionTotalPorVehiculoYFecha,
+            $liquidacionEgresoTotalPorVehiculoYFecha,
+            $liquidacionVehiculoRutaFecha,
+            $_vehiculos
+        );
+
+        return $liquidacion;
+
+//        $idUsuario = $user->getId();
+//
+//        $idClient = $request->input('idCliente');
+//        $fechaDesde = $request->input('fechaDesde');
+//        $fechaHasta = $request->input('fechaHasta');
+//        $idVehiculo = $request->input('idVehiculo');
+//        $idPersonal = $request->input('idPersonal');
+//        $useCase = new GetReporteByClienteUseCase($this->repository);
+//        return $useCase->__invoke($idClient, $fechaDesde, $fechaHasta, $idVehiculo, $idPersonal);
     }
 
 }

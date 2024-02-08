@@ -1,5 +1,7 @@
 <!doctype html>
-
+    <tr>
+        <td colspan="10" style="font-size: 20px"><b>N° {{ str_pad(($liquidacion->getCodigo()->value()+1), 10, "0", STR_PAD_LEFT) }} </b></td>
+    </tr>
     <tr>
         <td colspan="10" style="font-size: 20px"><b>LIQUIDACIÓN DEL {{ $liquidacion->getFechaDesde()->value() }} AL {{ $liquidacion->getFechaHasta()->value() }}</b></td>
     </tr>

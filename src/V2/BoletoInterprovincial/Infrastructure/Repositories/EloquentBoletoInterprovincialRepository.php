@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Src\V2\BoletoInterprovincial\Infrastructure\Repositories;
 
 use App\Enums\EnumAcciones;
+use App\Enums\EnumEstadoBoletoInterprovincial;
 use App\Enums\EnumOrigenBoleto;
 use App\Enums\IdTipoBoleto;
 use App\Models\User;
@@ -1331,5 +1332,49 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
         return $collection;
     }
+
+
+    public function liquidar(
+        Id $idCliente,
+        Id $idLiquidacion,
+        DateFormat $fechaDesde,
+        DateFormat $fechaHasta,
+        array $idVehiculos
+    ): void
+    {
+        $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
+        $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
+
+
+        $this->eloquentModelBoletoInterprovincial
+            ->where('id_estado',1)
+            ->whereDate('f_registro', '>=', $fechaDesde->value())
+            ->whereDate('f_registro', '<=', $fechaHasta->value())
+            ->whereIn('id_vehiculo',$idVehiculos)
+            ->whereNull('id_liquidacion')
+            ->update([
+                'id_liquidacion' => $idLiquidacion->value(),
+                'id_estado' => EnumEstadoBoletoInterprovincial::Liquidado->value
+            ]);
+    }
+
+
+    public function liberarLiquidacion(
+        Id $idCliente,
+        Id $idLiquidacion
+    ): void
+    {
+        $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
+        $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
+
+
+        $this->eloquentModelBoletoInterprovincial
+            ->where('id_liquidacion',$idLiquidacion->value())
+            ->update([
+                'id_liquidacion' => null,
+                'id_estado' => EnumEstadoBoletoInterprovincial::Activo->value
+            ]);
+    }
+
 
 }

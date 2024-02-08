@@ -15,17 +15,17 @@ return new class extends Migration
             $table->uuid('id_egreso');
             $table->uuid('id_cliente');
             $table->uuid('id_egreso_tipo');
-            $table->string('detalle', 150);
+            $table->string('detalle', 150)->nullable();
             $table->date('fecha');
             $table->decimal('importe',10,2);
-            $table->string('numero_documento',50);
+            $table->string('numero_documento',50)->nullable();
             $table->tinyInteger('id_estado')->default(1);
             $table->tinyInteger('id_eliminado')->default(0);
             $table->uuid('id_usu_registro')->nullable();
             $table->uuid('id_usu_modifico')->nullable();
             $table->timestamp('f_registro');
             $table->timestamp('f_modifico')->nullable();
-            $table->timestamp('id_liquidacion')->nullable();
+            $table->uuid('id_liquidacion')->nullable();
 
             $table->index([
                 'id_egreso',

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\V2\EgresoDetalle\Infrastructure\Repositories;
 
+use App\Enums\EnumEstadoEgresoDetalle;
 use App\Models\V2\EgresoDetalle as EloquentModelEgresoDetalle;
 use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
@@ -101,6 +102,45 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
     ): void
     {
         $this->eloquent->where('id_egreso',$idEgreso->value())->delete();
+    }
+
+    public function liquidarDetalle(
+        Id $idCliente,
+        Id $idLiquidacion,
+        DateFormat $fechaDesde,
+        DateFormat $fechaHasta,
+        array $idVehiculos,
+        Id $idUsuarioRegistro
+    ): void
+    {
+        $this->eloquent->where('id_cliente', $idCliente->value())
+            ->whereDate('fecha', '>=', $fechaDesde->value())
+            ->whereDate('fecha', '<=', $fechaHasta->value())
+            ->whereNull('id_liquidacion')
+            ->update([
+                'id_liquidacion' => $idLiquidacion->value(),
+                'id_estado' => EnumEstadoEgresoDetalle::Liquidado->value,
+                'id_usu_modifico' => $idUsuarioRegistro->value()
+            ]);
+
+    }
+
+    public function liberarLiquidacionDetalle(
+        Id $idCliente,
+        Id $idLiquidacion,
+        Id $idUsuarioRegistro
+    ): void
+    {
+
+        $this->eloquent
+            ->where('id_cliente',$idCliente->value())
+            ->where('id_liquidacion',$idLiquidacion->value())
+            ->update([
+                'id_liquidacion' => null,
+                'id_estado' => EnumEstadoEgresoDetalle::Activo->value,
+                'id_usu_modifico' => $idUsuarioRegistro->value()
+            ]);
+
     }
 
 

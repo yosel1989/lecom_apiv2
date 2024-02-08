@@ -8,13 +8,13 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Src\Utility\Utilidades;
-use Src\V2\Liquidacion\Domain\Liquidacion;
+use Src\V2\Liquidacion\Domain\LiquidacionExcel;
 
 class LiquidacionExport implements WithMultipleSheets, WithEvents
 {
     use RegistersEventListeners;
 
-    private Liquidacion $liquidacion;
+    private LiquidacionExcel $liquidacion;
     private Utilidades $utilidades;
 
     public function __construct($liquidacion, $utilidades)

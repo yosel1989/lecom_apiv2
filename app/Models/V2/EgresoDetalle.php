@@ -64,5 +64,13 @@ class EgresoDetalle extends Model
         return $this->hasOne('App\Models\V2\EgresoTipo','id','id_egreso_tipo');
     }
 
+    public function liquidacion(){
+        return $this->hasOne('App\Models\V2\Liquidacion','id','id_liquidacion');
+    }
+
+    public function estado(){
+        return $this->hasOne('App\Models\V2\EstadoEgresoDetalle','id','id_estado');
+    }
+
 
 }

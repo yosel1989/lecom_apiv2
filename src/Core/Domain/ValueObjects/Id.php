@@ -26,7 +26,7 @@ final class Id
     }
 
     /**
-     * @return string|null
+     * @return string|DateFormat
      */
     public function value() : string | null
     {

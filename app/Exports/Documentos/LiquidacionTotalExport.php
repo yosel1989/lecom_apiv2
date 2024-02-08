@@ -9,18 +9,16 @@ use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Src\Utility\Utilidades;
-use Src\V2\Liquidacion\Domain\Liquidacion;
+use Src\V2\Liquidacion\Domain\LiquidacionExcel;
 
 class LiquidacionTotalExport implements FromView, ShouldAutoSize, WithEvents, WithTitle
 {
     use RegistersEventListeners;
 
-    private Liquidacion $liquidacion;
+    private LiquidacionExcel $liquidacion;
     private Utilidades $utilidades;
 
     public function __construct($liquidacion, $utilidades)

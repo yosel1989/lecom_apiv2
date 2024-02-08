@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Src\Utility\Utilidades;
-use Src\V2\Liquidacion\Domain\Liquidacion;
+use Src\V2\Liquidacion\Domain\LiquidacionExcel;
 use Src\V2\Vehiculo\Domain\VehiculoShort;
 
 class LiquidacionVehiculoFechaExport implements FromView, ShouldAutoSize, WithEvents, WithTitle
@@ -22,7 +22,7 @@ class LiquidacionVehiculoFechaExport implements FromView, ShouldAutoSize, WithEv
     use Exportable;
 
     private VehiculoShort $vehiculo;
-    private Liquidacion $liquidacion;
+    private LiquidacionExcel $liquidacion;
     private Utilidades $utilidades;
 
     public function __construct($vehiculo, $liquidacion, $utilidades)

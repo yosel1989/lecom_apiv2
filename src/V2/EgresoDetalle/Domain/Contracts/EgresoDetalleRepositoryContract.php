@@ -27,4 +27,19 @@ interface EgresoDetalleRepositoryContract
 
     public function collectionByCliente(Id $idCliente, Id $idEgreso): EgresoDetalleList;
 
+    public function liquidarDetalle(
+        Id $idCliente,
+        Id $idLiquidacion,
+        DateFormat $fechaDesde,
+        DateFormat $fechaHasta,
+        array $idVehiculos,
+        Id $idUsuarioRegistro
+    ): void;
+
+    public function liberarLiquidacionDetalle(
+        Id $idCliente,
+        Id $idLiquidacion,
+        Id $idUsuarioRegistro
+    ): void;
+
 }

@@ -32,6 +32,8 @@ class ExportController extends Controller
 
         $utilidades = new Utilidades();
 
+
+
         return $this->excel->download(new LiquidacionExport($liquidacion, $utilidades), 'users.xlsx');
 
     }

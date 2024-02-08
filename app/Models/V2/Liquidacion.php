@@ -2,12 +2,12 @@
 
 namespace App\Models\V2;
 
-use App\Traits\UUID;
+//use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
 class Liquidacion extends Model
 {
-    use UUID;
+//    use UUID;
 
     protected $keyType = 'string';
     public $incrementing = false;
@@ -26,16 +26,20 @@ class Liquidacion extends Model
         'id',
         'codigo',
         'id_cliente',
+        'id_sede',
         'id_vehiculos',
         'id_personal',
         'f_inicio',
         'f_fin',
         'archivo',
+        'url_archivo',
         'id_estado',
         'id_usu_registro',
         'id_usu_modifico',
         'f_registro',
         'f_modifico',
+        'local',
+        'monto',
     ];
 
     /**
@@ -50,7 +54,9 @@ class Liquidacion extends Model
         'f_fin' =>  'string',
         'f_registro' =>  'string',
         'f_modifico' =>  'string',
-        'id_estado' => 'integer'
+        'id_estado' => 'integer',
+        'local' => 'boolean',
+        'monto' => 'float',
     ];
 
     public function usuarioRegistro(){

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Src\V2\Liquidacion\Infrastructure;
 
 use Illuminate\Http\Request;
@@ -23,9 +22,11 @@ final class GetCollectionByClienteController
      */
     public function __invoke( Request $request ): LiquidacionList
     {
-        $idClient = $request->id;
+        $idCliente = $request->idCliente;
+        $fechaDesde = $request->fechaDesde;
+        $fechaHasta = $request->fechaHasta;
         $getVehicleCollectionByClientUseCase = new GetCollectionByClienteUseCase($this->repository);
-        return $getVehicleCollectionByClientUseCase->__invoke($idClient);
+        return $getVehicleCollectionByClientUseCase->__invoke($idCliente, $fechaDesde, $fechaHasta);
     }
 
 }
