@@ -1,10 +1,31 @@
 <!doctype html>
+
+    <tr>
+        <td colspan="10" style="font-size: 20px"><b>LIQUIDACIÓN DEL {{ $liquidacion->getFechaDesde()->value() }} AL {{ $liquidacion->getFechaHasta()->value() }}</b></td>
+    </tr>
+    <tr></tr>
+
     <table class="table table-sm">
         <thead>
+        <tr>
+            <td colspan="8" style="font-size: 14px; background: #9d9d9d; border: 1px solid #242f59"><b>VEHICULOS </b></td>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach($liquidacion->getVehiculos()->all() as $vehiculo)
             <tr>
-                <td colspan="10" style="font-size: 20px"><b>LIQUIDACIÓN DEL {{ $liquidacion->getFechaDesde()->value() }} AL {{ $liquidacion->getFechaHasta()->value() }}</b></td>
+                <td colspan="8" style="font-size: 12px; border: 1px solid #242f59">{{ $vehiculo->getPlaca()->value() }}</td>
             </tr>
+        @endforeach
             <tr></tr>
+            <tr></tr>
+            <tr></tr>
+        </tbody>
+    </table>
+
+
+    <table class="table table-sm">
+        <thead>
             <tr>
                 <td colspan="8" style="font-size: 14px; background: #B3EEA7; border: 1px solid #242f59"><b>INGRESOS </b></td>
             </tr>
@@ -132,18 +153,4 @@
         </tbody>
     </table>
 
-    <table class="table table-sm">
-        <thead>
-            <tr>
-                <td colspan="8" style="font-size: 14px; background: #9d9d9d; border: 1px solid #242f59"><b>VEHICULOS </b></td>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($liquidacion->getVehiculos()->all() as $vehiculo)
-            <tr>
-                <td colspan="8" style="font-size: 12px; border: 1px solid #242f59">{{ $vehiculo->getPlaca()->value() }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
 </html>

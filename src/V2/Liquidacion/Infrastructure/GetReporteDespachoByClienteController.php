@@ -5,11 +5,11 @@ namespace Src\V2\Liquidacion\Infrastructure;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Src\V2\Liquidacion\Application\GetReporteByClienteUseCase;
+use Src\V2\Liquidacion\Application\GetReporteDespachoByClienteUseCase;
 use Src\V2\Liquidacion\Domain\LiquidacionList;
 use Src\V2\Liquidacion\Infrastructure\Repositories\EloquentLiquidacionRepository;
 
-final class GetReporteByClienteController
+final class GetReporteDespachoByClienteController
 {
     private EloquentLiquidacionRepository $repository;
 
@@ -25,15 +25,11 @@ final class GetReporteByClienteController
     public function __invoke( Request $request ): LiquidacionList
     {
         $user = Auth::user();
-        $idUsuario = $user->getId();
 
-        $idClient = $request->input('idCliente');
-        $fechaDesde = $request->input('fechaDesde');
-        $fechaHasta = $request->input('fechaHasta');
-        $idVehiculo = $request->input('idVehiculo');
-        $idPersonal = $request->input('idPersonal');
-        $useCase = new GetReporteByClienteUseCase($this->repository);
-        return $useCase->__invoke($idClient, $fechaDesde, $fechaHasta, $idVehiculo, $idPersonal);
+        $idCliente = $request->id;
+        $fecha = (new \DateTime('now'))->format('Y-m-d');
+        $useCase = new GetReporteDespachoByClienteUseCase($this->repository);
+        return $useCase->__invoke($idCliente, $user->getId(), $fecha);
     }
 
 }

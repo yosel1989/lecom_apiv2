@@ -4,65 +4,77 @@ declare(strict_types=1);
 namespace Src\V2\Liquidacion\Domain;
 
 use Src\Core\Domain\ValueObjects\DateFormat;
+use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
-use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialShortFechaList;
-use Src\V2\Egreso\Domain\EgresoGroupTipoFechaShortList;
-use Src\V2\EgresoTipo\Domain\EgresoTipoShortList;
-use Src\V2\Vehiculo\Domain\VehiculoShortList;
+use Src\Core\Domain\ValueObjects\NumericInteger;
+use Src\Core\Domain\ValueObjects\Text;
 
 final class Liquidacion
 {
+    private Id $id;
     private Id $idCliente;
     private DateFormat $fechaDesde;
     private DateFormat $fechaHasta;
-    private \DatePeriod $fechaPeriodo;
-    private EgresoTipoShortList $egresoTipos;
-    private EgresoGroupTipoFechaShortList $egresoTotal;
-    private VehiculoShortList $vehiculos;
-    private EgresoGroupTipoFechaShortList $egresoVehiculo;
-    private BoletoInterprovincialShortFechaList $ingresoTotalBoleto;
-    private array $ingresoTotalBoletoPorVehiculo;
-    private array $egresoTotalPorVehiculo;
+    private NumericInteger $idEstado;
+    private Id $idUsuarioRegistro;
+    private Id $idUsuarioModifico;
+    private DateTimeFormat $fechaRegistro;
+    private DateTimeFormat $fechaModifico;
+
+
+    private Text $estado;
+    private Text $usuarioRegistro;
+    private Text $usuarioModifico;
 
     /**
+     * @param Id $id
      * @param Id $idCliente
      * @param DateFormat $fechaDesde
      * @param DateFormat $fechaHasta
-     * @param \DatePeriod $fechaPeriodo
-     * @param EgresoTipoShortList $egresoTipos
-     * @param EgresoGroupTipoFechaShortList $egresoTotal
-     * @param EgresoGroupTipoFechaShortList $egresoVehiculo
-     * @param BoletoInterprovincialShortFechaList $ingresoTotalBoleto
-     * @param array $egresoTotalPorVehiculo
-     * @param array $ingresoTotalBoletoPorVehiculo
-     * @param VehiculoShortList $vehiculos
+     * @param NumericInteger $idEstado
+     * @param Id $idUsuarioRegistro
+     * @param Id $idUsuarioModifico
+     * @param DateTimeFormat $fechaRegistro
+     * @param DateTimeFormat $fechaModifico
      */
     public function __construct(
+        Id $id,
         Id $idCliente,
         DateFormat $fechaDesde,
         DateFormat $fechaHasta,
-        \DatePeriod $fechaPeriodo,
-        EgresoTipoShortList $egresoTipos,
-        EgresoGroupTipoFechaShortList $egresoTotal,
-        EgresoGroupTipoFechaShortList $egresoVehiculo,
-        BoletoInterprovincialShortFechaList $ingresoTotalBoleto,
-        array $egresoTotalPorVehiculo,
-        array $ingresoTotalBoletoPorVehiculo,
-        VehiculoShortList $vehiculos
+        NumericInteger $idEstado,
+        Id $idUsuarioRegistro,
+        Id $idUsuarioModifico,
+        DateTimeFormat $fechaRegistro,
+        DateTimeFormat $fechaModifico
     )
     {
 
+        $this->id = $id;
         $this->idCliente = $idCliente;
         $this->fechaDesde = $fechaDesde;
         $this->fechaHasta = $fechaHasta;
-        $this->fechaPeriodo = $fechaPeriodo;
-        $this->egresoTipos = $egresoTipos;
-        $this->egresoTotal = $egresoTotal;
-        $this->vehiculos = $vehiculos;
-        $this->egresoVehiculo = $egresoVehiculo;
-        $this->ingresoTotalBoleto = $ingresoTotalBoleto;
-        $this->ingresoTotalBoletoPorVehiculo = $ingresoTotalBoletoPorVehiculo;
-        $this->egresoTotalPorVehiculo = $egresoTotalPorVehiculo;
+        $this->idEstado = $idEstado;
+        $this->idUsuarioRegistro = $idUsuarioRegistro;
+        $this->idUsuarioModifico = $idUsuarioModifico;
+        $this->fechaRegistro = $fechaRegistro;
+        $this->fechaModifico = $fechaModifico;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getId(): Id
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param Id $id
+     */
+    public function setId(Id $id): void
+    {
+        $this->id = $id;
     }
 
     /**
@@ -114,131 +126,131 @@ final class Liquidacion
     }
 
     /**
-     * @return \DatePeriod
+     * @return NumericInteger
      */
-    public function getFechaPeriodo(): \DatePeriod
+    public function getIdEstado(): NumericInteger
     {
-        return $this->fechaPeriodo;
+        return $this->idEstado;
     }
 
     /**
-     * @param \DatePeriod $fechaPeriodo
+     * @param NumericInteger $idEstado
      */
-    public function setFechaPeriodo(\DatePeriod $fechaPeriodo): void
+    public function setIdEstado(NumericInteger $idEstado): void
     {
-        $this->fechaPeriodo = $fechaPeriodo;
+        $this->idEstado = $idEstado;
     }
 
     /**
-     * @return EgresoTipoShortList
+     * @return Id
      */
-    public function getEgresoTipos(): EgresoTipoShortList
+    public function getIdUsuarioRegistro(): Id
     {
-        return $this->egresoTipos;
+        return $this->idUsuarioRegistro;
     }
 
     /**
-     * @param EgresoTipoShortList $egresoTipos
+     * @param Id $idUsuarioRegistro
      */
-    public function setEgresoTipos(EgresoTipoShortList $egresoTipos): void
+    public function setIdUsuarioRegistro(Id $idUsuarioRegistro): void
     {
-        $this->egresoTipos = $egresoTipos;
+        $this->idUsuarioRegistro = $idUsuarioRegistro;
     }
 
     /**
-     * @return EgresoGroupTipoFechaShortList
+     * @return Id
      */
-    public function getEgresoTotal(): EgresoGroupTipoFechaShortList
+    public function getIdUsuarioModifico(): Id
     {
-        return $this->egresoTotal;
+        return $this->idUsuarioModifico;
     }
 
     /**
-     * @param EgresoGroupTipoFechaShortList $egresoTotal
+     * @param Id $idUsuarioModifico
      */
-    public function setEgresoTotal(EgresoGroupTipoFechaShortList $egresoTotal): void
+    public function setIdUsuarioModifico(Id $idUsuarioModifico): void
     {
-        $this->egresoTotal = $egresoTotal;
+        $this->idUsuarioModifico = $idUsuarioModifico;
     }
 
     /**
-     * @return VehiculoShortList
+     * @return DateTimeFormat
      */
-    public function getVehiculos(): VehiculoShortList
+    public function getFechaRegistro(): DateTimeFormat
     {
-        return $this->vehiculos;
+        return $this->fechaRegistro;
     }
 
     /**
-     * @param VehiculoShortList $vehiculos
+     * @param DateTimeFormat $fechaRegistro
      */
-    public function setVehiculos(VehiculoShortList $vehiculos): void
+    public function setFechaRegistro(DateTimeFormat $fechaRegistro): void
     {
-        $this->vehiculos = $vehiculos;
+        $this->fechaRegistro = $fechaRegistro;
     }
 
     /**
-     * @return EgresoGroupTipoFechaShortList
+     * @return DateTimeFormat
      */
-    public function getEgresoVehiculo(): EgresoGroupTipoFechaShortList
+    public function getFechaModifico(): DateTimeFormat
     {
-        return $this->egresoVehiculo;
+        return $this->fechaModifico;
     }
 
     /**
-     * @param EgresoGroupTipoFechaShortList $egresoVehiculo
+     * @param DateTimeFormat $fechaModifico
      */
-    public function setEgresoVehiculo(EgresoGroupTipoFechaShortList $egresoVehiculo): void
+    public function setFechaModifico(DateTimeFormat $fechaModifico): void
     {
-        $this->egresoVehiculo = $egresoVehiculo;
+        $this->fechaModifico = $fechaModifico;
     }
 
     /**
-     * @return BoletoInterprovincialShortFechaList
+     * @return Text
      */
-    public function getIngresoTotalBoleto(): BoletoInterprovincialShortFechaList
+    public function getEstado(): Text
     {
-        return $this->ingresoTotalBoleto;
+        return $this->estado;
     }
 
     /**
-     * @param BoletoInterprovincialShortFechaList $ingresoTotalBoleto
+     * @param Text $estado
      */
-    public function setIngresoTotalBoleto(BoletoInterprovincialShortFechaList $ingresoTotalBoleto): void
+    public function setEstado(Text $estado): void
     {
-        $this->ingresoTotalBoleto = $ingresoTotalBoleto;
+        $this->estado = $estado;
     }
 
     /**
-     * @return array
+     * @return Text
      */
-    public function getIngresoTotalBoletoPorVehiculo(): array
+    public function getUsuarioRegistro(): Text
     {
-        return $this->ingresoTotalBoletoPorVehiculo;
+        return $this->usuarioRegistro;
     }
 
     /**
-     * @param array $ingresoTotalBoletoPorVehiculo
+     * @param Text $usuarioRegistro
      */
-    public function setIngresoTotalBoletoPorVehiculo(array $ingresoTotalBoletoPorVehiculo): void
+    public function setUsuarioRegistro(Text $usuarioRegistro): void
     {
-        $this->ingresoTotalBoletoPorVehiculo = $ingresoTotalBoletoPorVehiculo;
+        $this->usuarioRegistro = $usuarioRegistro;
     }
 
     /**
-     * @return array
+     * @return Text
      */
-    public function getEgresoTotalPorVehiculo(): array
+    public function getUsuarioModifico(): Text
     {
-        return $this->egresoTotalPorVehiculo;
+        return $this->usuarioModifico;
     }
 
     /**
-     * @param array $egresoTotalPorVehiculo
+     * @param Text $usuarioModifico
      */
-    public function setEgresoTotalPorVehiculo(array $egresoTotalPorVehiculo): void
+    public function setUsuarioModifico(Text $usuarioModifico): void
     {
-        $this->egresoTotalPorVehiculo = $egresoTotalPorVehiculo;
+        $this->usuarioModifico = $usuarioModifico;
     }
 
 
