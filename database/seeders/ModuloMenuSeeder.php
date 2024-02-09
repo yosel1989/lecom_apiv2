@@ -400,22 +400,31 @@ class ModuloMenuSeeder extends Seeder
         ]);
         $menuOperaciones1 = \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::Operaciones,
-            'texto'=>'Despacho',
+            'texto'=>'Administración',
             'icono'=> 'fa-duotone fa-file-chart-column',
             'id_tipo_menu'=> EnumTipoMenu::SubMenu,
             'padre'=>null,
             'link'=>null,
             'id_estado'=> IdEstado::Habilitado
         ]);
-        \App\Models\V2\ModuloMenu::create([
-            'id_modulo'=> EnumModulo::Reportes,
-            'texto'=>'Administrar Egresos',
-            'icono'=>null,
-            'id_tipo_menu'=> EnumTipoMenu::Link,
-            'padre'=>$menuOperaciones1->id,
-            'link'=>'operaciones/egresos',
-            'id_estado'=> IdEstado::Habilitado
-        ]);
+            \App\Models\V2\ModuloMenu::create([
+                'id_modulo'=> EnumModulo::Reportes,
+                'texto'=>'Administrar Egresos',
+                'icono'=>null,
+                'id_tipo_menu'=> EnumTipoMenu::Link,
+                'padre'=>$menuOperaciones1->id,
+                'link'=>'operaciones/egresos',
+                'id_estado'=> IdEstado::Habilitado
+            ]);
+            \App\Models\V2\ModuloMenu::create([
+                'id_modulo'=> EnumModulo::Reportes,
+                'texto'=>'Administrar Liquidaciones',
+                'icono'=>null,
+                'id_tipo_menu'=> EnumTipoMenu::Link,
+                'padre'=>$menuOperaciones1->id,
+                'link'=>'operaciones/liquidaciones',
+                'id_estado'=> IdEstado::Habilitado
+            ]);
 
     }
 }

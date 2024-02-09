@@ -5,6 +5,7 @@ namespace Src\V2\BoletoInterprovincial\Infrastructure;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Src\V2\BoletoInterprovincial\Application\PuntoVentaUseCase;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
 use Src\V2\BoletoInterprovincial\Infrastructure\Repositories\EloquentBoletoInterprovincialRepository;
@@ -24,6 +25,7 @@ final class PuntoVentaController
      */
     public function __invoke( Request $request ): BoletoInterprovincialOficial
     {
+
         $id   = \Ramsey\Uuid\Uuid::uuid4();
         $user = Auth::user();
 

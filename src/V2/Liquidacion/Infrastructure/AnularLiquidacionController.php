@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Src\Core\Domain\ValueObjects\Id;
+use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\V2\BoletoInterprovincial\Application\LiberarLiquidacionUseCase;
 use Src\V2\BoletoInterprovincial\Infrastructure\Repositories\EloquentBoletoInterprovincialRepository;
 use Src\V2\EgresoDetalle\Application\LiberarLiquidacionEgresoDetalleUseCase;
@@ -14,9 +15,12 @@ use Src\V2\EgresoDetalle\Infrastructure\Repositories\EloquentEgresoDetalleReposi
 use Src\V2\Liquidacion\Application\AnularLiquidacionUseCase;
 use Src\V2\Liquidacion\Application\FindByIdUseCase;
 use Src\V2\Liquidacion\Infrastructure\Repositories\EloquentLiquidacionRepository;
+use Src\V2\LiquidacionEstadoMotivo\Application\CreateUseCase;
+use Src\V2\LiquidacionEstadoMotivo\Infrastructure\Repositories\EloquentLiquidacionEstadoMotivoRepository;
 
 final class AnularLiquidacionController
 {
+    private EloquentLiquidacionEstadoMotivoRepository $repositoryLiquidacionEstadoMotivo;
     private EloquentLiquidacionRepository $repository;
     private EloquentEgresoDetalleRepository $egresoDetallerepository;
     private EloquentBoletoInterprovincialRepository $eloquentBoletoInterprovincialRepository;
@@ -24,12 +28,14 @@ final class AnularLiquidacionController
     public function __construct(
         EloquentLiquidacionRepository $repository,
         EloquentEgresoDetalleRepository $egresoDetallerepository,
-        EloquentBoletoInterprovincialRepository $eloquentBoletoInterprovincialRepository
-)
+        EloquentBoletoInterprovincialRepository $eloquentBoletoInterprovincialRepository,
+        EloquentLiquidacionEstadoMotivoRepository $repositoryLiquidacionEstadoMotivo
+    )
     {
         $this->repository = $repository;
         $this->egresoDetallerepository = $egresoDetallerepository;
         $this->eloquentBoletoInterprovincialRepository = $eloquentBoletoInterprovincialRepository;
+        $this->repositoryLiquidacionEstadoMotivo = $repositoryLiquidacionEstadoMotivo;
     }
 
     /**
@@ -44,9 +50,11 @@ final class AnularLiquidacionController
             $user = Auth::user();
             $idLiquidacion = $request->input('id');
             $idCliente = $request->input('idCliente');
+            $idMotivo = $request->input('idMotivo');
 
             $_idLiquidacion = new Id($idLiquidacion, false, 'El id de la liquidación no tiene el formato correcto');
             $_idCliente = new Id($idCliente, false, 'El id del cliente no tiene el formato correcto');
+            $_idMotivo = new NumericInteger($idMotivo);
 
             $buscarLiquidacionUseCase = new FindByIdUseCase($this->repository);
             $_liquidacion = $buscarLiquidacionUseCase->__invoke($_idLiquidacion->value());
@@ -58,6 +66,10 @@ final class AnularLiquidacionController
                 $_idLiquidacion->value(),
                 $user->getId()
             );
+
+            // Registrar motivo de anulacion
+            $motivoAnulacionUseCase = new CreateUseCase($this->repositoryLiquidacionEstadoMotivo);
+            $motivoAnulacionUseCase->__invoke($_liquidacion->getIdCliente()->value(), $_liquidacion->getId()->value(), $_idMotivo->value(), $user->getId());
 
             // Liberar liquidacion de los boletos
             $liberarLiquidacionBoletosInterprovincialesUseCase = new LiberarLiquidacionUseCase($this->eloquentBoletoInterprovincialRepository);

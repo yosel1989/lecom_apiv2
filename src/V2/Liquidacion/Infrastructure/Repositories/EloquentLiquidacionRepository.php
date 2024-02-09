@@ -105,11 +105,13 @@ final class EloquentLiquidacionRepository implements LiquidacionRepositoryContra
         $collection = $this->eloquent->with(
             'estado:id,nombre',
             'usuarioRegistro:id,nombres,apellidos',
-            'usuarioModifico:id,nombres,apellidos'
+            'usuarioModifico:id,nombres,apellidos',
+            'sede:id,nombre',
         )
             ->where('id_cliente', $idCliente->value())
             ->whereDate('f_registro', '>=', $fechaInicio->value())
             ->whereDate('f_registro', '<=', $fechaFin->value())
+            ->orderBy('f_registro','DESC')
             ->get();
 
         $output = new LiquidacionList();
@@ -135,6 +137,7 @@ final class EloquentLiquidacionRepository implements LiquidacionRepositoryContra
                 new NumericFloat($model->monto)
             );
             $OModel->setEstado(new Text($model->estado?->nombre, false, -1, ''));
+            $OModel->setSede(new Text($model->sede?->nombre, false, -1, ''));
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, false, -1));
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
             $output->add($OModel);

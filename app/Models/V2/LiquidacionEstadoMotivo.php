@@ -2,21 +2,23 @@
 
 namespace App\Models\V2;
 
-//use App\Traits\UUID;
+use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
-class Liquidacion extends Model
+class LiquidacionEstadoMotivo extends Model
 {
-//    use UUID;
+    use UUID;
 
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $table = "liquidacion";
+    protected $table = "liquidacion_estado_motivo";
     public $timestamps = true;
 
     const CREATED_AT = 'f_registro';
     const UPDATED_AT = 'f_modifico';
+
+
     /**
      * The attributes that are mass assignable.
      *
@@ -24,22 +26,13 @@ class Liquidacion extends Model
      */
     protected $fillable = [
         'id',
-        'codigo',
         'id_cliente',
-        'id_sede',
-        'id_vehiculos',
-        'id_personal',
-        'f_inicio',
-        'f_fin',
-        'archivo',
-        'url_archivo',
-        'id_estado',
+        'id_liquidacion',
+        'id_liquidacion_motivo',
         'id_usu_registro',
         'id_usu_modifico',
         'f_registro',
         'f_modifico',
-        'local',
-        'monto',
     ];
 
     /**
@@ -48,15 +41,9 @@ class Liquidacion extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'id_vehiculos' => 'array',
-        'codigo' =>  'integer',
-        'f_inicio' =>  'string',
-        'f_fin' =>  'string',
+        'id_liquidacion_motivo' =>  'integer',
         'f_registro' =>  'string',
         'f_modifico' =>  'string',
-        'id_estado' => 'integer',
-        'local' => 'boolean',
-        'monto' => 'float',
     ];
 
     public function usuarioRegistro(){
@@ -67,12 +54,8 @@ class Liquidacion extends Model
         return $this->hasOne('App\Models\User','id','id_usu_modifico');
     }
 
-    public function estado(){
-        return $this->hasOne('App\Models\V2\EstadoLiquidacion','id','id_estado');
-    }
-
-    public function sede(){
-        return $this->hasOne('App\Models\V2\Sede','id','id_sede');
+    public function motivo(){
+        return $this->hasOne('App\Models\V2\LiquidacionMotivo','id','id_liquidacion_motivo');
     }
 
 }

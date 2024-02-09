@@ -105,6 +105,7 @@ include 'V2/cliente-modulo-menu-route.php';
 include 'V2/export-route.php';
 include 'V2/tipo-personal-route.php';
 include 'V2/liquidacion-route.php';
+include 'V2/liquidacion-motivo-route.php';
 
 
 Route::get('v1/erts', function(){
