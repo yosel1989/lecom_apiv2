@@ -17,6 +17,7 @@ class EgresoReporteResource extends JsonResource
         // Map Domain User model values
         return [
             'id'            => $this->getId()->value(),
+            'idCliente'          => $this->getIdCliente()->value(),
             'idVehiculo'          => $this->getIdVehiculo()->value(),
             'vehiculo'          => $this->getVehiculo()->value(),
             'idPersonal'          => $this->getIdPersonal()->value(),

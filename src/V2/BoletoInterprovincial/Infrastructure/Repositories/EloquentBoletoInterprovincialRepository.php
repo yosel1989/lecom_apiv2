@@ -742,12 +742,14 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         if( $Ruta->total === 0 ){
             throw new InvalidArgumentException( 'La ruta no se encuentra registrado en el sistema o esta inhabilitado.' );
         }
+        $_ruta = Ruta::findOrFail($_idRuta->value(), ['nombre']);
         // validar viaje
         $BoletoPrecio = \App\Models\V2\BoletoPrecio::selectRaw('count(*) as total')->where('id', $_idBoletoPrecio->value())->where('id_estado',1)->where('id_eliminado',0)->where('id_cliente',$_idCliente->value())->where('id_ruta',$_idRuta->value())->first();
         if( $BoletoPrecio->total === 0 ) {
             throw new InvalidArgumentException('El viaje no se encuentra registrado en el sistema o esta inhabilitado.');
         }
         $viaje = \App\Models\V2\BoletoPrecio::findOrFail($_idBoletoPrecio->value(), ['id','id_paradero_origen','id_paradero_destino']);
+        $ParaderoDestino = Paradero::findOrFail($viaje->id_paradero_destino, ['nombre']) ;
 
 
         $Serie  = \App\Models\V2\ComprobanteSerie::
@@ -829,7 +831,6 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             'id_estado' => 1,
             'id_origen' => EnumOrigenBoleto::COUNTER->value
         ]);
-
 
         $boleto = $model->find($idBoleto);
 //        throw new InvalidArgumentException(var_dump($boleto));

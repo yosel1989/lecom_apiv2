@@ -40,5 +40,9 @@ interface EgresoRepositoryContract
     ): Egreso;
 
     public function liquidacionTotalByVehiculoRangoFecha(Id $idCliente, array $idVehiculos, DateFormat $fechaDesde, DateFormat $fechaHasta): array;
-    
+
+    public function anular(
+        Id $id,
+        Id $idUsuarioRegistro
+    ): void;
 }

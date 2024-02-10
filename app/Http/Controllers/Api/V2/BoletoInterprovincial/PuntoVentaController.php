@@ -36,22 +36,12 @@ class PuntoVentaController extends Controller
 
             $usuario = Auth::user();
 
-            //return response()->json(BoletoInterprovincial::all());
-
+            // Registrar boleto
             $boleto = $this->controller->__invoke($request);
+            // Obtener datos de la empresa
             $configuracion = $this->controllerConfiguracion->__invoke($request);
-
+            // Registrar comprobante
             $comprobante = $this->controllerComprobante->__invoke($request, $boleto);
-
-            // generando el qr
-//            $qrcode = base64_encode(QrCode::encoding('UTF-8')->format('svg')->size(100)->errorCorrection('M')->generate(
-//                $comprobante->getSerie()->value() . ' | ' .
-//                $comprobante->getNumero()->value() . ' | ' .
-//                $comprobante->getIdProducto()->value() . ' | ' .
-//                $comprobante->getFechaRegistro()->value() . ' | ' .
-//                $boleto->getNumeroDocumento()->value()
-//            ));
-//            $qrcode = base64_encode(QrCode::encoding('UTF-8')->format('svg')->size(100)->errorCorrection('M')->generate('ddddddd'));
 
             $qrcode = base64_encode(QrCode::encoding('UTF-8')->format('svg')->size(80)->errorCorrection('L')->generate(
                 $boleto->getId()->value()

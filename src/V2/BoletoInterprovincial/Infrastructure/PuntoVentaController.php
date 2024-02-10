@@ -26,70 +26,80 @@ final class PuntoVentaController
     public function __invoke( Request $request ): BoletoInterprovincialOficial
     {
 
-        $id   = \Ramsey\Uuid\Uuid::uuid4();
-        $user = Auth::user();
+        DB::beginTransaction();
 
-        $idCliente = $request->input('idCliente');
-        $idSede = $request->input('idSede');
-        $idCaja = $request->input('idCaja');
-        $idCajaDiario = $request->input('idCajaDiario');
-        $idTipoDocumento = $request->input('idTipoDocumento');
-        $numeroDocumento = $request->input('numeroDocumento');
-        $nombres = $request->input('nombres');
-        $apellidos = $request->input('apellidos');
-        $menorEdad = $request->input('menorEdad');
+        try {
+            $id   = \Ramsey\Uuid\Uuid::uuid4();
+            $user = Auth::user();
 
-        $idVehiculo = $request->input('idVehiculo'); //null
-        $idAsiento = $request->input('numeroAsiento'); //null
-        $fechaPartida = $request->input('fechaPartida'); // null
-        $horaPartida = $request->input('horaSalida'); //null
-        $idRuta = $request->input('idRuta');
-        $idBoletoPrecio = $request->input('idBoletoPrecio');
-        $precio = $request->input('precio');
-        $idTipoMoneda = $request->input('idTipoMoneda');
-        $idFormaPago = $request->input('idFormaPago');
-        $obsequio = $request->input('obsequio');
+            $idCliente = $request->input('idCliente');
+            $idSede = $request->input('idSede');
+            $idCaja = $request->input('idCaja');
+            $idCajaDiario = $request->input('idCajaDiario');
+            $idTipoDocumento = $request->input('idTipoDocumento');
+            $numeroDocumento = $request->input('numeroDocumento');
+            $nombres = $request->input('nombres');
+            $apellidos = $request->input('apellidos');
+            $menorEdad = $request->input('menorEdad');
 
-        $idTipoComprobante = $request->input('idTipoComprobante');
-        $idTipoDocumentoEntidad = $request->input('idTipoDocumentoEntidad'); //null
-        $numeroDocumentoEntidad = $request->input('numeroDocumento');
-        $nombreEntidad = $request->input('nombreEntidad');
-        $direccionEntidad = $request->input('direccionEntidad');
+            $idVehiculo = $request->input('idVehiculo'); //null
+            $idAsiento = $request->input('numeroAsiento'); //null
+            $fechaPartida = $request->input('fechaPartida'); // null
+            $horaPartida = $request->input('horaSalida'); //null
+            $idRuta = $request->input('idRuta');
+            $idBoletoPrecio = $request->input('idBoletoPrecio');
+            $precio = $request->input('precio');
+            $idTipoMoneda = $request->input('idTipoMoneda');
+            $idFormaPago = $request->input('idFormaPago');
+            $obsequio = $request->input('obsequio');
 
-        $idUsuarioRegistro = $user->getId();
+            $idTipoComprobante = $request->input('idTipoComprobante');
+            $idTipoDocumentoEntidad = $request->input('idTipoDocumentoEntidad'); //null
+            $numeroDocumentoEntidad = $request->input('numeroDocumento');
+            $nombreEntidad = $request->input('nombreEntidad');
+            $direccionEntidad = $request->input('direccionEntidad');
 
-        $useCase = new PuntoVentaUseCase($this->repository);
-        return $useCase->__invoke(
-            $id,
-            $idCliente,
-            $idSede,
-            $idCaja,
-            $idCajaDiario,
-            $idTipoDocumento,
-            $numeroDocumento,
-            $nombres,
-            $apellidos,
-            $menorEdad,
+            $idUsuarioRegistro = $user->getId();
 
-            $idVehiculo,
-            $idAsiento,
-            $fechaPartida,
-            $horaPartida,
-            $idRuta,
-            $idBoletoPrecio,
-            $precio,
-            $idTipoMoneda,
-            $idFormaPago,
-            $obsequio,
+            $useCase = new PuntoVentaUseCase($this->repository);
 
-            $idTipoComprobante,
-            $idTipoDocumentoEntidad,
-            $numeroDocumentoEntidad,
-            $nombreEntidad,
-            $direccionEntidad,
+            DB::commit();
 
-            $idUsuarioRegistro,
-        );
+            return $useCase->__invoke(
+                $id,
+                $idCliente,
+                $idSede,
+                $idCaja,
+                $idCajaDiario,
+                $idTipoDocumento,
+                $numeroDocumento,
+                $nombres,
+                $apellidos,
+                $menorEdad,
+
+                $idVehiculo,
+                $idAsiento,
+                $fechaPartida,
+                $horaPartida,
+                $idRuta,
+                $idBoletoPrecio,
+                $precio,
+                $idTipoMoneda,
+                $idFormaPago,
+                $obsequio,
+
+                $idTipoComprobante,
+                $idTipoDocumentoEntidad,
+                $numeroDocumentoEntidad,
+                $nombreEntidad,
+                $direccionEntidad,
+
+                $idUsuarioRegistro,
+            );
+        }catch(\Exception $e){
+            DB::rollBack();
+            throw new \InvalidArgumentException($e->getMessage());
+        }
     }
 
 }

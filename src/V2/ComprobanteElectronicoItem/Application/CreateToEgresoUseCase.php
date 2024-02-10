@@ -1,23 +1,23 @@
 <?php
 
-namespace Src\V2\ComprobanteElectronico\Application;
+namespace Src\V2\ComprobanteElectronicoItem\Application;
 
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
-use Src\V2\ComprobanteElectronico\Domain\ComprobanteElectronico;
-use Src\V2\ComprobanteElectronico\Domain\Contracts\ComprobanteElectronicoRepositoryContract;
+use Src\V2\ComprobanteElectronicoItem\Domain\ComprobanteElectronicoItem;
+use Src\V2\ComprobanteElectronicoItem\Domain\Contracts\ComprobanteElectronicoItemRepositoryContract;
 use Src\V2\Egreso\Domain\Egreso;
 use Src\V2\EgresoDetalle\Domain\EgresoDetalle;
 
 final class CreateToEgresoUseCase
 {
     /**
-     * @var ComprobanteElectronicoRepositoryContract
+     * @var ComprobanteElectronicoItemRepositoryContract
      */
-    private ComprobanteElectronicoRepositoryContract $repository;
+    private ComprobanteElectronicoItemRepositoryContract $repository;
 
-    public function __construct( ComprobanteElectronicoRepositoryContract $repository )
+    public function __construct( ComprobanteElectronicoItemRepositoryContract $repository )
     {
         $this->repository = $repository;
     }
@@ -30,7 +30,7 @@ final class CreateToEgresoUseCase
         string $idUsuario,
         Egreso $egreso,
         EgresoDetalle $egresoDetalle
-    ): ComprobanteElectronico
+    ): ComprobanteElectronicoItem
     {
         return $this->repository->createToEgreso(
             new NumericInteger($idTipoDocumento),

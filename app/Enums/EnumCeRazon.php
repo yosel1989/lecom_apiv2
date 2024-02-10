@@ -6,4 +6,5 @@ enum EnumCeRazon: int
 {
     case VentaBoletoInterprovincial = 1;
     case Encomienda = 2;
+    case Egreso = 3;
 }

@@ -163,7 +163,21 @@ class ComprobanteElectronico extends Model
         'f_modifico' =>  'string',
 
 
+        // secondary
         'ultimo_numero' => 'integer'
     ];
+
+
+    public function usuarioRegistro(){
+        return $this->hasOne('App\Models\User','id','id_usu_registro');
+    }
+
+    public function usuarioModifico(){
+        return $this->hasOne('App\Models\User','id','id_usu_modifico');
+    }
+
+    public function razon(){
+        return $this->hasOne('App\Models\V2\ComprobanteElectronicoRazon','id','id_razon');
+    }
 
 }

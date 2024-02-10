@@ -2,6 +2,7 @@
 
 namespace App\Models\V2;
 
+use App\Enums\EnumEstadoEgreso;
 use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
 use App\Traits\UUID;
@@ -51,7 +52,7 @@ class Egreso extends Model
         'total' =>  'float',
         'f_registro' =>  'string',
         'f_modifico' =>  'string',
-        'id_estado' => IdEstado::class,
+        'id_estado' => EnumEstadoEgreso::class,
         'id_eliminado' => IdEliminado::class
     ];
 

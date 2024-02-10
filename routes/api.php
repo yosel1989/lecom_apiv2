@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Older\RegisterErtStateController;
+use App\Models\V2\Sede;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 Route::post('register', [App\Http\Controllers\AuthController::class, 'register']);
 Route::post('login', [App\Http\Controllers\AuthController::class, 'login']);
@@ -19,6 +21,31 @@ Route::middleware('auth:sanctum')->group(function() {
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::middleware('auth:sanctum')->get('/check', function (Request $request) {
+    $user = $request->user();
+    return response()->json([
+        'data'=>[
+            'usuario' => [
+                'id' => $user->id,
+                'usuario' => $user->usuario,
+                'nombres' => $user->nombres,
+                'apellidos' => $user->apellidos,
+                'correo' => $user->correo,
+                'idNivel' => $user->id_nivel,
+                'idPerfil' => $user->id_perfil,
+                'perfil' => $user->id_perfil ? $user->perfil->nombre : null,
+                'idEstado' => $user->id_estado,
+                'idCliente' => $user->id_cliente,
+                'cliente' => $user->id_cliente ? $user->cliente->nombre : null,
+                'idSede' => $user->personal ? $user->personal->id_sede : null,
+                'sede' => $user->personal ? Sede::findOrFail($user->personal->id_sede)->nombre : null,
+            ],
+        ],
+        'error' => null,
+        'status' => Response::HTTP_OK
+    ]);
 });
 
 
@@ -106,6 +133,7 @@ include 'V2/export-route.php';
 include 'V2/tipo-personal-route.php';
 include 'V2/liquidacion-route.php';
 include 'V2/liquidacion-motivo-route.php';
+include 'V2/egreso-motivo-route.php';
 
 
 Route::get('v1/erts', function(){

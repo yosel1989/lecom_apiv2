@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\V2\Egreso\Infrastructure\Repositories;
 
+use App\Enums\EnumEstadoEgreso;
 use App\Enums\EnumTipoComprobante;
 use App\Models\V2\Caja;
 use App\Models\V2\CajaDiario;
@@ -375,6 +376,17 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
         }
 
         return $collection;
+    }
+
+    public function anular(
+        Id $id,
+        Id $idUsuarioRegistro
+    ): void
+    {
+        $this->eloquent->findOrFail($id->value())->update([
+            'id_estado' => EnumEstadoEgreso::Anulado->value,
+            'id_usu_modifico' => $idUsuarioRegistro->value()
+        ]);
     }
 
 }

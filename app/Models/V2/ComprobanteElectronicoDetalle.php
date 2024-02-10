@@ -29,20 +29,28 @@ class ComprobanteElectronicoDetalle extends Model
         'id_comprobante',
         'id_cliente',
         'id_unidad_medida',
-        'idProducto',
-        'producto',
-        'detalle',
+        'codigo',
+        'descripcion',
         'cantidad',
-        'valor',
-        'subTotal',
+        'valor_unitario',
+        'precio_unitario',
+        'descuento',
+        'sub_total',
+        'id_tipo_igv',
+        'id_tipo_ivap',
         'igv',
+        'imp_bolsa',
         'total',
-        'idEstado',
-        'idEliminado',
-        'idUsuarioRegistro',
-        'idUsuarioModifico',
-        'fechaRegistro',
-        'fechaModifico'
+        'anticipo_regulariza',
+        'anticipo_comprobante_serie',
+        'anticipo_comprobante_numero',
+        'codigo_producto_sunat',
+        'tipo_isc',
+        'isc',
+        'id_usu_registro',
+        'id_usu_modifico',
+        'f_registro',
+        'f_modifico',
     ];
 
     /**
@@ -51,17 +59,13 @@ class ComprobanteElectronicoDetalle extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'fechaRegistro' =>  'string',
-        'fechaModifico' =>  'string',
-        'idUnidadMedida' =>  EnumUnidadMedida::class,
-        'idProducto' =>  EnumRazonComprobante::class,
+        'f_registro' =>  'string',
+        'f_modifico' =>  'string',
         'cantidad' =>  'integer',
         'valor' =>  'float',
-        'subTotal' =>  'float',
+        'sub_total' =>  'float',
         'igv' =>  'integer',
         'total' =>  'integer',
-        'idEstado' =>  'integer',
-        'idEliminado' =>  'integer'
     ];
 
 }

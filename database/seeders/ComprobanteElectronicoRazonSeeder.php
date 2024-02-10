@@ -23,6 +23,9 @@ class ComprobanteElectronicoRazonSeeder extends Seeder
         \App\Models\V2\ComprobanteElectronicoRazon::create([
             'nombre'=> 'Encomienda',
         ]);
+        \App\Models\V2\ComprobanteElectronicoRazon::create([
+            'nombre'=> 'Egreso',
+        ]);
 
     }
 }

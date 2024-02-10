@@ -6,4 +6,6 @@ Route::namespace('App\Http\Controllers\Api\V2\Egreso')->middleware('auth:sanctum
     Route::post('cliente/egreso', 'CreateController');
     Route::get('cliente/{id}/egreso/reporte-despacho/usuario', 'GetReporteDespachoByClienteController');
     Route::post('cliente/{id}/egreso/reporte', 'GetReporteByClienteController');
+    Route::put('egreso/anular', 'AnularEgresoController');
+
 });
