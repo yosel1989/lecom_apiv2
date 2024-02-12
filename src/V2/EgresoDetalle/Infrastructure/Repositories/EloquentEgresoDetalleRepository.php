@@ -42,6 +42,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
         foreach ( $models as $model ){
 
             $OModel = new EgresoDetalle(
+                new Id($model->id , false, 'El id  no tiene el formato correcto'),
                 new Id($model->id_egreso , false, 'El id de la egreso no tiene el formato correcto'),
                 new Id($model->id_cliente , false, 'El id de la cliente no tiene el formato correcto'),
                 new Id($model->id_egreso_tipo , false, 'El id del egreso tipo no tiene el formato correcto'),
@@ -69,6 +70,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
     }
 
     public function create(
+        Id $id,
         Id $idEgreso,
         Id $idCliente,
         Id $idEgresoTipo,
@@ -77,7 +79,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
         NumericFloat $importe,
         Text $numeroDocumento,
         Id $idUsuarioRegistro
-    ): void
+    ): EgresoDetalle
     {
 
         if($importe->value() === 0){
@@ -85,6 +87,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
         }
 
         $this->eloquent->create([
+            'id' => $id->value(),
             'id_egreso' => $idEgreso->value(),
             'id_cliente' => $idCliente->value(),
             'id_egreso_tipo' => $idEgresoTipo->value(),
@@ -95,6 +98,38 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
             'id_estado' => 1,
             'id_usu_registro' => $idUsuarioRegistro->value()
         ]);
+
+
+        $model = $this->eloquent->with(
+            'usuarioRegistro:id,nombres,apellidos',
+            'usuarioModifico:id,nombres,apellidos',
+            'egresoTipo:id,nombre',
+        )
+            ->findOrFail($id->value());
+
+        $OModel = new EgresoDetalle(
+            new Id($model->id , false, 'El id  no tiene el formato correcto'),
+            new Id($model->id_egreso , false, 'El id de la egreso no tiene el formato correcto'),
+            new Id($model->id_cliente , false, 'El id de la cliente no tiene el formato correcto'),
+            new Id($model->id_egreso_tipo , false, 'El id del egreso tipo no tiene el formato correcto'),
+            new Text($model->detalle , true, -1, ''),
+            new DateFormat($model->fecha, false, 'La fecha no tiene el formato correcto'),
+            new NumericFloat($model->importe),
+            new Text($model->numero_documento , true, -1, ''),
+            new NumericInteger($model->id_estado->value),
+            new NumericInteger($model->id_eliminado->value),
+            new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
+            new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+            new DateTimeFormat($model->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
+            new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+            new Id($model->id_liquidacion, true, 'El id de la liquidacion no tiene el formato correcto'),
+        );
+
+        $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
+        $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
+        $OModel->setEgresoTipo(new Text($model->egresoTipo->nombre, false, -1, ''));
+
+        return $OModel;
     }
 
     public function deleteByEgreso(

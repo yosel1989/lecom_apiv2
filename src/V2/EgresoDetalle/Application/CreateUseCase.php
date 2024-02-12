@@ -7,6 +7,7 @@ use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\V2\EgresoDetalle\Domain\Contracts\EgresoDetalleRepositoryContract;
+use Src\V2\EgresoDetalle\Domain\EgresoDetalle;
 
 final class CreateUseCase
 {
@@ -21,6 +22,7 @@ final class CreateUseCase
     }
 
     public function __invoke(
+        string $id,
         string $idEgreso,
         string $idCliente,
         string $idEgresoTipo,
@@ -29,8 +31,9 @@ final class CreateUseCase
         float $importe,
         ?string $numeroDocumento,
         string $idUsuarioRegistro
-    ): void
+    ): EgresoDetalle
     {
+        $_id = new Id($id,false, 'El id no tiene el formato correcto');
         $_idEgreso = new Id($idEgreso,false, 'El id del egreso no tiene el formato correcto');
         $_idCliente = new Id($idCliente,false, 'El id del cliente no tiene el formato correcto');
         $_idEgresoTipo = new Id($idEgresoTipo,false, 'El id del egreso tipo no tiene el formato correcto');
@@ -40,7 +43,8 @@ final class CreateUseCase
         $_numeroDocumento = new Text($numeroDocumento,true, 50, 'El numero de documento excede los 50 caracteres');
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
-        $this->repository->create(
+        return $this->repository->create(
+            $_id,
             $_idEgreso,
             $_idCliente,
             $_idEgresoTipo,

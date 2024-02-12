@@ -12,6 +12,7 @@ use Src\V2\ComprobanteElectronico\Application\CreateToEgresoUseCase;
 use Src\V2\ComprobanteElectronico\Infrastructure\Repositories\EloquentComprobanteElectronicoRepository;
 use Src\V2\Egreso\Application\CreateUseCase;
 use Src\V2\Egreso\Infrastructure\Repositories\EloquentEgresoRepository;
+use Src\V2\EgresoDetalle\Domain\EgresoDetalleList;
 use Src\V2\EgresoDetalle\Infrastructure\Repositories\EloquentEgresoDetalleRepository;
 
 final class CreateController
@@ -47,10 +48,14 @@ final class CreateController
             $idCaja          = $request->input('idCaja');
             $idCajaDiario           = $request->input('idCajaDiario');
 
+            $idTipoDocumentoEntidad           = $request->input('idTipoDocumentoEntidad');
+            $numeroDocumentoEntidad           = $request->input('numeroDocumentoEntidad');
+            $nombreEntidad           = $request->input('nombreEntidad');
+
             $detalle           = $request->input('detalle');
 
             $useCase = new CreateUseCase( $this->repository );
-            $useCase->__invoke(
+            $_egreso =$useCase->__invoke(
                 $Id->toString(),
                 $idCliente,
                 $idSede,
@@ -61,12 +66,15 @@ final class CreateController
                 $idCajaDiario,
                 $user->getId()
             );
+            $_egreso->setDetalle(new EgresoDetalleList());
 
             $createDetalleUseCase = new \Src\V2\EgresoDetalle\Application\CreateUseCase($this->detalleRepository);
 
             foreach ($detalle as $det) {
+                $IdDetalle         = Uuid::uuid4();
                 $d = (object) $det;
-                $createDetalleUseCase->__invoke(
+                $detalle = $createDetalleUseCase->__invoke(
+                    $IdDetalle->toString(),
                     $Id->toString(),
                     $idCliente,
                     $d->idTipoEgreso,
@@ -76,11 +84,20 @@ final class CreateController
                     $d->numeroDocumento,
                     $user->getId()
                 );
+                $_egreso->getDetalle()->add($detalle);
             }
 
-            $comprobanteElectronicoUseCase = new CreateToEgresoUseCase($this->comprobanteElectronicoRepository);
-            $
+            //
 
+            $comprobanteElectronicoUseCase = new CreateToEgresoUseCase($this->comprobanteElectronicoRepository);
+            $comprobanteElectronicoUseCase->__invoke(
+                $idTipoDocumentoEntidad,
+                $numeroDocumentoEntidad,
+                $nombreEntidad,
+                null,
+                $user->getId(),
+                $_egreso,
+            );
 
 
             DB::commit();

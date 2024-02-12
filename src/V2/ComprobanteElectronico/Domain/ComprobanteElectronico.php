@@ -10,6 +10,7 @@ use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\V2\ComprobanteElectronicoItem\Domain\ComprobanteElectronicoItemList;
 
 final class ComprobanteElectronico
 {
@@ -76,6 +77,9 @@ final class ComprobanteElectronico
     private Id $idUsuarioModifico;
     private DateTimeFormat $fechaRegistro;
     private DateTimeFormat $fechaModifico;
+
+    // secondary
+    private ComprobanteElectronicoItemList $items;
 
     /**
      * @param Id $id
@@ -1296,6 +1300,22 @@ final class ComprobanteElectronico
     public function setFechaModifico(DateTimeFormat $fechaModifico): void
     {
         $this->fechaModifico = $fechaModifico;
+    }
+
+    /**
+     * @return ComprobanteElectronicoItemList
+     */
+    public function getItems(): ComprobanteElectronicoItemList
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param ComprobanteElectronicoItemList $items
+     */
+    public function setItems(ComprobanteElectronicoItemList $items): void
+    {
+        $this->items = $items;
     }
 
 

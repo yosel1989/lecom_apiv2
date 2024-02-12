@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Src\V2\ComprobanteElectronico\Infrastructure\Repositories;
 
 use App\Enums\EnumCeRazon;
+use App\Enums\EnumSunatTipoIgv;
 use App\Enums\EnumSunatTransaccion;
 use App\Enums\EnumTipoComprobante;
 use App\Enums\EnumTipoMoneda;
+use App\Enums\EnumUnidadMedida;
 use App\Models\V2\ComprobanteElectronico as EloquentModelComprobanteElectronico;
+use App\Models\V2\ComprobanteElectronicoItem as EloquentModelComprobanteElectronicoItem;
 use App\Models\V2\ComprobanteSerie;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
@@ -22,16 +25,20 @@ use Src\Core\Domain\ValueObjects\ValueBoolean;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
 use Src\V2\ComprobanteElectronico\Domain\Contracts\ComprobanteElectronicoRepositoryContract;
 use Src\V2\ComprobanteElectronico\Domain\ComprobanteElectronico;
+use Src\V2\ComprobanteElectronicoItem\Domain\ComprobanteElectronicoItem;
+use Src\V2\ComprobanteElectronicoItem\Domain\ComprobanteElectronicoItemList;
 use Src\V2\Egreso\Domain\Egreso;
 use Src\V2\EgresoDetalle\Domain\EgresoDetalle;
 
 final class EloquentComprobanteElectronicoRepository implements ComprobanteElectronicoRepositoryContract
 {
     private EloquentModelComprobanteElectronico $eloquentModel;
+    private EloquentModelComprobanteElectronicoItem $eloquentModelItem;
 
     public function __construct()
     {
         $this->eloquentModel = new EloquentModelComprobanteElectronico;
+        $this->eloquentModelItem = new EloquentModelComprobanteElectronicoItem;
     }
 
     public function createToBoleto(
@@ -241,9 +248,9 @@ final class EloquentComprobanteElectronicoRepository implements ComprobanteElect
         Text $direccion,
         Id $idUsuario,
         Egreso $egreso,
-        EgresoDetalle $egresoDetalle
     ): ComprobanteElectronico
     {
+        $fechaRegistro =  new \DateTime('now');
         $idComprobante = Uuid::uuid4();
 
         $Serie = ComprobanteSerie::where('id_cliente', $egreso->getIdCliente()->value())
@@ -264,7 +271,7 @@ final class EloquentComprobanteElectronicoRepository implements ComprobanteElect
             ->first();
 
         $this->eloquentModel->create([
-            'id' =>  $idComprobante,
+            'id' =>  $idComprobante->toString(),
             'id_cliente' =>  $egreso->getIdCliente()->value(),
             'id_sede' =>  $egreso->getIdSede()->value(),
 
@@ -345,12 +352,47 @@ final class EloquentComprobanteElectronicoRepository implements ComprobanteElect
             'id_estado' =>  1,
             'id_usu_registro' =>  $idUsuario->value(),
             'id_usu_modifico' =>  null,
-            'f_registro' =>  (new \DateTime('now'))->format('Y-m-d H:i:s'),
+            'f_registro' =>  ($fechaRegistro)->format('Y-m-d H:i:s'),
             'f_modifico' =>  null,
         ]);
 
+        foreach ( $egreso->getDetalle()->all() as $item) {
+            $this->eloquentModelItem->create([
+                'id_comprobante' => $idComprobante->toString(),
+                'id_cliente' => $egreso->getIdCliente()->value(),
+
+                'id_unidad_medida' => EnumUnidadMedida::Servicio,
+                'codigo' => $item->getId()->value(),
+                'descripcion' => $item->getEgresoTipo()->value(),
+                'cantidad' => 1,
+                'valor_unitario' => $item->getImporte()->value(),
+                'precio_unitario' => $item->getImporte()->value(),
+                'descuento' => 0,
+                'sub_total' => $item->getImporte()->value(),
+                'id_tipo_igv' => EnumSunatTipoIgv::ExoneradoTransferenciaGratuita,
+                'id_tipo_ivap' => null,
+                'igv' => 0,
+                'impBolsa' => 0,
+                'total' => $item->getImporte()->value(),
+
+                'anticipo_regulariza' => false,
+                'anticipo_comprobante_serie' => null,
+                'anticipo_comprobante_numero' => null,
+
+                'codigo_producto_sunat' => null,
+                'tipo_isc' => 0,
+                'isc' => 0,
+
+
+                'id_usu_registro' => $idUsuario->value(),
+                'id_usu_modifico' => null,
+                'f_registro' => ($fechaRegistro)->format('Y-m-d H:i:s'),
+                'f_modifico' => null
+            ]);
+        }
+
         $model = $this->eloquentModel->find($idComprobante);
-        return new ComprobanteElectronico(
+        $OModel = new ComprobanteElectronico(
             new Id($model->id, false, 'El id del comprobante no tiene el formato correcto'),
             new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
             new Id($model->id_sede, false, 'El id de la sede no tiene el formato correcto'),
@@ -431,6 +473,42 @@ final class EloquentComprobanteElectronicoRepository implements ComprobanteElect
             new DateTimeFormat($model->f_registro, false, 'La fecha de registro del comprobante no tiene el formato correcto'),
             new DateTimeFormat($model->f_modifico, true, 'La fecha de modificación del comprobante no tiene el formato correcto')
         );
+        $OModel->setItems(new ComprobanteElectronicoItemList());
 
+
+        $items = $this->eloquentModelItem->where('id_comprobante', $idComprobante)->get();
+        foreach ( $items as $item) {
+            $OModelItem = new ComprobanteElectronicoItem(
+                new Id($item->id, false, 'El id del item no tiene el formato correcto'),
+                    new Id($item->id_comprobante, false, 'El id del comprobante no tiene el formato correcto'),
+                    new Id($item->id_cliente, false,  'El id del cliente no tiene el formato correcto'),
+                    new NumericInteger($item->id_unidad_medida->value),
+                    new Id($item->codigo, false, 'El id del código del item no tiene el formato correcto'),
+                    new Text($item->descripcion, false, -1, ''),
+                    new NumericFloat($item->cantidad),
+                    new NumericFloat($item->valor_unitario),
+                    new NumericFloat($item->precio_unitario),
+                    new NumericFloat($item->descuento),
+                    new NumericFloat($item->sub_total),
+                    new NumericInteger($item->id_tipo_igv),
+                    new NumericInteger($item->id_tipo_ivap),
+                    new NumericFloat($item->igv),
+                    new NumericFloat($item->imp_bolsa),
+                    new NumericFloat($item->total),
+                    new ValueBoolean($item->anticipo_regulariza ? $item->anticipo_regulariza : false),
+                    new Text($item->anticipo_comprobante_serie, false, -1, ''),
+                    new Text($item->anticipo_comprobante_numero, false, -1, ''),
+                    new Text($item->codigo_producto_sunat, false, -1, ''),
+                    new NumericFloat($item->tipo_isc),
+                    new NumericFloat($item->isc),
+                    new Id($item->id_usu_registro, false,  'El id del usuario que registro no tiene el formato correcto'),
+                    new Id($item->id_usu_modifico, true,  'El id del usuario que modifico no tiene el formato correcto'),
+                    new DateTimeFormat($item->f_registro, false,  'La fecha de registro no tiene el formato correcto'),
+                    new DateTimeFormat($item->f_modifico, true,  'La fecha de modificación no tiene el formato correcto')
+            );
+            $OModel->getItems()->add($OModelItem);
+        }
+
+        return $OModel;
     }
 }

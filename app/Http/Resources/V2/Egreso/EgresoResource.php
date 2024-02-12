@@ -31,6 +31,9 @@ class EgresoResource extends JsonResource
             'usuarioRegistro'     => $this->getUsuarioRegistro()->value(),
             'idUsuarioModifico'     => $this->getIdUsuarioModifico()->value(),
             'usuarioModifico'     => $this->getUsuarioModifico()->value(),
+            'comprobanteSerie'     => $this->getComprobanteSerie()->value(),
+            'comprobanteNumero'     => $this->getComprobanteNumero()->value(),
+            'tipoComprobante'     => $this->getTipoComprobante()->value(),
         ];
 
     }

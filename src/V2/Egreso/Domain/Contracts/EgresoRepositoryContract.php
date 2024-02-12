@@ -21,7 +21,7 @@ interface EgresoRepositoryContract
         Id $idCaja,
         Id $idCajaDiario,
         Id $idUsuarioRegistro
-    ): void;
+    ): Egreso;
 
     public function delete(
         Id $id

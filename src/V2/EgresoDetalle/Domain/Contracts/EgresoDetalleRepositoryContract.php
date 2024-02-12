@@ -6,11 +6,13 @@ use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\V2\EgresoDetalle\Domain\EgresoDetalle;
 use Src\V2\EgresoDetalle\Domain\EgresoDetalleList;
 
 interface EgresoDetalleRepositoryContract
 {
     public function create(
+        Id $id,
         Id $idEgreso,
         Id $idCliente,
         Id $idEgresoTipo,
@@ -19,7 +21,7 @@ interface EgresoDetalleRepositoryContract
         NumericFloat $importe,
         Text $numeroDocumento,
         Id $idUsuarioRegistro
-    ): void;
+    ): EgresoDetalle;
 
     public function deleteByEgreso(
         Id $idEgreso

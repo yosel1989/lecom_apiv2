@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre', 50);
             $table->string('abreviatura', 50);
-            $table->smallInteger('bl_punto_venta')->default(0);
+            $table->boolean('bl_punto_venta')->default(false);
             $table->boolean('bl_despacho')->default(false);
 
             $table->index(['id', 'nombre', 'bl_punto_venta', 'bl_despacho']);

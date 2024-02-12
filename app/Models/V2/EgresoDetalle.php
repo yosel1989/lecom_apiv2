@@ -22,6 +22,7 @@ class EgresoDetalle extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'id_egreso',
         'id_cliente',
         'id_egreso_tipo',

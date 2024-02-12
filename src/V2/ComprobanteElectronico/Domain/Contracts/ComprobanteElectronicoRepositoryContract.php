@@ -29,7 +29,6 @@ interface ComprobanteElectronicoRepositoryContract
         Text $direccion,
         Id $idUsuario,
         Egreso $egreso,
-        EgresoDetalle $egresoDetalle
     ): ComprobanteElectronico;
 
 }

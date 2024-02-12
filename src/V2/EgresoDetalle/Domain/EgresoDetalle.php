@@ -30,8 +30,10 @@ final class EgresoDetalle
     private Text $detalle;
     private Text $numeroDocumento;
     private Id $idLiquidacion;
+    private Id $id;
 
     /**
+     * @param Id $id
      * @param Id $idEgreso
      * @param Id $idCliente
      * @param Id $idEgresoTipo
@@ -48,6 +50,7 @@ final class EgresoDetalle
      * @param Id $idLiquidacion
      */
     public function __construct(
+        Id $id,
         Id $idEgreso,
         Id $idCliente,
         Id $idEgresoTipo,
@@ -78,7 +81,26 @@ final class EgresoDetalle
         $this->detalle = $detalle;
         $this->numeroDocumento = $numeroDocumento;
         $this->idLiquidacion = $idLiquidacion;
+        $this->id = $id;
     }
+
+    /**
+     * @return Id
+     */
+    public function getId(): Id
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param Id $id
+     */
+    public function setId(Id $id): void
+    {
+        $this->id = $id;
+    }
+
+
 
     /**
      * @return Id

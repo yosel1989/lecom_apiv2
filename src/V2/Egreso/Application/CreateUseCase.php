@@ -5,6 +5,7 @@ namespace Src\V2\Egreso\Application;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\V2\Egreso\Domain\Contracts\EgresoRepositoryContract;
+use Src\V2\Egreso\Domain\Egreso;
 
 final class CreateUseCase
 {
@@ -28,7 +29,7 @@ final class CreateUseCase
         string $idCaja,
         string $idCajaDiario,
         string $idUsuarioRegistro
-    ): void
+    ): Egreso
     {
 
         $_id = new Id($id,false, 'El id del egreso no tiene el formato correcto');
@@ -41,7 +42,7 @@ final class CreateUseCase
         $_idCajaDiario = new Id($idCajaDiario,false,'El id de la caja diario no tiene el formato correcto');
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
-        $this->repository->create(
+        return $this->repository->create(
             $_id,
             $_idCliente,
             $_idSede,

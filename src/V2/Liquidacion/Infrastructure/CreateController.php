@@ -207,7 +207,7 @@ final class CreateController
 
         }catch(\Exception $e){
             DB::rollBack();
-            throw new \HttpInvalidParamException('No se pudo registrar la liquidación');
+            throw new \InvalidArgumentException($e->getMessage());
         }
 
 //

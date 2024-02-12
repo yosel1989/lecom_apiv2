@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('egreso_detalle', function (Blueprint $table) {
+            $table->uuid('id')->unique()->primary();
             $table->uuid('id_egreso');
             $table->uuid('id_cliente');
             $table->uuid('id_egreso_tipo');
@@ -42,6 +43,10 @@ return new class extends Migration
                 'f_registro',
                 'f_modifico',
                 'id_liquidacion',
+            ]);
+
+            $table->unique([
+                'id'
             ]);
 
         });

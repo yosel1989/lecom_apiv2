@@ -2,7 +2,6 @@
 
 namespace App\Models\V2;
 
-use App\Enums\EnumRazonComprobante;
 use App\Enums\EnumUnidadMedida;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
@@ -69,7 +68,13 @@ class ComprobanteElectronicoItem extends Model
         'id_unidad_medida' =>  EnumUnidadMedida::class,
         'cantidad' =>  'integer',
         'valor' =>  'float',
+        'valor_unitario' =>  'float',
+        'precio_unitario' =>  'float',
+        'anticipo_regulariza' =>  'boolean',
+        'descuento' =>  'float',
         'sub_total' =>  'float',
+        'tipo_isc' =>  'float',
+        'isc' =>  'float',
         'igv' =>  'float',
         'total' =>  'float'
     ];

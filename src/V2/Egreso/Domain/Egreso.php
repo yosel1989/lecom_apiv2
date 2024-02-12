@@ -36,6 +36,9 @@ final class Egreso
     private EgresoDetalleList $detalle;
     private Id $idCaja;
     private Id $idSede;
+    private Text $tipoComprobante;
+    private Text $comprobanteSerie;
+    private NumericInteger $comprobanteNumero;
 
     /**
      * @param Id $id
@@ -436,6 +439,54 @@ final class Egreso
     public function setEstado(Text $estado): void
     {
         $this->estado = $estado;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getTipoComprobante(): Text
+    {
+        return $this->tipoComprobante;
+    }
+
+    /**
+     * @param Text $tipoComprobante
+     */
+    public function setTipoComprobante(Text $tipoComprobante): void
+    {
+        $this->tipoComprobante = $tipoComprobante;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getComprobanteSerie(): Text
+    {
+        return $this->comprobanteSerie;
+    }
+
+    /**
+     * @param Text $comprobanteSerie
+     */
+    public function setComprobanteSerie(Text $comprobanteSerie): void
+    {
+        $this->comprobanteSerie = $comprobanteSerie;
+    }
+
+    /**
+     * @return NumericInteger
+     */
+    public function getComprobanteNumero(): NumericInteger
+    {
+        return $this->comprobanteNumero;
+    }
+
+    /**
+     * @param NumericInteger $comprobanteNumero
+     */
+    public function setComprobanteNumero(NumericInteger $comprobanteNumero): void
+    {
+        $this->comprobanteNumero = $comprobanteNumero;
     }
 
 

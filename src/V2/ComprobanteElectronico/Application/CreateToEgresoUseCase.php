@@ -29,7 +29,6 @@ final class CreateToEgresoUseCase
         ?string $direccion,
         string $idUsuario,
         Egreso $egreso,
-        EgresoDetalle $egresoDetalle
     ): ComprobanteElectronico
     {
         return $this->repository->createToEgreso(
@@ -38,8 +37,7 @@ final class CreateToEgresoUseCase
             new Text($nombre, false, 100, 'El numero de documento excede los 100 caracteres'),
             new Text($direccion, true, 100, 'El numero de documento excede los 100 caracteres'),
             new Id($idUsuario, false, 'El id del usuario no tiene el formato correcto'),
-            $egreso,
-            $egresoDetalle
+            $egreso
         );
     }
 }
