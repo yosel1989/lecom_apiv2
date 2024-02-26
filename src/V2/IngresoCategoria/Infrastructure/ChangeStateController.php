@@ -1,18 +1,18 @@
 <?php
 
 
-namespace Src\V2\Ruta\Infrastructure;
+namespace Src\V2\IngresoCategoria\Infrastructure;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Src\V2\Ruta\Application\ChangeStateUseCase;
-use Src\V2\Ruta\Infrastructure\Repositories\EloquentRutaRepository;
+use Src\V2\IngresoCategoria\Application\ChangeStateUseCase;
+use Src\V2\IngresoCategoria\Infrastructure\Repositories\EloquentIngresoCategoriaRepository;
 
 final class ChangeStateController
 {
-    private EloquentRutaRepository $repository;
+    private EloquentIngresoCategoriaRepository $repository;
 
-    public function __construct(EloquentRutaRepository $repository)
+    public function __construct(EloquentIngresoCategoriaRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -24,11 +24,11 @@ final class ChangeStateController
     public function __invoke( Request $request ): void
     {
         $user = Auth::user();
-        $idRuta = $request->id;
+        $idIngresoCategoria = $request->id;
         $idEstado = $request->input('idEstado');
         $useCase = new ChangeStateUseCase($this->repository);
         $useCase->__invoke(
-            $idRuta,
+            $idIngresoCategoria,
             $idEstado,
             $user->getId()
         );

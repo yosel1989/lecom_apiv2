@@ -134,6 +134,9 @@ include 'V2/tipo-personal-route.php';
 include 'V2/liquidacion-route.php';
 include 'V2/liquidacion-motivo-route.php';
 include 'V2/egreso-motivo-route.php';
+include 'V2/ingreso-categoria-route.php';
+include 'V2/ingreso-tipo-route.php';
+
 
 
 Route::get('v1/erts', function(){

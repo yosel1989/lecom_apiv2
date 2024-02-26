@@ -522,7 +522,9 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
         $boleto->first()->update([
             'id_vehiculo' => $idVehiculo->value(),
-            'id_usu_modifico' => $idUsuario->value()
+            'id_usu_modifico' => $idUsuario->value(),
+            'f_partida' => (new \DateTime('now'))->format('Y-m-d'),
+            'h_partida' => (new \DateTime('now'))->format('H:i:s'),
         ]);
 
         $this->eloquentModelHistorialBoletoInterprovincial->create([
@@ -1306,7 +1308,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             )
             ->join('tipo_documento', 'boleto_interprovincial_cliente_' . $OCliente->codigo . '.id_tipo_documento', '=', 'tipo_documento.id')
             ->join('paradero', 'boleto_interprovincial_cliente_' . $OCliente->codigo . '.id_paradero_destino', '=', 'paradero.id')
-            ->where('boleto_interprovincial_cliente_' . $OCliente->codigo .'.id_estado', 1)
+            //->where('boleto_interprovincial_cliente_' . $OCliente->codigo .'.id_estado', 1)
             ->whereNotNull('f_partida')
             ->whereNotNull('h_partida')
             ->whereDate('f_partida', '>=', $fechaDesde->date())

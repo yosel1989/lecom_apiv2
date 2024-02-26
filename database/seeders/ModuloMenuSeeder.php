@@ -164,6 +164,37 @@ class ModuloMenuSeeder extends Seeder
             'id_estado'=> IdEstado::Habilitado
         ]);
 
+
+        $menuIngresos = \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Administracion,
+            'texto'=>'Ingresos',
+            'icono'=>'fa-duotone fa-hand-holding-circle-dollar',
+            'id_tipo_menu'=> EnumTipoMenu::SubMenu,
+            'padre'=>null,
+            'link'=>null,
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Administracion,
+            'texto'=>'Categorias',
+            'icono'=>null,
+            'id_tipo_menu'=> EnumTipoMenu::Link,
+            'padre'=>$menuIngresos->id,
+            'link'=>'administracion/ingreso/categoria',
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Administracion,
+            'texto'=>'Tipos',
+            'icono'=>null,
+            'id_tipo_menu'=> EnumTipoMenu::Link,
+            'padre'=>$menuIngresos->id,
+            'link'=> 'administracion/ingreso/tipo',
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+
+
 //        \App\Models\V2\ModuloMenu::create([
 //            'id_modulo'=> EnumModulo::Administracion,
 //            'texto'=>'Nuevo',
