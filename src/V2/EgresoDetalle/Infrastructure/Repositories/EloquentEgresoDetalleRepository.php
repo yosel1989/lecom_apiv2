@@ -179,4 +179,74 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
     }
 
 
+    public function reporteByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idVehiculo, Id $idPersonal): EgresoDetalleList
+    {
+        $models = $this->eloquent->with(
+            'usuarioRegistro:id,nombres,apellidos',
+            'usuarioModifico:id,nombres,apellidos',
+            'egresoTipo:id,nombre',
+        )->select(
+            'egreso_detalle.*',
+            'ce_comprobante_electronico.serie as serie',
+            'ce_comprobante_electronico.numero as numero',
+            'vehiculos.placa as vehiculo',
+            'personal.nombre as personalNombre',
+            'personal.apellido as personalApellido',
+        )
+//            ->leftjoin('tipo_comprobante',  'ce_comprobante_electronico.id_tipo_comprobante', '=', 'tipo_comprobante.id')
+            ->join('egreso',  'egreso_detalle.id_egreso', '=', 'egreso.id')
+            ->leftjoin('ce_comprobante_electronico',  'egreso.id', '=', 'ce_comprobante_electronico.id_producto')
+            ->leftjoin('vehiculos',  'egreso.id_vehiculo', '=', 'vehiculos.id')
+            ->leftjoin('personal',  'egreso.id_personal', '=', 'personal.id')
+            ->where('egreso.id_cliente',$idCliente->value())
+            ->whereDate('egreso.f_registro','>=', $fechaDesde->value())
+            ->whereDate('egreso.f_registro','<=', $fechaHasta->value());
+
+        if(!is_null($idVehiculo->value())){
+            $models = $models->where('egreso.id_vehiculo', $idVehiculo->value());
+        }
+        if(!is_null($idPersonal->value())){
+            $models = $models->where('egreso.id_personal', $idPersonal->value());
+        }
+
+        $models = $models->orderBy('egreso.f_registro', 'desc')
+            ->get();
+
+
+        $collection = new EgresoDetalleList();
+
+        foreach ( $models as $model ){
+
+            $OModel = new EgresoDetalle(
+                new Id($model->id , false, 'El id  no tiene el formato correcto'),
+                new Id($model->id_egreso , false, 'El id de la egreso no tiene el formato correcto'),
+                new Id($model->id_cliente , false, 'El id de la cliente no tiene el formato correcto'),
+                new Id($model->id_egreso_tipo , false, 'El id del egreso tipo no tiene el formato correcto'),
+                new Text($model->detalle , true, -1, ''),
+                new DateFormat($model->fecha, false, 'La fecha no tiene el formato correcto'),
+                new NumericFloat($model->importe),
+                new Text($model->numero_documento , true, -1, ''),
+                new NumericInteger($model->id_estado->value),
+                new NumericInteger($model->id_eliminado->value),
+                new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
+                new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+                new DateTimeFormat($model->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
+                new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+                new Id($model->id_liquidacion, true, 'El id de la liquidacion no tiene el formato correcto'),
+            );
+
+            $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
+            $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
+            $OModel->setEgresoTipo(new Text($model->egresoTipo->nombre, false, -1, ''));
+            $OModel->setCodigo(new Text($model->serie.'-'.str_pad((string)$model->numero,8,'0',STR_PAD_LEFT), false, -1, ''));
+            $OModel->setVehiculo(new Text($model->vehiculo, false, -1, ''));
+            $OModel->setPersonal(new Text($model->personalNombre ? ($model->personalNombre . ' ' . $model->personalApellido) : null, false, -1, ''));
+
+            $collection->add($OModel);
+        }
+
+        return $collection;
+    }
+
+
 }

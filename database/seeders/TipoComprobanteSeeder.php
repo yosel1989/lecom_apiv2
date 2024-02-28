@@ -51,7 +51,7 @@ class TipoComprobanteSeeder extends Seeder
         ]);
 
         \App\Models\V2\TipoComprobante::create([
-            'nombre' => 'Tcket Interno de Egresos',
+            'nombre' => 'Ticket Interno de Egresos',
             'abreviatura' => 'TCE.',
             'bl_punto_venta' => false,
             'bl_despacho' => true,

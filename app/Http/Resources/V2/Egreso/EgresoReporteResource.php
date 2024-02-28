@@ -36,6 +36,7 @@ class EgresoReporteResource extends JsonResource
             'usuarioModifico'     => $this->getUsuarioModifico()->value(),
             'comprobanteSerie'     => $this->getComprobanteSerie()->value(),
             'comprobanteNumero'     => $this->getComprobanteNumero()->value(),
+            'codigo' => $this->getComprobanteSerie()->value() . '-' . str_pad($this->getComprobanteNumero()->value(), 8, '0',STR_PAD_LEFT),
             'tipoComprobante'     => $this->getTipoComprobante()->value(),
         ];
 

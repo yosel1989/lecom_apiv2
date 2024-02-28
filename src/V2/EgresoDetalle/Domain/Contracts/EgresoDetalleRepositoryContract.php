@@ -44,4 +44,6 @@ interface EgresoDetalleRepositoryContract
         Id $idUsuarioRegistro
     ): void;
 
+    public function reporteByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idVehiculo, Id $idPersonal): EgresoDetalleList;
+
 }
