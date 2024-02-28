@@ -32,6 +32,10 @@ final class EgresoDetalle
     private Id $idLiquidacion;
     private Id $id;
 
+    private Text $codigo;
+    private Text $vehiculo;
+    private Text $personal;
+
     /**
      * @param Id $id
      * @param Id $idEgreso
@@ -372,6 +376,54 @@ final class EgresoDetalle
     public function setIdLiquidacion(Id $idLiquidacion): void
     {
         $this->idLiquidacion = $idLiquidacion;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getCodigo(): Text
+    {
+        return $this->codigo;
+    }
+
+    /**
+     * @param Text $codigo
+     */
+    public function setCodigo(Text $codigo): void
+    {
+        $this->codigo = $codigo;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getVehiculo(): Text
+    {
+        return $this->vehiculo;
+    }
+
+    /**
+     * @param Text $vehiculo
+     */
+    public function setVehiculo(Text $vehiculo): void
+    {
+        $this->vehiculo = $vehiculo;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getPersonal(): Text
+    {
+        return $this->personal;
+    }
+
+    /**
+     * @param Text $personal
+     */
+    public function setPersonal(Text $personal): void
+    {
+        $this->personal = $personal;
     }
 
 
