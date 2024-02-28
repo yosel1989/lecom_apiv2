@@ -10,4 +10,5 @@ enum EnumTipoComprobante: int
     case NotaCredito = 4;
     case NotaDebito = 5;
     case TicketEgreso = 6;
+    case ComprobanteIngreso = 7;
 }
