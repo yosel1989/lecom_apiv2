@@ -27,7 +27,7 @@ final class CreateController
         DB::beginTransaction();
 
         try{
-            $Id         = Uuid::uuid4();
+            $Id = Uuid::uuid4();
 
             $user = Auth::user();
             $idCliente          = $request->input('idCliente');
@@ -56,65 +56,10 @@ final class CreateController
                 $idCajaDiario,
                 $user->getId()
             );
-            $_ingreso->setDetalle(new IngresoDetalleList());
 
-            $createDetalleUseCase = new \Src\V2\IngresoDetalle\Application\CreateUseCase($this->detalleRepository);
-
-            foreach ($detalle as $det) {
-                $IdDetalle         = Uuid::uuid4();
-                $d = (object) $det;
-                $detalle = $createDetalleUseCase->__invoke(
-                    $IdDetalle->toString(),
-                    $Id->toString(),
-                    $idCliente,
-                    $d->idTipoIngreso,
-                    $d->detalle,
-                    $d->fecha,
-                    $d->importe,
-                    $d->numeroDocumento,
-                    $user->getId()
-                );
-                $_ingreso->getDetalle()->add($detalle);
-            }
-
-            //
-
-            $comprobanteElectronicoUseCase = new CreateToIngresoUseCase($this->comprobanteElectronicoRepository);
-            $comprobanteElectronicoUseCase->__invoke(
-                $idTipoDocumentoEntidad,
-                $numeroDocumentoEntidad,
-                $nombreEntidad,
-                null,
-                $user->getId(),
-                $_ingreso,
-            );
 
 
             DB::commit();
-
-            /*try {
-                foreach ($detalle as $det) {
-                    $d = (object) $det;
-                    $createDetalleUseCase->__invoke(
-                        $Id->toString(),
-                        $idCliente,
-                        $d->idTipoIngreso,
-                        $d->detalle,
-                        $d->fecha,
-                        $d->importe,
-                        $d->numeroDocumento,
-                        $user->getId()
-                    );
-                }
-            }catch(\Exception $e){
-                $deleteUseCase = new DeleteUseCase($this->repository);
-                $deleteUseCase->__invoke($Id->toString());
-
-                $deleteDetalleByIngresoUseCase = new DeleteByIngresoUseCase($this->detalleRepository);
-                $deleteDetalleByIngresoUseCase->__invoke($Id->toString());
-
-                throw new \InvalidArgumentException($e->getMessage());
-            }*/
         }catch(\Exception $e){
             DB::rollBack();
             throw new \InvalidArgumentException($e->getMessage());

@@ -4,6 +4,9 @@ namespace Src\V2\Ingreso\Application;
 
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
+use Src\Core\Domain\ValueObjects\NumericInteger;
+use Src\Core\Domain\ValueObjects\Text;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
 use Src\V2\Ingreso\Domain\Contracts\IngresoRepositoryContract;
 use Src\V2\Ingreso\Domain\Ingreso;
 
@@ -32,15 +35,26 @@ final class CreateUseCase
     ): Ingreso
     {
 
-        $_id = new Id($id,false, 'El id del ingreso no tiene el formato correcto');
-        $_idCliente = new Id($idCliente,false,'El id del cliente no tiene el formato correcto');
-        $_idSede = new Id($idSede,false,'El id de la sede no tiene el formato correcto');
-        $_idVehiculo = new Id($idVehiculo,true,'El id del vehiculo no tiene el formato correcto');
-        $_idPersonal = new Id($idPersonal,true,'El id del personal no tiene el formato correcto');
-        $_total = new NumericFloat($total);
-        $_idCaja = new Id($idCaja,false,'El id de la caja no tiene el formato correcto');
-        $_idCajaDiario = new Id($idCajaDiario,false,'El id de la caja diario no tiene el formato correcto');
-        $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
+        $id = new Id $id,
+        $idCliente = new Id $idCliente,
+        $idSede = new Id $idSede,
+        $idTipoComprobante = new NumericInteger $idTipoComprobante,
+        $serie = new Text $serie,
+        $numero = new NumericInteger $numero,
+        $idTipoIngreso = new NumericInteger $idTipoIngreso,
+        $detalle = new Text $detalle,
+        $idTipoDocumentoEntidad = new NumericInteger $idTipoDocumentoEntidad,
+        $numeroDocumentoEntidad = new Text $numeroDocumentoEntidad,
+        $nombreEntidad = new Text $nombreEntidad,
+        $importe = new NumericFloat $importe,
+        $idCaja = new Id $idCaja,
+        $idCajaDiario = new Id $idCajaDiario,
+        $contabilizado = new ValueBoolean $contabilizado,
+        $aprobado = new ValueBoolean $aprobado,
+        $idMedioPago = new NumericInteger $idMedioPago,
+        $numeroOperacion = new Text $numeroOperacion,
+        $idEntidadFinanciera = new NumericInteger $idEntidadFinanciera,
+        $idUsuarioRegistro = new Id $idUsuarioRegistro
 
         return $this->repository->create(
             $_id,
