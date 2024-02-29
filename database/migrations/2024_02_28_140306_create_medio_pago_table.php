@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('nombre', 50);
             $table->boolean('bl_despacho')->default(false);
+            $table->boolean('bl_entidad_financiera')->default(false);
 
             $table->index([
                 'nombre',
-                'bl_despacho'
+                'bl_despacho',
+                'bl_entidad_financiera',
             ]);
         });
     }

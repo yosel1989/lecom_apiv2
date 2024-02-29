@@ -37,9 +37,7 @@ final class EloquentIngresoRepository implements IngresoRepositoryContract
         Id $idCliente,
         Id $idSede,
         NumericInteger $idTipoComprobante,
-        Text $serie,
-        NumericInteger $numero,
-        NumericInteger $idTipoIngreso,
+        Id $idTipoIngreso,
         Text $detalle,
         NumericInteger $idTipoDocumentoEntidad,
         Text $numeroDocumentoEntidad,
@@ -55,6 +53,9 @@ final class EloquentIngresoRepository implements IngresoRepositoryContract
         Id $idUsuarioRegistro
     ): Ingreso
     {
+        if($importe->value() === 0){
+            throw new InvalidArgumentException('El importe debe ser mayor a 0');
+        }
 
         // Validar sede
         $Sede = Sede::where('id', $idSede->value())->where('id_estado', 1)->where('id_eliminado',0)->where('id_cliente',$idCliente->value());
@@ -68,13 +69,23 @@ final class EloquentIngresoRepository implements IngresoRepositoryContract
         }
 
         // Validar serie
-        $Serie = ComprobanteSerie::where('id_estado', 1)->where('id_cliente',$idCliente->value())->where('id_tipo_comprobante',EnumTipoComprobante::ComprobanteIngreso);
-        if( $Serie->count() === 0 ){
-            throw new InvalidArgumentException( 'Falta registrar la serie en el sistema' );
+        $Serie = ComprobanteSerie::where('id_cliente', $idCliente->value())
+            ->where('id_sede', $idSede->value())
+            ->where('id_tipo_comprobante', EnumTipoComprobante::ComprobanteIngreso->value)
+            ->where('id_estado', 1);
+
+        if($Serie->count() === 0){
+            throw new \InvalidArgumentException('Falta registrar la serie para esta operación');
         }
-        if( $Serie->count() > 1 ){
-            throw new InvalidArgumentException( 'Existe más de una serie registrada' );
+        if($Serie->count() > 1){
+            throw new \InvalidArgumentException('Existe más de una serie para esta operación');
         }
+
+        // Obtener ultimo numero
+        $ultimoNumero = $this->eloquent->select(DB::raw('MAX(numero) as ultimo_numero'))
+            ->where('id_cliente', $idCliente->value())
+            ->where('serie', $Serie->first()->nombre)
+            ->first();
 
         // Validar caja
         $Caja = Caja::selectRaw('count(*) as total')->where('id', $idCaja->value())->where('id_estado', 1)->where('id_cliente',$idCliente->value())->where('id_eliminado',0)->first();
@@ -126,8 +137,8 @@ final class EloquentIngresoRepository implements IngresoRepositoryContract
             'id_cliente' => $idMedioPago->value(),
             'id_sede' => $idSede->value(),
             'id_tipo_comprobante' => $idTipoComprobante->value(),
-            'serie' => $serie->value(),
-            'numero' => $numero->value(),
+            'serie' =>  $Serie->first()->nombre,
+            'numero' =>  $ultimoNumero->ultimo_numero ? ($ultimoNumero->ultimo_numero + 1) : 1,
             'id_tipo_ingreso' => $idTipoIngreso->value(),
             'detalle' => $detalle->value(),
             'id_tipo_documento_entidad' => $idTipoDocumentoEntidad->value(),
@@ -136,8 +147,10 @@ final class EloquentIngresoRepository implements IngresoRepositoryContract
             'importe' => $importe->value(),
             'id_caja' => $idCaja->value(),
             'id_caja_diario' => $idCajaDiario->value(),
+
             'contabilizado' => $contabilizado->value(),
             'aprobado' => $aprobado->value(),
+
             'id_medio_pago' => $idMedioPago->value(),
             'numero_operacion' => $numeroOperacion->value(),
             'id_entidad_financiera' => $idEntidadFinanciera->value(),
@@ -151,39 +164,42 @@ final class EloquentIngresoRepository implements IngresoRepositoryContract
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
             'sede:id,nombre',
+            'tipoComprobante:id,nombre',
+            'tipoIngreso:id,nombre',
         )->findOrFail($id->value());
         $OModel = new Ingreso(
             new Id($model->id, false, 'El id del ingreso no tiene el formato correcto'),
-            new Id($model->idCliente, false, 'El id del cliente no tiene el formato correcto'),
-            new Id($model->idSede, false, 'El id de la sede no tiene el formato correcto'),
-            new NumericInteger($model->idTipoComprobante),
+            new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+            new Id($model->id_sede, false, 'El id de la sede no tiene el formato correcto'),
+            new NumericInteger($model->id_tipo_comprobante),
             new Text($model->serie, false, -1 , ''),
             new NumericInteger($model->numero),
-            new NumericInteger($model->idTipoIngreso),
+            new Id($model->id_tipo_ingreso, false, 'El id del tipo de ingreso no tiene el formato correcto'),
             new Text($model->detalle, false, -1 , ''),
-            new NumericInteger($model->idTipoDocumentoEntidad),
-            new Text($model->numeroDocumentoEntidad, false, -1 , ''),
-            new Text($model->nombreEntidad, false, -1 , ''),
+            new NumericInteger($model->id_tipo_documento_entidad),
+            new Text($model->numero_documento_entidad, false, -1 , ''),
+            new Text($model->nombre_entidad, false, -1 , ''),
             new NumericFloat($model->importe),
 
-            new Id($model->idCaja, false, 'El id de la caja no tiene el formato correcto'),
-            new Id($model->idCajaDiario, false, 'El id de la caja diario no tiene el formato correcto'),
+            new Id($model->id_caja, false, 'El id de la caja no tiene el formato correcto'),
+            new Id($model->id_caja_diario, false, 'El id de la caja diario no tiene el formato correcto'),
             new ValueBoolean($model->contabilizado),
             new ValueBoolean($model->aprobado),
-            new NumericInteger($model->idMedioPago),
-            new Text($model->numeroOperacion, false, -1 , ''),
-            new NumericInteger($model->idEntidadFinanciera),
+            new NumericInteger($model->id_medio_pago),
+            new Text($model->numero_operacion, false, -1 , ''),
+            new NumericInteger($model->id_entidad_financiera),
 
-            new NumericInteger($model->idEstado),
-            new Id($model->idUsuarioRegistro, false, 'El id del usuario que registro no tiene el formato correcto'),
-            new Id($model->idUsuarioModifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
-            new DateTimeFormat($model->fechaRegistro, false, 'La fecha que registro no tiene el formato correcto'),
-            new DateTimeFormat($model->fechaModifico, true, 'La fecha que modifico no tiene el formato correcto')
+            new NumericInteger($model->id_estado),
+            new Id($model->id_usu_registro, false, 'El id del usuario que registro no tiene el formato correcto'),
+            new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
+            new DateTimeFormat($model->f_registro, false, 'La fecha que registro no tiene el formato correcto'),
+            new DateTimeFormat($model->f_modifico, true, 'La fecha que modifico no tiene el formato correcto')
         );
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
         $OModel->setSede(new Text($model->sede->nombre, false, -1));
-        $OModel->setTipoComprobante(new Text($model->sede->nombre, false, -1));
+        $OModel->setTipoComprobante(new Text($model->tipoComprobante->nombre, false, -1));
+        $OModel->setTipoIngreso(new Text($model->tipoIngreso->nombre, false, -1));
 
         return $OModel;
 

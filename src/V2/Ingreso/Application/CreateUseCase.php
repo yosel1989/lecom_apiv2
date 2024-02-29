@@ -26,46 +26,62 @@ final class CreateUseCase
         string $id,
         string $idCliente,
         string $idSede,
-        ?string $idVehiculo,
-        ?string $idPersonal,
-        float $total,
+        int $idTipoComprobante,
+        string $idTipoIngreso,
+        ?string $detalle,
+        int $idTipoDocumentoEntidad,
+        string $numeroDocumentoEntidad,
+        string $nombreEntidad,
+        float $importe,
         string $idCaja,
         string $idCajaDiario,
+        bool $contabilizado,
+        bool $aprobado,
+        int $idMedioPago,
+        ?string $numeroOperacion,
+        ?int $idEntidadFinanciera,
         string $idUsuarioRegistro
     ): Ingreso
     {
 
-        $id = new Id $id,
-        $idCliente = new Id $idCliente,
-        $idSede = new Id $idSede,
-        $idTipoComprobante = new NumericInteger $idTipoComprobante,
-        $serie = new Text $serie,
-        $numero = new NumericInteger $numero,
-        $idTipoIngreso = new NumericInteger $idTipoIngreso,
-        $detalle = new Text $detalle,
-        $idTipoDocumentoEntidad = new NumericInteger $idTipoDocumentoEntidad,
-        $numeroDocumentoEntidad = new Text $numeroDocumentoEntidad,
-        $nombreEntidad = new Text $nombreEntidad,
-        $importe = new NumericFloat $importe,
-        $idCaja = new Id $idCaja,
-        $idCajaDiario = new Id $idCajaDiario,
-        $contabilizado = new ValueBoolean $contabilizado,
-        $aprobado = new ValueBoolean $aprobado,
-        $idMedioPago = new NumericInteger $idMedioPago,
-        $numeroOperacion = new Text $numeroOperacion,
-        $idEntidadFinanciera = new NumericInteger $idEntidadFinanciera,
-        $idUsuarioRegistro = new Id $idUsuarioRegistro
+        $_id = new Id($id, false, 'El id del ingreso no tiene el formato correcto');
+        $_idCliente = new Id($idCliente, false,  'El id del cliente no tiene el formato correcto');
+        $_idSede = new Id($idSede, false, 'El id de la sede no tiene el formato correcto');
+        $_idTipoComprobante = new NumericInteger($idTipoComprobante);
+        $_idTipoIngreso = new Id($idTipoIngreso, false, 'El id del tipo de ingreso no tiene el formato correcto');
+        $_detalle = new Text($detalle, true, 250, 'El detalle excede los 250 caracteres');
+        $_idTipoDocumentoEntidad = new NumericInteger($idTipoDocumentoEntidad);
+        $_numeroDocumentoEntidad = new Text($numeroDocumentoEntidad,false, 25, 'El numero de documento de la entidad exede los 25 caracteres');
+        $_nombreEntidad = new Text($nombreEntidad, false, 150, 'El nombre de la entidad excede los 150 caracteres');
+        $_importe = new NumericFloat($importe);
+        $_idCaja = new Id($idCaja, false,  'El id de la caja no tiene el formato correcto');
+        $_idCajaDiario = new Id($idCajaDiario, false,  'El id del diario de caja no tiene el formato correcto');
+        $_contabilizado = new ValueBoolean($contabilizado);
+        $_aprobado = new ValueBoolean($aprobado);
+        $_idMedioPago = new NumericInteger($idMedioPago);
+        $_numeroOperacion = new Text($numeroOperacion, true, 25, 'El número de operación excede los 25 caracteres');
+        $_idEntidadFinanciera = new NumericInteger($idEntidadFinanciera, true);
+        $_idUsuarioRegistro = new Id($idUsuarioRegistro, false,  'El id del usuario que registro no tiene el formato correcto');
 
         return $this->repository->create(
-            $_id,
-            $_idCliente,
-            $_idSede,
-            $_idVehiculo,
-            $_idPersonal,
-            $_total,
-            $_idCaja,
-            $_idCajaDiario,
-            $_idUsuarioRegistro
+             $_id,
+             $_idCliente,
+             $_idSede,
+             $_idTipoComprobante,
+             $_idTipoIngreso,
+             $_detalle,
+             $_idTipoDocumentoEntidad,
+             $_numeroDocumentoEntidad,
+             $_nombreEntidad,
+             $_importe,
+             $_idCaja,
+             $_idCajaDiario,
+             $_contabilizado,
+             $_aprobado,
+             $_idMedioPago,
+             $_numeroOperacion,
+             $_idEntidadFinanciera,
+             $_idUsuarioRegistro
         );
 
     }

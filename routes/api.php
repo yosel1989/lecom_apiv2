@@ -136,6 +136,10 @@ include 'V2/liquidacion-motivo-route.php';
 include 'V2/egreso-motivo-route.php';
 include 'V2/ingreso-categoria-route.php';
 include 'V2/ingreso-tipo-route.php';
+include 'V2/ingreso-route.php';
+include 'V2/medio-pago-route.php';
+include 'V2/entidad-financiera-route.php';
+
 
 
 

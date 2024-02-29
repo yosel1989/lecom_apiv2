@@ -63,9 +63,7 @@ final class PuntoVentaController
 
             $useCase = new PuntoVentaUseCase($this->repository);
 
-            DB::commit();
-
-            return $useCase->__invoke(
+            $output = $useCase->__invoke(
                 $id,
                 $idCliente,
                 $idSede,
@@ -96,6 +94,11 @@ final class PuntoVentaController
 
                 $idUsuarioRegistro,
             );
+
+            DB::commit();
+
+            return $output;
+
         }catch(\Exception $e){
             DB::rollBack();
             throw new \InvalidArgumentException($e->getMessage());

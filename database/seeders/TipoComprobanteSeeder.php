@@ -56,5 +56,12 @@ class TipoComprobanteSeeder extends Seeder
             'bl_punto_venta' => false,
             'bl_despacho' => true,
         ]);
+
+        \App\Models\V2\TipoComprobante::create([
+            'nombre' => 'Comprobante de Ingreso',
+            'abreviatura' => 'CI.',
+            'bl_punto_venta' => false,
+            'bl_despacho' => true,
+        ]);
     }
 }

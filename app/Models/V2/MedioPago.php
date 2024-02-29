@@ -14,7 +14,8 @@ class MedioPago extends Model
     protected $fillable = [
         'id',
         'nombre',
-        'bl_despacho'
+        'bl_despacho',
+        'bl_entidad_financiera',
     ];
 
     /**
@@ -24,6 +25,7 @@ class MedioPago extends Model
      */
     protected $casts = [
         'bl_despacho' =>  'bool',
+        'bl_entidad_financiera' =>  'bool',
     ];
 
 

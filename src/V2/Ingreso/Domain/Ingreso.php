@@ -18,7 +18,7 @@ final class Ingreso
     private NumericInteger $idTipoComprobante;
     private Text $serie;
     private NumericInteger $numero;
-    private NumericInteger $idTipoIngreso;
+    private Id $idTipoIngreso;
     private Text $detalle;
     private NumericInteger $idTipoDocumentoEntidad;
     private Text $numeroDocumentoEntidad;
@@ -82,7 +82,7 @@ final class Ingreso
         NumericInteger $idTipoComprobante,
         Text $serie,
         NumericInteger $numero,
-        NumericInteger $idTipoIngreso,
+        Id $idTipoIngreso,
         Text $detalle,
         NumericInteger $idTipoDocumentoEntidad,
         Text $numeroDocumentoEntidad,
@@ -228,17 +228,17 @@ final class Ingreso
     }
 
     /**
-     * @return NumericInteger
+     * @return Id
      */
-    public function getIdTipoIngreso(): NumericInteger
+    public function getIdTipoIngreso(): Id
     {
         return $this->idTipoIngreso;
     }
 
     /**
-     * @param NumericInteger $idTipoIngreso
+     * @param Id $idTipoIngreso
      */
-    public function setIdTipoIngreso(NumericInteger $idTipoIngreso): void
+    public function setIdTipoIngreso(Id $idTipoIngreso): void
     {
         $this->idTipoIngreso = $idTipoIngreso;
     }
