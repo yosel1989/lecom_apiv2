@@ -35,8 +35,9 @@ final class CreateUseCase
         float $importe,
         string $idCaja,
         string $idCajaDiario,
-        bool $contabilizado,
+        bool $ccontabilizado,
         bool $aprobado,
+        bool $revisado,
         int $idMedioPago,
         ?string $numeroOperacion,
         ?int $idEntidadFinanciera,
@@ -56,8 +57,9 @@ final class CreateUseCase
         $_importe = new NumericFloat($importe);
         $_idCaja = new Id($idCaja, false,  'El id de la caja no tiene el formato correcto');
         $_idCajaDiario = new Id($idCajaDiario, false,  'El id del diario de caja no tiene el formato correcto');
-        $_contabilizado = new ValueBoolean($contabilizado);
+        $_contabilizado = new ValueBoolean($ccontabilizado);
         $_aprobado = new ValueBoolean($aprobado);
+        $_revisado = new ValueBoolean($revisado);
         $_idMedioPago = new NumericInteger($idMedioPago);
         $_numeroOperacion = new Text($numeroOperacion, true, 25, 'El número de operación excede los 25 caracteres');
         $_idEntidadFinanciera = new NumericInteger($idEntidadFinanciera, true);
@@ -78,6 +80,7 @@ final class CreateUseCase
              $_idCajaDiario,
              $_contabilizado,
              $_aprobado,
+             $_revisado,
              $_idMedioPago,
              $_numeroOperacion,
              $_idEntidadFinanciera,

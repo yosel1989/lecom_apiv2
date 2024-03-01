@@ -37,8 +37,9 @@ class Ingreso extends Model
         'importe',
         'id_caja',
         'id_caja_diario',
-        'contabilizado',
-        'aprobado',
+        'bl_contabilizado',
+        'bl_aprobado',
+        'bl_revisado',
         'id_medio_pago',
         'numero_operacion',
         'id_entidad_financiera',
@@ -56,8 +57,9 @@ class Ingreso extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'contabilizado' =>  'boolean',
-        'aprobado' =>  'boolean',
+        'bl_contabilizado' =>  'boolean',
+        'bl_aprobado' =>  'boolean',
+        'bl_revisado' =>  'boolean',
         'importe' =>  'float',
         'f_registro' =>  'string',
         'f_modifico' =>  'string',
@@ -70,6 +72,10 @@ class Ingreso extends Model
 
     public function tipoComprobante(){
         return $this->hasOne('App\Models\V2\TipoComprobante','id','id_tipo_comprobante');
+    }
+
+    public function tipoDocumento(){
+        return $this->hasOne('App\Models\V2\TipoDocumento','id','id_tipo_documento_entidad');
     }
 
     public function usuarioModifico(){
@@ -94,6 +100,14 @@ class Ingreso extends Model
 
     public function caja(){
         return $this->hasOne('App\Models\V2\Caja','id','id_caja');
+    }
+
+    public function sede(){
+        return $this->hasOne('App\Models\V2\Sede','id','id_sede');
+    }
+
+    public function tipoIngreso(){
+        return $this->hasOne('App\Models\V2\IngresoTipo','id','id_tipo_ingreso');
     }
 
 }

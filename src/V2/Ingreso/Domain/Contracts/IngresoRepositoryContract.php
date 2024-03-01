@@ -2,12 +2,15 @@
 
 namespace Src\V2\Ingreso\Domain\Contracts;
 
+use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\Core\Domain\ValueObjects\ValueBoolean;
 use Src\V2\Ingreso\Domain\Ingreso;
+use Src\V2\Ingreso\Domain\IngresoList;
+
 interface IngresoRepositoryContract
 {
     public function create(
@@ -23,8 +26,9 @@ interface IngresoRepositoryContract
         NumericFloat $importe,
         Id $idCaja,
         Id $idCajaDiario,
-        ValueBoolean $contabilizado,
+        ValueBoolean $ccontabilizado,
         ValueBoolean $aprobado,
+        ValueBoolean $revisado,
         NumericInteger $idMedioPago,
         Text $numeroOperacion,
         NumericInteger $idEntidadFinanciera,
@@ -41,7 +45,7 @@ interface IngresoRepositoryContract
 //
 //    public function reporteByClienteGroupTipoFechaVehiculo(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): IngresoGroupTipoFechaShortList;
 //
-//    public function reporteDespachoByCliente(Id $idCliente, Id $idUsuario, DateFormat $fecha): IngresoList;
+    public function reporteDespachoByCliente(Id $idCliente, Id $idUsuario, DateFormat $fecha): IngresoList;
 
     public function find(
         Id $idIngreso,

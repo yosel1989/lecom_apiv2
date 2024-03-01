@@ -26,8 +26,6 @@ final class Ingreso
     private NumericFloat $importe;
     private Id $idCaja;
     private Id $idCajaDiario;
-    private ValueBoolean $contabilizado;
-    private ValueBoolean $aprobado;
     private NumericInteger $idMedioPago;
     private Text $numeroOperacion;
     private NumericInteger $idEntidadFinanciera;
@@ -39,6 +37,7 @@ final class Ingreso
 
 
     // secondary
+    private Text $estado;
     private Text $sede;
     private Text $tipoComprobante;
     private Text $tipoIngreso;
@@ -48,6 +47,9 @@ final class Ingreso
     private Text $entidadFinanciera;
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
+    private ValueBoolean $blContabilizado;
+    private ValueBoolean $blAprobado;
+    private ValueBoolean $blRevisado;
 
     /**
      * @param Id $id
@@ -56,7 +58,7 @@ final class Ingreso
      * @param NumericInteger $idTipoComprobante
      * @param Text $serie
      * @param NumericInteger $numero
-     * @param NumericInteger $idTipoIngreso
+     * @param Id $idTipoIngreso
      * @param Text $detalle
      * @param NumericInteger $idTipoDocumentoEntidad
      * @param Text $numeroDocumentoEntidad
@@ -64,8 +66,9 @@ final class Ingreso
      * @param NumericFloat $importe
      * @param Id $idCaja
      * @param Id $idCajaDiario
-     * @param ValueBoolean $contabilizado
-     * @param ValueBoolean $aprobado
+     * @param ValueBoolean $blContabilizado
+     * @param ValueBoolean $blAprobado
+     * @param ValueBoolean $blRevisado
      * @param NumericInteger $idMedioPago
      * @param Text $numeroOperacion
      * @param NumericInteger $idEntidadFinanciera
@@ -91,8 +94,9 @@ final class Ingreso
 
         Id $idCaja,
         Id $idCajaDiario,
-        ValueBoolean $contabilizado,
-        ValueBoolean $aprobado,
+        ValueBoolean $blContabilizado,
+        ValueBoolean $blAprobado,
+        ValueBoolean $blRevisado,
         NumericInteger $idMedioPago,
         Text $numeroOperacion,
         NumericInteger $idEntidadFinanciera,
@@ -119,8 +123,6 @@ final class Ingreso
         $this->importe = $importe;
         $this->idCaja = $idCaja;
         $this->idCajaDiario = $idCajaDiario;
-        $this->contabilizado = $contabilizado;
-        $this->aprobado = $aprobado;
         $this->idMedioPago = $idMedioPago;
         $this->numeroOperacion = $numeroOperacion;
         $this->idEntidadFinanciera = $idEntidadFinanciera;
@@ -129,6 +131,9 @@ final class Ingreso
         $this->idUsuarioModifico = $idUsuarioModifico;
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
+        $this->blContabilizado = $blContabilizado;
+        $this->blAprobado = $blAprobado;
+        $this->blRevisado = $blRevisado;
     }
 
     /**
@@ -353,38 +358,6 @@ final class Ingreso
     public function setIdCajaDiario(Id $idCajaDiario): void
     {
         $this->idCajaDiario = $idCajaDiario;
-    }
-
-    /**
-     * @return ValueBoolean
-     */
-    public function getContabilizado(): ValueBoolean
-    {
-        return $this->contabilizado;
-    }
-
-    /**
-     * @param ValueBoolean $contabilizado
-     */
-    public function setContabilizado(ValueBoolean $contabilizado): void
-    {
-        $this->contabilizado = $contabilizado;
-    }
-
-    /**
-     * @return ValueBoolean
-     */
-    public function getAprobado(): ValueBoolean
-    {
-        return $this->aprobado;
-    }
-
-    /**
-     * @param ValueBoolean $aprobado
-     */
-    public function setAprobado(ValueBoolean $aprobado): void
-    {
-        $this->aprobado = $aprobado;
     }
 
     /**
@@ -658,5 +631,71 @@ final class Ingreso
     {
         $this->usuarioModifico = $usuarioModifico;
     }
+
+    /**
+     * @return ValueBoolean
+     */
+    public function getBlContabilizado(): ValueBoolean
+    {
+        return $this->blContabilizado;
+    }
+
+    /**
+     * @param ValueBoolean $blContabilizado
+     */
+    public function setBlContabilizado(ValueBoolean $blContabilizado): void
+    {
+        $this->blContabilizado = $blContabilizado;
+    }
+
+    /**
+     * @return ValueBoolean
+     */
+    public function getBlAprobado(): ValueBoolean
+    {
+        return $this->blAprobado;
+    }
+
+    /**
+     * @param ValueBoolean $blAprobado
+     */
+    public function setBlAprobado(ValueBoolean $blAprobado): void
+    {
+        $this->blAprobado = $blAprobado;
+    }
+
+    /**
+     * @return ValueBoolean
+     */
+    public function getBlRevisado(): ValueBoolean
+    {
+        return $this->blRevisado;
+    }
+
+    /**
+     * @param ValueBoolean $blRevisado
+     */
+    public function setBlRevisado(ValueBoolean $blRevisado): void
+    {
+        $this->blRevisado = $blRevisado;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getEstado(): Text
+    {
+        return $this->estado;
+    }
+
+    /**
+     * @param Text $estado
+     */
+    public function setEstado(Text $estado): void
+    {
+        $this->estado = $estado;
+    }
+
+
 
 }

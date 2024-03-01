@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('id_tipo_comprobante');
             $table->string('serie');
             $table->integer('numero');
-            $table->integer('id_tipo_ingreso');
+            $table->uuid('id_tipo_ingreso');
             $table->string('detalle', 250)->nullable();
             $table->integer('id_tipo_documento_entidad');
             $table->string('numero_documento_entidad',15);
@@ -28,8 +28,9 @@ return new class extends Migration
             $table->tinyInteger('id_eliminado')->default(0);
             $table->uuid('id_caja');
             $table->uuid('id_caja_diario');
-            $table->boolean('contabilizado');
-            $table->boolean('aprobado');
+            $table->boolean('bl_contabilizado');
+            $table->boolean('bl_aprobado');
+            $table->boolean('bl_revisado');
             $table->integer('id_medio_pago');
             $table->string('numero_operacion', 25)->nullable();
             $table->integer('id_entidad_financiera')->nullable();
@@ -55,8 +56,9 @@ return new class extends Migration
                 'id_eliminado',
                 'id_caja',
                 'id_caja_diario',
-                'contabilizado',
-                'aprobado',
+                'bl_contabilizado',
+                'bl_aprobado',
+                'bl_revisado',
                 'id_medio_pago',
                 'numero_operacion',
                 'id_entidad_financiera',

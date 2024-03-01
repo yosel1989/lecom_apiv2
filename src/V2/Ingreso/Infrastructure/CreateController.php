@@ -42,8 +42,9 @@ final class CreateController
             $importe = $request->input('importe');
             $idCaja = $request->input('idCaja');
             $idCajaDiario = $request->input('idCajaDiario');
-            $contabilizado = $request->input('contabilizado');
-            $aprobado = $request->input('aprobado');
+            $ccontabilizado = $request->input('blContabilizado');
+            $aprobado = $request->input('blAprobado');
+            $revisado = $request->input('blRevisado');
             $idMedioPago = $request->input('idMedioPago');
             $numeroOperacion = $request->input('numeroOperacion');
             $idEntidadFinanciera = $request->input('idEntidadFinanciera');
@@ -62,8 +63,9 @@ final class CreateController
                 $importe,
                 $idCaja,
                 $idCajaDiario,
-                $contabilizado,
+                $ccontabilizado,
                 $aprobado,
+                $revisado,
                 $idMedioPago,
                 $numeroOperacion,
                 $idEntidadFinanciera,

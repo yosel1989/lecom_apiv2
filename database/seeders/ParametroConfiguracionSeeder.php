@@ -37,5 +37,10 @@ class ParametroConfiguracionSeeder extends Seeder
             'nombre'=> 'Ubigeo',
             'descripcion'=> 'Código que indica la ubicación geográfica de la entidad',
         ]);
+
+        \App\Models\V2\ParametroConfiguracion::create([
+            'nombre'=> 'Logo Empresa',
+            'descripcion'=> 'Logo de la empresa',
+        ]);
     }
 }
