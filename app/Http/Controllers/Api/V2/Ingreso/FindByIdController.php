@@ -3,19 +3,25 @@
 namespace App\Http\Controllers\Api\V2\Ingreso;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V2\Ingreso\IngresoResource;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
+use Luecano\NumeroALetras\NumeroALetras;
 
 class FindByIdController extends Controller
 {
     private \Src\V2\Ingreso\Infrastructure\FindByIdController $controller;
+    private \Src\V2\ClienteConfiguracion\Infrastructure\FindByIdController $controllerConfiguracion;
 
-    public function __construct(\Src\V2\Ingreso\Infrastructure\FindByIdController $controller)
+    public function __construct(
+        \Src\V2\Ingreso\Infrastructure\FindByIdController $controller,
+        \Src\V2\ClienteConfiguracion\Infrastructure\FindByIdController $controllerConfiguracion,
+    )
     {
         $this->controller = $controller;
+        $this->controllerConfiguracion = $controllerConfiguracion;
     }
 
 
@@ -25,10 +31,22 @@ class FindByIdController extends Controller
 
             //return response()->json(Ingreso::all());
 
-            $vehicle = IngresoResource::make($this->controller->__invoke($request));
+            $ingreso = $this->controller->__invoke($request);
+            $formatter = new NumeroALetras();
+
+            $fechaRegistro = new \DateTime($ingreso->getFechaRegistro()->value());
+
+            // Obtener datos de la empresa
+            $configuracion = $this->controllerConfiguracion->__invoke($request);
+
+            $pdf = PDF::loadView('comprobantes.comprobante-ingresos', compact('ingreso', 'configuracion', 'formatter', 'fechaRegistro'))
+                ->setOption( 'dpi' , '72' );
+
+
             return response()->json([
-                'data' => $vehicle,
+                'data' => null,
                 'error' =>  null,
+                'pdf' => base64_encode($pdf->output(['Attachment' => 0])),
                 'trace' => null,
                 'status' => Response::HTTP_OK
             ]);

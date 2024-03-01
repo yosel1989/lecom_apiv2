@@ -371,26 +371,54 @@ final class EloquentIngresoRepository implements IngresoRepositoryContract
         $model = $this->eloquent->with(
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
+            'sede:id,nombre',
+            'caja:id,nombre',
+            'tipoComprobante:id,nombre',
+            'tipoIngreso:id,nombre',
+            'tipoDocumento:id,nombre_corto',
+            'medioPago:id,nombre',
+            'entidadFinanciera:id,nombre',
+            'estado:id,nombre',
         )->findOrFail($idIngreso->value());
         $OModel = new Ingreso(
-            new Id($model->id , false, 'El id del ingreso no tiene el formato correcto'),
-            new Id($model->id_cliente , false, 'El id del cliente no tiene el formato correcto'),
-            new Id($model->id_sede , false, 'El id de la sede no tiene el formato correcto'),
-            new Id($model->id_vehiculo , true, 'El id del vehiculo tipo no tiene el formato correcto'),
-            new Id($model->id_personal , true, 'El id del personal tipo no tiene el formato correcto'),
-            new Id($model->id_caja , false, 'El id de la caja  no tiene el formato correcto'),
-            new Id($model->id_caja_diario , false, 'El id de la caja diario tipo no tiene el formato correcto'),
-            new NumericFloat($model->total),
-            new NumericInteger($model->id_estado->value),
-            new NumericInteger($model->id_eliminado->value),
-            new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
+            new Id($model->id, false, 'El id del ingreso no tiene el formato correcto'),
+            new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+            new Id($model->id_sede, false, 'El id de la sede no tiene el formato correcto'),
+            new NumericInteger($model->id_tipo_comprobante),
+            new Text($model->serie, false, -1 , ''),
+            new NumericInteger($model->numero),
+            new Id($model->id_tipo_ingreso, false, 'El id del tipo de ingreso no tiene el formato correcto'),
+            new Text($model->detalle, true, -1 , ''),
+            new NumericInteger($model->id_tipo_documento_entidad),
+            new Text($model->numero_documento_entidad, false, -1 , ''),
+            new Text($model->nombre_entidad, false, -1 , ''),
+            new NumericFloat($model->importe),
+
+            new Id($model->id_caja, false, 'El id de la caja no tiene el formato correcto'),
+            new Id($model->id_caja_diario, false, 'El id de la caja diario no tiene el formato correcto'),
+            new ValueBoolean($model->bl_contabilizado),
+            new ValueBoolean($model->bl_aprobado),
+            new ValueBoolean($model->bl_revisado),
+            new NumericInteger($model->id_medio_pago),
+            new Text($model->numero_operacion, false, -1 , ''),
+            new NumericInteger($model->id_entidad_financiera),
+
+            new NumericInteger($model->id_estado),
+            new Id($model->id_usu_registro, false, 'El id del usuario que registro no tiene el formato correcto'),
             new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
-            new DateTimeFormat($model->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
-            new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
+            new DateTimeFormat($model->f_registro, false, 'La fecha que registro no tiene el formato correcto'),
+            new DateTimeFormat($model->f_modifico, true, 'La fecha que modifico no tiene el formato correcto')
         );
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
-
+        $OModel->setSede(new Text($model->sede->nombre, false, -1));
+        $OModel->setTipoComprobante(new Text($model->tipoComprobante->nombre, false, -1));
+        $OModel->setTipoIngreso(new Text($model->tipoIngreso->nombre, false, -1));
+        $OModel->setTipoDocumentoEntidad(new Text($model->tipoDocumento->nombre_corto, false, -1));
+        $OModel->setMedioPago(new Text($model->medioPago->nombre, false, -1));
+        $OModel->setEntidadFinanciera(new Text($model->entidadFinanciera?->nombre, true, -1));
+        $OModel->setCaja(new Text($model->caja?->nombre, false, -1));
+        $OModel->setEstado(new Text($model->estado?->nombre, false, -1));
         return $OModel;
     }
 

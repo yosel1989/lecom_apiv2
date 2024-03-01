@@ -55,7 +55,6 @@ class CreateController extends Controller
                 'error' =>  null,
                 'pdf' => base64_encode($pdf->output(['Attachment' => 0])),
                 'trace' => null,
-//                'dd' => $pdf->getCanvas( ),
                 'status' => Response::HTTP_CREATED
             ]);
 
