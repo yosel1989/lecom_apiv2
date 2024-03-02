@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\V2\Ingreso;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V2\Ingreso\IngresoReporteResource;
+use App\Http\Resources\V2\Ingreso\IngresoResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -25,7 +25,7 @@ class GetReporteByClienteController extends Controller
 
             //return response()->json(Ingreso::all());
 
-            $collection = IngresoReporteResource::collection($this->controller->__invoke($request)->all());
+            $collection = IngresoResource::collection($this->controller->__invoke($request)->all());
             return response()->json([
                 'data' => $collection,
                 'error' =>  null,

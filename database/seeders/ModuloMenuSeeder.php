@@ -407,6 +407,16 @@ class ModuloMenuSeeder extends Seeder
 
             \App\Models\V2\ModuloMenu::create([
                 'id_modulo'=> EnumModulo::Reportes,
+                'texto'=>'Reporte de Ingresos',
+                'icono'=>null,
+                'id_tipo_menu'=> EnumTipoMenu::Link,
+                'padre'=>$menuReporte2->id,
+                'link'=>'reportes/administracion/ingreso',
+                'id_estado'=> IdEstado::Habilitado
+            ]);
+
+            \App\Models\V2\ModuloMenu::create([
+                'id_modulo'=> EnumModulo::Reportes,
                 'texto'=>'Reporte de Liquidaciones',
                 'icono'=>null,
                 'id_tipo_menu'=> EnumTipoMenu::Link,

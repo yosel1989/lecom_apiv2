@@ -30,10 +30,8 @@ final class GetReporteByClienteController
         $idClient = $request->input('idCliente');
         $fechaDesde = $request->input('fechaDesde');
         $fechaHasta = $request->input('fechaHasta');
-        $idVehiculo = $request->input('idVehiculo');
-        $idPersonal = $request->input('idPersonal');
         $useCase = new GetReporteByClienteUseCase($this->repository);
-        return $useCase->__invoke($idClient, $fechaDesde, $fechaHasta, $idVehiculo, $idPersonal);
+        return $useCase->__invoke($idClient, $fechaDesde, $fechaHasta);
     }
 
 }

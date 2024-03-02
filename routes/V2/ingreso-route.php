@@ -6,7 +6,7 @@ Route::namespace('App\Http\Controllers\Api\V2\Ingreso')->middleware('auth:sanctu
     Route::post('cliente/ingreso', 'CreateController');
     Route::get('cliente/{id}/ingreso/reporte-despacho/usuario', 'GetReporteDespachoByClienteController');
     Route::get('cliente/{idCliente}/ingreso/{id}', 'FindByIdController');
-//    Route::put('egreso/anular', 'AnularIngresoController');
+    Route::post('cliente/{id}/ingreso/reporte', 'GetReporteByClienteController');
 });
 
 //Route::namespace('App\Http\Controllers\Api\V2\Ingreso')->group( function (){
