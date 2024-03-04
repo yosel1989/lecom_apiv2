@@ -2,6 +2,7 @@
 
 namespace Src\V2\CajaDiario\Domain\Contracts;
 
+use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
@@ -39,4 +40,11 @@ interface CajaDiarioRepositoryContract
         NumericFloat $monto,
         Id $idUsuarioRegistro
     ): void;
+
+
+    public function reporte(
+        Id $idCliente,
+        DateFormat $fechaInicio,
+        DateFormat $fechaFinal
+    ): array;
 }

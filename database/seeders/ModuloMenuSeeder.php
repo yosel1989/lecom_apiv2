@@ -425,6 +425,26 @@ class ModuloMenuSeeder extends Seeder
                 'id_estado'=> IdEstado::Habilitado
             ]);
 
+            \App\Models\V2\ModuloMenu::create([
+                'id_modulo'=> EnumModulo::Reportes,
+                'texto' => 'Reporte de Caja | Saldo',
+                'icono' => null,
+                'id_tipo_menu' => EnumTipoMenu::Link,
+                'padre' => $menuReporte2->id,
+                'link' => 'reportes/administracion/caja/saldo',
+                'id_estado' => IdEstado::Habilitado
+            ]);
+
+            \App\Models\V2\ModuloMenu::create([
+                'id_modulo'=> EnumModulo::Reportes,
+                'texto' => 'Reporte de Caja | Apertura / Cierre',
+                'icono' => null,
+                'id_tipo_menu' => EnumTipoMenu::Link,
+                'padre' => $menuReporte2->id,
+                'link' => 'reportes/administracion/caja/apertura-cierre',
+                'id_estado' => IdEstado::Habilitado
+            ]);
+
 
         /**********************************************************************************************
          * Operaciones

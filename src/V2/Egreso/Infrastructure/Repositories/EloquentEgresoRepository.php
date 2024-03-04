@@ -97,7 +97,7 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
             }
         }
 
-        // Validar vehiculo
+        // Validar personal
         if(!is_null($idPersonal->value())){
             $Personal = \App\Models\V2\Personal::where('id', $idPersonal->value())->where('id', $idCliente->value())->where('id_estado',1)->where('id_eliminado',0);
             if( $Personal->count() === 0 ){

@@ -58,9 +58,13 @@ class CajaDiario extends Model
         'f_cierre' =>  'string',
         'f_cegistro' =>  'string',
         'f_modifico' =>  'string',
-        'id_estado' => IdEstado::class,
+        'id_estado' => 'integer',
         'id_eliminado' => IdEliminado::class
     ];
+
+    public function estado(){
+        return $this->hasOne('App\Models\V2\EstadoCajaDiario','id','id_estado');
+    }
 
     public function caja(){
         return $this->hasOne('App\Models\V2\Caja','id','id_caja');
