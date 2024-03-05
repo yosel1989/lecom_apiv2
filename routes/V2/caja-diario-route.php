@@ -12,4 +12,5 @@ Route::namespace('App\Http\Controllers\Api\V2\CajaDiario')->middleware('auth:san
     Route::post('caja-diario/abrir', 'AbrirController');
     Route::put('caja-diario/cerrar', 'CerrarController');
     Route::get('cliente/{idCliente}/caja-diario/reporte/{fechaInicio}/{fechaFin}', 'ReporteController');
+    Route::get('cliente/{idCliente}/caja-diario/reporte-saldo/{fechaInicio}/{fechaFin}', 'ReporteSaldoController');
 });

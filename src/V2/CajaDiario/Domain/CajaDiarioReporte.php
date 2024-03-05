@@ -29,6 +29,7 @@ final class CajaDiarioReporte
     private Text $usuarioAperturo;
     private Text $usuarioCerro;
     private Text $estado;
+    private NumericFloat $saldo;
 
     /**
      * @param Id $id
@@ -325,6 +326,22 @@ final class CajaDiarioReporte
     public function setEstado(Text $estado): void
     {
         $this->estado = $estado;
+    }
+
+    /**
+     * @return NumericFloat
+     */
+    public function getSaldo(): NumericFloat
+    {
+        return $this->saldo;
+    }
+
+    /**
+     * @param NumericFloat $saldo
+     */
+    public function setSaldo(NumericFloat $saldo): void
+    {
+        $this->saldo = $saldo;
     }
 
 
