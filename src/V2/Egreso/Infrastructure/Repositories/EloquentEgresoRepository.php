@@ -99,9 +99,9 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
 
         // Validar personal
         if(!is_null($idPersonal->value())){
-            $Personal = \App\Models\V2\Personal::where('id', $idPersonal->value())->where('id', $idCliente->value())->where('id_estado',1)->where('id_eliminado',0);
+            $Personal = \App\Models\V2\Personal::where('id', $idPersonal->value())->where('id_cliente', $idCliente->value())->where('id_estado',1)->where('id_eliminado',0);
             if( $Personal->count() === 0 ){
-                throw new InvalidArgumentException( 'El vehiculo no se encuentra registrado en el sistema o esta inhabilitado.' );
+                throw new InvalidArgumentException( 'El personal no se encuentra registrado en el sistema o esta inhabilitado.' );
             }
         }
 
