@@ -17,11 +17,14 @@ class EgresoReporteResource extends JsonResource
         // Map Domain User model values
         return [
             'id'            => $this->getId()->value(),
-            'idCliente'          => $this->getIdCliente()->value(),
-            'idVehiculo'          => $this->getIdVehiculo()->value(),
+            'idCliente'            => $this->getIdCliente()->value(),
+            'idVehiculo'            => $this->getIdVehiculo()->value(),
+            'idPersonal'            => $this->getIdPersonal()->value(),
+            'codigo'          => $this->getSerie()->value() . '-' . str_pad((string)$this->getNumero()->value(),8,'0',STR_PAD_LEFT),
             'vehiculo'          => $this->getVehiculo()->value(),
-            'idPersonal'          => $this->getIdPersonal()->value(),
             'personal'          => $this->getPersonal()->value(),
+            'idSede'          => $this->getIdSede()->value(),
+            'sede'          => $this->getSede()->value(),
             'total'          => $this->getTotal()->value(),
             'idCaja'          => $this->getIdCaja()->value(),
             'caja'          => $this->getCaja()->value(),
@@ -34,9 +37,8 @@ class EgresoReporteResource extends JsonResource
             'usuarioRegistro'     => $this->getUsuarioRegistro()->value(),
             'idUsuarioModifico'     => $this->getIdUsuarioModifico()->value(),
             'usuarioModifico'     => $this->getUsuarioModifico()->value(),
-            'comprobanteSerie'     => $this->getComprobanteSerie()->value(),
-            'comprobanteNumero'     => $this->getComprobanteNumero()->value(),
-            'codigo' => $this->getComprobanteSerie()->value() . '-' . str_pad($this->getComprobanteNumero()->value(), 8, '0',STR_PAD_LEFT),
+            'comprobanteSerie'     => $this->getSerie()->value(),
+            'comprobanteNumero'     => $this->getNumero()->value(),
             'tipoComprobante'     => $this->getTipoComprobante()->value(),
         ];
 

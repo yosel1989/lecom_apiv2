@@ -7,6 +7,7 @@ use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\Core\Domain\ValueObjects\ValueBoolean;
 use Src\V2\Caja\Domain\Caja;
+use Src\V2\Caja\Domain\CajaSede;
 
 interface CajaRepositoryContract
 {
@@ -46,4 +47,9 @@ interface CajaRepositoryContract
     public function find(
         Id $idCaja,
     ): Caja;
+
+    public function findToDespacho(
+        Id $idCaja,
+        Id $idCajaDiario,
+    ): CajaSede;
 }

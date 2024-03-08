@@ -17,8 +17,11 @@ class EgresoResource extends JsonResource
         // Map Domain User model values
         return [
             'id'            => $this->getId()->value(),
+            'codigo'          => $this->getSerie()->value() . '-' . str_pad((string)$this->getNumero()->value(),8,'0',STR_PAD_LEFT),
             'vehiculo'          => $this->getVehiculo()->value(),
             'personal'          => $this->getPersonal()->value(),
+            'idSede'          => $this->getIdSede()->value(),
+            'sede'          => $this->getSede()->value(),
             'total'          => $this->getTotal()->value(),
             'idCaja'          => $this->getIdCaja()->value(),
             'caja'          => $this->getCaja()->value(),
@@ -31,8 +34,8 @@ class EgresoResource extends JsonResource
             'usuarioRegistro'     => $this->getUsuarioRegistro()->value(),
             'idUsuarioModifico'     => $this->getIdUsuarioModifico()->value(),
             'usuarioModifico'     => $this->getUsuarioModifico()->value(),
-            'comprobanteSerie'     => $this->getComprobanteSerie()->value(),
-            'comprobanteNumero'     => $this->getComprobanteNumero()->value(),
+            'comprobanteSerie'     => $this->getSerie()->value(),
+            'comprobanteNumero'     => $this->getNumero()->value(),
             'tipoComprobante'     => $this->getTipoComprobante()->value(),
         ];
 

@@ -45,6 +45,10 @@ interface EgresoRepositoryContract
         Id $idEgreso,
     ): Egreso;
 
+    public function findPdf(
+        Id $idEgreso,
+    ): Egreso;
+
     public function liquidacionTotalByVehiculoRangoFecha(Id $idCliente, array $idVehiculos, DateFormat $fechaDesde, DateFormat $fechaHasta): array;
 
     public function anular(

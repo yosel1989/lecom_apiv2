@@ -96,6 +96,38 @@ $medidaTicket = 180;
             margin-bottom: 1.5rem;
             margin-top: 1.5rem;
         }
+
+
+        .pt-1{
+            padding-top: .5rem;
+        }
+        .pb-1{
+            padding-bottom: .5rem;
+        }
+        .py-1{
+            padding-bottom: .5rem;
+            padding-top: .5rem;
+        }
+        .pt-2{
+            padding-top: 1rem;
+        }
+        .pb-2{
+            padding-bottom: 1rem;
+        }
+        .py-2{
+            padding-bottom: 1rem;
+            padding-top: 1rem;
+        }
+        .pt-3{
+            padding-top: 1.5rem;
+        }
+        .pb-3{
+            padding-bottom: 1.5rem;
+        }
+        .py-3{
+            padding-bottom: 1.5rem;
+            padding-top: 1.5rem;
+        }
     </style>
     {{--    <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css" />--}}
 </head>
@@ -111,14 +143,19 @@ $medidaTicket = 180;
     <div class="border-dashed-top w-100 my-1"></div>
 {{--    <p class="text-center text-uppercase"><b>{{ $egreso->getCodigo()->value() }}</b></p>--}}
     <p class="text-center text-uppercase"><b>{{ $egreso->getTipoComprobante()->value() }}</b></p>
-    <p class="text-center text-uppercase"><b>{{ $comprobante->getSerie()->value() }}-{{ str_pad($comprobante->getNumero()->value(),8,'0',STR_PAD_LEFT) }}</b></p>
+    <p class="text-center text-uppercase"><b>{{ $egreso->getSerie()->value() }}-{{ str_pad($egreso->getNumero()->value(),8,'0',STR_PAD_LEFT) }}</b></p>
     <div class="border-dashed-top w-100 my-1"></div>
 
     <table class="w-100">
         <tr>
-            <td>TOTAL</td>
+            <td>VEHICULO</td>
             <td></td>
-            <td class="text-end">S/ {{ number_format($egreso->geTotal()->value(), 2, '.', '') }}</td>
+            <td class="text-end">{{ $egreso->getVehiculo()->value() }}</td>
+        </tr>
+        <tr>
+            <td>PERSONAL</td>
+            <td></td>
+            <td class="text-end">{{ $egreso->getPersonal()->value() }}</td>
         </tr>
 {{--        <tr>--}}
 {{--            <td>VEHICULO</td>--}}
@@ -161,42 +198,31 @@ $medidaTicket = 180;
             <td class="text-end text-uppercase">{{ $egreso->getNumeroDocumentoEntidad()->value() }}</td>
         </tr>
     </table>
-    <div class="border-dashed-top w-100 my-1"></div>
+    <div class="border-dashed-top w-100 my-1 mb-3"></div>
+
     <table class="w-100">
-{{--        <tr>--}}
-{{--            <td>OP. GRAVADA</td>--}}
-{{--            <td></td>--}}
-{{--            <td class="text-end">{{ number_format($egreso->getPrecio()->value(), 2, '.', '') }}</td>--}}
-{{--        </tr>--}}
-{{--        <tr>--}}
-{{--            <td>EXONERADA</td>--}}
-{{--            <td></td>--}}
-{{--            <td class="text-end">{{ number_format($egreso->getPrecio()->value(), 2, '.', '') }}</td>--}}
-{{--        </tr>--}}
-{{--        <tr>--}}
-{{--            <td>I.G.V</td>--}}
-{{--            <td></td>--}}
-{{--            <td class="text-end">0.00</td>--}}
-{{--        </tr>--}}
-{{--        <tr>--}}
-{{--            <td>RECARGO CONSUMO</td>--}}
-{{--            <td></td>--}}
-{{--            <td class="text-end">0.00</td>--}}
-{{--        </tr>--}}
-{{--        <tr>--}}
-{{--            <td>ICBPER</td>--}}
-{{--            <td></td>--}}
-{{--            <td class="text-end">0.00</td>--}}
-{{--        </tr>--}}
+        @foreach($egreso->getDetalle()->all() as $detalle)
+        <tr>
+            <td class="text-uppercase">{{ $detalle->getEgresoTipo()->value() }}</td>
+            <td align="right">{{ $detalle->getFecha()->value() }}</td>
+        </tr>
+            <tr>
+                <td colspan="2" align="right">{{ number_format($detalle->getImporte()->value(), 2, '.', '') }}</td>
+            </tr>
+        @endforeach
+    </table>
+
+    <div class="border-dashed-top w-100 my-1 mt-3"></div>
+    <table class="w-100">
         <tr>
             <td>IMPORTE TOTAL</td>
             <td></td>
-            <td class="text-end" style="font-size: 14px !important; font-weight: 500">S/ {{ number_format($egreso->getPrecio()->value(), 2, '.', '') }}</td>
+            <td class="text-end" style="font-size: 14px !important; font-weight: 500">S/ {{ number_format($egreso->getTotal()->value(), 2, '.', '') }}</td>
         </tr>
         <tr>
             <td>Efectivo</td>
             <td></td>
-            <td class="text-end" style="font-size: 20px; font-weight: 500">{{ number_format($egreso->getPrecio()->value(), 2, '.', '') }}</td>
+            <td class="text-end" style="font-size: 20px; font-weight: 500">{{ number_format($egreso->getTotal()->value(), 2, '.', '') }}</td>
         </tr>
 {{--        <tr>--}}
 {{--            <td>VUELTO</td>--}}
@@ -212,7 +238,7 @@ $medidaTicket = 180;
     </table>
     <div class="border-dashed-top w-100 my-1"></div>
     <div class="w-100 text-center">
-        <p>Representación impresa de la <span class="text-uppercase">{{ $egreso->getTipoComprobante()->value()  }}</span>, visita cpe.lecomperu.com</p>
+        <p>Representación impresa de la <span class="text-uppercase">{{ $egreso->getTipoComprobante()->value()  }}</span></p>
 {{--        <p>Autorizado mediante Resolución de Intendencia No.034-005-0005315</p>--}}
 {{--        <p style="margin-top:30px">Código QR del Boleto</p>--}}
 {{--        <img src="data:image/png;base64, {{ $qrcode }}" alt="" width="100" height="100" style="display:block; margin:0;width:100px; height: 100px" >--}}

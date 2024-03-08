@@ -1,25 +1,22 @@
 <?php
 
-
 namespace App\Http\Controllers\Api\V2\Egreso;
-
 
 use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use InvalidArgumentException;
 use Luecano\NumeroALetras\NumeroALetras;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class CreateController extends Controller
+class FindPdfByIdController extends Controller
 {
-    private \Src\V2\Egreso\Infrastructure\CreateController $controller;
+    private \Src\V2\Egreso\Infrastructure\FindPdfByIdController $controller;
     private \Src\V2\ClienteConfiguracion\Infrastructure\FindByIdController $controllerConfiguracion;
 
     public function __construct(
-        \Src\V2\Egreso\Infrastructure\CreateController $controller,
+        \Src\V2\Egreso\Infrastructure\FindPdfByIdController $controller,
         \Src\V2\ClienteConfiguracion\Infrastructure\FindByIdController $controllerConfiguracion,
     )
     {
@@ -28,18 +25,15 @@ class CreateController extends Controller
     }
 
 
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function __invoke(Request $request): \Illuminate\Http\JsonResponse
+    public function __invoke(Request $request)
     {
         try {
 
-//            return response()->json($id);
+            //return response()->json(Ingreso::all());
 
             $egreso = $this->controller->__invoke($request);
             $formatter = new NumeroALetras();
+
             $fechaRegistro = new \DateTime($egreso->getFechaRegistro()->value());
 
             // Obtener datos de la empresa
@@ -51,28 +45,31 @@ class CreateController extends Controller
 
             unset( $pdf );
             $pdf = PDF::loadView('comprobantes.ticket-interno-egreso', compact('egreso', 'configuracion', 'formatter', 'fechaRegistro'))
-                ->setPaper(array( 0 , 0 , 226.77 * $page_count + 400 , 226.77 ), 'portrait')->setOption( 'dpi' , '72' );
+                ->setPaper(array( 0 , 0 , 226.77 * $page_count + 400 , 226.77 ), 'landscape')->setOption( 'dpi' , '72' );
+
 
             return response()->json([
-                'data' => null,
+                'data' => base64_encode($pdf->output(['Attachment' => 0])),
                 'error' =>  null,
-                'pdf' => base64_encode($pdf->output(['Attachment' => 0])),
-                'status' => ResponseAlias::HTTP_CREATED
+                'trace' => null,
+                'status' => Response::HTTP_OK
             ]);
 
         }catch ( InvalidArgumentException $e ){
 
             return response()->json([
-                'data' => null,
+                'data' => [],
                 'error' => $e->getMessage(),
-                'status' => ResponseAlias::HTTP_BAD_REQUEST
+                'trace' => $e->getTraceAsString(),
+                'status' => Response::HTTP_BAD_REQUEST
             ]);
 
         }catch ( Exception $e ){
 
             return response()->json([
-                'data' => null,
+                'data' => [],
                 'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
                 'status' => $e->getCode()
             ]);
 
