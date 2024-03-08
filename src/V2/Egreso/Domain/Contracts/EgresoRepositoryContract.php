@@ -5,6 +5,8 @@ namespace Src\V2\Egreso\Domain\Contracts;
 use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
+use Src\Core\Domain\ValueObjects\NumericInteger;
+use Src\Core\Domain\ValueObjects\Text;
 use Src\V2\Egreso\Domain\Egreso;
 use Src\V2\Egreso\Domain\EgresoGroupTipoFechaShortList;
 use Src\V2\Egreso\Domain\EgresoList;
@@ -15,6 +17,10 @@ interface EgresoRepositoryContract
         Id $id,
         Id $idCliente,
         Id $idSede,
+        NumericInteger $idTipoComprobante,
+        NumericInteger $idTipoDocumentoEntidad,
+        Text $numeroDocumentoEntidad,
+        Text $nombreEntidad,
         Id $idVehiculo,
         Id $idPersonal,
         NumericFloat $total,

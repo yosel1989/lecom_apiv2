@@ -95,10 +95,17 @@ final class EloquentIngresoRepository implements IngresoRepositoryContract
         }
 
         // Validar caja diario
-        $CajaDiario = CajaDiario::selectRaw('count(*) as total')->where('id', $idCajaDiario->value())->where('id_cliente',$idCliente->value())->where('id_estado', 1)->where('id_eliminado',0)->whereNull('f_cierre')->first();
-        if( $CajaDiario->total === 0 ){
+        $CajaDiario = CajaDiario::where('id', $idCajaDiario->value())->where('id_cliente',$idCliente->value())->where('id_estado', 1)->where('id_eliminado',0)->whereNull('f_cierre');
+        if( $CajaDiario->count() === 0 ){
             throw new InvalidArgumentException( 'La caja no se encuentra aperturada' );
+        }else{
+            $fechaApertura = new \DateTime($CajaDiario->first()->f_apertura);
+            $hoy = new \DateTime('now');
+            if($fechaApertura->format('Y-m-d') !== $hoy->format('Y-m-d')){
+                throw new InvalidArgumentException( 'Debe realizar el cierre de caja' );
+            }
         }
+
 
         // Validar cliente
         $Cliente = \App\Models\V2\Cliente::where('id', $idCliente->value())->where('idEstado',1)->where('idEliminado',0);
@@ -118,7 +125,7 @@ final class EloquentIngresoRepository implements IngresoRepositoryContract
             throw new InvalidArgumentException( 'El tipo de documento no se encuentra registrado en el sistema o esta inhabilitado.' );
         }
 
-        // Validar tipo de documento de identidad
+        // Validar medio de pago
         $medioPago = \App\Models\V2\MedioPago::where('id', $idMedioPago->value());
         if( $medioPago->count() === 0 ){
             throw new InvalidArgumentException( 'El medio de pago no se encuentra registrado en el sistema o esta inhabilitado.' );

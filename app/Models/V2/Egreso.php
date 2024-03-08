@@ -25,11 +25,17 @@ class Egreso extends Model
      */
     protected $fillable = [
         'id',
+        'id_cliente',
+        'id_sede',
+        'id_tipo_comprobante',
+        'serie',
+        'numero',
+        'id_tipo_documento_entidad',
+        'numero_documento_entidad',
+        'nombre_entidad',
         'id_vehiculo',
         'id_personal',
         'total',
-        'id_cliente',
-        'id_sede',
         'id_estado',
         'id_eliminado',
         'id_caja',
@@ -82,6 +88,14 @@ class Egreso extends Model
 
     public function estado(){
         return $this->hasOne('App\Models\V2\EstadoEgreso','id','id_estado');
+    }
+
+    public function tipoComprobante(){
+        return $this->hasOne('App\Models\V2\TipoComprobante','id','id_tipo_comprobante');
+    }
+
+    public function tipoDocumento(){
+        return $this->hasOne('App\Models\V2\TipoDocumento','id','id_tipo_documento_entidad');
     }
 
 }

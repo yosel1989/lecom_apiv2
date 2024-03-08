@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
-use Src\V2\ComprobanteElectronico\Application\CreateToEgresoUseCase;
 use Src\V2\ComprobanteElectronico\Infrastructure\Repositories\EloquentComprobanteElectronicoRepository;
 use Src\V2\Egreso\Application\CreateUseCase;
+use Src\V2\Egreso\Domain\Egreso;
 use Src\V2\Egreso\Infrastructure\Repositories\EloquentEgresoRepository;
 use Src\V2\EgresoDetalle\Domain\EgresoDetalleList;
 use Src\V2\EgresoDetalle\Infrastructure\Repositories\EloquentEgresoDetalleRepository;
@@ -19,20 +19,20 @@ final class CreateController
 {
     private EloquentEgresoRepository $repository;
     private EloquentEgresoDetalleRepository $detalleRepository;
-    private EloquentComprobanteElectronicoRepository $comprobanteElectronicoRepository;
+/*    private EloquentComprobanteElectronicoRepository $comprobanteElectronicoRepository;*/
 
     public function __construct(
         EloquentEgresoRepository $repository,
         EloquentEgresoDetalleRepository $detalleRepository,
-        EloquentComprobanteElectronicoRepository $comprobanteElectronicoRepository
+//        EloquentComprobanteElectronicoRepository $comprobanteElectronicoRepository
     )
     {
         $this->repository = $repository;
         $this->detalleRepository = $detalleRepository;
-        $this->comprobanteElectronicoRepository = $comprobanteElectronicoRepository;
+//        $this->comprobanteElectronicoRepository = $comprobanteElectronicoRepository;
     }
 
-    public function __invoke( Request $request): void
+    public function __invoke( Request $request): Egreso
     {
         DB::beginTransaction();
 
@@ -48,6 +48,7 @@ final class CreateController
             $idCaja          = $request->input('idCaja');
             $idCajaDiario           = $request->input('idCajaDiario');
 
+            $idTipoComprobante = $request->input('idTipoComprobante');
             $idTipoDocumentoEntidad           = $request->input('idTipoDocumentoEntidad');
             $numeroDocumentoEntidad           = $request->input('numeroDocumentoEntidad');
             $nombreEntidad           = $request->input('nombreEntidad');
@@ -59,6 +60,10 @@ final class CreateController
                 $Id->toString(),
                 $idCliente,
                 $idSede,
+                $idTipoComprobante,
+                $idTipoDocumentoEntidad,
+                $numeroDocumentoEntidad,
+                $nombreEntidad,
                 $idVehiculo,
                 $idPersonal,
                 $total,
@@ -89,15 +94,15 @@ final class CreateController
 
             //
 
-            $comprobanteElectronicoUseCase = new CreateToEgresoUseCase($this->comprobanteElectronicoRepository);
-            $comprobanteElectronicoUseCase->__invoke(
-                $idTipoDocumentoEntidad,
-                $numeroDocumentoEntidad,
-                $nombreEntidad,
-                null,
-                $user->getId(),
-                $_egreso,
-            );
+//            $comprobanteElectronicoUseCase = new CreateToEgresoUseCase($this->comprobanteElectronicoRepository);
+//            $comprobanteElectronicoUseCase->__invoke(
+//                $idTipoDocumentoEntidad,
+//                $numeroDocumentoEntidad,
+//                $nombreEntidad,
+//                null,
+//                $user->getId(),
+//                $_egreso,
+//            );
 
 
             DB::commit();
@@ -125,6 +130,8 @@ final class CreateController
 
                 throw new \InvalidArgumentException($e->getMessage());
             }*/
+
+            return $_egreso;
         }catch(\Exception $e){
             DB::rollBack();
             throw new \InvalidArgumentException($e->getMessage());

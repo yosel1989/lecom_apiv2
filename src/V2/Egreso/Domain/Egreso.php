@@ -37,13 +37,24 @@ final class Egreso
     private Id $idCaja;
     private Id $idSede;
     private Text $tipoComprobante;
-    private Text $comprobanteSerie;
-    private NumericInteger $comprobanteNumero;
+    private NumericInteger $idTipoComprobante;
+    private Text $serie;
+    private NumericInteger $numero;
+    private NumericInteger $idTipoDocumentoEntidad;
+    private Text $numeroDocumentoEntidad;
+    private Text $nombreEntidad;
+    private Text $tipoDocumentoEntidad;
 
     /**
      * @param Id $id
      * @param Id $idCliente
      * @param Id $idSede
+     * @param NumericInteger $idTipoComprobante
+     * @param Text $serie
+     * @param NumericInteger $numero
+     * @param NumericInteger $idTipoDocumentoEntidad
+     * @param Text $numeroDocumentoEntidad
+     * @param Text $nombreEntidad
      * @param Id $idVehiculo
      * @param Id $idPersonal
      * @param Id $idCaja
@@ -60,6 +71,12 @@ final class Egreso
         Id $id,
         Id $idCliente,
         Id $idSede,
+        NumericInteger $idTipoComprobante,
+        Text $serie,
+        NumericInteger $numero,
+        NumericInteger $idTipoDocumentoEntidad,
+        Text $numeroDocumentoEntidad,
+        Text $nombreEntidad,
         Id $idVehiculo,
         Id $idPersonal,
         Id $idCaja,
@@ -87,6 +104,12 @@ final class Egreso
         $this->fechaModifico = $fechaModifico;
         $this->idCaja = $idCaja;
         $this->idSede = $idSede;
+        $this->idTipoComprobante = $idTipoComprobante;
+        $this->serie = $serie;
+        $this->numero = $numero;
+        $this->idTipoDocumentoEntidad = $idTipoDocumentoEntidad;
+        $this->numeroDocumentoEntidad = $numeroDocumentoEntidad;
+        $this->nombreEntidad = $nombreEntidad;
     }
 
     /**
@@ -458,36 +481,118 @@ final class Egreso
     }
 
     /**
-     * @return Text
+     * @return NumericInteger
      */
-    public function getComprobanteSerie(): Text
+    public function getIdTipoComprobante(): NumericInteger
     {
-        return $this->comprobanteSerie;
+        return $this->idTipoComprobante;
     }
 
     /**
-     * @param Text $comprobanteSerie
+     * @param NumericInteger $idTipoComprobante
      */
-    public function setComprobanteSerie(Text $comprobanteSerie): void
+    public function setIdTipoComprobante(NumericInteger $idTipoComprobante): void
     {
-        $this->comprobanteSerie = $comprobanteSerie;
+        $this->idTipoComprobante = $idTipoComprobante;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getSerie(): Text
+    {
+        return $this->serie;
+    }
+
+    /**
+     * @param Text $serie
+     */
+    public function setSerie(Text $serie): void
+    {
+        $this->serie = $serie;
     }
 
     /**
      * @return NumericInteger
      */
-    public function getComprobanteNumero(): NumericInteger
+    public function getNumero(): NumericInteger
     {
-        return $this->comprobanteNumero;
+        return $this->numero;
     }
 
     /**
-     * @param NumericInteger $comprobanteNumero
+     * @param NumericInteger $numero
      */
-    public function setComprobanteNumero(NumericInteger $comprobanteNumero): void
+    public function setNumero(NumericInteger $numero): void
     {
-        $this->comprobanteNumero = $comprobanteNumero;
+        $this->numero = $numero;
     }
+
+    /**
+     * @return NumericInteger
+     */
+    public function getIdTipoDocumentoEntidad(): NumericInteger
+    {
+        return $this->idTipoDocumentoEntidad;
+    }
+
+    /**
+     * @param NumericInteger $idTipoDocumentoEntidad
+     */
+    public function setIdTipoDocumentoEntidad(NumericInteger $idTipoDocumentoEntidad): void
+    {
+        $this->idTipoDocumentoEntidad = $idTipoDocumentoEntidad;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getNumeroDocumentoEntidad(): Text
+    {
+        return $this->numeroDocumentoEntidad;
+    }
+
+    /**
+     * @param Text $numeroDocumentoEntidad
+     */
+    public function setNumeroDocumentoEntidad(Text $numeroDocumentoEntidad): void
+    {
+        $this->numeroDocumentoEntidad = $numeroDocumentoEntidad;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getNombreEntidad(): Text
+    {
+        return $this->nombreEntidad;
+    }
+
+    /**
+     * @param Text $nombreEntidad
+     */
+    public function setNombreEntidad(Text $nombreEntidad): void
+    {
+        $this->nombreEntidad = $nombreEntidad;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getTipoDocumentoEntidad(): Text
+    {
+        return $this->tipoDocumentoEntidad;
+    }
+
+    /**
+     * @param Text $tipoDocumentoEntidad
+     */
+    public function setTipoDocumentoEntidad(Text $tipoDocumentoEntidad): void
+    {
+        $this->tipoDocumentoEntidad = $tipoDocumentoEntidad;
+    }
+
+
 
 
 }

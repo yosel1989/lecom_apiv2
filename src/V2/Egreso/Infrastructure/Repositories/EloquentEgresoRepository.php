@@ -39,6 +39,10 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
         Id $id,
         Id $idCliente,
         Id $idSede,
+        NumericInteger $idTipoComprobante,
+        NumericInteger $idTipoDocumentoEntidad,
+        Text $numeroDocumentoEntidad,
+        Text $nombreEntidad,
         Id $idVehiculo,
         Id $idPersonal,
         NumericFloat $total,
@@ -71,6 +75,12 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
             throw new InvalidArgumentException( 'Existe más de una serie registrada' );
         }
 
+        // Obtener ultimo numero
+        $ultimoNumero = $this->eloquent->select(DB::raw('MAX(numero) as ultimo_numero'))
+            ->where('id_cliente', $idCliente->value())
+            ->where('serie', $Serie->first()->nombre)
+            ->first();
+
         // Validar caja
         $Caja = Caja::selectRaw('count(*) as total')->where('id', $idCaja->value())->where('id_estado', 1)->where('id_cliente',$idCliente->value())->where('id_eliminado',0)->first();
         if( $Caja->total === 0 ){
@@ -78,9 +88,15 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
         }
 
         // Validar caja diario
-        $CajaDiario = CajaDiario::selectRaw('count(*) as total')->where('id', $idCajaDiario->value())->where('id_cliente',$idCliente->value())->where('id_estado', 1)->where('id_eliminado',0)->whereNull('f_cierre')->first();
-        if( $CajaDiario->total === 0 ){
+        $CajaDiario = CajaDiario::where('id', $idCajaDiario->value())->where('id_cliente',$idCliente->value())->where('id_estado', 1)->where('id_eliminado',0)->whereNull('f_cierre');
+        if( $CajaDiario->count() === 0 ){
             throw new InvalidArgumentException( 'La caja no se encuentra aperturada' );
+        }else{
+            $fechaApertura = new \DateTime($CajaDiario->first()->f_apertura);
+            $hoy = new \DateTime('now');
+            if($fechaApertura->format('Y-m-d') !== $hoy->format('Y-m-d')){
+                throw new InvalidArgumentException( 'Debe realizar el cierre de caja' );
+            }
         }
 
         // Validar cliente
@@ -105,10 +121,22 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
             }
         }
 
+        // Validar tipo de documento de identidad
+        $tipoDocumento = \App\Models\V2\TipoDocumento::where('id', $idTipoDocumentoEntidad->value());
+        if( $tipoDocumento->count() === 0 ){
+            throw new InvalidArgumentException( 'El tipo de documento no se encuentra registrado en el sistema o esta inhabilitado.' );
+        }
+
         $this->eloquent->create([
             'id' => $id->value(),
             'id_cliente' => $idCliente->value(),
             'id_sede' => $idSede->value(),
+            'id_tipo_comprobante' => $idTipoComprobante->value(),
+            'serie' =>  $Serie->first()->nombre,
+            'numero' =>  $ultimoNumero->ultimo_numero ? ($ultimoNumero->ultimo_numero + 1) : 1,
+            'id_tipo_documento_entidad' => $idTipoDocumentoEntidad->value(),
+            'numero_documento_entidad' => $numeroDocumentoEntidad->value(),
+            'nombre_entidad' => $nombreEntidad->value(),
             'id_vehiculo' => $idVehiculo->value(),
             'id_personal' => $idPersonal->value(),
             'total' => $total->value(),
@@ -122,11 +150,21 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
         $model = $this->eloquent->with(
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
+            'tipoComprobante:id,nombre',
+            'sede:id,nombre',
+            'caja:id,nombre',
+            'tipoDocumento:id,nombre_corto',
         )->findOrFail($id->value());
         $OModel = new Egreso(
             new Id($model->id , false, 'El id del egreso no tiene el formato correcto'),
             new Id($model->id_cliente , false, 'El id del cliente no tiene el formato correcto'),
             new Id($model->id_sede , false, 'El id de la sede no tiene el formato correcto'),
+            new NumericInteger($model->id_tipo_comprobante),
+            new Text($model->serie, false, -1, ''),
+            new NumericInteger($model->numero),
+            new NumericInteger($model->id_tipo_documento_entidad ),
+            new Text($model->numero_documento_entidad, false, -1, ''),
+            new Text($model->nombre_entidad, false, -1, ''),
             new Id($model->id_vehiculo , true, 'El id del vehiculo tipo no tiene el formato correcto'),
             new Id($model->id_personal , true, 'El id del personal tipo no tiene el formato correcto'),
             new Id($model->id_caja , false, 'El id de la caja  no tiene el formato correcto'),
@@ -141,6 +179,10 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
         );
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
+        $OModel->setSede(new Text($model->sede->nombre, false, -1));
+        $OModel->setTipoComprobante(new Text($model->tipoComprobante->nombre, false, -1));
+        $OModel->setTipoDocumentoEntidad(new Text($model->tipoDocumento->nombre_corto, false, -1));
+        $OModel->setCaja(new Text($model->caja?->nombre, false, -1));
 
         return $OModel;
 

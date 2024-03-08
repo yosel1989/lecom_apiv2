@@ -14,6 +14,12 @@ return new class extends Migration
         Schema::create('egreso', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->uuid('id_cliente');
+            $table->integer('id_tipo_comprobante');
+            $table->string('serie');
+            $table->integer('numero');
+            $table->integer('id_tipo_documento_entidad');
+            $table->string('numero_documento_entidad',15);
+            $table->string('nombre_entidad',100);
             $table->uuid('id_sede');
             $table->uuid('id_vehiculo')->nullable();
             $table->uuid('id_personal')->nullable();
@@ -30,6 +36,12 @@ return new class extends Migration
             $table->index([
                 'id',
                 'id_cliente',
+                'id_tipo_comprobante',
+                'serie',
+                'numero',
+                'id_tipo_documento_entidad',
+                'numero_documento_entidad',
+                'nombre_entidad',
                 'id_sede',
                 'id_vehiculo',
                 'id_personal',
