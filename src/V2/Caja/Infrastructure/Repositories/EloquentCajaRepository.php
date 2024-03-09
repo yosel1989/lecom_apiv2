@@ -363,12 +363,12 @@ final class EloquentCajaRepository implements CajaRepositoryContract
 
 
         $cajadiario = CajaDiario::with('estado:id,nombre')->where('id_caja', $idCaja->value())->findOrFail($idCajaDiario->value());
+//        dd($cajadiario->estado->nombre);
         $OModel->setAperturado(new ValueBoolean(true));
         $OModel->setIdCajaDiario(new Id($cajadiario->id, true, 'El id del historial de la caja no tiene el formato correcto'));
         $OModel->setIdEstado(new NumericInteger($cajadiario->estado->id));
         $OModel->setEstado(new Text($cajadiario->estado->nombre, false, -1, ''));
         $OModel->setFechaApertura(new DateTimeFormat($cajadiario->f_apertura, false));
-
 
         return $OModel;
     }

@@ -3,7 +3,6 @@
 namespace App\Models\V2;
 
 use App\Enums\IdEliminado;
-use App\Enums\IdEstado;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 

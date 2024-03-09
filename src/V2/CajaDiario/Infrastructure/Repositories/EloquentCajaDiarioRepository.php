@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\V2\CajaDiario\Infrastructure\Repositories;
 
+use App\Enums\EnumEstadoCajaDiario;
 use App\Models\V2\CajaDiario as EloquentModelCajaDiario;
 use Illuminate\Support\Facades\DB;
 use Src\Core\Domain\ValueObjects\DateFormat;
@@ -60,6 +61,7 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
                 'monto_final' =>  $montoFinal->value(),
                 'f_cierre' =>  $fechaCierre->value(),
                 'id_usu_modifico' =>  $idUsuarioRegistro->value(),
+                'id_estado' => EnumEstadoCajaDiario::Cerrado->value
             ]);
     }
 
@@ -68,17 +70,19 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
         Id $idCliente,
         NumericFloat $monto,
         Id $idUsuarioRegistro,
-    ): void
+    ): string
     {
         $fecha = (new \DateTime('now'))->format('Y-m-d H:i:s');
 
-        $this->eloquentModelCajaDiario->create([
+        $model = $this->eloquentModelCajaDiario->create([
             'id_caja' =>  $idCaja->value(),
             'id_cliente' =>  $idCliente->value(),
             'monto_inicial' =>  $monto->value(),
             'f_apertura' =>  $fecha,
             'id_usu_registro' =>  $idUsuarioRegistro->value(),
         ]);
+
+        return $model->id;
     }
 
     public function cerrar(
@@ -103,7 +107,36 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
                 'monto_final' =>  $monto->value(),
                 'f_cierre' =>  $fecha,
                 'id_usu_modifico' =>  $idUsuarioRegistro->value(),
+                'id_estado' => EnumEstadoCajaDiario::Cerrado->value
             ]);
+    }
+
+    public function cerrarCajaDespacho(
+        Id $idCaja,
+        Id $idCajaDiario,
+        Id $idCliente,
+        NumericFloat $monto,
+        Id $idUsuarioRegistro,
+    ): void
+    {
+        $fecha = (new \DateTime('now'))->format('Y-m-d H:i:s');
+
+        $select = $this->eloquentModelCajaDiario
+            ->where('id',$idCajaDiario->value())
+            ->where('id_caja',$idCaja->value())
+            ->where('id_cliente',$idCliente->value())
+            ->whereNull('f_cierre');
+
+        if($select->count() === 0){
+            throw new \InvalidArgumentException('La caja ya se encuentra cerrada');
+        }
+
+        $select->firstOrFail()->update([
+            'monto_final' =>  $monto->value(),
+            'f_cierre' =>  $fecha,
+            'id_usu_modifico' =>  $idUsuarioRegistro->value(),
+            'id_estado' => EnumEstadoCajaDiario::Cerrado->value
+        ]);
     }
 
 

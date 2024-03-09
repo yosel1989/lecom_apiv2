@@ -32,10 +32,18 @@ interface CajaDiarioRepositoryContract
         Id $idCliente,
         NumericFloat $monto,
         Id $idUsuarioRegistro
-    ): void;
+    ): string;
 
     public function cerrar(
         Id $idCaja,
+        Id $idCliente,
+        NumericFloat $monto,
+        Id $idUsuarioRegistro
+    ): void;
+
+    public function cerrarCajaDespacho(
+        Id $idCaja,
+        Id $idCajaDiario,
         Id $idCliente,
         NumericFloat $monto,
         Id $idUsuarioRegistro

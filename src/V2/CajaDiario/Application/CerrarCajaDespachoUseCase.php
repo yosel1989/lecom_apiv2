@@ -7,7 +7,7 @@ use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\V2\CajaDiario\Domain\Contracts\CajaDiarioRepositoryContract;
 
-final class AbrirUseCase
+final class CerrarCajaDespachoUseCase
 {
     /**
      * @var CajaDiarioRepositoryContract
@@ -21,18 +21,21 @@ final class AbrirUseCase
 
     public function __invoke(
         string $idCaja,
+        string $idCajaDiario,
         string $idCliente,
         float $monto,
         string $idUsuarioRegistro
-    ): string
+    ): void
     {
         $_idCaja = new Id($idCaja,false,'El id de la caja no tiene el formato correcto');
-        $_idCliente = new Id($idCliente,false,'El id del cliente no tiene el formato correcto');
+        $_idCajaDiario = new Id($idCajaDiario,false,'El id de la caja diario no tiene el formato correcto');
+        $_idCliente = new Id($idCliente,true,'El id del cliente no tiene el formato correcto');
         $_monto = new NumericFloat($monto);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
-        return $this->repository->abrir(
+        $this->repository->cerrarCajaDespacho(
             $_idCaja,
+            $_idCajaDiario,
             $_idCliente,
             $_monto,
             $_idUsuarioRegistro

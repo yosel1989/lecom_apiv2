@@ -9,14 +9,13 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use InvalidArgumentException;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class AbrirController extends Controller
+class CerrarCajaDespachoController extends Controller
 {
-    private \Src\V2\CajaDiario\Infrastructure\AbrirController $controller;
+    private \Src\V2\CajaDiario\Infrastructure\CerrarCajaDespachoController $controller;
 
-    public function __construct(\Src\V2\CajaDiario\Infrastructure\AbrirController $controller)
+    public function __construct(\Src\V2\CajaDiario\Infrastructure\CerrarCajaDespachoController $controller)
     {
         $this->controller = $controller;
     }
@@ -30,11 +29,11 @@ class AbrirController extends Controller
     {
         try {
 
-            $id = $this->controller->__invoke($request);
+            $this->controller->__invoke($request);
             return response()->json([
-                'data' => $id,
+                'data' => null,
                 'error' =>  null,
-                'status' => ResponseAlias::HTTP_CREATED
+                'status' => ResponseAlias::HTTP_OK
             ]);
 
         }catch ( InvalidArgumentException $e ){
