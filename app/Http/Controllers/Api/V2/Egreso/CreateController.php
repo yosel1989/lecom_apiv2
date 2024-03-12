@@ -46,12 +46,12 @@ class CreateController extends Controller
             $configuracion = $this->controllerConfiguracion->__invoke($request);
 
             $pdf = PDF::loadView('comprobantes.ticket-interno-egreso', compact('egreso', 'configuracion', 'formatter', 'fechaRegistro'))
-                ->setPaper(array( 0 , 0 , 226.77 , 226.77 ), 'portrait')->setOption( 'dpi' , '72' );
+                ->setPaper(array( 0 , 0 , 226.77 , 226.77 ), 'landscape')->setOption( 'dpi' , '72' );
             $page_count = $pdf->getCanvas()->get_page_number();
 
             unset( $pdf );
             $pdf = PDF::loadView('comprobantes.ticket-interno-egreso', compact('egreso', 'configuracion', 'formatter', 'fechaRegistro'))
-                ->setPaper(array( 0 , 0 , 226.77 * $page_count + 400 , 226.77 ), 'portrait')->setOption( 'dpi' , '72' );
+                ->setPaper(array( 0 , 0 , 226.77 * $page_count + 100 , 226.77 ), 'landscape')->setOption( 'dpi' , '72' );
 
             return response()->json([
                 'data' => null,

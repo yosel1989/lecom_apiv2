@@ -23,9 +23,10 @@ interface CajaRepositoryContract
     ): void;
 
     public function collectionByCliente(Id $idCliente): array;
-    public function listBySede(Id $idCliente, Id $idSede): array;
     public function listByCliente(Id $idCliente): array;
+    public function listBySede(Id $idCliente, Id $idSede): array;
     public function listBySedeDespacho(Id $idCliente, Id $idSede): array;
+    public function listBySedePuntoVenta(Id $idCliente, Id $idSede): array;
 
     public function update(
         Id $id,
@@ -49,6 +50,11 @@ interface CajaRepositoryContract
     ): Caja;
 
     public function findToDespacho(
+        Id $idCaja,
+        Id $idCajaDiario,
+    ): CajaSede;
+
+    public function findToPuntoVenta(
         Id $idCaja,
         Id $idCajaDiario,
     ): CajaSede;
