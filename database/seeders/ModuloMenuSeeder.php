@@ -469,7 +469,7 @@ class ModuloMenuSeeder extends Seeder
             'id_estado'=> IdEstado::Habilitado
         ]);
             \App\Models\V2\ModuloMenu::create([
-                'id_modulo'=> EnumModulo::Reportes,
+                'id_modulo'=> EnumModulo::Operaciones,
                 'texto'=>'Administrar Ingresos',
                 'icono'=>null,
                 'id_tipo_menu'=> EnumTipoMenu::Link,
@@ -478,7 +478,7 @@ class ModuloMenuSeeder extends Seeder
                 'id_estado'=> IdEstado::Habilitado
             ]);
         \App\Models\V2\ModuloMenu::create([
-            'id_modulo'=> EnumModulo::Reportes,
+            'id_modulo'=> EnumModulo::Operaciones,
             'texto'=>'Administrar Egresos',
             'icono'=>null,
             'id_tipo_menu'=> EnumTipoMenu::Link,
@@ -487,7 +487,7 @@ class ModuloMenuSeeder extends Seeder
             'id_estado'=> IdEstado::Habilitado
         ]);
             \App\Models\V2\ModuloMenu::create([
-                'id_modulo'=> EnumModulo::Reportes,
+                'id_modulo'=> EnumModulo::Operaciones,
                 'texto'=>'Administrar Liquidaciones',
                 'icono'=>null,
                 'id_tipo_menu'=> EnumTipoMenu::Link,

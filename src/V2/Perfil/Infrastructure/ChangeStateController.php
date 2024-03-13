@@ -24,7 +24,7 @@ final class ChangeStateController
     public function __invoke( Request $request ): void
     {
         $user = Auth::user();
-        $idPerfil = $request->idPerfil;
+        $idPerfil = $request->id;
         $idEstado = $request->input('idEstado');
         $useCase = new ChangeStateUseCase($this->repository);
         $useCase->__invoke(
