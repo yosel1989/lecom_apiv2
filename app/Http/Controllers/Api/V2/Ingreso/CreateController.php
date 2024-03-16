@@ -49,7 +49,6 @@ class CreateController extends Controller
             $pdf = PDF::loadView('comprobantes.comprobante-ingresos', compact('ingreso', 'configuracion', 'usuario', 'formatter', 'fechaRegistro'))
                 ->setOption( 'dpi' , '72' );
 
-
             return response()->json([
                 'data' => null,
                 'error' =>  null,

@@ -59,6 +59,7 @@ interface CajaDiarioRepositoryContract
     public function reporteSaldo(
         Id $idCliente,
         DateFormat $fechaInicio,
-        DateFormat $fechaFinal
+        DateFormat $fechaFinal,
+        Id $idCaja
     ): array;
 }

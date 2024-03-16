@@ -12,9 +12,17 @@ $medidaTicket = 180;
     <title>Laravel 7 PDF Example</title>
 {{--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">--}}
     <style>
-        @page { margin-top: 0px; margin-bottom: 0px; }
+        @page { margin: 0; padding: 0; size: 80mm 210mm;max-width: 100%;}
         @media dompdf {
-            /* your styles here */
+            @page {
+                size: 80mm 210mm;
+            }
+        }
+        @media print{
+            @page {
+                size: 80mm 210mm;
+                max-width: 100%;
+            }
         }
         *{
             padding: 0;

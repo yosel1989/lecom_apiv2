@@ -22,12 +22,14 @@ final class ReporteSaldoController
         $idCliente          = $request->idCliente;
         $fechaInicial     = $request->fechaInicio;
         $fechaFinal     = $request->fechaFin;
+        $idCaja     = $request->idCaja == 'null' ? null : $request->idCaja;
 
         $useCase = new ReporteSaldoUseCase( $this->repository );
         return $useCase->__invoke(
             $idCliente,
             $fechaInicial,
-            $fechaFinal
+            $fechaFinal,
+            $idCaja
         );
     }
 }

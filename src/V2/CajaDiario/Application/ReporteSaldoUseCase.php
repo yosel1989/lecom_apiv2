@@ -21,18 +21,22 @@ final class ReporteSaldoUseCase
     public function __invoke(
         string $idCliente,
         string $fechaInicio,
-        string $fechaFinal
+        string $fechaFinal,
+        ?string $idCaja
     ): array
     {
 
         $_idCliente = new Id($idCliente,false,'El id del cliente no tiene el formato correcto');
         $_fechaInicio = new DateFormat($fechaInicio);
         $_fechaFinal = new DateFormat($fechaFinal);
+        $_idCaja = new Id($idCaja,true,'El id de la caja no tiene el formato correcto');
+
 
         return $this->repository->reporteSaldo(
             $_idCliente,
             $_fechaInicio,
-            $_fechaFinal
+            $_fechaFinal,
+            $_idCaja
         );
 
     }
