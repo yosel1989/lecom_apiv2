@@ -204,7 +204,8 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
                 'caja_diario.*',
                 DB::raw("
                 COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id), 0) -
-                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id),0)
+                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id),0) +
+                COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_3 WHERE id_caja_diario = caja_diario.id),0)
                 as saldo")
             )
             ->with(

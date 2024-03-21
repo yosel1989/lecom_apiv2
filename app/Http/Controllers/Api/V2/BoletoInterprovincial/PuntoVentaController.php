@@ -71,7 +71,7 @@ class PuntoVentaController extends Controller
             return response()->json([
                 'data' => [],
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
+                'trace' => $request->debug ? $e->getTrace() : null,
 //                'd' => $page_count,
                 'status' => Response::HTTP_BAD_REQUEST
             ]);
@@ -81,7 +81,7 @@ class PuntoVentaController extends Controller
             return response()->json([
                 'data' => [],
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
+                'trace' => $request->debug ? $e->getTrace() : null,
                 'status' => $e->getCode()
             ]);
 
