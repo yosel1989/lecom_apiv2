@@ -67,7 +67,7 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
         }
 
         // Validar serie
-        $Serie = ComprobanteSerie::where('id_estado', 1)->where('id_cliente',$idCliente->value())->where('id_tipo_comprobante',EnumTipoComprobante::TicketEgreso);
+        $Serie = ComprobanteSerie::where('id_estado', 1)->where('id_cliente',$idCliente->value())->where('id_tipo_comprobante',EnumTipoComprobante::TicketEgreso)->where('id_sede', $idSede->value());
         if( $Serie->count() === 0 ){
             throw new InvalidArgumentException( 'Falta registrar la serie en el sistema' );
         }

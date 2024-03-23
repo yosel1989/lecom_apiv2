@@ -73,7 +73,8 @@ final class EloquentIngresoRepository implements IngresoRepositoryContract
         $Serie = ComprobanteSerie::where('id_cliente', $idCliente->value())
             ->where('id_sede', $idSede->value())
             ->where('id_tipo_comprobante', EnumTipoComprobante::ComprobanteIngreso->value)
-            ->where('id_estado', 1);
+            ->where('id_estado', 1)
+            ->where('id_sede', $idSede->value());
 
         if($Serie->count() === 0){
             throw new \InvalidArgumentException('Falta registrar la serie para esta operación');

@@ -48,12 +48,14 @@ class ShowByIdController extends Controller
             // Creando pdf boleto
             $formatter = new NumeroALetras();
             $pdf = PDF::loadView('comprobantes.ver-boleta-electronica', compact('boleto', 'usuario', 'formatter', 'qrcode', 'fecha', 'configuracion'))
-                ->setPaper(array( 0 , 0 , 226.77 , 226.77 ), 'landscape')->setOption( 'dpi' , '72' );
+                ->setPaper(array( 0 , 0 , 226.77 , 226.77 ), 'landscape')
+                ->setOption( ['dpi' => 70, 'isRemoteEnabled' => true, 'isHtml5ParserEnabled' => true] );
             $page_count = $pdf->getCanvas()->get_page_number();
 
             unset( $pdf );
             $pdf = PDF::loadView('comprobantes.ver-boleta-electronica', compact('boleto', 'usuario', 'formatter', 'qrcode', 'fecha', 'configuracion'))
-                ->setPaper(array( 0 , 0 , 226.77 * $page_count + 400 , 226.77 ), 'landscape')->setOption( 'dpi' , '72' );
+                ->setPaper(array( 0 , 0 , 226.77 * $page_count + 170 , 226.77 ), 'landscape')
+                ->setOption( ['dpi' => 70, 'isRemoteEnabled' => true, 'isHtml5ParserEnabled' => true] );
 
             return response()->json([
                 'data' => base64_encode($pdf->output(['Attachment' => 0])),

@@ -716,7 +716,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             throw new InvalidArgumentException( 'Falta ingresar el código de la sede' );
         }
 
-        // Validar sede
+        // Validar serie
         $Serie = ComprobanteSerie::where('id_estado', 1)->where('id_cliente',$_idCliente->value())->where('id_tipo_comprobante',$_idTipoComprobante->value())->where('id_sede',$_idSede->value());
         if( $Serie->count() === 0 ){
             throw new InvalidArgumentException( 'Falta registrar la serie en el sistema' );
