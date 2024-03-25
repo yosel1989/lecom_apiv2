@@ -5,6 +5,7 @@ namespace Src\V2\Caja\Domain;
 
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
+use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\Core\Domain\ValueObjects\ValueBoolean;
@@ -22,6 +23,7 @@ final class CajaSede
     private NumericInteger $idEstado;
     private Text $estado;
     private DateTimeFormat $fechaApertura;
+    private NumericFloat $saldo;
 
     /**
      * @param Id $id
@@ -186,4 +188,22 @@ final class CajaSede
     {
         $this->fechaApertura = $fechaApertura;
     }
+
+    /**
+     * @return NumericFloat
+     */
+    public function getSaldo(): NumericFloat
+    {
+        return $this->saldo;
+    }
+
+    /**
+     * @param NumericFloat $saldo
+     */
+    public function setSaldo(NumericFloat $saldo): void
+    {
+        $this->saldo = $saldo;
+    }
+
+
 }

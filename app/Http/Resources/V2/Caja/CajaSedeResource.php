@@ -25,6 +25,7 @@ class CajaSedeResource extends JsonResource
             'idEstado'          => $this->getIdEstado()->value(),
             'idCajaHistorial'     => $this->getIdCajaDiario()->value(),
             'fechaApertura'     => $this->getFechaApertura()->value(),
+            'saldo'     => $this->getSaldo()->value(),
         ];
     }
 }

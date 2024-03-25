@@ -9,6 +9,7 @@ Route::namespace('App\Http\Controllers\Api\V2\CajaDiario')->middleware('auth:san
 
 
 Route::namespace('App\Http\Controllers\Api\V2\CajaDiario')->middleware('auth:sanctum')->group( function (){
+    Route::get('cliente/{idCliente}/caja-diario/monto-actual/{idCaja}', 'MontoActualController');
     Route::post('caja-diario/abrir', 'AbrirController');
     Route::put('caja-diario/cerrar', 'CerrarController');
     Route::put('caja-diario/cerrar-despacho', 'CerrarCajaDespachoController');

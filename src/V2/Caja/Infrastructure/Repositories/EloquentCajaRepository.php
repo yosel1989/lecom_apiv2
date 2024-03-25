@@ -6,9 +6,11 @@ namespace Src\V2\Caja\Infrastructure\Repositories;
 
 use App\Models\V2\Caja as EloquentModelCaja;
 use App\Models\V2\CajaDiario;
+use App\Models\V2\Cliente;
 use Illuminate\Support\Facades\DB;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
+use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\Core\Domain\ValueObjects\ValueBoolean;
@@ -157,6 +159,8 @@ final class EloquentCajaRepository implements CajaRepositoryContract
 
     public function listBySedeDespacho(Id $idCliente, Id $idSede): array
     {
+        $Cliente = Cliente::findOrFail($idCliente->value(),['id','codigo']);
+
         $models = $this->eloquentModelCaja
             ->select(
                 'id',
@@ -182,8 +186,6 @@ final class EloquentCajaRepository implements CajaRepositoryContract
                 new Id($model->id_sede , true, 'El id de la sede no tiene el formato correcto'),
             );
 
-            $arrVehicles[] = $OModel;
-
 
             $cajadiario = CajaDiario::with('estado:id,nombre')->where('id_caja',$model->id)->orderBy('f_apertura', 'desc')->limit(1);
             if($cajadiario->count() === 0){
@@ -207,6 +209,21 @@ final class EloquentCajaRepository implements CajaRepositoryContract
                     $OModel->setIdCajaDiario(new Id(null, true, ''));
                 }
             }
+
+            if($OModel->getIdCajaDiario()->value()){
+                $saldo = CajaDiario::select(
+                    DB::raw("
+                COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id), 0) -
+                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id),0) +
+                COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id),0)
+                as saldo")
+                )->where('id', $OModel->getIdCajaDiario()->value())->get()->first()->saldo;
+                $OModel->setSaldo(new NumericFloat($saldo));
+            }else{
+                $OModel->setSaldo(new NumericFloat(0));
+            }
+
+            $arrVehicles[] = $OModel;
         }
 
 
@@ -215,6 +232,8 @@ final class EloquentCajaRepository implements CajaRepositoryContract
 
     public function listBySedePuntoVenta(Id $idCliente, Id $idSede): array
     {
+        $Cliente = Cliente::findOrFail($idCliente->value(),['id','codigo']);
+
         $models = $this->eloquentModelCaja
             ->select(
                 'id',
@@ -240,9 +259,6 @@ final class EloquentCajaRepository implements CajaRepositoryContract
                 new Id($model->id_sede , true, 'El id de la sede no tiene el formato correcto'),
             );
 
-
-
-
             $cajadiario = CajaDiario::with('estado:id,nombre')->where('id_caja',$model->id)->orderBy('f_apertura', 'desc')->limit(1);
             if($cajadiario->count() === 0){
                 $OModel->setAperturado(new ValueBoolean(false));
@@ -266,8 +282,18 @@ final class EloquentCajaRepository implements CajaRepositoryContract
                 }
             }
 
-
-
+            if($OModel->getIdCajaDiario()->value()){
+                $saldo = CajaDiario::select(
+                    DB::raw("
+                COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id), 0) -
+                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id),0) +
+                COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id),0)
+                as saldo")
+                )->where('id', $OModel->getIdCajaDiario()->value())->get()->first()->saldo;
+                $OModel->setSaldo(new NumericFloat($saldo));
+            }else{
+                $OModel->setSaldo(new NumericFloat(0));
+            }
 
             $arrVehicles[] = $OModel;
         }
@@ -416,6 +442,8 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             ->where('id_estado', 1)
             ->findOrFail($idCaja->value());
 
+        $Cliente = Cliente::findOrFail($model->id_cliente,['id','codigo']);
+
         $OModel = new CajaSede(
             new Id($model->id , false, 'El id del caja no tiene el formato correcto'),
             new Text($model->nombre, false, 100, 'El nombre de la caja excede los 100 caracteres'),
@@ -431,6 +459,20 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         $OModel->setIdEstado(new NumericInteger($cajadiario->estado->id));
         $OModel->setEstado(new Text($cajadiario->estado->nombre, false, -1, ''));
         $OModel->setFechaApertura(new DateTimeFormat($cajadiario->f_apertura, false));
+
+
+        if($OModel->getIdCajaDiario()->value()){
+            $saldo = CajaDiario::select(
+                DB::raw("
+                COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id), 0) -
+                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id),0) +
+                COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id),0)
+                as saldo")
+            )->where('id', $OModel->getIdCajaDiario()->value())->get()->first()->saldo;
+            $OModel->setSaldo(new NumericFloat($saldo));
+        }else{
+            $OModel->setSaldo(new NumericFloat(0));
+        }
 
         return $OModel;
     }
@@ -453,6 +495,8 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             ->where('id_estado', 1)
             ->findOrFail($idCaja->value());
 
+        $Cliente = Cliente::findOrFail($model->id_cliente,['id','codigo']);
+
         $OModel = new CajaSede(
             new Id($model->id , false, 'El id del caja no tiene el formato correcto'),
             new Text($model->nombre, false, 100, 'El nombre de la caja excede los 100 caracteres'),
@@ -468,6 +512,20 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         $OModel->setIdEstado(new NumericInteger($cajadiario->estado->id));
         $OModel->setEstado(new Text($cajadiario->estado->nombre, false, -1, ''));
         $OModel->setFechaApertura(new DateTimeFormat($cajadiario->f_apertura, false));
+
+
+        if($OModel->getIdCajaDiario()->value()){
+            $saldo = CajaDiario::select(
+                DB::raw("
+                COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id), 0) -
+                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id),0) +
+                COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id),0)
+                as saldo")
+            )->where('id', $OModel->getIdCajaDiario()->value())->get()->first()->saldo;
+            $OModel->setSaldo(new NumericFloat($saldo));
+        }else{
+            $OModel->setSaldo(new NumericFloat(0));
+        }
 
         return $OModel;
     }

@@ -6,6 +6,7 @@ use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
+use Src\V2\Caja\Domain\CajaSede;
 
 interface CajaDiarioRepositoryContract
 {
@@ -40,6 +41,11 @@ interface CajaDiarioRepositoryContract
         NumericFloat $monto,
         Id $idUsuarioRegistro
     ): void;
+
+    public function montoActual(
+        Id $idCaja,
+        Id $idCliente
+    ): CajaSede;
 
     public function cerrarCajaDespacho(
         Id $idCaja,

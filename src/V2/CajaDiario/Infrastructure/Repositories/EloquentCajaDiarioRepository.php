@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Src\V2\CajaDiario\Infrastructure\Repositories;
 
 use App\Enums\EnumEstadoCajaDiario;
+use App\Models\V2\Caja;
 use App\Models\V2\CajaDiario as EloquentModelCajaDiario;
 use App\Models\V2\Cliente;
+use App\Models\V2\EstadoCajaDiario;
 use Illuminate\Support\Facades\DB;
 use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
@@ -14,6 +16,9 @@ use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
+use Src\V2\Caja\Domain\CajaSede;
+use Src\V2\CajaDiario\Domain\CajaDiario;
 use Src\V2\CajaDiario\Domain\CajaDiarioReporte;
 use Src\V2\CajaDiario\Domain\Contracts\CajaDiarioRepositoryContract;
 
@@ -190,6 +195,64 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
     }
 
 
+    public function montoActual(
+        Id $idCaja,
+        Id $idCliente
+    ): CajaSede
+    {
+        $collection = [];
+
+        $Cliente = Cliente::findOrFail($idCliente->value(), ['id','codigo']);
+        $Caja = Caja::findOrFail($idCaja->value(), ['id','nombre','id_sede']);
+
+        $result = $this->eloquentModelCajaDiario
+            ->select(
+                'caja_diario.*',
+                DB::raw("
+                caja_diario.monto_inicial +
+                COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id), 0) -
+                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id),0) +
+                COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id),0)
+                as saldo")
+            )
+            ->with(
+                'caja:id,nombre',
+                'estado:id,nombre',
+            )
+            ->where('id_cliente',$idCliente->value())
+            ->where('id_caja',$idCaja->value())
+//            ->whereDate('f_apertura', '>=', $fechaInicio->value())
+//            ->whereDate('f_apertura', '<=', $fechaFinal->value())
+            ->orderBy('f_apertura','DESC')
+            ->offset(0)->limit(1)->get();
+
+        if($result->count() === 1){
+            $model = $result->first();
+
+            $OModel = new CajaSede(
+                new Id($model->id_caja, false, 'El id de la caja no tiene el formato correcto'),
+                new Text($Caja->nombre, false, -1, ''),
+                $idCliente,
+                new Id($Caja->id_sede, false, 'El id de la sede no tiene el formato correcto')
+            );
+            $OModel->setAperturado(new ValueBoolean(is_null($model->f_cierre)));
+            $OModel->setIdCajaDiario(new Id($model->id, false, 'El id del historial de caja no tiene el formato correcto'));
+            $OModel->setIdEstado(new NumericInteger(is_null($model->f_cierre) ? EnumEstadoCajaDiario::Abierto->value : EnumEstadoCajaDiario::Cerrado->value));
+
+            $Estado = EstadoCajaDiario::findOrFail($OModel->getIdEstado()->value());
+            $OModel->setEstado(new Text($Estado->nombre, false, -1, ''));
+            $OModel->setFechaApertura(new DateTimeFormat($model->f_apertura, false,  ''));
+            $OModel->setSaldo(new NumericFloat($model->saldo));
+
+            dd($OModel);
+
+            return $OModel;
+
+        }
+
+        throw new \InvalidArgumentException('Ocurrio un error');
+
+    }
 
     public function reporteSaldo(
         Id $idCliente,
