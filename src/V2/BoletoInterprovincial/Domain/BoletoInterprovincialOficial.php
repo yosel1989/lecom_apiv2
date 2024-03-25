@@ -61,6 +61,7 @@ final class BoletoInterprovincialOficial
     private Text $paraderoDestino;
     private Text $tipoMoneda;
     private Text $formaPago;
+    private Text $medioPago;
     private Text $pos;
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
@@ -1060,6 +1061,22 @@ final class BoletoInterprovincialOficial
     public function setEstado(Text $estado): void
     {
         $this->estado = $estado;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getMedioPago(): Text
+    {
+        return $this->medioPago;
+    }
+
+    /**
+     * @param Text $medioPago
+     */
+    public function setMedioPago(Text $medioPago): void
+    {
+        $this->medioPago = $medioPago;
     }
 
 

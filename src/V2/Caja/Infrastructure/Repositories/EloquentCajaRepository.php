@@ -240,7 +240,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
                 new Id($model->id_sede , true, 'El id de la sede no tiene el formato correcto'),
             );
 
-            $arrVehicles[] = $OModel;
+
 
 
             $cajadiario = CajaDiario::with('estado:id,nombre')->where('id_caja',$model->id)->orderBy('f_apertura', 'desc')->limit(1);
@@ -265,6 +265,11 @@ final class EloquentCajaRepository implements CajaRepositoryContract
                     $OModel->setIdCajaDiario(new Id(null, true, ''));
                 }
             }
+
+
+
+
+            $arrVehicles[] = $OModel;
         }
 
 

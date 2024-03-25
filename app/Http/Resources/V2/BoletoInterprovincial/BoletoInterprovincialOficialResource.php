@@ -68,7 +68,9 @@ class BoletoInterprovincialOficialResource extends JsonResource
             'idOrigen'            => $this->getIdOrigen()->value(),
             'origen'            => $this->getOrigen()->value(),
             'idCajaDiario'            => $this->getIdCajaDiario()->value(),
-            'idLiquidacion'            => $this->getIdLiquidacion()->value()
+            'idLiquidacion'            => $this->getIdLiquidacion()->value(),
+
+            'medioPago'            => $this->getMedioPago()->value(),
         ];
 
     }

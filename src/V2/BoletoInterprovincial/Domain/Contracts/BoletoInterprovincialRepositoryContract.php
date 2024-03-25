@@ -76,6 +76,7 @@ interface BoletoInterprovincialRepositoryContract
         NumericFloat $_precio,
         NumericInteger $_idTipoMoneda,
         NumericInteger $_idFormaPago,
+        NumericInteger $_idMedioPago,
         NumericInteger $_obsequio,
 
         NumericInteger $_idTipoComprobante,

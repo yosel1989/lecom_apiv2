@@ -33,6 +33,12 @@ class MedioPagoSeeder extends Seeder
         ]);
 
         \App\Models\V2\MedioPago::create([
+            'nombre' => 'Plin',
+            'bl_despacho' => true,
+            'bl_entidad_financiera' => false,
+        ]);
+
+        \App\Models\V2\MedioPago::create([
             'nombre' => 'Cheque',
             'bl_despacho' => true,
             'bl_entidad_financiera' => true,

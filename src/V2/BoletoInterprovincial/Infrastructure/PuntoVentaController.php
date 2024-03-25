@@ -51,6 +51,7 @@ final class PuntoVentaController
             $precio = $request->input('precio');
             $idTipoMoneda = $request->input('idTipoMoneda');
             $idFormaPago = $request->input('idFormaPago');
+            $idMedioPago = $request->input('idMedioPago');
             $obsequio = $request->input('obsequio');
 
             $idTipoComprobante = $request->input('idTipoComprobante');
@@ -84,6 +85,7 @@ final class PuntoVentaController
                 $precio,
                 $idTipoMoneda,
                 $idFormaPago,
+                $idMedioPago,
                 $obsequio,
 
                 $idTipoComprobante,

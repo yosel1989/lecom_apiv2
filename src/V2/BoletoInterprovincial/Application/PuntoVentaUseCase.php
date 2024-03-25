@@ -45,6 +45,7 @@ final class PuntoVentaUseCase
         float $precio,
         int $idTipoMoneda,
         int $idFormaPago,
+        int $idMedioPago,
         int $obsequio,
 
         int $idTipoComprobante,
@@ -77,6 +78,7 @@ final class PuntoVentaUseCase
         $_precio = new NumericFloat($precio);
         $_idTipoMoneda = new NumericInteger($idTipoMoneda);
         $_idFormaPago = new NumericInteger($idFormaPago);
+        $_idMedioPago = new NumericInteger($idMedioPago);
         $_obsequio = new NumericInteger($obsequio);
 
         $_idTipoComprobante = new NumericInteger($idTipoComprobante);
@@ -110,6 +112,7 @@ final class PuntoVentaUseCase
             $_precio,
             $_idTipoMoneda,
             $_idFormaPago,
+            $_idMedioPago,
             $_obsequio,
 
             $_idTipoComprobante,

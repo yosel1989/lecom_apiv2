@@ -56,6 +56,7 @@ class BoletoInterprovincialOficial extends Model
         'precio',
         'id_tipo_moneda',
         'id_forma_pago',
+        'id_medio_pago',
         'obsequio',
 
 

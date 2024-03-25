@@ -33,6 +33,7 @@ return new class extends Migration
                 $table->decimal('precio',5,2);
                 $table->integer('id_tipo_moneda');
                 $table->integer('id_forma_pago');
+                $table->integer('id_medio_pago');
                 $table->boolean('obsequio');
 
 

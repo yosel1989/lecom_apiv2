@@ -16,6 +16,7 @@ use App\Models\V2\BoletoInterprovincialOficial as EloquentModelBoletoInterprovin
 use App\Models\V2\Caja;
 use App\Models\V2\Cliente;
 use App\Models\V2\ComprobanteSerie;
+use App\Models\V2\MedioPago;
 use App\Models\V2\Paradero;
 use App\Models\V2\Ruta;
 use App\Models\V2\Sede;
@@ -212,6 +213,9 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             $TipoComprobante = $model->id_tipo_comprobante ? TipoComprobante::findOrFail($model->id_tipo_comprobante->value, ['nombre']) : null;
             $OModel->setTipoComprobante(new Text(($TipoComprobante?->nombre), true, -1));
 
+            $MedioPago = $model->id_medio_pago ? MedioPago::findOrFail($model->id_medio_pago, ['nombre']) : null;
+            $OModel->setMedioPago(new Text(($MedioPago?->nombre), true, -1));
+
             $OModel->setIdOrigen(new NumericInteger($model->id_origen));
             $OModel->setIdCajaDiario(new Id($model->id_caja_diario, true, 'El id de la caja diario no tiene un formato correcto'));
             $OModel->setIdLiquidacion(new Id($model->id_liquidacion, true, 'El id de la liquidación no tiene un formato correcto'));
@@ -320,6 +324,9 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
             $UsuarioModifico = $model->id_usu_modifico ? User::findOrFail($model->id_usu_modifico, ['nombres','apellidos']) : null;
             $OModel->setUsuarioModifico(new Text(($UsuarioModifico?->nombres . ' ' . $UsuarioModifico?->apellidos), true, -1));
+
+            $MedioPago = $model->id_medio_pago ? MedioPago::findOrFail($model->id_medio_pago, ['nombre']) : null;
+            $OModel->setMedioPago(new Text(($MedioPago?->nombre), true, -1));
 
             $OModel->setTipoComprobante(new Text($model->tipoComprobante, true, -1 , ''));
             $OModel->setComprobanteNumero(new NumericInteger($model->numero));
@@ -466,6 +473,9 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
             $UsuarioModifico = $model->id_usu_modifico ? User::findOrFail($model->id_usu_modifico, ['nombres','apellidos']) : null;
             $OModel->setUsuarioModifico(new Text(($UsuarioModifico?->nombres . ' ' . $UsuarioModifico?->apellidos), true, -1));
+
+            $MedioPago = $model->id_medio_pago ? MedioPago::findOrFail($model->id_medio_pago, ['nombre']) : null;
+            $OModel->setMedioPago(new Text(($MedioPago?->nombre), true, -1));
 
             $OModel->setEstado(new Text($model->estado, true, -1 , ''));
             $OModel->setTipoComprobante(new Text($model->tipoComprobante, true, -1 , ''));
@@ -694,6 +704,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         NumericFloat $_precio,
         NumericInteger $_idTipoMoneda,
         NumericInteger $_idFormaPago,
+        NumericInteger $_idMedioPago,
         NumericInteger $_obsequio,
 
         NumericInteger $_idTipoComprobante,
@@ -837,13 +848,14 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
             'id_tipo_moneda' => $_idTipoMoneda->value(),
             'id_forma_pago' => $_idFormaPago->value(),
+            'id_medio_pago' => $_idMedioPago->value(),
             'obsequio' => $_obsequio->value(),
             'f_emision' => (new \DateTime('now'))->format('Y-m-d H:m:s'),
             'id_estado' => 1,
             'id_origen' => EnumOrigenBoleto::COUNTER->value
         ]);
 
-        $boleto = $model->find($idBoleto);
+        $boleto = $model->findOrFail($idBoleto);
 //        throw new InvalidArgumentException(var_dump($boleto));
         $OUTPUT = new BoletoInterprovincialOficial(
             new Id($boleto->id, false, 'El id del boleto no tiene el formato correcto'),
@@ -912,6 +924,9 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
         $TipoComprobante = $boleto->id_tipo_comprobante ? TipoComprobante::findOrFail($boleto->id_tipo_comprobante->value, ['nombre']) : null;
         $OUTPUT->setTipoComprobante(new Text(($TipoComprobante?->nombre), true, -1));
+
+        $MedioPago = $boleto->id_medio_pago ? MedioPago::findOrFail($boleto->id_medio_pago, ['nombre']) : null;
+        $OUTPUT->setMedioPago(new Text(($MedioPago?->nombre), true, -1));
 
         return $OUTPUT;
     }
