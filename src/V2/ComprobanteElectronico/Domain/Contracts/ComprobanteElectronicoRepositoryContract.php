@@ -5,6 +5,7 @@ namespace Src\V2\ComprobanteElectronico\Domain\Contracts;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
 use Src\V2\ComprobanteElectronico\Domain\ComprobanteElectronico;
 use Src\V2\Egreso\Domain\Egreso;
@@ -15,6 +16,7 @@ interface ComprobanteElectronicoRepositoryContract
 
     public function createToBoleto(
         NumericInteger $idTipoDocumento,
+        ValueBoolean $editarEntidad,
         Text $numeroDocumento,
         Text $nombre,
         Text $direccion,

@@ -43,6 +43,7 @@ final class EloquentComprobanteElectronicoRepository implements ComprobanteElect
 
     public function createToBoleto(
         NumericInteger $idTipoDocumento,
+        ValueBoolean $editarEntidad,
         Text $numeroDocumento,
         Text $nombre,
         Text $direccion,
@@ -81,9 +82,9 @@ final class EloquentComprobanteElectronicoRepository implements ComprobanteElect
 
 
             //  $table->uuid('idClienteSunat')->nullable();
-            'id_tipo_documento_entidad' => $boleto->getIdTipoComprobante()->value() === EnumTipoComprobante::Ticket->value ? $boleto->getIdTipoDocumento()->value() : $idTipoDocumento->value(),
-            'numero_documento_entidad' =>  $boleto->getIdTipoComprobante()->value() === EnumTipoComprobante::Ticket->value ? $boleto->getNumeroDocumento()->value() : $numeroDocumento->value(),
-            'nombre_entidad' =>  $boleto->getIdTipoComprobante()->value() === EnumTipoComprobante::Ticket->value ? $boleto->getNombres()->value() . ' ' . $boleto->getApellidos()->value() : $nombre->value(),
+            'id_tipo_documento_entidad' => !$editarEntidad->value() ? $boleto->getIdTipoComprobante()->value() : $idTipoDocumento->value(),
+            'numero_documento_entidad' =>  !$editarEntidad->value() ? $boleto->getNumeroDocumento()->value() : $numeroDocumento->value(),
+            'nombre_entidad' =>  !$editarEntidad->value() ? $boleto->getNombres()->value() . ' ' . $boleto->getApellidos()->value() : $nombre->value(),
             'direccion_entidad' =>  $direccion->value(),
             'email' =>  null,
             'email1' =>  null,

@@ -139,6 +139,7 @@ include 'V2/ingreso-tipo-route.php';
 include 'V2/ingreso-route.php';
 include 'V2/medio-pago-route.php';
 include 'V2/entidad-financiera-route.php';
+include 'V2/genero-route.php';
 
 
 

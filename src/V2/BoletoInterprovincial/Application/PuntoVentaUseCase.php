@@ -9,6 +9,7 @@ use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
 use Src\V2\BoletoInterprovincial\Domain\Contracts\BoletoInterprovincialRepositoryContract;
 
@@ -49,6 +50,7 @@ final class PuntoVentaUseCase
         int $obsequio,
 
         int $idTipoComprobante,
+        bool $editarEntidad,
         ?int $idTipoDocumentoEntidad,
         ?string $numeroDocumentoEntidad,
         ?string $nombreEntidad,
@@ -82,6 +84,7 @@ final class PuntoVentaUseCase
         $_obsequio = new NumericInteger($obsequio);
 
         $_idTipoComprobante = new NumericInteger($idTipoComprobante);
+        $_editarEntidad = new ValueBoolean($editarEntidad);
         $_idTipoDocumentoEntidad = new NumericInteger($idTipoDocumentoEntidad);
         $_numeroDocumentoEntidad = new Text($numeroDocumentoEntidad,true, -1, '');
         $_nombreEntidad = new Text($nombreEntidad,true, -1, '');
@@ -116,6 +119,7 @@ final class PuntoVentaUseCase
             $_obsequio,
 
             $_idTipoComprobante,
+            $_editarEntidad,
             $_idTipoDocumentoEntidad,
             $_numeroDocumentoEntidad,
             $_nombreEntidad,

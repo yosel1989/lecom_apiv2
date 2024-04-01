@@ -107,7 +107,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'apellidos' => $persona->apellidoPaterno . ' ' . $persona->apellidoMaterno,
                     'direccion' => null
                 ],
-//                'data2'      => $persona,
+                'data2'      => $persona,
                 'error' => null,
                 'status' => Response::HTTP_OK
             ]);

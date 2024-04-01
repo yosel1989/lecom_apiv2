@@ -244,7 +244,7 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
             $OModel->setFechaApertura(new DateTimeFormat($model->f_apertura, false,  ''));
             $OModel->setSaldo(new NumericFloat($model->saldo));
 
-            dd($OModel);
+//            dd($OModel);
 
             return $OModel;
 

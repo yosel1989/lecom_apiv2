@@ -27,6 +27,7 @@ use App\Models\V2\Vehiculo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
+use PhpOffice\PhpSpreadsheet\Calculation\Information\Value;
 use Ramsey\Uuid\Uuid;
 use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
@@ -35,6 +36,7 @@ use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\Core\Domain\ValueObjects\TimeFormat;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialLiquidacionVehiculoFecha;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialPasajero;
@@ -708,6 +710,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         NumericInteger $_obsequio,
 
         NumericInteger $_idTipoComprobante,
+        ValueBoolean $_editarEntidad,
         NumericInteger $_idTipoDocumentoEntidad,
         Text $_numeroDocumentoEntidad,
         Text $_nombreEntidad,

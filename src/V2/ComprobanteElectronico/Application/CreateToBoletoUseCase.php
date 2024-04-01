@@ -5,6 +5,7 @@ namespace Src\V2\ComprobanteElectronico\Application;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
 use Src\V2\ComprobanteElectronico\Domain\ComprobanteElectronico;
 use Src\V2\ComprobanteElectronico\Domain\Contracts\ComprobanteElectronicoRepositoryContract;
@@ -23,6 +24,7 @@ final class CreateToBoletoUseCase
 
     public function __invoke(
         ?int $idTipoDocumento,
+        bool $editarEntidad,
         ?string $numeroDocumento,
         ?string $nombre,
         ?string $direccion,
@@ -32,6 +34,7 @@ final class CreateToBoletoUseCase
     {
         return $this->repository->createToBoleto(
             new NumericInteger($idTipoDocumento, true),
+            new ValueBoolean($editarEntidad),
             new Text($numeroDocumento, true, 15, 'El numero de documento excede los 15 caracteres'),
             new Text($nombre, true, 100, 'El numero de documento excede los 100 caracteres'),
             new Text($direccion, true, 100, 'El numero de documento excede los 100 caracteres'),

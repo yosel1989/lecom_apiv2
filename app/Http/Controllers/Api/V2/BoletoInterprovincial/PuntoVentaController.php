@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use Luecano\NumeroALetras\NumeroALetras;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -35,6 +36,8 @@ class PuntoVentaController extends Controller
     public function __invoke(Request $request)
     {
         try {
+
+            DB::beginTransaction();
 
             $usuario = Auth::user();
 
@@ -70,6 +73,8 @@ class PuntoVentaController extends Controller
 
             }
 
+            DB::commit();
+
             $pdf = PDF::loadView('comprobantes.boleta-electronica', compact('boletos', 'configuracion', 'usuario', 'formatter'))
                 ->setPaper(array( 0 , 0 , 226.77 , 226.77 ), 'landscape')
                 ->setOption( ['dpi' => 70, 'isRemoteEnabled' => true, 'isHtml5ParserEnabled' => true] );
@@ -80,6 +85,9 @@ class PuntoVentaController extends Controller
             $pdf = PDF::loadView('comprobantes.boleta-electronica', compact('boletos', 'configuracion', 'usuario', 'formatter'))
                 ->setPaper(array( 0 , 0 , 226.77 * $page_count + 200 , 226.77 ), 'landscape')
                 ->setOption( ['dpi' => 70, 'isRemoteEnabled' => true, 'isHtml5ParserEnabled' => true] );
+
+
+
             return response()->json([
                 'data' => null,
                 'error' =>  null,
@@ -91,6 +99,8 @@ class PuntoVentaController extends Controller
 
         }catch ( InvalidArgumentException $e ){
 
+            DB::rollBack();
+
             return response()->json([
                 'data' => [],
                 'error' => $e->getMessage(),
@@ -100,6 +110,8 @@ class PuntoVentaController extends Controller
             ]);
 
         }catch ( Exception $e ){
+
+            DB::rollBack();
 
             return response()->json([
                 'data' => [],

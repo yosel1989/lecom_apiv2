@@ -8,6 +8,7 @@ use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialOficial;
 use Src\V2\BoletoInterprovincial\Domain\BoletoInterprovincialShortFechaList;
 use Src\V2\Vehiculo\Domain\VehiculoShortList;
@@ -80,6 +81,7 @@ interface BoletoInterprovincialRepositoryContract
         NumericInteger $_obsequio,
 
         NumericInteger $_idTipoComprobante,
+        ValueBoolean $_editarEntidad,
         NumericInteger $_idTipoDocumentoEntidad,
         Text $_numeroDocumentoEntidad,
         Text $_nombreEntidad,

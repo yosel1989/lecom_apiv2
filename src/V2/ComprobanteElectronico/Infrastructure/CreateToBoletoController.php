@@ -23,6 +23,7 @@ final class CreateToBoletoController
         $user = Auth::user();
 
         $idTipoDocumento = $request->input('idTipoDocumentoEntidad');
+        $editarEntidad = $request->input('editarEntidad');
         $numeroDocumento = $request->input('numeroDocumentoEntidad');
         $nombre = $request->input('nombreEntidad');
         $direccion = $request->input('direccionEntidad');
@@ -30,6 +31,7 @@ final class CreateToBoletoController
         $useCase = new CreateToBoletoUseCase( $this->repository );
         return $useCase->__invoke(
             $idTipoDocumento,
+            $editarEntidad,
             $numeroDocumento,
             $nombre,
             $direccion,
