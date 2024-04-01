@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Src\V2\MedioPago\Domain;
 
+use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\Core\Domain\ValueObjects\ValueBoolean;
@@ -12,6 +13,9 @@ final class MedioPagoShort
     private NumericInteger $id;
     private Text $nombre;
     private ValueBoolean $blEntidadFinanciera;
+
+    // secondary
+    private NumericFloat $monto;
 
     /**
      * @param NumericInteger $id
@@ -76,6 +80,22 @@ final class MedioPagoShort
     public function setBlEntidadFinanciera(ValueBoolean $blEntidadFinanciera): void
     {
         $this->blEntidadFinanciera = $blEntidadFinanciera;
+    }
+
+    /**
+     * @return NumericFloat
+     */
+    public function getMonto(): NumericFloat
+    {
+        return $this->monto;
+    }
+
+    /**
+     * @param NumericFloat $monto
+     */
+    public function setMonto(NumericFloat $monto): void
+    {
+        $this->monto = $monto;
     }
 
 
