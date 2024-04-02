@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('detalle', 150)->nullable();
             $table->date('fecha');
             $table->decimal('importe',10,2);
+            $table->integer('id_medio_pago');
             $table->string('numero_documento',50)->nullable();
             $table->tinyInteger('id_estado')->default(1);
             $table->tinyInteger('id_eliminado')->default(0);
@@ -35,6 +36,7 @@ return new class extends Migration
                 'detalle',
                 'fecha',
                 'importe',
+                'id_medio_pago',
                 'numero_documento',
                 'id_estado',
                 'id_eliminado',

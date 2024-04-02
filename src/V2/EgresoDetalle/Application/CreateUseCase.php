@@ -5,6 +5,7 @@ namespace Src\V2\EgresoDetalle\Application;
 use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
+use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\V2\EgresoDetalle\Domain\Contracts\EgresoDetalleRepositoryContract;
 use Src\V2\EgresoDetalle\Domain\EgresoDetalle;
@@ -29,6 +30,7 @@ final class CreateUseCase
         ?string $detalle,
         string $fecha,
         float $importe,
+        int $idMedioPago,
         ?string $numeroDocumento,
         string $idUsuarioRegistro
     ): EgresoDetalle
@@ -40,6 +42,7 @@ final class CreateUseCase
         $_detalle = new Text($detalle,true, 150, 'El detalle excede los 150 caracteres');
         $_fecha = new DateFormat($fecha,false,'La fecha no tiene el formato correcto');
         $_importe = new NumericFloat($importe);
+        $_idMedioPago = new NumericInteger($idMedioPago);
         $_numeroDocumento = new Text($numeroDocumento,true, 50, 'El numero de documento excede los 50 caracteres');
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
@@ -51,6 +54,7 @@ final class CreateUseCase
             $_detalle,
             $_fecha,
             $_importe,
+            $_idMedioPago,
             $_numeroDocumento,
             $_idUsuarioRegistro
         );

@@ -35,6 +35,8 @@ final class EgresoDetalle
     private Text $codigo;
     private Text $vehiculo;
     private Text $personal;
+    private Text $medioPago;
+    private NumericInteger $idMedioPago;
 
     /**
      * @param Id $id
@@ -44,6 +46,7 @@ final class EgresoDetalle
      * @param Text $detalle
      * @param DateFormat $fecha
      * @param NumericFloat $importe
+     * @param NumericInteger $idMedioPago
      * @param Text $numeroDocumento
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
@@ -61,6 +64,7 @@ final class EgresoDetalle
         Text $detalle,
         DateFormat $fecha,
         NumericFloat $importe,
+        NumericInteger $idMedioPago,
         Text $numeroDocumento,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
@@ -86,6 +90,7 @@ final class EgresoDetalle
         $this->numeroDocumento = $numeroDocumento;
         $this->idLiquidacion = $idLiquidacion;
         $this->id = $id;
+        $this->idMedioPago = $idMedioPago;
     }
 
     /**
@@ -424,6 +429,38 @@ final class EgresoDetalle
     public function setPersonal(Text $personal): void
     {
         $this->personal = $personal;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getMedioPago(): Text
+    {
+        return $this->medioPago;
+    }
+
+    /**
+     * @param Text $medioPago
+     */
+    public function setMedioPago(Text $medioPago): void
+    {
+        $this->medioPago = $medioPago;
+    }
+
+    /**
+     * @return NumericInteger
+     */
+    public function getIdMedioPago(): NumericInteger
+    {
+        return $this->idMedioPago;
+    }
+
+    /**
+     * @param NumericInteger $idMedioPago
+     */
+    public function setIdMedioPago(NumericInteger $idMedioPago): void
+    {
+        $this->idMedioPago = $idMedioPago;
     }
 
 

@@ -31,6 +31,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
             'egresoTipo:id,nombre',
+            'medioPago:id,nombre',
         )
             ->where('id_cliente',$idCliente->value())
             ->where('id_egreso',$idEgreso->value())
@@ -49,6 +50,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
                 new Text($model->detalle , true, -1, ''),
                 new DateFormat($model->fecha, false, 'La fecha no tiene el formato correcto'),
                 new NumericFloat($model->importe),
+                new NumericInteger($model->id_medio_pago),
                 new Text($model->numero_documento , true, -1, ''),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
@@ -62,6 +64,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
             $OModel->setEgresoTipo(new Text($model->egresoTipo->nombre, false, -1, ''));
+            $OModel->setMedioPago(new Text($model->medioPago->nombre, false, -1, ''));
 
             $collection->add($OModel);
         }
@@ -77,6 +80,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
         Text $detalle,
         DateFormat $fecha,
         NumericFloat $importe,
+        NumericInteger $idMedioPago,
         Text $numeroDocumento,
         Id $idUsuarioRegistro
     ): EgresoDetalle
@@ -94,6 +98,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
             'detalle' => $detalle->value(),
             'fecha' => $fecha->value(),
             'importe' => $importe->value(),
+            'id_medio_pago' => $idMedioPago->value(),
             'numero_documento' => $numeroDocumento->value(),
             'id_estado' => 1,
             'id_usu_registro' => $idUsuarioRegistro->value()
@@ -104,6 +109,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
             'egresoTipo:id,nombre',
+            'medioPago:id,nombre',
         )
             ->findOrFail($id->value());
 
@@ -115,6 +121,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
             new Text($model->detalle , true, -1, ''),
             new DateFormat($model->fecha, false, 'La fecha no tiene el formato correcto'),
             new NumericFloat($model->importe),
+            new NumericInteger($model->id_medio_pago),
             new Text($model->numero_documento , true, -1, ''),
             new NumericInteger($model->id_estado->value),
             new NumericInteger($model->id_eliminado->value),
@@ -128,6 +135,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
         $OModel->setEgresoTipo(new Text($model->egresoTipo->nombre, false, -1, ''));
+        $OModel->setMedioPago(new Text($model->medioPago->nombre, false, -1, ''));
 
         return $OModel;
     }
@@ -185,6 +193,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
             'egresoTipo:id,nombre',
+            'medioPago:id,nombre',
         )->select(
             'egreso_detalle.*',
             'ce_comprobante_electronico.serie as serie',
@@ -225,6 +234,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
                 new Text($model->detalle , true, -1, ''),
                 new DateFormat($model->fecha, false, 'La fecha no tiene el formato correcto'),
                 new NumericFloat($model->importe),
+                new NumericInteger($model->id_medio_pago),
                 new Text($model->numero_documento , true, -1, ''),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
@@ -240,6 +250,7 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
             $OModel->setEgresoTipo(new Text($model->egresoTipo->nombre, false, -1, ''));
             $OModel->setCodigo(new Text($model->serie.'-'.str_pad((string)$model->numero,8,'0',STR_PAD_LEFT), false, -1, ''));
             $OModel->setVehiculo(new Text($model->vehiculo, false, -1, ''));
+            $OModel->setMedioPago(new Text($model->medioPago->nombre, false, -1, ''));
             $OModel->setPersonal(new Text($model->personalNombre ? ($model->personalNombre . ' ' . $model->personalApellido) : null, false, -1, ''));
 
             $collection->add($OModel);

@@ -29,6 +29,7 @@ class EgresoDetalle extends Model
         'detalle',
         'fecha',
         'importe',
+        'id_medio_pago',
         'numero_documento',
         'id_estado',
         'id_eliminado',
@@ -73,5 +74,8 @@ class EgresoDetalle extends Model
         return $this->hasOne('App\Models\V2\EstadoEgresoDetalle','id','id_estado');
     }
 
+    public function medioPago(){
+        return $this->hasOne('App\Models\V2\MedioPago','id','id_medio_pago');
+    }
 
 }

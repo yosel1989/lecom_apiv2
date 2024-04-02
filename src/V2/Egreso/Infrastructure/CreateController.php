@@ -86,6 +86,7 @@ final class CreateController
                     $d->detalle,
                     $d->fecha,
                     $d->importe,
+                    $d->idMedioPago,
                     $d->numeroDocumento,
                     $user->getId()
                 );
