@@ -264,58 +264,81 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
     {
         $collection = [];
 
-        $Cliente = Cliente::findOrFail($idCliente);
-
-        $result = $this->eloquentModelCajaDiario
-            ->select(
-                'caja_diario.*',
-                DB::raw("
+        $Cliente = Cliente::findOrFail($idCliente->value());
+        $Cajas = Caja::with('sede:id,nombre')->where('id_cliente', $idCliente->value())->get();
+        foreach ($Cajas as $caja) {
+            $result = $this->eloquentModelCajaDiario
+                ->select(
+                    'caja_diario.*',
+                    DB::raw("
+                    caja_diario.monto_inicial +
                 COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id), 0) -
                 COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id),0) +
                 COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id),0)
                 as saldo")
-            )
-            ->with(
-                'caja:id,nombre',
-                'ruta:id,nombre',
-                'usuarioRegistro:id,nombres,apellidos',
-                'usuarioModifico:id,nombres,apellidos',
-                'estado:id,nombre',
-            )
-            ->where('id_cliente',$idCliente->value())
-            ->whereDate('f_apertura', '>=', $fechaInicio->value())
-            ->whereDate('f_apertura', '<=', $fechaFinal->value())
-            ->orderBy('f_apertura','DESC');
+                )
+                ->with(
+                    'caja:id,nombre',
+                    'ruta:id,nombre',
+                    'usuarioRegistro:id,nombres,apellidos',
+                    'usuarioModifico:id,nombres,apellidos',
+                    'estado:id,nombre',
+                )
+                ->where('id_cliente',$idCliente->value())
+                ->where('id_caja',$caja->id)
+                ->whereDate('f_apertura', '>=', $fechaInicio->value())
+                ->whereDate('f_apertura', '<=', $fechaFinal->value())
+                ->orderBy('f_apertura','DESC')
+                ->limit(1);
 
-        if(!is_null($idCaja->value())){
-            $result = $result->where('id_caja',$idCaja->value());
+            if($result->count() !== 0){
+                $model = $result->get()->first();
+
+                $OModel = new CajaDiarioReporte(
+                    new Id($model->id, false,  'El id no tiene el formato correcto'),
+                    new Id($model->id_cliente, false,  'E id del cliente no tiene el formato correcto'),
+                    new Id($model->id_caja, false,  'El id de la caja no tiene el formato correcto'),
+                    new Id(null, true, ''),
+                    new Id($model->id_usu_registro, false, 'El id del usuario que aperturo la caja no tiene el formato correcto'),
+                    new Id($model->id_usu_modifico, true,  'El id del usuario que cerro la caja no tiene el formato correcto'),
+                    new DateTimeFormat($model->f_apertura, false, 'La fecha de apertura no tiene el formato correcto'),
+                    new DateTimeFormat($model->f_cierre, true, 'La fecha de cierre no tiene el formato correcto'),
+                    new NumericFloat($model->monto_inicial),
+                    new NumericFloat($model->monto_final),
+                    new NumericInteger($model->id_estado)
+                );
+                $OModel->setUsuarioAperturo(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
+                $OModel->setUsuarioCerro(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
+                $OModel->setEstado(new Text( $model->estado->nombre , true, -1));
+                $OModel->setCaja(new Text( $model->caja->nombre , true, -1));
+                $OModel->setSaldo(new NumericFloat( $model->saldo));
+
+                $collection[] = $OModel;
+            }else{
+                $OModel = new CajaDiarioReporte(
+                    new Id(null, true,  'El id no tiene el formato correcto'),
+                    new Id($caja->id_cliente, false,  'E id del cliente no tiene el formato correcto'),
+                    new Id($caja->id, false,  'El id de la caja no tiene el formato correcto'),
+                    new Id($caja->sede->id, true, ''),
+                    new Id(null, true, 'El id del usuario que aperturo la caja no tiene el formato correcto'),
+                    new Id(null, true,  'El id del usuario que cerro la caja no tiene el formato correcto'),
+                    new DateTimeFormat(null, true, 'La fecha de apertura no tiene el formato correcto'),
+                    new DateTimeFormat(null, true, 'La fecha de cierre no tiene el formato correcto'),
+                    new NumericFloat(0),
+                    new NumericFloat(0),
+                    new NumericInteger(EnumEstadoCajaDiario::Cerrado->value)
+                );
+                $OModel->setUsuarioAperturo(new Text(null, true, -1));
+                $OModel->setUsuarioCerro(new Text(null, true, -1));
+                $OModel->setEstado(new Text( 'Cerrado' , true, -1));
+                $OModel->setCaja(new Text( $caja->nombre , true, -1));
+                $OModel->setSaldo(new NumericFloat( 0));
+                $OModel->setSede(new Text($caja->sede->nombre, false, -1, ''));
+
+                $collection[] = $OModel;
+            }
+
         }
-
-        $result = $result->get();
-
-        foreach ($result as $model) {
-            $OModel = new CajaDiarioReporte(
-                new Id($model->id, false,  'El id no tiene el formato correcto'),
-                new Id($model->id_cliente, false,  'E id del cliente no tiene el formato correcto'),
-                new Id($model->id_caja, false,  'El id de la caja no tiene el formato correcto'),
-                new Id(null, true, ''),
-                new Id($model->id_usu_registro, false, 'El id del usuario que aperturo la caja no tiene el formato correcto'),
-                new Id($model->id_usu_modifico, true,  'El id del usuario que cerro la caja no tiene el formato correcto'),
-                new DateTimeFormat($model->f_apertura, false, 'La fecha de apertura no tiene el formato correcto'),
-                new DateTimeFormat($model->f_cierre, true, 'La fecha de cierre no tiene el formato correcto'),
-                new NumericFloat($model->monto_inicial),
-                new NumericFloat($model->monto_final),
-                new NumericInteger($model->id_estado)
-            );
-            $OModel->setUsuarioAperturo(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
-            $OModel->setUsuarioCerro(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
-            $OModel->setEstado(new Text( $model->estado->nombre , true, -1));
-            $OModel->setCaja(new Text( $model->caja->nombre , true, -1));
-            $OModel->setSaldo(new NumericFloat( $model->saldo));
-
-            $collection[] = $OModel;
-        }
-
 
         return $collection;
     }
