@@ -15,6 +15,7 @@ use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\Core\Domain\ValueObjects\ValueBoolean;
 use Src\V2\MedioPago\Domain\Contracts\MedioPagoRepositoryContract;
+use Src\V2\MedioPago\Domain\MedioPagoFlujo;
 use Src\V2\MedioPago\Domain\MedioPagoShort;
 use Src\V2\MedioPago\Domain\MedioPagoShortList;
 
@@ -106,6 +107,58 @@ final class EloquentMedioPagoRepository implements MedioPagoRepositoryContract
         }
 
         return $collection;
+    }
+
+
+    public function flujoToCajaDiario(Id $idCliente, Id $idCajaDiario): MedioPagoFlujo
+    {
+        $Cliente = $this->eloquentCliente->findOrFail($idCliente->value());
+
+        $models = $this->eloquent->select(
+            'id',
+            'nombre',
+            'bl_entidad_financiera'
+        )->orderBy('nombre', 'asc')
+            ->get();
+
+        $ingresos = new MedioPagoShortList();
+        $egresos = new MedioPagoShortList();
+
+        foreach ( $models as $model ){
+
+            $OModel = new MedioPagoShort(
+                new NumericInteger($model->id),
+                new Text($model->nombre, false, -1, ''),
+                new ValueBoolean($model->bl_entidad_financiera),
+            );
+
+            $egreso = $OModel;
+            $ingreso = $OModel;
+
+            $montoEgreso = $this->eloquentCajaDiario->select(
+                DB::raw("COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id AND egreso_detalle.id_medio_pago = ". $model->id ."),0) as saldo"
+                )
+            )->where('id', $idCajaDiario->value())->get();
+            $egreso->setMonto(new NumericFloat($montoEgreso->first()->saldo));
+
+            $montoIngreso = $this->eloquentCajaDiario->select(
+                DB::raw("COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". $model->id ."), 0) +
+                                    COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_" . $Cliente->codigo . " WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". $model->id ."),0)
+                                    as saldo"
+                )
+            )->where('id', $idCajaDiario->value())->get();
+            $ingreso->setMonto(new NumericFloat($montoIngreso->first()->saldo));
+
+            $ingresos->add($ingreso);
+            $egresos->add($egreso);
+        }
+
+        $output = new MedioPagoFlujo(
+            $ingresos,
+            $egresos
+        );
+
+        return $output;
     }
 
 }
