@@ -126,14 +126,16 @@ final class EloquentMedioPagoRepository implements MedioPagoRepositoryContract
 
         foreach ( $models as $model ){
 
-            $OModel = new MedioPagoShort(
+            $egreso = new MedioPagoShort(
                 new NumericInteger($model->id),
                 new Text($model->nombre, false, -1, ''),
                 new ValueBoolean($model->bl_entidad_financiera),
             );
-
-            $egreso = $OModel;
-            $ingreso = $OModel;
+            $ingreso = new MedioPagoShort(
+                new NumericInteger($model->id),
+                new Text($model->nombre, false, -1, ''),
+                new ValueBoolean($model->bl_entidad_financiera),
+            );
 
             $montoEgreso = $this->eloquentCajaDiario->select(
                 DB::raw("COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id AND egreso_detalle.id_medio_pago = ". $model->id ."),0) as saldo"
