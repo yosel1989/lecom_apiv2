@@ -1150,11 +1150,13 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
                 'tipo_comprobante.abreviatura as tipoComprobante',
                 'origen_boleto.nombre as origen',
                 'e_boleto_interprovincial.nombre as estado',
+                'medio_pago.nombre as medioPago',
             )
             ->leftjoin('ce_comprobante_electronico',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id', '=', 'ce_comprobante_electronico.id_producto')
             ->leftjoin('origen_boleto',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_origen', '=', 'origen_boleto.id')
             ->leftjoin('tipo_comprobante',  'ce_comprobante_electronico.id_tipo_comprobante', '=', 'tipo_comprobante.id')
             ->leftjoin('e_boleto_interprovincial',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_estado', '=', 'e_boleto_interprovincial.id')
+            ->leftjoin('medio_pago',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_medio_pago', '=', 'medio_pago.id')
 
 
             ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo .'.f_registro','=',$fecha->value())
@@ -1237,6 +1239,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             $OModel->setEstado(new Text($model->estado, true, -1, ''));
             $OModel->setIdCajaDiario(new Id($model->id_caja_diario, true, 'El id de la caja diario no tiene el formato corercto'));
             $OModel->setIdLiquidacion(new Id($model->id_liquidacion, true, 'El id de la liquidación no tiene el formato corercto'));
+            $OModel->setMedioPago(new Text($model->medioPago, true, -1, ''));
 
             $arrVehicles[] = $OModel;
         }
