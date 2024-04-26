@@ -32,6 +32,7 @@ use Ramsey\Uuid\Uuid;
 use Src\Core\Domain\ValueObjects\DateFormat;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
+use Src\Core\Domain\ValueObjects\Numeric;
 use Src\Core\Domain\ValueObjects\NumericFloat;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
@@ -975,11 +976,12 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             ->select(
                 'id_vehiculo',
                 DB::raw('SUM(precio) as total'),
+                DB::raw('COUNT(*) as total_boletos'),
                 'placa'
             )
             ->join('vehiculos','id_vehiculo','=','vehiculos.id')
             ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo . '.f_registro','>=',$fechaDesde->value())
-            ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo . '.f_registro','<=',$fechaDesde->value())
+            ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo . '.f_registro','<=',$fechaHasta->value())
             ->whereIn('id_vehiculo', $idVehiculos);
 
         if(!is_null($idRuta->value())) $models->where('id_ruta',$idRuta->value());
@@ -997,6 +999,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
                 new Text($model->placa, false, -1 ,''),
                 new NumericFloat($model->total),
             );
+            $OModel->setTotalBoletos( new NumericInteger($model->total_boletos));
 
             $arrVehicles[] = $OModel;
         }
@@ -1013,6 +1016,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
     ): array
     {
 
+
         $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
         $this->eloquentModelBoletoInterprovincial->setTable('boleto_interprovincial_cliente_' . $OCliente->codigo);
 
@@ -1022,7 +1026,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
                 DB::raw('SUM(precio) as total')
             )
             ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo . '.f_registro','>=',$fechaDesde->value())
-            ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo . '.f_registro','<=',$fechaDesde->value())
+            ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo . '.f_registro','<=',$fechaHasta->value())
             ->where('id_vehiculo', $idVehiculo->value());
 
         $models->groupBy('fecha');

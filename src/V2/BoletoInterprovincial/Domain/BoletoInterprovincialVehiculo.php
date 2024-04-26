@@ -5,6 +5,7 @@ namespace Src\V2\BoletoInterprovincial\Domain;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericFloat;
+use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 
 final class BoletoInterprovincialVehiculo
@@ -15,6 +16,7 @@ final class BoletoInterprovincialVehiculo
 
     // secondary
     private DateTimeFormat $fecha;
+    private NumericInteger $totalBoletos;
 
     /**
      * @param Id $idVehiculo
@@ -80,5 +82,38 @@ final class BoletoInterprovincialVehiculo
     {
         $this->total = $total;
     }
+
+    /**
+     * @return DateTimeFormat
+     */
+    public function getFecha(): DateTimeFormat
+    {
+        return $this->fecha;
+    }
+
+    /**
+     * @param DateTimeFormat $fecha
+     */
+    public function setFecha(DateTimeFormat $fecha): void
+    {
+        $this->fecha = $fecha;
+    }
+
+    /**
+     * @return NumericInteger
+     */
+    public function getTotalBoletos(): NumericInteger
+    {
+        return $this->totalBoletos;
+    }
+
+    /**
+     * @param NumericInteger $totalBoletos
+     */
+    public function setTotalBoletos(NumericInteger $totalBoletos): void
+    {
+        $this->totalBoletos = $totalBoletos;
+    }
+
 
 }

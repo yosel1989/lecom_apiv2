@@ -19,6 +19,7 @@ class BoletoInterprovincialReporteTotalResource extends JsonResource
             'idVehiculo'            => $this->getIdVehiculo()->value(),
             'placa'       => $this->getPlaca()->value(),
             'total'       => $this->getTotal()->value(),
+            'totalBoletos'       => $this->getTotalBoletos()->value(),
         ];
 
     }
