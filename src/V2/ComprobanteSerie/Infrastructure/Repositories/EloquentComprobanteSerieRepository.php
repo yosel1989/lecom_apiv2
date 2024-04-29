@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Src\V2\ComprobanteSerie\Infrastructure\Repositories;
 
-use App\Models\V2\ComprobanteSerie as EloquentModelComprobanteSerie;
+use App\Models\V2\ComprobanteSerie as eloquent;
 use Illuminate\Support\Facades\DB;
 use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
@@ -16,21 +16,22 @@ use Src\V2\ComprobanteSerie\Domain\ComprobanteSerieShort;
 
 final class EloquentComprobanteSerieRepository implements ComprobanteSerieRepositoryContract
 {
-    private EloquentModelComprobanteSerie $eloquentVehicleModel;
+    private eloquent $eloquent;
 
     public function __construct()
     {
-        $this->eloquentModelComprobanteSerie = new EloquentModelComprobanteSerie;
+        $this->eloquent = new eloquent;
     }
 
 
     public function collectionByCliente(Id $idCliente): array
     {
-        $models = $this->eloquentModelComprobanteSerie->with(
+        $models = $this->eloquent->with(
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioRegistro:id,nombres,apellidos',
             'tipoComprobante:id,nombre',
-            'sede:id,nombre'
+            'sede:id,nombre',
+            'empresa:id,nombre'
         )->where('id_cliente',$idCliente->value())
             ->orderBy('f_registro','desc')
             ->get();
@@ -44,6 +45,7 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
                 new NumericInteger($model->id_tipo_comprobante->value),
                 new Text($model->nombre, false, -1),
                 new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+                new Id($model->id_empresa, true, 'El id de la empresa no tiene el formato correcto'),
                 new Id($model->id_sede, false, 'El id de la sede no tiene el formato correcto'),
                 new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
                 new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
@@ -56,6 +58,7 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
             $OModel->setSede(new Text(!is_null($model->sede) ?  $model->sede->nombre  : null, true, -1));
             $OModel->setTipoComprobante(new Text(!is_null($model->tipoComprobante) ?  $model->tipoComprobante->nombre  : null, true, -1));
+            $OModel->setEmpresa(new Text(!is_null($model->empresa) ?  $model->empresa->nombre  : null, true, -1));
 
             $arrVehicles[] = $OModel;
         }
@@ -66,7 +69,7 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
 
     public function listByCliente(Id $idCliente): array
     {
-        $models = $this->eloquentModelComprobanteSerie->select(
+        $models = $this->eloquent->select(
             'id',
             'id_tipo_comprobante',
             'nombre',
@@ -82,6 +85,7 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
                 new Id($model->id , false, 'El id no tiene el formato correcto'),
                 new NumericInteger($model->id_tipo_comprobante ),
                 new Text($model->nombre, false, 100, 'El nombre de la destino excede los 100 caracteres'),
+                new Id($model->id_empresa , false, 'El id de la empresa no tiene el formato correcto'),
                 new Id($model->id_sede , false, 'El id de la sede no tiene el formato correcto'),
                 new NumericInteger($model->id_estado->value)
             );
@@ -96,13 +100,15 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
         Text $nombre,
         NumericInteger $idTipoComprobante,
         Id $idCliente,
+        Id $idEmpresa,
         Id $idSede,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
     {
-        $existe = $this->eloquentModelComprobanteSerie
+        $existe = $this->eloquent
             ->where('id_cliente' , $idCliente->value())
+            ->where('id_empresa' , $idEmpresa->value())
             ->where(DB::raw("UPPER(nombre)"), mb_strtoupper($nombre->value()))
             //->where('id_tipo_comprobante',$idTipoComprobante->value())
             //->where('id_sede', $idSede->value())
@@ -112,10 +118,11 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
             throw new \InvalidArgumentException('La serie ya se encuentra registrada');
         }
 
-        $this->eloquentModelComprobanteSerie->create([
+        $this->eloquent->create([
             'nombre' => trim($nombre->value()),
             'id_tipo_comprobante' => $idTipoComprobante->value(),
             'id_cliente' => $idCliente->value(),
+            'id_empresa' => $idEmpresa->value(),
             'id_sede' => $idSede->value(),
             'id_estado' => $idEstado->value(),
             'id_usu_registro' => $idUsuarioRegistro->value()
@@ -128,14 +135,16 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
         Text $nombre,
         NumericInteger $idTipoComprobante,
         Id $idCliente,
+        Id $idEmpresa,
         Id $idSede,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
     {
-        $existe = $this->eloquentModelComprobanteSerie
+        $existe = $this->eloquent
             ->where('id', '<>' , $id->value())
             ->where('id_cliente' , $idCliente->value())
+            ->where('id_empresa' , $idEmpresa->value())
             ->where(DB::raw("UPPER(nombre)"), mb_strtoupper($nombre->value()))
             //->where('idTipoComprobante',$idTipoComprobante->value())
             //->where('idSede', $idSede->value())
@@ -145,9 +154,10 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
             throw new \InvalidArgumentException('La serie ya se encuentra registrada');
         }
 
-        $this->eloquentModelComprobanteSerie->findOrFail($id->value())->update([
+        $this->eloquent->findOrFail($id->value())->update([
             'nombre' => $nombre->value(),
             'id_tipo_comprobante' => $idTipoComprobante->value(),
+            'id_empresa' => $idEmpresa->value(),
             'id_sede' => $idSede->value(),
             'id_estado' => $idEstado->value(),
             'id_usu_modifico' => $idUsuarioRegistro->value()
@@ -160,7 +170,7 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
         Id $idUsuarioModifico
     ): void
     {
-        $this->eloquentModelComprobanteSerie->findOrFail($idComprobanteSerie->value())->update([
+        $this->eloquent->findOrFail($idComprobanteSerie->value())->update([
             'id_estado' => $idEstado->value(),
             'id_usu_modifico' => $idUsuarioModifico->value()
         ]);
@@ -170,7 +180,7 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
         Id $idComprobanteSerie,
     ): ComprobanteSerie
     {
-        $model = $this->eloquentModelComprobanteSerie->with(
+        $model = $this->eloquent->with(
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioRegistro:id,nombres,apellidos',
             'tipoComprobante:id,nombre',
@@ -182,6 +192,7 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
             new NumericInteger($model->id_tipo_comprobante->value),
             new Text($model->nombre, false, -1),
             new Id($model->id_cliente, false, 'El id del cliente no tiene el formato correcto'),
+            new Id($model->id_empresa, true, 'El id de la empresa no tiene el formato correcto'),
             new Id($model->id_sede, false, 'El id de la sede no tiene el formato correcto'),
             new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
             new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
@@ -195,6 +206,43 @@ final class EloquentComprobanteSerieRepository implements ComprobanteSerieReposi
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
         $OModel->setSede(new Text(!is_null($model->sede) ?  $model->sede->nombre  : null, true, -1));
         $OModel->setTipoComprobante(new Text(!is_null($model->tipoComprobante) ?  $model->tipoComprobante->nombre  : null, true, -1));
+        $OModel->setEmpresa(new Text(!is_null($model->empresa) ?  $model->empresa->nombre  : null, true, -1));
+
+        return $OModel;
+    }
+
+
+    public function findByEmpresaTipoComprobanteSede(
+        Id $idEmpresa,
+        Id $idSede,
+        NumericInteger $idTipoComprobante,
+    ): ComprobanteSerieShort
+    {
+
+        $model = $this->eloquent->where('id_empresa', $idEmpresa->value())
+                        ->where('id_sede', $idSede->value())
+                        ->where('id_tipo_comprobante', $idTipoComprobante->value())
+                        ->get();
+
+        if($model->isEmpty()){
+            throw new \InvalidArgumentException('No existe serie registrada');
+        }
+
+        if($model->count() > 1){
+            throw new \InvalidArgumentException('Existe más de una serie registrada');
+        }
+
+        $model = $model->first();
+
+
+        $OModel = new ComprobanteSerieShort(
+            new Id($model->id , false, 'El id no tiene el formato correcto'),
+            new NumericInteger($model->id_tipo_comprobante->value ),
+            new Text($model->nombre, false, 100, 'El nombre de la destino excede los 100 caracteres'),
+            new Id($model->id_empresa , false, 'El id de la empresa no tiene el formato correcto'),
+            new Id($model->id_sede , false, 'El id de la sede no tiene el formato correcto'),
+            new NumericInteger($model->id_estado->value)
+        );
 
         return $OModel;
     }

@@ -22,6 +22,7 @@ final class UpdateController
         $user = Auth::user();
         $nombre             = $request->input('nombre');
         $idTipoComprobante  = $request->input('idTipoComprobante');
+        $idEmpresa  = $request->input('idEmpresa');
         $idCliente  = $request->input('idCliente');
         $idSede  = $request->input('idSede');
         $idEstado           = $request->input('idEstado');
@@ -32,6 +33,7 @@ final class UpdateController
             $nombre,
             $idTipoComprobante,
             $idCliente,
+            $idEmpresa,
             $idSede,
             $idEstado,
             $user->getId()

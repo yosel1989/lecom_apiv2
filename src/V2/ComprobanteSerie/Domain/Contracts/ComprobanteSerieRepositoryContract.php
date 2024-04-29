@@ -6,6 +6,7 @@ use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\V2\ComprobanteSerie\Domain\ComprobanteSerie;
+use Src\V2\ComprobanteSerie\Domain\ComprobanteSerieShort;
 
 interface ComprobanteSerieRepositoryContract
 {
@@ -14,6 +15,7 @@ interface ComprobanteSerieRepositoryContract
         Text $nombre,
         NumericInteger $idTipoComprobante,
         Id $idCliente,
+        Id $idEmpresa,
         Id $idSede,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
@@ -24,6 +26,7 @@ interface ComprobanteSerieRepositoryContract
         Text $nombre,
         NumericInteger $idTipoComprobante,
         Id $idCliente,
+        Id $idEmpresa,
         Id $idSede,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
@@ -41,5 +44,11 @@ interface ComprobanteSerieRepositoryContract
     public function find(
         Id $id,
     ): ComprobanteSerie;
+
+    public function findByEmpresaTipoComprobanteSede(
+        Id $idEmpresa,
+        Id $idSede,
+        NumericInteger $idTipoComprobante,
+    ): ComprobanteSerieShort;
 
 }

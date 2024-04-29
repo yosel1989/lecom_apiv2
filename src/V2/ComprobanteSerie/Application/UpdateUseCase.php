@@ -25,6 +25,7 @@ final class UpdateUseCase
         string $nombre,
         int $idTipoComprobante,
         string $idCliente,
+        ?string $idEmpresa,
         string $idSede,
         int $idEstado,
         string $idUsuarioRegistro
@@ -34,6 +35,7 @@ final class UpdateUseCase
         $_nombre = new Text($nombre,false, 100,'El nombre de la ComprobanteSerie excede los 100 caracteres');
         $_idTipoComprobante = new NumericInteger($idTipoComprobante);
         $_idCliente = new Id($idCliente,false,'El id del cliente no tiene el formato correcto');
+        $_idEmpresa = new Id($idEmpresa,true,'El id de la empresa no tiene el formato correcto');
         $_idSede = new Id($idSede,false,'El id de la sede no tiene el formato correcto');
         $_idEstado = new NumericInteger($idEstado);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
@@ -43,6 +45,7 @@ final class UpdateUseCase
             $_nombre,
             $_idTipoComprobante,
             $_idCliente,
+            $_idEmpresa,
             $_idSede,
             $_idEstado,
             $_idUsuarioRegistro

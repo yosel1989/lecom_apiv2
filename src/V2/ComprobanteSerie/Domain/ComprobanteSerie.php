@@ -25,12 +25,15 @@ final class ComprobanteSerie
     private Text $usuarioRegistro;
     private Text $usuarioModifico;
     private Text $nombre;
+    private Id $idEmpresa;
+    private Text $empresa;
 
     /**
      * @param Id $id
      * @param NumericInteger $idTipoComprobante
      * @param Text $nombre
      * @param Id $idCliente
+     * @param Id $idEmpresa
      * @param Id $idSede
      * @param Id $idUsuarioRegistro
      * @param Id $idUsuarioModifico
@@ -43,6 +46,7 @@ final class ComprobanteSerie
         NumericInteger $idTipoComprobante,
         Text $nombre,
         Id             $idCliente,
+        Id             $idEmpresa,
         Id             $idSede,
         Id             $idUsuarioRegistro,
         Id             $idUsuarioModifico,
@@ -62,6 +66,7 @@ final class ComprobanteSerie
         $this->fechaModifico = $fechaModifico;
         $this->idEstado = $idEstado;
         $this->nombre = $nombre;
+        $this->idEmpresa = $idEmpresa;
     }
 
     /**
@@ -287,6 +292,39 @@ final class ComprobanteSerie
     {
         $this->nombre = $nombre;
     }
+
+    /**
+     * @return Id
+     */
+    public function getIdEmpresa(): Id
+    {
+        return $this->idEmpresa;
+    }
+
+    /**
+     * @param Id $idEmpresa
+     */
+    public function setIdEmpresa(Id $idEmpresa): void
+    {
+        $this->idEmpresa = $idEmpresa;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getEmpresa(): Text
+    {
+        return $this->empresa;
+    }
+
+    /**
+     * @param Text $empresa
+     */
+    public function setEmpresa(Text $empresa): void
+    {
+        $this->empresa = $empresa;
+    }
+
 
 
 }

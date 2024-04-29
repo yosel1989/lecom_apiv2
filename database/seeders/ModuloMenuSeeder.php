@@ -125,12 +125,32 @@ class ModuloMenuSeeder extends Seeder
             'id_estado'=> IdEstado::Habilitado
         ]);
 
+        $menuComprobanteElectronico = \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Administracion,
+            'texto'=>'Comprobante Electrónico',
+            'icono'=>'fa-duotone fa-receipt',
+            'id_tipo_menu'=> EnumTipoMenu::SubMenu,
+            'padre'=>null,
+            'link'=>null,
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+
         \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::Administracion,
-            'texto'=>'Serie (Comprobante)',
+            'texto'=>'Empresas',
             'icono'=>null,
             'id_tipo_menu'=> EnumTipoMenu::Link,
-            'padre'=>$menuRegistro->id,
+            'padre'=>$menuComprobanteElectronico->id,
+            'link'=>'administracion/comprobante/empresa',
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+
+        \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Administracion,
+            'texto'=>'Series',
+            'icono'=>null,
+            'id_tipo_menu'=> EnumTipoMenu::Link,
+            'padre'=>$menuComprobanteElectronico->id,
             'link'=>'administracion/comprobante-serie',
             'id_estado'=> IdEstado::Habilitado
         ]);

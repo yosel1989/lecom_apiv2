@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\V2\ComprobanteSerie;
+namespace App\Http\Resources\V2\Empresa;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ComprobanteSerieListResource extends JsonResource
+class EmpresaListResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,10 +18,9 @@ class ComprobanteSerieListResource extends JsonResource
         return [
             'id'            => $this->getId()->value(),
             'nombre'          => $this->getNombre()->value(),
-            'idEmpresa'          => $this->getIdEmpresa()->value(),
-            'idSede'          => $this->getIdSede()->value(),
-            'idTipoComprobante'          => $this->getIdTipoComprobante()->value(),
-            'idEstado'       => $this->getIdEstado()->value(),
+            'ruc'          => $this->getRuc()->value(),
+            'predeterminado'       => $this->getPredeterminado()->value(),
+
         ];
 
     }

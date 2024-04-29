@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\V2\ComprobanteSerie;
+namespace App\Http\Resources\V2\Empresa;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ComprobanteSerieResource extends JsonResource
+class EmpresaResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,14 +18,12 @@ class ComprobanteSerieResource extends JsonResource
         return [
             'id'            => $this->getId()->value(),
             'nombre'          => $this->getNombre()->value(),
+            'ruc'          => $this->getRuc()->value(),
+            'direccion'       => $this->getDireccion()->value(),
+            'idUbigeo'       => $this->getIdUbigeo()->value(),
+            'predeterminado'       => $this->getPredeterminado()->value(),
             'idEstado'       => $this->getIdEstado()->value(),
-            'idCliente'       => $this->getIdCliente()->value(),
-            'idTipoComprobante'       => $this->getIdTipoComprobante()->value(),
-            'tipoComprobante'       => $this->getTipoComprobante()->value(),
-            'idEmpresa'       => $this->getIdEmpresa()->value(),
-            'empresa'       => $this->getEmpresa()->value(),
-            'idSede'       => $this->getIdSede()->value(),
-            'sede'       => $this->getSede()->value(),
+            'idEliminado'       => $this->getIdEliminado()->value(),
             'fechaRegistro'       => $this->getFechaRegistro()->value(),
             'fechaModifico'     => $this->getFechaModifico()->value(),
             'idUsuarioRegistro'     => $this->getIdUsuarioModifico()->value(),

@@ -22,6 +22,7 @@ final class CreateController
         $nombre             = $request->input('nombre');
         $idCliente          = $id;
         $idTipoComprobante  = $request->input('idTipoComprobante');
+        $idEmpresa  = $request->input('idEmpresa');
         $idSede  = $request->input('idSede');
         $idEstado           = $request->input('idEstado');
 
@@ -30,6 +31,7 @@ final class CreateController
             $nombre,
             $idTipoComprobante,
             $idCliente,
+            $idEmpresa,
             $idSede,
             $idEstado,
             $user->getId()

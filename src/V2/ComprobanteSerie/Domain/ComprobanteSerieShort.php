@@ -15,11 +15,13 @@ final class ComprobanteSerieShort
     private Text $nombre;
     private Id $idSede;
     private NumericInteger $idEstado;
+    private Id $idEmpresa;
 
     /**
      * @param Id $id
      * @param NumericInteger $idTipoComprobante
      * @param Text $nombre
+     * @param Id $idEmpresa
      * @param Id $idSede
      * @param NumericInteger $idEstado
      */
@@ -27,6 +29,7 @@ final class ComprobanteSerieShort
         Id             $id,
         NumericInteger $idTipoComprobante,
         Text $nombre,
+        Id             $idEmpresa,
         Id             $idSede,
         NumericInteger $idEstado
     )
@@ -36,6 +39,7 @@ final class ComprobanteSerieShort
         $this->nombre = $nombre;
         $this->idSede = $idSede;
         $this->idEstado = $idEstado;
+        $this->idEmpresa = $idEmpresa;
     }
 
     /**
@@ -116,6 +120,22 @@ final class ComprobanteSerieShort
     public function setIdEstado(NumericInteger $idEstado): void
     {
         $this->idEstado = $idEstado;
+    }
+
+    /**
+     * @return Id
+     */
+    public function getIdEmpresa(): Id
+    {
+        return $this->idEmpresa;
+    }
+
+    /**
+     * @param Id $idEmpresa
+     */
+    public function setIdEmpresa(Id $idEmpresa): void
+    {
+        $this->idEmpresa = $idEmpresa;
     }
 
 

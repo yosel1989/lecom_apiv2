@@ -17,6 +17,7 @@ return new class extends Migration
             $table->uuid('id_sede');
             $table->uuid('id_cliente');
             $table->integer('id_tipo_comprobante');
+            $table->uuid('id_empresa')->nullable();
             $table->integer('id_estado');
 
 

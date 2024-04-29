@@ -131,7 +131,9 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
         $relation = $this->eloquentUserVehicleModel->with(
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos'
-        )->where('id_usuario',$idUsuario->value())->get();
+        )->where('id_usuario',$idUsuario->value())
+            ->orderBy('placa', 'asc')
+            ->get();
 
         if($relation->isEmpty()){
             return [];
@@ -235,7 +237,8 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
                 ->where('id_estado', 1)
                 ->where('id_eliminado', 0)
                 ->where('id_cliente',$idCliente->value())
-                ->whereIn('id',$ids);
+                ->whereIn('id',$ids)
+                ->orderBy('placa','ASC');
 
             if($vehicles->count() > 0){
                 foreach ( $vehicles as $model) {

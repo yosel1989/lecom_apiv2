@@ -9,4 +9,7 @@ Route::namespace('App\Http\Controllers\Api\V2\ComprobanteSerie')->middleware('au
     Route::post('comprobante-serie/{id}/cambiar-estado', 'ChangeStateController');
     Route::get('comprobante-serie/{id}', 'FindByIdController');
     Route::put('comprobante-serie/{id}', 'UpdateController');
+
+    Route::get('comprobante-serie/venta/{idEmpresa}/{idSede}/{idTipoComprobante}', 'FindByEmpresaTipoComprobanteSedeController');
+
 });

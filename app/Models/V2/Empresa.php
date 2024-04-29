@@ -2,19 +2,17 @@
 
 namespace App\Models\V2;
 
-use App\Enums\EnumTipoComprobante;
-use App\Enums\IdEstado;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
-class ComprobanteSerie extends Model
+class Empresa extends Model
 {
     use UUID;
 
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $table = "ce_serie";
+    protected $table = "ce_empresa";
     public $timestamps = true;
 
     const CREATED_AT = 'f_registro';
@@ -27,18 +25,17 @@ class ComprobanteSerie extends Model
     protected $fillable = [
         'id',
         'nombre',
+        'ruc',
+        'direccion',
+        'id_ubigeo',
         'id_cliente',
-        'id_sede',
-        'id_tipo_comprobante',
-        'id_empresa',
         'id_estado',
+        'id_eliminado',
+        'predeterminado',
         'id_usu_registro',
         'id_usu_modifico',
         'f_registro',
         'f_modifico',
-
-
-        'total'
     ];
 
     /**
@@ -47,20 +44,12 @@ class ComprobanteSerie extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'total' =>  'int',
         'f_registro' =>  'string',
         'f_modifico' =>  'string',
-        'id_tipo_comprobante' =>  EnumTipoComprobante::class,
-        'id_estado' =>  IdEstado::class,
+        'id_estado' => 'integer',
+        'id_eliminado' => 'integer',
+        'predeterminado' => 'boolean'
     ];
-
-    public function sede(){
-        return $this->hasOne('App\Models\V2\Sede','id','id_sede');
-    }
-
-    public function tipoComprobante(){
-        return $this->hasOne('App\Models\V2\TipoComprobante','id','id_tipo_comprobante');
-    }
 
     public function usuarioRegistro(){
         return $this->hasOne('App\Models\User','id','id_usu_registro');
@@ -70,8 +59,8 @@ class ComprobanteSerie extends Model
         return $this->hasOne('App\Models\User','id','id_usu_modifico');
     }
 
-    public function empresa(){
-        return $this->hasOne('App\Models\V2\Empresa','id','id_empresa');
+    public function ubigeo(){
+        return $this->hasOne('App\Models\V2\Ubigeo','id','id_ubigeo');
     }
 
 }
