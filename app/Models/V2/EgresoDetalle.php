@@ -2,6 +2,7 @@
 
 namespace App\Models\V2;
 
+use App\Enums\EnumEstadoEgresoDetalle;
 use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
 use Illuminate\Database\Eloquent\Model;
@@ -50,7 +51,7 @@ class EgresoDetalle extends Model
         'fecha' =>  'string',
         'f_registro' =>  'string',
         'f_modifico' =>  'string',
-        'id_estado' => IdEstado::class,
+        'id_estado' => EnumEstadoEgresoDetalle::class,
         'id_eliminado' => IdEliminado::class
     ];
 

@@ -11,6 +11,7 @@ use App\Enums\IdTipoBoleto;
 use App\Models\User;
 use App\Models\V2\CajaDiario;
 use App\Models\V2\Cliente as EloquentModelClient;
+use App\Models\V2\Empresa;
 use App\Models\V2\HistorialBoletoInterprovincial as EloquentModelHistorialBoletoInterprovincial;
 use App\Models\V2\BoletoInterprovincialOficial as EloquentModelBoletoInterprovincial;
 use App\Models\V2\Caja;
@@ -397,14 +398,16 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
                 'boleto_interprovincial_cliente_' . $OCliente->codigo .'.*',
                 'ce_comprobante_electronico.serie as serie',
                 'ce_comprobante_electronico.numero as numero',
-                'tipo_comprobante.nombre as tipoComprobante',
+                'tipo_comprobante.abreviatura as tipoComprobante',
                 'origen_boleto.nombre as origen',
-                'e_boleto_interprovincial.nombre as estado'
+                'e_boleto_interprovincial.nombre as estado',
+                'ce_empresa.nombre as empresa',
             )
             ->leftjoin('ce_comprobante_electronico',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id', '=', 'ce_comprobante_electronico.id_producto')
             ->leftjoin('origen_boleto',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_origen', '=', 'origen_boleto.id')
             ->leftjoin('e_boleto_interprovincial',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_estado', '=', 'e_boleto_interprovincial.id')
             ->leftjoin('tipo_comprobante',  'ce_comprobante_electronico.id_tipo_comprobante', '=', 'tipo_comprobante.id')
+            ->leftjoin('ce_empresa',  'ce_comprobante_electronico.id_empresa', '=', 'ce_empresa.id')
             ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo .'.f_registro','=',$fecha->value())
             ->where('boleto_interprovincial_cliente_' . $OCliente->codigo .'.id_usu_registro', $idUsuario->value())
             ->orderBy('f_registro','desc')
@@ -488,6 +491,9 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             $OModel->setOrigen(new Text($model->origen, true, -1, ''));
             $OModel->setIdCajaDiario(new Id($model->id_caja_diario, true, 'El id de la caja diario no tiene un formato correcto'));
             $OModel->setIdLiquidacion(new Id($model->id_liquidacion, true, 'El id de la liquidación no tiene un formato correcto'));
+
+            $OModel->setEmpresa(new Text($model->empresa, true, -1 , ''));
+
 
 
             $arrVehicles[] = $OModel;
@@ -710,7 +716,9 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         NumericInteger $_idMedioPago,
         NumericInteger $_obsequio,
 
+        Id $_idEmpresa,
         NumericInteger $_idTipoComprobante,
+        Id $_idSerie,
         ValueBoolean $_editarEntidad,
         NumericInteger $_idTipoDocumentoEntidad,
         Text $_numeroDocumentoEntidad,
@@ -726,13 +734,26 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         if( $Sede->count() === 0 ){
             throw new InvalidArgumentException( 'La sede no se encuentra registrado en el sistema o esta inhabilitado.' );
         }
-
         if( is_null($Sede->first()->codigo) ){
             throw new InvalidArgumentException( 'Falta ingresar el código de la sede' );
         }
 
+        // Validar Empresa
+        $Empresa = Empresa::where('id', $_idEmpresa->value())->where('id_estado', 1)->where('id_eliminado',0)->where('id_cliente',$_idCliente->value());
+        if( $Empresa->count() === 0 ){
+            throw new InvalidArgumentException( 'La empresa no se encuentra registrado en el sistema o esta inhabilitado.' );
+        }
+        if( is_null($Empresa->first()->id_ubigeo) ){
+            throw new InvalidArgumentException( 'Falta ingresar el ubigeo de la empresa' );
+        }
+
+
         // Validar serie
-        $Serie = ComprobanteSerie::where('id_estado', 1)->where('id_cliente',$_idCliente->value())->where('id_tipo_comprobante',$_idTipoComprobante->value())->where('id_sede',$_idSede->value());
+        $Serie = ComprobanteSerie::where('id_estado', 1)
+            ->where('id_cliente',$_idCliente->value())
+            ->where('id_tipo_comprobante',$_idTipoComprobante->value())
+            ->where('id_sede',$_idSede->value())
+            ->where('id_empresa',$_idEmpresa->value());
         if( $Serie->count() === 0 ){
             throw new InvalidArgumentException( 'Falta registrar la serie en el sistema' );
         }
@@ -856,7 +877,8 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             'obsequio' => $_obsequio->value(),
             'f_emision' => (new \DateTime('now'))->format('Y-m-d H:m:s'),
             'id_estado' => 1,
-            'id_origen' => EnumOrigenBoleto::COUNTER->value
+            'id_origen' => EnumOrigenBoleto::COUNTER->value,
+            'id_empresa' => $_idEmpresa->value()
         ]);
 
         $boleto = $model->findOrFail($idBoleto);
@@ -931,6 +953,8 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
         $MedioPago = $boleto->id_medio_pago ? MedioPago::findOrFail($boleto->id_medio_pago, ['nombre']) : null;
         $OUTPUT->setMedioPago(new Text(($MedioPago?->nombre), true, -1));
+
+        $OUTPUT->setIdEmpresa(new Id(($boleto->id_empresa), true, 'El id de la empresa no tiene el formato correcto'));
 
         return $OUTPUT;
     }
@@ -1155,12 +1179,14 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
                 'origen_boleto.nombre as origen',
                 'e_boleto_interprovincial.nombre as estado',
                 'medio_pago.nombre as medioPago',
+                'ce_empresa.nombre as empresa',
             )
             ->leftjoin('ce_comprobante_electronico',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id', '=', 'ce_comprobante_electronico.id_producto')
             ->leftjoin('origen_boleto',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_origen', '=', 'origen_boleto.id')
             ->leftjoin('tipo_comprobante',  'ce_comprobante_electronico.id_tipo_comprobante', '=', 'tipo_comprobante.id')
             ->leftjoin('e_boleto_interprovincial',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_estado', '=', 'e_boleto_interprovincial.id')
             ->leftjoin('medio_pago',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_medio_pago', '=', 'medio_pago.id')
+            ->leftjoin('ce_empresa',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_empresa', '=', 'ce_empresa.id')
 
 
             ->whereDate('boleto_interprovincial_cliente_' . $OCliente->codigo .'.f_registro','=',$fecha->value())
@@ -1244,6 +1270,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             $OModel->setIdCajaDiario(new Id($model->id_caja_diario, true, 'El id de la caja diario no tiene el formato corercto'));
             $OModel->setIdLiquidacion(new Id($model->id_liquidacion, true, 'El id de la liquidación no tiene el formato corercto'));
             $OModel->setMedioPago(new Text($model->medioPago, true, -1, ''));
+            $OModel->setEmpresa(new Text($model->empresa, true, -1, ''));
 
             $arrVehicles[] = $OModel;
         }

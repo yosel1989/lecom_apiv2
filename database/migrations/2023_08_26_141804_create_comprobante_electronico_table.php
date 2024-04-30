@@ -95,6 +95,7 @@ return new class extends Migration
             $table->uuid('id_usu_modifico')->nullable();
             $table->timestamp('f_registro');
             $table->timestamp('f_modifico')->nullable();
+            $table->timestamp('id_empresa')->nullable();
 
             $table->index([
                 'id_sede',
@@ -117,7 +118,8 @@ return new class extends Migration
 
                 'id_estado',
                 'id_usu_registro',
-                'id_usu_modifico'
+                'id_usu_modifico',
+                'id_empresa'
             ]);
 
         });

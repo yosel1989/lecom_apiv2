@@ -49,7 +49,9 @@ final class PuntoVentaUseCase
         int $idMedioPago,
         int $obsequio,
 
+        string $idEmpresa,
         int $idTipoComprobante,
+        string $idSerie,
         bool $editarEntidad,
         ?int $idTipoDocumentoEntidad,
         ?string $numeroDocumentoEntidad,
@@ -83,7 +85,9 @@ final class PuntoVentaUseCase
         $_idMedioPago = new NumericInteger($idMedioPago);
         $_obsequio = new NumericInteger($obsequio);
 
+        $_idEmpresa = new Id($idEmpresa,false, 'El id de la empresa no tiene el formato correcto');
         $_idTipoComprobante = new NumericInteger($idTipoComprobante);
+        $_idSerie = new Id($idSerie,false, 'El id de la serie no tiene el formato correcto');
         $_editarEntidad = new ValueBoolean($editarEntidad);
         $_idTipoDocumentoEntidad = new NumericInteger($idTipoDocumentoEntidad);
         $_numeroDocumentoEntidad = new Text($numeroDocumentoEntidad,true, -1, '');
@@ -118,7 +122,9 @@ final class PuntoVentaUseCase
             $_idMedioPago,
             $_obsequio,
 
+            $_idEmpresa,
             $_idTipoComprobante,
+            $_idSerie,
             $_editarEntidad,
             $_idTipoDocumentoEntidad,
             $_numeroDocumentoEntidad,

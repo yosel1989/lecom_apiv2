@@ -249,9 +249,26 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
 
             return $OModel;
 
+        }else{
+            $OModel = new CajaSede(
+                new Id($Caja->id, false, 'El id de la caja no tiene el formato correcto'),
+                new Text($Caja->nombre, false, -1, ''),
+                $idCliente,
+                new Id($Caja->id_sede, false, 'El id de la sede no tiene el formato correcto')
+            );
+            $OModel->setAperturado(new ValueBoolean(false));
+            $OModel->setIdCajaDiario(new Id(null, true, 'El id del historial de caja no tiene el formato correcto'));
+            $OModel->setIdEstado(new NumericInteger(EnumEstadoCajaDiario::Cerrado->value));
+
+            $Estado = EstadoCajaDiario::findOrFail(EnumEstadoCajaDiario::Cerrado->value);
+            $OModel->setEstado(new Text($Estado->nombre, false, -1, ''));
+            $OModel->setFechaApertura(new DateTimeFormat(null, true,  ''));
+            $OModel->setSaldo(new NumericFloat(0));
+
+            return $OModel;
         }
 
-        throw new \InvalidArgumentException('Ocurrio un error');
+//        throw new \InvalidArgumentException('Ocurrio un error');
 
     }
 

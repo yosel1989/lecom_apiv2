@@ -21,7 +21,7 @@ class EgresoDetalleReporteResource extends JsonResource
             'idTipo'          => $this->getIdEgresoTipo()->value(),
             'detalle'          => $this->getDetalle()->value(),
             'tipo'          => $this->getEgresoTipo()->value(),
-            'fecha'          => $this->getFecha()->value(),
+            'fecha'          => $this->getFecha()->value() . ' 00:00:00',
             'importe'          => $this->getImporte()->value(),
             'numeroDocumento'          => $this->getNumeroDocumento()->value(),
             'idEstado'       => $this->getIdEstado()->value(),

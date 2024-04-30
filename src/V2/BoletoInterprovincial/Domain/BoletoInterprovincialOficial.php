@@ -71,6 +71,8 @@ final class BoletoInterprovincialOficial
     private Text $tipoBoleto;
     private Text $cliente;
     private Text $origen;
+    private Id $idEmpresa;
+    private Text $empresa;
 
     /**
      * @param Id $id
@@ -1078,6 +1080,39 @@ final class BoletoInterprovincialOficial
     {
         $this->medioPago = $medioPago;
     }
+
+    /**
+     * @return Id
+     */
+    public function getIdEmpresa(): Id
+    {
+        return $this->idEmpresa;
+    }
+
+    /**
+     * @param Id $idEmpresa
+     */
+    public function setIdEmpresa(Id $idEmpresa): void
+    {
+        $this->idEmpresa = $idEmpresa;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getEmpresa(): Text
+    {
+        return $this->empresa;
+    }
+
+    /**
+     * @param Text $empresa
+     */
+    public function setEmpresa(Text $empresa): void
+    {
+        $this->empresa = $empresa;
+    }
+
 
 
 }

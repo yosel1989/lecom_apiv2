@@ -208,8 +208,8 @@ final class EloquentEgresoDetalleRepository implements EgresoDetalleRepositoryCo
             ->leftjoin('vehiculos',  'egreso.id_vehiculo', '=', 'vehiculos.id')
             ->leftjoin('personal',  'egreso.id_personal', '=', 'personal.id')
             ->where('egreso.id_cliente',$idCliente->value())
-            ->whereDate('egreso.f_registro','>=', $fechaDesde->value())
-            ->whereDate('egreso.f_registro','<=', $fechaHasta->value());
+            ->whereDate('fecha','>=', $fechaDesde->value())
+            ->whereDate('fecha','<=', $fechaHasta->value());
 
         if(!is_null($idVehiculo->value())){
             $models = $models->where('egreso.id_vehiculo', $idVehiculo->value());

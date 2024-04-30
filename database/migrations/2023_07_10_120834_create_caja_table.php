@@ -21,12 +21,13 @@ return new class extends Migration
             $table->tinyInteger('id_eliminado')->default(0);
             $table->boolean('bl_punto_venta')->default(false);
             $table->boolean('bl_despacho')->default(false);
+            $table->boolean('bl_principal')->default(false);
             $table->uuid('id_usu_registro')->nullable();
             $table->uuid('id_usu_modifico')->nullable();
             $table->timestamp('f_registro');
             $table->timestamp('f_modifico')->nullable();
 
-            $table->index(['id', 'nombre', 'id_sede', 'id_pos', 'id_cliente', 'id_estado', 'id_eliminado', 'id_usu_registro', 'f_registro', 'bl_despacho', 'bl_punto_venta']);
+            $table->index(['id', 'nombre', 'id_sede', 'id_pos', 'id_cliente', 'id_estado', 'id_eliminado', 'id_usu_registro', 'f_registro', 'bl_despacho', 'bl_punto_venta', 'bl_principal']);
         });
     }
 

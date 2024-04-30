@@ -31,6 +31,7 @@ final class Caja
     private Id $idCajaDiario;
     private ValueBoolean $blPuntoVenta;
     private ValueBoolean $blDespacho;
+    private ValueBoolean $blPrincipal;
 
 
     /**
@@ -380,6 +381,22 @@ final class Caja
     public function setBlDespacho(ValueBoolean $blDespacho): void
     {
         $this->blDespacho = $blDespacho;
+    }
+
+    /**
+     * @return ValueBoolean
+     */
+    public function getBlPrincipal(): ValueBoolean
+    {
+        return $this->blPrincipal;
+    }
+
+    /**
+     * @param ValueBoolean $blPrincipal
+     */
+    public function setBlPrincipal(ValueBoolean $blPrincipal): void
+    {
+        $this->blPrincipal = $blPrincipal;
     }
 
 

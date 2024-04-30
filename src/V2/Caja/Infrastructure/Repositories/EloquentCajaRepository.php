@@ -64,6 +64,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
             $OModel->setSede(new Text(!is_null($model->sede) ? $model->sede->nombre : null, true, -1));
             $OModel->setPos(new Text(!is_null($model->pos) ? $model->pos->nombre : null, true, -1));
+            $OModel->setBlPrincipal(new ValueBoolean($model->bl_principal),);
 
 
             $aperturado = CajaDiario::where('id_caja',$model->id)->orderBy('f_apertura', 'desc')->limit(1);

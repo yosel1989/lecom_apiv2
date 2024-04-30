@@ -105,6 +105,7 @@ class ComprobanteElectronico extends Model
         'id_usu_modifico',
         'f_registro',
         'f_modifico',
+        'id_empresa',
 
         'ultimo_numero'
     ];
@@ -178,6 +179,10 @@ class ComprobanteElectronico extends Model
 
     public function razon(){
         return $this->hasOne('App\Models\V2\ComprobanteElectronicoRazon','id','id_razon');
+    }
+
+    public function empresa(){
+        return $this->hasOne('App\Models\V2\Empresa','id','id_empresa');
     }
 
 }

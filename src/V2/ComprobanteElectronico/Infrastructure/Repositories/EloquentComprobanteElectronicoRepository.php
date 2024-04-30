@@ -13,6 +13,7 @@ use App\Enums\EnumUnidadMedida;
 use App\Models\V2\ComprobanteElectronico as EloquentModelComprobanteElectronico;
 use App\Models\V2\ComprobanteElectronicoItem as EloquentModelComprobanteElectronicoItem;
 use App\Models\V2\ComprobanteSerie;
+use App\Models\V2\Empresa;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 use Src\Core\Domain\ValueObjects\DateFormat;
@@ -53,9 +54,13 @@ final class EloquentComprobanteElectronicoRepository implements ComprobanteElect
     {
         $idComprobante = Uuid::uuid4();
 
+        // Validar Empresa
+        $Empresa = Empresa::findOrFail( $boleto->getIdEmpresa()->value());
+
         $Serie = ComprobanteSerie::where('id_cliente', $boleto->getIdCliente()->value())
             ->where('id_sede', $boleto->getIdSede()->value())
             ->where('id_tipo_comprobante', $boleto->getIdTipoComprobante()->value())
+            ->where('id_empresa', $boleto->getIdEmpresa()->value())
             ->where('id_estado', 1);
 
         if($Serie->count() === 0){
@@ -67,6 +72,7 @@ final class EloquentComprobanteElectronicoRepository implements ComprobanteElect
 
         $ultimoNumero = $this->eloquentModel->select(DB::raw('MAX(numero) as ultimo_numero'))
             ->where('id_cliente', $boleto->getIdCliente()->value())
+            ->where('id_tipo_comprobante', $boleto->getIdTipoComprobante()->value())
             ->where('serie', $Serie->first()->nombre)
             ->first();
 
@@ -154,6 +160,8 @@ final class EloquentComprobanteElectronicoRepository implements ComprobanteElect
             'id_usu_modifico' =>  null,
             'f_registro' =>  (new \DateTime('now'))->format('Y-m-d H:i:s'),
             'f_modifico' =>  null,
+
+            'id_empresa' => $Empresa->id
         ]);
 
         $model = $this->eloquentModel->find($idComprobante);

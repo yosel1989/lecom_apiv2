@@ -59,6 +59,7 @@ return new class extends Migration
                 $table->boolean('id_origen')->default(0);
                 $table->uuid('id_caja_diario')->nullable();
                 $table->uuid('id_liquidacion')->nullable();
+                $table->uuid('id_empresa')->nullable();
 
 //
                 $table->index([
@@ -90,7 +91,8 @@ return new class extends Migration
                     'por_pagar',
                     'id_origen',
                     'id_caja_diario',
-                    'id_liquidacion'
+                    'id_liquidacion',
+                    'id_empresa'
                 ]);
         });
     }

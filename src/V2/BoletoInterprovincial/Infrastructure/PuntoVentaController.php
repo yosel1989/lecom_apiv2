@@ -54,7 +54,9 @@ final class PuntoVentaController
             $idMedioPago = $request->input('idMedioPago');
             $obsequio = $request->input('obsequio');
 
+            $idEmpresa = $request->input('idEmpresa');
             $idTipoComprobante = $request->input('idTipoComprobante');
+            $idSerie = $request->input('idSerie');
             $editarEntidad = $request->input('editarEntidad');
             $idTipoDocumentoEntidad = $request->input('idTipoDocumentoEntidad'); //null
             $numeroDocumentoEntidad = $request->input('numeroDocumento');
@@ -89,7 +91,9 @@ final class PuntoVentaController
                 $idMedioPago,
                 $obsequio,
 
+                $idEmpresa,
                 $idTipoComprobante,
+                $idSerie,
                 $editarEntidad,
                 $idTipoDocumentoEntidad,
                 $numeroDocumentoEntidad,

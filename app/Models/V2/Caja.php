@@ -34,6 +34,7 @@ class Caja extends Model
         'id_eliminado',
         'bl_punto_venta',
         'bl_despacho',
+        'bl_principal',
         'id_usu_registro',
         'id_usu_modifico',
         'f_registro',
@@ -50,6 +51,7 @@ class Caja extends Model
     protected $casts = [
         'bl_punto_venta' =>  'boolean',
         'bl_despacho' =>  'boolean',
+        'bl_principal' =>  'boolean',
         'total' =>  'integer',
         'f_registro' =>  'string',
         'f_modifico' =>  'string',

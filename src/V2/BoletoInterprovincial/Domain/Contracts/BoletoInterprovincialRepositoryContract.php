@@ -80,7 +80,9 @@ interface BoletoInterprovincialRepositoryContract
         NumericInteger $_idMedioPago,
         NumericInteger $_obsequio,
 
+        Id $_idEmpresa,
         NumericInteger $_idTipoComprobante,
+        Id $_idSerie,
         ValueBoolean $_editarEntidad,
         NumericInteger $_idTipoDocumentoEntidad,
         Text $_numeroDocumentoEntidad,

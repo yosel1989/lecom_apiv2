@@ -216,6 +216,7 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
             'vehiculo:id,placa',
             'estado:id,nombre',
         )
+//            ->leftJoin('egreso_detalle', 'egreso.id', '=', 'egreso_detalle.id_egreso')
 //            ->leftjoin('ce_comprobante_electronico',  'egreso.id', '=', 'ce_comprobante_electronico.id_producto')
 //            ->leftjoin('tipo_comprobante',  'ce_comprobante_electronico.id_tipo_comprobante', '=', 'tipo_comprobante.id')
             ->where('id_cliente',$idCliente->value())

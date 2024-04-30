@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V2\BoletoInterprovincial;
 
 use App\Http\Controllers\Controller;
+use App\Models\V2\Empresa;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -20,6 +21,7 @@ class PuntoVentaController extends Controller
     private \Src\V2\BoletoInterprovincial\Infrastructure\PuntoVentaController $controller;
     private \Src\V2\ClienteConfiguracion\Infrastructure\FindByIdController $controllerConfiguracion;
     private \Src\V2\ComprobanteElectronico\Infrastructure\CreateToBoletoController $controllerComprobante;
+    private \Src\V2\Empresa\Infrastructure\FindByIdController $controllerEmpresa;
 
 
     public function __construct(
@@ -49,6 +51,9 @@ class PuntoVentaController extends Controller
             // Utilidad para transformar número a letras
             $formatter = new NumeroALetras();
 
+            // Empresa
+            $empresa = Empresa::findOrFail($request->input('idEmpresa'));
+
             $boletos = [];
 
             for($i = 0; $i < $numBoletos; $i++){
@@ -75,14 +80,14 @@ class PuntoVentaController extends Controller
 
             DB::commit();
 
-            $pdf = PDF::loadView('comprobantes.boleta-electronica', compact('boletos', 'configuracion', 'usuario', 'formatter'))
+            $pdf = PDF::loadView('comprobantes.boleta-electronica', compact('boletos', 'configuracion', 'usuario', 'formatter', 'empresa'))
                 ->setPaper(array( 0 , 0 , 226.77 , 226.77 ), 'landscape')
                 ->setOption( ['dpi' => 70, 'isRemoteEnabled' => true, 'isHtml5ParserEnabled' => true] );
             $page_count = $pdf->getCanvas()->get_page_number();
 
 //            dd($pdf->getCanvas( ));
             unset( $pdf );
-            $pdf = PDF::loadView('comprobantes.boleta-electronica', compact('boletos', 'configuracion', 'usuario', 'formatter'))
+            $pdf = PDF::loadView('comprobantes.boleta-electronica', compact('boletos', 'configuracion', 'usuario', 'formatter', 'empresa'))
                 ->setPaper(array( 0 , 0 , 226.77 * $page_count + 200 , 226.77 ), 'landscape')
                 ->setOption( ['dpi' => 70, 'isRemoteEnabled' => true, 'isHtml5ParserEnabled' => true] );
 

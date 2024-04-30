@@ -80,6 +80,7 @@ class BoletoInterprovincialOficial extends Model
         'por_pagar',
         'id_origen',
         'id_liquidacion',
+        'id_empresa',
     ];
 
     /**
