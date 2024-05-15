@@ -6,6 +6,7 @@ Route::namespace('App\Http\Controllers\Api\V2\Caja')->middleware('auth:sanctum')
     Route::get('cliente/{id}/caja/listado', 'GetListByClienteController');
     Route::get('cliente/{id}/{idSede}/caja/despacho/listado', 'GetListBySedeDespachoController');
     Route::get('cliente/{id}/{idSede}/caja/punto-venta/listado', 'GetListBySedePuntoVentaController');
+    Route::get('cliente/{id}/{idSede}/caja/principal/listado', 'GetListPrincipalBySedeController');
     Route::get('cliente/{id}/{idSede}/caja/listado', 'GetListBySedeController');
     Route::post('cliente/{id}/caja', 'CreateController');
     Route::post('caja/{id}/cambiar-estado', 'ChangeStateController');

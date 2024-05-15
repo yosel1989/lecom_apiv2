@@ -21,6 +21,7 @@ final class CreateController
         $user = Auth::user();
         $placa          = $request->input('placa');
         $unidad         = $request->input('unidad');
+        $numAsientos         = $request->input('numeroAsientos');
         $idCliente   = $request->idCliente;
         $idEstado   = $request->input('idEstado');
 
@@ -29,6 +30,7 @@ final class CreateController
             $placa,
             $unidad,
             $idCliente,
+            $numAsientos,
             $idEstado,
             $user->getId()
         );

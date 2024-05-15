@@ -8,6 +8,7 @@ use Src\V2\MedioPago\Domain\MedioPagoShortList;
 
 interface MedioPagoRepositoryContract
 {
+    public function collectionByCliente(Id $idCliente): MedioPagoShortList;
     public function collectionToDespacho(): MedioPagoShortList;
     public function collectionToCajaDiario(Id $idCliente, Id $idCajaDiario): MedioPagoShortList;
     public function flujoToCajaDiario(Id $idCliente, Id $idCajaDiario): MedioPagoFlujo;

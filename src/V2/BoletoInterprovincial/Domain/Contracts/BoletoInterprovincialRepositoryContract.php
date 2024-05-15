@@ -68,6 +68,7 @@ interface BoletoInterprovincialRepositoryContract
         NumericInteger $_menorEdad,
 
 
+        Id $_idCronogramaSalida,
         Id $_idVehiculo,
         Id $_idAsiento,
         DateFormat $_fechaPartida,

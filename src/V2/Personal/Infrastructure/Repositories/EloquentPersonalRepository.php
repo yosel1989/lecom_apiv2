@@ -72,9 +72,10 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
         return $arrVehicles;
     }
 
-    public function ListByCliente(Id $idCliente): array
+    public function listByCliente(Id $idCliente): array
     {
         $personal = $this->eloquentModelPersonal
+            ->with('tipoPersonal:id,nombre')
             ->select(
                 'id',
                 'nombre',
@@ -82,7 +83,9 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
                 'id_cliente',
                 'id_sede',
                 'id_estado',
-                'id_eliminado'
+                'id_eliminado',
+                'id_personal_tipo',
+                'foto'
             )
             ->where('id_cliente',$idCliente->value())
             ->where('id_estado', 1)
@@ -90,7 +93,9 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
             ->orderBy('nombre','ASC')
             ->get();
 
-        $arrVehicles = array();
+        $collection = array();
+
+//        dd(123);
 
         foreach ( $personal as $model ){
 
@@ -103,11 +108,13 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
             );
+            $OModel->setTipoPersonal( new Text( $model->tipoPersonal?->nombre,false, -1 ) );
+            $OModel->setFoto( new Text( $model->foto,true, -1 ) );
 
-            $arrVehicles[] = $OModel;
+            $collection[] = $OModel;
         }
 
-        return $arrVehicles;
+        return $collection;
     }
 
     public function create(

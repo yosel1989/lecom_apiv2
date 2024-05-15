@@ -33,6 +33,9 @@ class VehiculoResource extends JsonResource
             'usuarioRegistro'     => $this->getUsuarioRegistro()->value(),
             'idUsuarioModifico'     => $this->getIdUsuarioModifico()->value(),
             'usuarioModifico'     => $this->getUsuarioModifico()->value(),
+
+
+            'numeroAsientos'     => $this->getNumeroAsientos()->value(),
         ];
 
     }

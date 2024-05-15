@@ -14,6 +14,7 @@ interface VehiculoRepositoryContract
         Text $placa,
         Text $unidad,
         Id $idCliente,
+        NumericInteger $numAsientos,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;
@@ -28,6 +29,7 @@ interface VehiculoRepositoryContract
         Id $id,
         Text $placa,
         Text $unidad,
+        NumericInteger $numAsientos,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void;

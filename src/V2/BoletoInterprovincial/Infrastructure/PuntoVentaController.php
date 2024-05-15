@@ -42,6 +42,7 @@ final class PuntoVentaController
             $apellidos = $request->input('apellidos');
             $menorEdad = $request->input('menorEdad');
 
+            $idCronogramaSalida = $request->input('idCronogramaSalida'); //null
             $idVehiculo = $request->input('idVehiculo'); //null
             $idAsiento = $request->input('numeroAsiento'); //null
             $fechaPartida = $request->input('fechaPartida'); // null
@@ -79,6 +80,7 @@ final class PuntoVentaController
                 $apellidos,
                 $menorEdad,
 
+                $idCronogramaSalida,
                 $idVehiculo,
                 $idAsiento,
                 $fechaPartida,

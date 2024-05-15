@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\EnumTipoMedioPago;
 use Illuminate\Database\Seeder;
 
 class MedioPagoSeeder extends Seeder
@@ -18,36 +19,29 @@ class MedioPagoSeeder extends Seeder
             'nombre' => 'Efectivo',
             'bl_despacho' => true,
             'bl_entidad_financiera' => false,
+            'id_tipo' => EnumTipoMedioPago::Fisico,
         ]);
 
         \App\Models\V2\MedioPago::create([
             'nombre' => 'Tarjeta de Crédito',
             'bl_despacho' => true,
             'bl_entidad_financiera' => true,
+            'id_tipo' => EnumTipoMedioPago::Digital,
         ]);
 
         \App\Models\V2\MedioPago::create([
             'nombre' => 'Yape',
             'bl_despacho' => true,
             'bl_entidad_financiera' => false,
+            'id_tipo' => EnumTipoMedioPago::Digital,
         ]);
 
         \App\Models\V2\MedioPago::create([
             'nombre' => 'Plin',
             'bl_despacho' => true,
             'bl_entidad_financiera' => false,
+            'id_tipo' => EnumTipoMedioPago::Digital,
         ]);
 
-        \App\Models\V2\MedioPago::create([
-            'nombre' => 'Cheque',
-            'bl_despacho' => true,
-            'bl_entidad_financiera' => true,
-        ]);
-
-        \App\Models\V2\MedioPago::create([
-            'nombre' => 'Deposito Bancario',
-            'bl_despacho' => true,
-            'bl_entidad_financiera' => true,
-        ]);
     }
 }

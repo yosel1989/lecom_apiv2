@@ -141,6 +141,10 @@ include 'V2/medio-pago-route.php';
 include 'V2/entidad-financiera-route.php';
 include 'V2/genero-route.php';
 include 'V2/empresa-route.php';
+include 'V2/caja-traslado-route.php';
+include 'V2/cliente-medio-pago-route.php';
+include 'V2/cronograma-route.php';
+include 'V2/cronograma-salida-route.php';
 
 
 

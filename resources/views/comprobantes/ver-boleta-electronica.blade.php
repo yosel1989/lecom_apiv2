@@ -42,7 +42,7 @@
             padding: 0;
             margin: 0;
             max-width: 100%;
-            font-size: 8px !important;
+            font-size: 7pt !important;
             box-sizing: border-box;
             page-break-inside: avoid;
             font-family: 'game', sans-serif !important;
@@ -136,9 +136,9 @@
     </div>
 
     <div class="border-dashed-top w-100 my-1"></div>
-    <p class="text-center text-uppercase"><b>{{ $boleto->getCodigo()->value() }}</b></p>
-    <p class="text-center text-uppercase"><b>{{ $boleto->getTipoComprobante()->value() }}</b></p>
-    <p class="text-center text-uppercase"><b>{{ $boleto->getComprobanteSerie()->value() }}-{{ str_pad($boleto->getComprobanteNumero()->value(),8,'0',STR_PAD_LEFT) }}</b></p>
+    <p class="text-center text-uppercase">{{ $boleto->getCodigo()->value() }}</p>
+    <p class="text-center text-uppercase">{{ $boleto->getTipoComprobante()->value() }}</p>
+    <p class="text-center text-uppercase">{{ $boleto->getComprobanteSerie()->value() }}-{{ str_pad($boleto->getComprobanteNumero()->value(),8,'0',STR_PAD_LEFT) }}</p>
     <div class="border-dashed-top w-100 my-1"></div>
 
     <table class="w-100">
@@ -162,11 +162,13 @@
             <td></td>
             <td class="text-end">S/ {{ number_format($boleto->getPrecio()->value(), 2, '.', '') }}</td>
         </tr>
-{{--        <tr>--}}
-{{--            <td>VEHICULO</td>--}}
-{{--            <td></td>--}}
-{{--            <td class="text-end">{{ $boleto->getVehiculoPlaca()->value() ? $boleto->getVehiculoPlaca()->value() : "**LIBRE**"}}</td>--}}
-{{--        </tr>--}}
+        @if($boleto->getVehiculoPlaca()->value())
+            <tr>
+                <td>VEHICULO</td>
+                <td></td>
+                <td class="text-end">{{ $boleto->getVehiculoPlaca()->value() ? $boleto->getVehiculoPlaca()->value() : "**LIBRE**"}}</td>
+            </tr>
+        @endif
 {{--        <tr>--}}
 {{--            <td>ASIENTO</td>--}}
 {{--            <td></td>--}}
@@ -236,7 +238,7 @@
             <td class="text-end" style="font-size: 14px !important; font-weight: 500">S/ {{ number_format($boleto->getPrecio()->value(), 2, '.', '') }}</td>
         </tr>
         <tr>
-            <td>Efectivo</td>
+            <td>EFECTIVO</td>
             <td></td>
             <td class="text-end" style="font-size: 20px; font-weight: 500; font-family: 'game', sans-serif !important">{{ number_format($boleto->getPrecio()->value(), 2, '.', '') }}</td>
         </tr>

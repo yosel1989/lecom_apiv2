@@ -27,6 +27,7 @@ final class Vehiculo
     private Text $usuarioModifico;
     private Text $usuarioRegistro;
     private Id $idCategoria;
+    private NumericInteger $numeroAsientos;
 
     /**
      * @param Id $id
@@ -38,6 +39,7 @@ final class Vehiculo
      * @param Id $idClase
      * @param Id $idFlota
      * @param Id $idCategoria
+     * @param NumericInteger $numeroAsientos
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      * @param Id $idUsuarioRegistro
@@ -55,6 +57,7 @@ final class Vehiculo
         Id $idClase,
         Id $idFlota,
         Id $idCategoria,
+        NumericInteger $numeroAsientos,
         NumericInteger $idEstado,
         NumericInteger $idEliminado,
         Id $idUsuarioRegistro,
@@ -79,6 +82,7 @@ final class Vehiculo
         $this->fechaRegistro = $fechaRegistro;
         $this->fechaModifico = $fechaModifico;
         $this->idCategoria = $idCategoria;
+        $this->numeroAsientos = $numeroAsientos;
     }
 
     /**
@@ -351,6 +355,22 @@ final class Vehiculo
     public function setIdCategoria(Id $idCategoria): void
     {
         $this->idCategoria = $idCategoria;
+    }
+
+    /**
+     * @return NumericInteger
+     */
+    public function getNumeroAsientos(): NumericInteger
+    {
+        return $this->numeroAsientos;
+    }
+
+    /**
+     * @param NumericInteger $numeroAsientos
+     */
+    public function setNumeroAsientos(NumericInteger $numeroAsientos): void
+    {
+        $this->numeroAsientos = $numeroAsientos;
     }
 
 

@@ -18,7 +18,8 @@ class VehiculoListResource extends JsonResource
         return [
             'id'           => $this->getId()->value(),
             'placa'        => $this->getPlaca()->value(),
-            'unidad'       => $this->getUnidad()->value()
+            'unidad'       => $this->getUnidad()->value(),
+            'numeroAsientos'       => $this->getNumeroAsientos()->value(),
         ];
 
     }

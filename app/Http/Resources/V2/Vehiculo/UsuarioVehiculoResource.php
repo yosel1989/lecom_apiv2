@@ -19,6 +19,7 @@ class UsuarioVehiculoResource extends JsonResource
             'id'            => $this->getId()->value(),
             'placa'          => $this->getPlaca()->value(),
             'unidad'       => $this->getUnidad()->value(),
+            'numeroAsientos'       => $this->getNumeroAsientos()->value(),
             'fechaRegistro'       => $this->getFechaRegistro()->value(),
             'fechaModifico'     => $this->getFechaModifico()->value(),
             'idUsuarioRegistro'     => $this->getIdUsuarioModifico()->value(),

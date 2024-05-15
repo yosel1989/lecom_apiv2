@@ -30,8 +30,8 @@ class TipoComprobanteSeeder extends Seeder
         ]);
 
         \App\Models\V2\TipoComprobante::create([
-            'nombre' => 'Ticket',
-            'abreviatura' => 'TC.',
+            'nombre' => 'Ticket de Venta',
+            'abreviatura' => 'TCV.',
             'bl_punto_venta' => true,
             'bl_despacho' => true,
         ]);
@@ -62,6 +62,13 @@ class TipoComprobanteSeeder extends Seeder
             'abreviatura' => 'CI.',
             'bl_punto_venta' => false,
             'bl_despacho' => true,
+        ]);
+
+        \App\Models\V2\TipoComprobante::create([
+            'nombre' => 'Comprobante de Traslado de Dinero',
+            'abreviatura' => 'CTD.',
+            'bl_punto_venta' => true,
+            'bl_despacho' => false,
         ]);
     }
 }

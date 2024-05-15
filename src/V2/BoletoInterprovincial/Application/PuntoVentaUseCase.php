@@ -37,6 +37,7 @@ final class PuntoVentaUseCase
         int $menorEdad,
 
 
+        ?string $idCronogramaSalida,
         ?string $idVehiculo,
         ?string $idAsiento,
         ?string $fechaPartida,
@@ -73,6 +74,7 @@ final class PuntoVentaUseCase
         $_menorEdad = new NumericInteger($menorEdad);
 
 
+        $_idCronogramaSalida = new Id($idCronogramaSalida,true, 'El id de la salida no tiene el formato correcto');
         $_idVehiculo = new Id($idVehiculo,true, 'El id del vehiculo no tiene el formato correcto');
         $_idAsiento = new Id($idAsiento,true, 'El id del asiento no tiene el formato correcto');
         $_fechaPartida = new DateFormat($fechaPartida,true, 'El formato de la fecha no es la correcta');
@@ -110,6 +112,7 @@ final class PuntoVentaUseCase
             $_menorEdad,
 
 
+            $_idCronogramaSalida,
             $_idVehiculo,
             $_idAsiento,
             $_fechaPartida,

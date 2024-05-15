@@ -23,6 +23,7 @@ final class CreateUseCase
         string $placa,
         string $unidad,
         string $idCliente,
+        int $numAsientos,
         int $idEstado,
         string $idUsuarioRegistro
     ): void
@@ -31,12 +32,14 @@ final class CreateUseCase
         $_unidad = new Text($unidad,false, 10,'La unidad excede los 10 caracteres');
         $_idCliente = new Id($idCliente,false,'El id del cliente no tiene el formato correcto');
         $_idEstado = new NumericInteger($idEstado);
+        $_numAsientos = new NumericInteger($numAsientos);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
         $this->repository->create(
             $_placa,
             $_unidad,
             $_idCliente,
+            $_numAsientos,
             $_idEstado,
             $_idUsuarioRegistro
         );

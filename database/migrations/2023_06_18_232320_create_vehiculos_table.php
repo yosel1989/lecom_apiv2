@@ -28,8 +28,9 @@ return new class extends Migration
             $table->uuid('id_usu_modifico')->nullable();
             $table->timestamp('f_registro');
             $table->timestamp('f_modifico')->nullable();
+            $table->integer('num_asientos')->nullable();
 
-            $table->index(['id', "codigo", 'placa', 'unidad', 'id_cliente', 'id_marca', 'id_categoria', 'id_modelo', 'id_clase', 'id_flota', 'id_estado', 'id_eliminado', 'id_usu_registro', 'f_registro']);
+            $table->index(['id', "codigo", 'placa', 'unidad', 'id_cliente', 'id_marca', 'id_categoria', 'id_modelo', 'id_clase', 'id_flota', 'id_estado', 'id_eliminado', 'id_usu_registro', 'f_registro', 'num_asientos']);
         });
     }
 

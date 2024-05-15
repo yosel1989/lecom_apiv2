@@ -17,6 +17,10 @@ final class PersonalShort
     private NumericInteger $idEliminado;
     private Id $idSede;
 
+    // secondary
+    private Text $tipoPersonal;
+    private Text $foto;
+
     /**
      * @param Id $id
      * @param Text $nombre
@@ -157,6 +161,40 @@ final class PersonalShort
     {
         $this->idSede = $idSede;
     }
+
+    /**
+     * @return Text
+     */
+    public function getTipoPersonal(): Text
+    {
+        return $this->tipoPersonal;
+    }
+
+    /**
+     * @param Text $tipoPersonal
+     */
+    public function setTipoPersonal(Text $tipoPersonal): void
+    {
+        $this->tipoPersonal = $tipoPersonal;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getFoto(): Text
+    {
+        return $this->foto;
+    }
+
+    /**
+     * @param Text $foto
+     */
+    public function setFoto(Text $foto): void
+    {
+        $this->foto = $foto;
+    }
+
+
 
 
 }

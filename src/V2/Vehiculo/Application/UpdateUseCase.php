@@ -23,6 +23,7 @@ final class UpdateUseCase
         string $idVehiculo,
         string $placa,
         string $unidad,
+        int $numAsientos,
         int $idEstado,
         string $idUsuarioRegistro
     ): void
@@ -30,6 +31,7 @@ final class UpdateUseCase
         $_idVehiculo = new Id($idVehiculo,false,'El id del vehiculo no tiene el formato correcto');
         $_placa = new Text($placa,false, 7,'La placa excede los 7 caracteres');
         $_unidad = new Text($unidad,false, 10,'La unidad excede los 10 caracteres');
+        $_numAsientos = new NumericInteger($numAsientos);
         $_idEstado = new NumericInteger($idEstado);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
@@ -37,6 +39,7 @@ final class UpdateUseCase
             $_idVehiculo,
             $_placa,
             $_unidad,
+            $_numAsientos,
             $_idEstado,
             $_idUsuarioRegistro
         );

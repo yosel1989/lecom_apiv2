@@ -16,11 +16,13 @@ return new class extends Migration
             $table->string('nombre', 50);
             $table->boolean('bl_despacho')->default(false);
             $table->boolean('bl_entidad_financiera')->default(false);
+            $table->integer('id_tipo');
 
             $table->index([
                 'nombre',
                 'bl_despacho',
                 'bl_entidad_financiera',
+                'id_tipo',
             ]);
         });
     }

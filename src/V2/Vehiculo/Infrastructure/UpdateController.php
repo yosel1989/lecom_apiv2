@@ -23,6 +23,7 @@ final class UpdateController
         $idVehiculo     = $request->id;
         $placa          = $request->input('placa');
         $unidad         = $request->input('unidad');
+        $numAsientos         = $request->input('numeroAsientos');
         $idEstado   = $request->input('idEstado');
 
         $useCase = new UpdateUseCase( $this->repository );
@@ -30,6 +31,7 @@ final class UpdateController
             $idVehiculo,
             $placa,
             $unidad,
+            $numAsientos,
             $idEstado,
             $user->getId()
         );

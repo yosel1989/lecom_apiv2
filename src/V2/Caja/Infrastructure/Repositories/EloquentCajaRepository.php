@@ -96,6 +96,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
                 'id_sede'
             )
             ->where('id_cliente',$idCliente->value())
+            ->where('bl_principal', false)
             ->where('id_sede',$idSede->value())->get();
 
         $arr = array();
@@ -137,7 +138,9 @@ final class EloquentCajaRepository implements CajaRepositoryContract
                 'id_pos',
                 'id_estado',
                 'id_eliminado'
-            )->where('id_cliente',$idCliente->value())->get();
+            )->where('id_cliente',$idCliente->value())
+            ->where('bl_principal', false)
+            ->get();
 
         $arrVehicles = array();
 
@@ -173,6 +176,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             ->where('id_cliente',$idCliente->value())
             ->where('id_sede',$idSede->value())
             ->where('bl_despacho', true)
+            ->where('bl_principal', false)
             ->where('id_estado', 1)
             ->get();
 
@@ -246,6 +250,79 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             ->where('id_cliente',$idCliente->value())
             ->where('id_sede',$idSede->value())
             ->where('bl_punto_venta', true)
+            ->where('bl_principal', false)
+            ->where('id_estado', 1)
+            ->get();
+
+        $arrVehicles = array();
+
+        foreach ( $models as $model ){
+
+            $OModel = new CajaSede(
+                new Id($model->id , false, 'El id del caja no tiene el formato correcto'),
+                new Text($model->nombre, false, -1, ''),
+                new Id($model->id_cliente , true, 'El id del cliente no tiene el formato correcto'),
+                new Id($model->id_sede , true, 'El id de la sede no tiene el formato correcto'),
+            );
+
+            $cajadiario = CajaDiario::with('estado:id,nombre')->where('id_caja',$model->id)->orderBy('f_apertura', 'desc')->limit(1);
+            if($cajadiario->count() === 0){
+                $OModel->setAperturado(new ValueBoolean(false));
+                $OModel->setIdEstado(new NumericInteger(2));
+                $OModel->setEstado(new Text('Cerrado', false, -1, ''));
+                $OModel->setFechaApertura(new DateTimeFormat(null, true));
+                $OModel->setIdCajaDiario(new Id(null, true, ''));
+            }else{
+                if(is_null($cajadiario->first()->f_cierre)){
+                    $OModel->setAperturado(new ValueBoolean(true));
+                    $OModel->setIdCajaDiario(new Id($cajadiario->first()->id, true, 'El id del historial de la caja no tiene el formato correcto'));
+                    $OModel->setIdEstado(new NumericInteger($cajadiario->first()->estado->id));
+                    $OModel->setEstado(new Text($cajadiario->first()->estado->nombre, false, -1, ''));
+                    $OModel->setFechaApertura(new DateTimeFormat($cajadiario->first()->f_apertura, false));
+                }else{
+                    $OModel->setAperturado(new ValueBoolean(false));
+                    $OModel->setIdEstado(new NumericInteger(2));
+                    $OModel->setEstado(new Text('Cerrado', false, -1, ''));
+                    $OModel->setFechaApertura(new DateTimeFormat(null, true));
+                    $OModel->setIdCajaDiario(new Id(null, true, ''));
+                }
+            }
+
+            if($OModel->getIdCajaDiario()->value()){
+                $saldo = CajaDiario::select(
+                    DB::raw("
+                COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id), 0) -
+                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id),0) +
+                COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id),0)
+                as saldo")
+                )->where('id', $OModel->getIdCajaDiario()->value())->get()->first()->saldo;
+                $OModel->setSaldo(new NumericFloat($saldo));
+            }else{
+                $OModel->setSaldo(new NumericFloat(0));
+            }
+
+            $arrVehicles[] = $OModel;
+        }
+
+
+        return $arrVehicles;
+    }
+
+    public function listPrincipalBySede(Id $idCliente, Id $idSede): array
+    {
+        $Cliente = Cliente::findOrFail($idCliente->value(),['id','codigo']);
+
+        $models = $this->eloquentModelCaja
+            ->select(
+                'id',
+                'nombre',
+                'id_cliente',
+                'id_sede',
+                'id_estado'
+            )
+            ->where('id_cliente',$idCliente->value())
+            ->where('id_sede',$idSede->value())
+            ->where('bl_principal', true)
             ->where('id_estado', 1)
             ->get();
 
@@ -310,6 +387,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         Id $idPos,
         ValueBoolean $blPuntoVenta,
         ValueBoolean $blDespacho,
+        ValueBoolean $blPrincipal,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -329,6 +407,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             'id_pos' => $idPos->value(),
             'bl_punto_venta' => $blPuntoVenta->value(),
             'bl_despacho' => $blDespacho->value(),
+            'bl_principal' => $blPrincipal->value(),
             'id_estado' => $idEstado->value(),
             'id_usu_registro' => $idUsuarioRegistro->value()
         ]);
@@ -342,6 +421,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         Id $idPos,
         ValueBoolean $blPuntoVenta,
         ValueBoolean $blDespacho,
+        ValueBoolean $blPrincipal,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -363,6 +443,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             'id_pos' => $idPos->value(),
             'bl_punto_venta' => $blPuntoVenta->value(),
             'bl_despacho' => $blDespacho->value(),
+            'bl_principal' => $blPrincipal->value(),
             'id_estado' => $idEstado->value(),
             'id_usu_modifico' => $idUsuarioRegistro->value()
         ]);
@@ -404,6 +485,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
         $OModel->setSede(new Text(!is_null($model->sede) ? $model->sede->nombre : null, true, -1));
         $OModel->setPos(new Text(!is_null($model->pos) ? $model->pos->nombre : null, true, -1));
+        $OModel->setBlPrincipal(new ValueBoolean($model->bl_principal));
 
 
 
@@ -439,7 +521,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
                 'id_sede',
                 'id_estado'
             )
-            ->where('bl_despacho', true)
+//            ->where('bl_despacho', true)
             ->where('id_estado', 1)
             ->findOrFail($idCaja->value());
 

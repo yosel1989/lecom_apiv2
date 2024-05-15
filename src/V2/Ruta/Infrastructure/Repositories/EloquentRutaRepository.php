@@ -83,7 +83,50 @@ final class EloquentRutaRepository implements RutaRepositoryContract
             'id_sede',
             'id_estado',
             'id_eliminado'
-        )->where('id_cliente',$idCliente->value())->get();
+        )->where('id_cliente',$idCliente->value())
+//            ->where('id_estado', 1)
+            ->get();
+
+        $arrVehicles = array();
+
+        foreach ( $models as $model ){
+
+            $OModel = new RutaShort(
+                new Id($model->id , false, 'El id del Ruta no tiene el formato correcto'),
+                new Text($model->nombre, false, 100, 'El nombre de la Ruta excede los 100 caracteres'),
+                new NumericInteger($model->id_tipo->value),
+                new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
+                new NumericInteger($model->id_estado->value),
+                new NumericInteger($model->id_eliminado->value),
+            );
+
+            $arrVehicles[] = $OModel;
+        }
+
+        return $arrVehicles;
+    }
+
+
+    /**
+     * @param Id $idCliente
+     * @param Id $idSede
+     * @param NumericInteger $idTipo
+     * @return array
+     */
+    public function listByClienteSedeTipo(Id $idCliente, Id $idSede, NumericInteger $idTipo): array
+    {
+        $models = $this->eloquentModelRuta->select(
+            'id',
+            'nombre',
+            'id_tipo',
+            'id_sede',
+            'id_estado',
+            'id_eliminado'
+        )->where('id_cliente',$idCliente->value())
+            ->where('id_sede', $idSede->value())
+            ->where('id_tipo', $idTipo->value())
+            ->where('id_estado', 1)
+            ->get();
 
         $arrVehicles = array();
 
@@ -143,6 +186,7 @@ final class EloquentRutaRepository implements RutaRepositoryContract
 
         return $arrVehicles;
     }
+
 
     /**
      * @param Text $nombre

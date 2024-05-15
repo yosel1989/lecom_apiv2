@@ -15,15 +15,14 @@ class TipoRutaSeeder extends Seeder
      */
     public function run()
     {
+        \App\Models\V2\TipoRuta::truncate();
         \App\Models\V2\TipoRuta::create([
-            'nombre'=> 'Interprovincial',
+            'nombre'=> 'Interprovincial (Ruta Corta)',
         ]);
 
         \App\Models\V2\TipoRuta::create([
-            'nombre'=> 'Urbano',
+            'nombre'=> 'Interprovincial (Ruta Larga)',
         ]);
-
-
 
     }
 }

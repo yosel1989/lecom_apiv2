@@ -24,6 +24,7 @@ final class UpdateController
         $idSede          = $request->input('idSede');
         $blPuntoVenta          = $request->input('blPuntoVenta');
         $blDespacho          = $request->input('blDespacho');
+        $blPrincipal          = $request->input('blPrincipal');
         $idPos          = $request->input('idPos');
         $idEstado   = $request->input('idEstado');
 
@@ -35,6 +36,7 @@ final class UpdateController
             $idPos,
             $blPuntoVenta,
             $blDespacho,
+            $blPrincipal,
             $idEstado,
             $user->getId()
         );

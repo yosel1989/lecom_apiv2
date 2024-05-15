@@ -11,4 +11,5 @@ enum EnumTipoComprobante: int
     case NotaDebito = 5;
     case TicketEgreso = 6;
     case ComprobanteIngreso = 7;
+    case ComprobanteTrasladoDinero = 8;
 }

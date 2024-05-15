@@ -11,6 +11,7 @@ use App\Enums\IdTipoBoleto;
 use App\Models\User;
 use App\Models\V2\CajaDiario;
 use App\Models\V2\Cliente as EloquentModelClient;
+use App\Models\V2\CronogramaSalida;
 use App\Models\V2\Empresa;
 use App\Models\V2\HistorialBoletoInterprovincial as EloquentModelHistorialBoletoInterprovincial;
 use App\Models\V2\BoletoInterprovincialOficial as EloquentModelBoletoInterprovincial;
@@ -626,6 +627,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
                 'pd.nombre as paraderoDestino',
                 'caja.nombre as caja',
                 'clientes.nombre as cliente',
+                'vehiculos.placa as vehiculoPlaca',
             )
             ->leftJoin('users','boleto_interprovincial_cliente_' . $OCliente->codigo.'.id_usu_registro', 'users.id')
             ->leftjoin('ce_comprobante_electronico',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id', '=', 'ce_comprobante_electronico.id_producto')
@@ -635,6 +637,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             ->leftjoin('paradero as pd',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_paradero_destino', '=', 'pd.id')
             ->leftjoin('caja',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_caja', '=', 'caja.id')
             ->leftjoin('clientes',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_cliente', '=', 'clientes.id')
+            ->leftjoin('vehiculos',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_vehiculo', '=', 'vehiculos.id')
 //            ->leftjoin('tipo_documento',  'boleto_interprovincial_cliente_' . $OCliente->codigo. '.id_tipo_documento', '=', 'caja.id')
             ->findOrFail($idBoletoInterprovincial->value());
         $OModel = new BoletoInterprovincialOficial(
@@ -683,7 +686,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         $OModel->setCliente(new Text($model->cliente, true, -1, ''));
 //        $OModel->setTipoDocumento(new Text($model->tipoDocumento, true, -1, ''));
 //        $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
-//        $OModel->setVehiculo(new Text(!is_null($model->vehiculo) ? ( $model->vehiculo->placa . ' ' . $model->vehiculo->placa ) : null, true, -1));
+        $OModel->setVehiculoPlaca(new Text($model->vehiculoPlaca, true, -1));
 //        $OModel->setDestino(new Text(!is_null($model->destino) ? ( $model->destino->nombre . ' ' . $model->destino->apellido ) : null, true, -1));
 
 
@@ -704,6 +707,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         Text $_apellidos,
         NumericInteger $_menorEdad,
 
+        Id $_idCronogramaSalida,
         Id $_idVehiculo,
         Id $_idAsiento,
         DateFormat $_fechaPartida,
@@ -729,6 +733,38 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
 
     ): BoletoInterprovincialOficial
     {
+
+        // Validar cliente
+        $Cliente = \App\Models\V2\Cliente::where('id', $_idCliente->value())->where('idEstado',1)->where('idEliminado',0);
+        if( $Cliente->count() === 0 ){
+            throw new InvalidArgumentException( 'El cliente no se encuentra registrado en el sistema o esta inhabilitado.' );
+        }
+
+        $model = new \App\Models\V2\BoletoInterprovincialOficial();
+        $model->setTable('boleto_interprovincial_cliente_' . $Cliente->first()->codigo);
+        $model->setDynamicTableName('boleto_interprovincial_cliente_' . $Cliente->first()->codigo);
+
+
+
+        $today = new \DateTime('now');
+        // Validar el número de boletos libres
+        $cronogramaSalida = CronogramaSalida::findOrFail($_idCronogramaSalida->value());
+        $vehiculo = Vehiculo::findOrFail($cronogramaSalida->id_vehiculo);
+        $asientosOcupados = $model
+            ->select(DB::raw('COUNT(*) as total'))
+            ->join('cronograma-salida','boleto_interprovincial_cliente_' . $Cliente->first()->codigo .'.id_cronograma_salida','cronograma_salida.id')
+            ->where('cronograma_salida.id_vehiculo', $vehiculo->id)
+            ->whereDate('boleto_interprovincial_cliente_' . $Cliente->first()->codigo .'.f_partida', $today->format('Y-m-d'))
+            ->where('boleto_interprovincial_cliente_' . $Cliente->first()->codigo .'.id_estado', 1)
+            ->get()->first()->total;
+
+        if((int)$asientosOcupados >= $vehiculo->num_asientos ){
+            throw new InvalidArgumentException( 'Ya no quedan asientos libres' );
+        }
+
+
+
+
         // Validar sede
         $Sede = Sede::where('id', $_idSede->value())->where('id_estado', 1)->where('id_eliminado',0)->where('id_cliente',$_idCliente->value());
         if( $Sede->count() === 0 ){
@@ -779,11 +815,6 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             }
         }
 
-        // Validar cliente
-        $Cliente = \App\Models\V2\Cliente::where('id', $_idCliente->value())->where('idEstado',1)->where('idEliminado',0);
-        if( $Cliente->count() === 0 ){
-            throw new InvalidArgumentException( 'El cliente no se encuentra registrado en el sistema o esta inhabilitado.' );
-        }
         // validar ruta
         $Ruta = \App\Models\V2\Ruta::selectRaw('count(*) as total')->where('id', $_idRuta->value())->where('id_estado',1)->where('id_eliminado',0)->where('id_cliente',$_idCliente->value())->first();
         if( $Ruta->total === 0 ){
@@ -813,10 +844,6 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         $_serie = $Serie->first();
 
 
-        $model = new \App\Models\V2\BoletoInterprovincialOficial();
-        $model->setTable('boleto_interprovincial_cliente_' . $Cliente->first()->codigo);
-        $model->setDynamicTableName('boleto_interprovincial_cliente_' . $Cliente->first()->codigo);
-
 //        $total = $model->selectRaw('COUNT(*) as total')->where('serie', $_serie->nombre)->where('idSede',$_serie->id_sede)->get()->first()->total;
 //
         $idBoleto = Uuid::uuid4();
@@ -834,7 +861,8 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             'id_ruta' => $_idRuta->value(),
             'id_paradero_origen' => $viaje->id_paradero_origen,
             'id_paradero_destino' => $viaje->id_paradero_destino,
-            'id_vehiculo' => $_idVehiculo->value(),
+            'id_cronograma_salida' => $cronogramaSalida->id,
+            'id_vehiculo' => $vehiculo->id,
             'id_caja' => $_idCaja->value(),
             'id_caja_diario' => $_idCajaDiario->value(),
             'id_pos' => null,
@@ -845,8 +873,8 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             'latitud' => 0,
             'longitud' => 0,
             'precio' => $_precio->value(),
-            'f_partida' => $_fechaPartida->value(),
-            'h_partida' => $_horaPartida->value(),
+            'f_partida' => $cronogramaSalida->fecha,
+            'h_partida' => $cronogramaSalida->hora,
             'id_usu_registro' => $user->getId(),
             'id_sede' => $_idSede->value(),
 

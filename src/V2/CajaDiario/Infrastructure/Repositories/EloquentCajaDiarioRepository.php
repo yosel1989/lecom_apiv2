@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Src\V2\CajaDiario\Infrastructure\Repositories;
 
+use App\Enums\EnuMedioPago;
 use App\Enums\EnumEstadoCajaDiario;
 use App\Models\V2\Caja;
 use App\Models\V2\CajaDiario as EloquentModelCajaDiario;
@@ -18,7 +19,6 @@ use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 use Src\Core\Domain\ValueObjects\ValueBoolean;
 use Src\V2\Caja\Domain\CajaSede;
-use Src\V2\CajaDiario\Domain\CajaDiario;
 use Src\V2\CajaDiario\Domain\CajaDiarioReporte;
 use Src\V2\CajaDiario\Domain\Contracts\CajaDiarioRepositoryContract;
 
@@ -289,9 +289,10 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
                     'caja_diario.*',
                     DB::raw("
                     caja_diario.monto_inicial +
-                COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id), 0) -
-                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id),0) +
-                COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id),0)
+                COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."), 0) -
+                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."),0) +
+                COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."),0) +
+                COALESCE((SELECT SUM(monto) FROM caja_traslado WHERE id_caja_diario_destino = caja_diario.id AND id_estado = 1 AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."),0)
                 as saldo")
                 )
                 ->with(
@@ -303,8 +304,8 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
                 )
                 ->where('id_cliente',$idCliente->value())
                 ->where('id_caja',$caja->id)
-                ->whereDate('f_apertura', '>=', $fechaInicio->value())
-                ->whereDate('f_apertura', '<=', $fechaFinal->value())
+//                ->whereDate('f_apertura', '>=', $fechaInicio->value())
+//                ->whereDate('f_apertura', '<=', $fechaFinal->value())
                 ->orderBy('f_apertura','DESC')
                 ->limit(1);
 

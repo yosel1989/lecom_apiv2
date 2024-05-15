@@ -46,6 +46,7 @@ class BoletoInterprovincialOficial extends Model
         'menor_edad',
 
 
+        'id_cronograma_salida',
         'id_vehiculo',
         'id_asiento',
         'f_partida',

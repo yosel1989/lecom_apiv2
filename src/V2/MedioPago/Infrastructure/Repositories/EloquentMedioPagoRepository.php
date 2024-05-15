@@ -33,6 +33,31 @@ final class EloquentMedioPagoRepository implements MedioPagoRepositoryContract
     }
 
 
+    public function collectionByCliente(Id $idCliente): MedioPagoShortList
+    {
+        $models = $this->eloquent
+            ->join('cliente_medio_pago','medio_pago.id','cliente_medio_pago.id_medio_pago')
+            ->where('cliente_medio_pago.id_cliente', $idCliente->value())
+            ->orderBy('nombre', 'asc')
+            ->get();
+
+        $collection = new MedioPagoShortList();
+
+        foreach ( $models as $model ){
+
+            $OModel = new MedioPagoShort(
+                new NumericInteger($model->id),
+                new Text($model->nombre, false, -1, ''),
+                new ValueBoolean($model->bl_entidad_financiera),
+            );
+
+            $collection->add($OModel);
+        }
+
+        return $collection;
+    }
+
+
     public function collectionToDespacho(): MedioPagoShortList
     {
         $models = $this->eloquent->select(
@@ -65,10 +90,13 @@ final class EloquentMedioPagoRepository implements MedioPagoRepositoryContract
         $Cliente = $this->eloquentCliente->findOrFail($idCliente->value());
 
         $models = $this->eloquent->select(
-            'id',
-            'nombre',
-            'bl_entidad_financiera'
-        )->orderBy('nombre', 'asc')
+            'medio_pago.id',
+            'medio_pago.nombre',
+            'medio_pago.bl_entidad_financiera'
+        )
+            ->join('cliente_medio_pago','medio_pago.id','cliente_medio_pago.id_medio_pago')
+            ->where('cliente_medio_pago.id_cliente', $idCliente->value())
+            ->orderBy('nombre', 'asc')
             ->get();
 
         $collection = new MedioPagoShortList();
@@ -86,7 +114,9 @@ final class EloquentMedioPagoRepository implements MedioPagoRepositoryContract
                     DB::raw("caja_diario.monto_inicial +
                                     COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". $model->id ."), 0) -
                                     COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id AND egreso_detalle.id_medio_pago = ". $model->id ."),0) +
-                                    COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_" . $Cliente->codigo . " WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". $model->id ."),0)
+                                    COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_" . $Cliente->codigo . " WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". $model->id ."),0) -
+                                    COALESCE((SELECT SUM(monto) FROM caja_traslado WHERE id_caja_diario_origen = caja_diario.id AND id_medio_pago = ". $model->id ." ),0) +
+                                    COALESCE((SELECT SUM(monto) FROM caja_traslado WHERE id_caja_diario_destino = caja_diario.id AND id_medio_pago = ". $model->id ." ),0)
                                     as saldo"
                     )
                 )->where('id', $idCajaDiario->value())->get();
@@ -94,7 +124,9 @@ final class EloquentMedioPagoRepository implements MedioPagoRepositoryContract
                 $result = $this->eloquentCajaDiario->select(
                     DB::raw("COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". $model->id ."), 0) -
                                     COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id AND egreso_detalle.id_medio_pago = ". $model->id ."),0) +
-                                    COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_" . $Cliente->codigo . " WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". $model->id ."),0)
+                                    COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_" . $Cliente->codigo . " WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". $model->id ."),0) -
+                                    COALESCE((SELECT SUM(monto) FROM caja_traslado WHERE id_caja_diario_origen = caja_diario.id AND id_medio_pago = ". $model->id ."),0) +
+                                    COALESCE((SELECT SUM(monto) FROM caja_traslado WHERE id_caja_diario_destino = caja_diario.id AND id_medio_pago = ". $model->id ."),0)
                                     as saldo"
                     )
                 )->where('id', $idCajaDiario->value())->get();
@@ -115,10 +147,13 @@ final class EloquentMedioPagoRepository implements MedioPagoRepositoryContract
         $Cliente = $this->eloquentCliente->findOrFail($idCliente->value());
 
         $models = $this->eloquent->select(
-            'id',
-            'nombre',
-            'bl_entidad_financiera'
-        )->orderBy('nombre', 'asc')
+            'medio_pago.id',
+            'medio_pago.nombre',
+            'medio_pago.bl_entidad_financiera'
+        )
+            ->join('cliente_medio_pago','medio_pago.id','cliente_medio_pago.id_medio_pago')
+            ->where('cliente_medio_pago.id_cliente', $idCliente->value())
+            ->orderBy('nombre', 'asc')
             ->get();
 
         $ingresos = new MedioPagoShortList();
@@ -138,15 +173,20 @@ final class EloquentMedioPagoRepository implements MedioPagoRepositoryContract
             );
 
             $montoEgreso = $this->eloquentCajaDiario->select(
-                DB::raw("COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id AND egreso_detalle.id_medio_pago = ". $model->id ."),0) as saldo"
+                DB::raw("
+                    COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id AND egreso_detalle.id_medio_pago = ". $model->id ."),0) +
+                    COALESCE((SELECT SUM(monto) FROM caja_traslado WHERE id_caja_diario_origen = caja_diario.id AND id_medio_pago = ". $model->id ."),0)
+                    as saldo"
                 )
             )->where('id', $idCajaDiario->value())->get();
             $egreso->setMonto(new NumericFloat($montoEgreso->first()->saldo));
 
             $montoIngreso = $this->eloquentCajaDiario->select(
-                DB::raw("COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". $model->id ."), 0) +
-                                    COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_" . $Cliente->codigo . " WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". $model->id ."),0)
-                                    as saldo"
+                DB::raw("
+                COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". $model->id ."), 0) +
+                COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_" . $Cliente->codigo . " WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". $model->id ."),0) +
+                COALESCE((SELECT SUM(monto) FROM caja_traslado WHERE id_caja_diario_destino = caja_diario.id AND id_medio_pago = ". $model->id ." ),0)
+                as saldo"
                 )
             )->where('id', $idCajaDiario->value())->get();
             $ingreso->setMonto(new NumericFloat($montoIngreso->first()->saldo));

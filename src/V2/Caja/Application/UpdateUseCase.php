@@ -27,6 +27,7 @@ final class UpdateUseCase
         string | null $idPos,
         bool $blPuntoVenta,
         bool $blDespacho,
+        bool $blPrincipal,
         int $idEstado,
         string $idUsuarioRegistro
     ): void
@@ -37,6 +38,7 @@ final class UpdateUseCase
         $_idPos = new Id($idPos,true,'El id del pos no tiene el formato correcto');
         $_blPuntoVenta = new ValueBoolean($blPuntoVenta);
         $_blDespacho = new ValueBoolean($blDespacho);
+        $_blPrincipal = new ValueBoolean($blPrincipal);
         $_idEstado = new NumericInteger($idEstado);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
@@ -47,6 +49,7 @@ final class UpdateUseCase
             $_idPos,
             $_blPuntoVenta,
             $_blDespacho,
+            $_blPrincipal,
             $_idEstado,
             $_idUsuarioRegistro
         );

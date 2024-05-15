@@ -41,6 +41,8 @@ class Vehiculo extends Model
         'id_usu_modifico',
         'f_registro',
         'f_modifico',
+
+        'num_asientos',
     ];
 
     /**
@@ -52,6 +54,7 @@ class Vehiculo extends Model
         'id' =>  'string',
         'codigo' =>  'integer',
         'total' =>  'integer',
+        'num_asientos' =>  'integer',
         'f_registro' =>  'string',
         'f_modifico' =>  'string',
         'id_estado' => IdEstado::class,

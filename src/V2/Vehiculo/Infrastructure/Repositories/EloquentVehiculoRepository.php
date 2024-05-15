@@ -35,7 +35,9 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
         $vehicles = $this->eloquentModelVehiculo->with(
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos'
-        )->where('id_cliente',$idCliente->value())->get();
+        )->where('id_cliente',$idCliente->value())
+            ->orderBy('f_registro','DESC')
+            ->get();
 
         $arrVehicles = array();
 
@@ -51,6 +53,7 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
                 new Id($model->id_clase, true, 'El id de la clase del vehiculo no tiene el formato correcto'),
                 new Id($model->id_flota, true, 'El id de la flota del vehiculo no tiene el formato correcto'),
                 new Id($model->id_categoria, true, 'El id de la categoria del vehiculo no tiene el formato correcto'),
+                new NumericInteger($model->num_asientos),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
                 new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
@@ -76,7 +79,10 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
                 'placa',
                 'unidad'
             )
-            ->where('id_cliente',$idCliente->value())->get();
+            ->where('id_cliente', $idCliente->value())
+            ->where('id_estado', 1)
+            ->orderBy('placa', 'ASC')
+            ->get();
 
         $arrVehicles = array();
 
@@ -86,6 +92,7 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
                 new Id($model->id , false, 'El id del vehiculo no tiene el formato correcto'),
                 new Text($model->placa, false, 7, 'La placa excede los 7 caracteres'),
                 new Text($model->unidad, false, 10, 'La unidad excede los 10 caracteres'),
+                new NumericInteger($model->num_asientos)
             );
             $arrVehicles[] = $OModel;
         }
@@ -115,6 +122,7 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
                 new Id($model->id , false, 'El id del vehiculo no tiene el formato correcto'),
                 new Text($model->placa, false, 7, 'La placa excede los 7 caracteres'),
                 new Text($model->unidad, false, 10, 'La unidad excede los 10 caracteres'),
+                new NumericInteger($model->num_asientos),
             );
             $collection->add($OModel);
 
@@ -205,7 +213,8 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
                 $OModel = new VehiculoShort(
                     new Id($vehicle->id , false, 'El id del vehiculo no tiene el formato correcto'),
                     new Text($vehicle->placa, false, -1, ''),
-                    new Text($vehicle->unidad, false, -1, '')
+                    new Text($vehicle->unidad, false, -1, ''),
+                    new NumericInteger($vehicle->num_asientos),
                 );
 
                 $arrVehicles->add($OModel);
@@ -222,7 +231,8 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
                     $OModel = new VehiculoShort(
                         new Id($model->id , false, 'El id del vehiculo no tiene el formato correcto'),
                         new Text($model->placa, false, -1, ''),
-                        new Text($model->unidad, false, -1, '')
+                        new Text($model->unidad, false, -1, ''),
+                        new NumericInteger($model->num_asientos),
                     );
                     $arrVehicles->add($OModel);
                 }
@@ -245,7 +255,8 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
                     $OModel = new VehiculoShort(
                         new Id($model->id , false, 'El id del vehiculo no tiene el formato correcto'),
                         new Text($model->placa, false, -1, ''),
-                        new Text($model->unidad, false, -1, '')
+                        new Text($model->unidad, false, -1, ''),
+                        new NumericInteger($model->num_asientos),
                     );
                     $arrVehicles->add($OModel);
                 }
@@ -281,6 +292,7 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
         Text $placa,
         Text $unidad,
         Id $idCliente,
+        NumericInteger $numAsientos,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -322,7 +334,8 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
            'codigo' => ($count + 1) ,
            'unidad' => $unidad->value(),
            'id_cliente' => $idCliente->value(),
-           'id_estado' => $idEstado->value(),
+            'num_asientos' => $numAsientos->value(),
+            'id_estado' => $idEstado->value(),
            'id_usu_registro' => $idUsuarioRegistro->value()
         ]);
     }
@@ -332,6 +345,7 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
         Id $id,
         Text $placa,
         Text $unidad,
+        NumericInteger $numAsientos,
         NumericInteger $idEstado,
         Id $idUsuarioRegistro
     ): void
@@ -339,7 +353,7 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
         $vehiculo = $this->eloquentModelVehiculo->findOrFail($id->value());
 
         // Validar la unidad
-        if($this->eloquentModelVehiculo->where('unidad',$unidad->value())->where('id_cliente',$vehiculo->id_cliente)->count() > 0){
+        if($this->eloquentModelVehiculo->where('unidad',$unidad->value())->where('id_cliente',$vehiculo->id_cliente)->where('id', '<>', $id->value())->count() > 0){
             throw new \InvalidArgumentException('La unidad ya se encuentra registrada');
         }
 
@@ -363,6 +377,7 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
         $vehiculo->update([
             'placa' => $placa->value(),
             'unidad' => $unidad->value(),
+            'num_asientos' => $numAsientos->value(),
             'id_estado' => $idEstado->value(),
             'id_usu_modifico' => $idUsuarioRegistro->value()
         ]);
@@ -395,6 +410,7 @@ final class EloquentVehiculoRepository implements VehiculoRepositoryContract
             new Id($model->id_clase, true, 'El id de la clase del vehiculo no tiene el formato correcto'),
             new Id($model->id_flota, true, 'El id de la flota del vehiculo no tiene el formato correcto'),
             new Id($model->id_categoria, true, 'El id de la categoria del vehiculo no tiene el formato correcto'),
+            new NumericInteger($model->num_asientos),
             new NumericInteger($model->id_estado->value),
             new NumericInteger($model->id_eliminado->value),
             new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),

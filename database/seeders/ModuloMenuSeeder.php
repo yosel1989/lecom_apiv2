@@ -75,6 +75,28 @@ class ModuloMenuSeeder extends Seeder
             'id_estado'=> IdEstado::Habilitado
         ]);
 
+//        $menuVehiculoSalida =\App\Models\V2\ModuloMenu::create([
+//            'id_modulo'=> EnumModulo::Administracion,
+//            'texto'=>'Vehiculo | Salidas',
+//            'icono'=>'fa-solid fa-arrows-turn-right',
+//            'id_tipo_menu'=> EnumTipoMenu::SubMenu,
+//            'padre'=> null,
+//            'link'=>null,
+//            'id_estado'=> IdEstado::Habilitado
+//        ]);
+
+            \App\Models\V2\ModuloMenu::create([
+                'id_modulo'=> EnumModulo::Administracion,
+                'texto'=>'Cronogramas',
+                'icono'=>null,
+                'id_tipo_menu'=> EnumTipoMenu::Link,
+                'padre'=> $menuRegistro->id,
+                'link'=>'administracion/cronogramas',
+                'id_estado'=> IdEstado::Habilitado
+            ]);
+
+
+
         \App\Models\V2\ModuloMenu::create([
             'id_modulo'=> EnumModulo::Administracion,
             'texto'=>'Tipo Personal',
@@ -246,7 +268,7 @@ class ModuloMenuSeeder extends Seeder
         ]);
             \App\Models\V2\ModuloMenu::create([
                 'id_modulo'=> EnumModulo::Administracion,
-                'texto'=>'Peril',
+                'texto'=>'Perfil',
                 'icono'=>null,
                 'id_tipo_menu'=> EnumTipoMenu::Link,
                 'padre'=>$menuSeguridad->id,
@@ -262,7 +284,24 @@ class ModuloMenuSeeder extends Seeder
                 'link'=>'administracion/usuarios',
                 'id_estado'=> IdEstado::Habilitado
             ]);
-
+        $menuConfiguracion = \App\Models\V2\ModuloMenu::create([
+            'id_modulo'=> EnumModulo::Administracion,
+            'texto'=>'Configuración',
+            'icono'=> 'fa-duotone fa-gear',
+            'id_tipo_menu'=> EnumTipoMenu::SubMenu,
+            'padre'=>null,
+            'link'=>null,
+            'id_estado'=> IdEstado::Habilitado
+        ]);
+            \App\Models\V2\ModuloMenu::create([
+                'id_modulo'=> EnumModulo::Administracion,
+                'texto'=>'Medio Pago',
+                'icono'=>null,
+                'id_tipo_menu'=> EnumTipoMenu::Link,
+                'padre'=>$menuConfiguracion->id,
+                'link'=>'administracion/configuracion/medio-pago',
+                'id_estado'=> IdEstado::Habilitado
+            ]);
 
         /**********************************************************************************
          * Boletaje Interprovincial
@@ -462,6 +501,16 @@ class ModuloMenuSeeder extends Seeder
                 'id_tipo_menu' => EnumTipoMenu::Link,
                 'padre' => $menuReporte2->id,
                 'link' => 'reportes/administracion/caja/apertura-cierre',
+                'id_estado' => IdEstado::Habilitado
+            ]);
+
+            \App\Models\V2\ModuloMenu::create([
+                'id_modulo'=> EnumModulo::Reportes,
+                'texto' => 'Reporte de Caja | Traslados',
+                'icono' => null,
+                'id_tipo_menu' => EnumTipoMenu::Link,
+                'padre' => $menuReporte2->id,
+                'link' => 'reportes/caja/traslados',
                 'id_estado' => IdEstado::Habilitado
             ]);
 

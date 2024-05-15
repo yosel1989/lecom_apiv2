@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Src\V2\Vehiculo\Domain;
 use Src\Core\Domain\ValueObjects\Id;
+use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
 
 final class VehiculoShort
@@ -10,22 +11,26 @@ final class VehiculoShort
     private Id $id;
     private Text $placa;
     private Text $unidad;
+    private NumericInteger $numeroAsientos;
 
     /**
      * @param Id $id
      * @param Text $placa
      * @param Text $unidad
+     * @param NumericInteger $numeroAsientos
      */
     public function __construct(
         Id $id,
         Text $placa,
-        Text $unidad
+        Text $unidad,
+        NumericInteger $numeroAsientos
     )
     {
 
         $this->id = $id;
         $this->placa = $placa;
         $this->unidad = $unidad;
+        $this->numeroAsientos = $numeroAsientos;
     }
 
     /**
@@ -74,6 +79,22 @@ final class VehiculoShort
     public function setUnidad(Text $unidad): void
     {
         $this->unidad = $unidad;
+    }
+
+    /**
+     * @return NumericInteger
+     */
+    public function getNumeroAsientos(): NumericInteger
+    {
+        return $this->numeroAsientos;
+    }
+
+    /**
+     * @param NumericInteger $numeroAsientos
+     */
+    public function setNumeroAsientos(NumericInteger $numeroAsientos): void
+    {
+        $this->numeroAsientos = $numeroAsientos;
     }
 
 

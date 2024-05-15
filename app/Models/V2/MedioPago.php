@@ -2,6 +2,7 @@
 
 namespace App\Models\V2;
 
+use App\Enums\EnumTipoMedioPago;
 use Illuminate\Database\Eloquent\Model;
 
 class MedioPago extends Model
@@ -16,6 +17,10 @@ class MedioPago extends Model
         'nombre',
         'bl_despacho',
         'bl_entidad_financiera',
+        'id_tipo',
+
+
+        'bl_activado'
     ];
 
     /**
@@ -26,7 +31,13 @@ class MedioPago extends Model
     protected $casts = [
         'bl_despacho' =>  'bool',
         'bl_entidad_financiera' =>  'bool',
+        'bl_activado' =>  'bool',
+        'id_tipo' =>  'int',
     ];
+
+    public function tipo(){
+        return $this->hasOne( 'App\Models\V2\TipoMedioPago', 'id', 'id_tipo');
+    }
 
 
 }
