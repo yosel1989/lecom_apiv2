@@ -299,6 +299,12 @@ Route::middleware('auth:sanctum')->group(function() {
         $serieComprobante = $request->has('serieComprobante') ? $request->input('serieComprobante') : null;
         $numeroComprobante = $request->has('numeroComprobante') ? (int)$request->input('numeroComprobante') : null;
         $idTipoBoleto = $request->has('idTipoBoleto') ? (int)$request->input('idTipoBoleto') : \App\Enums\IdTipoBoleto::VentaBoleto->value;
+
+        $idCajaDiario = $request->has('idCajaDiario') ? $request->input('idCajaDiario') : null;
+        $idCronogramaSalida = $request->has('idCronogramaSalida') ? $request->input('idCronogramaSalida') : null;
+        $idEmpresa = $request->has('idEmpresa') ? $request->input('idEmpresa') : null;
+
+
         $idRazon = 0;
         $idProductoServicio = 0;
 
@@ -340,6 +346,40 @@ Route::middleware('auth:sanctum')->group(function() {
             $_caja = null;
             /** @var \App\Models\V2\Pos | null $_pos */
             $_pos = null;
+
+
+            // validar cronograma salida
+            if(!is_null($idCronogramaSalida)){
+                $CronogramaSalida = \App\Models\V2\CronogramaSalida::findOrFail($idCronogramaSalida);
+                if($CronogramaSalida->id_vehiculo !== $request->input('idVehiculo')){
+                    return response()->json([
+                        'data'      => null,
+                        'error' => 'El vehiculo no pertenece a la salida',
+                        'status' => Response::HTTP_BAD_REQUEST
+                    ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
+                }
+            }
+
+            // validar apertura caja diario
+            if(!is_null($idCajaDiario)){
+                $today = new DateTime('now');
+                $CajaDiario = \App\Models\V2\CajaDiario::findOrFail($idCajaDiario);
+                if(!is_null($CajaDiario->f_cierre)){
+                    return response()->json([
+                        'data'      => null,
+                        'error' => 'Debe aperturar la caja',
+                        'status' => Response::HTTP_BAD_REQUEST
+                    ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
+                }
+
+                if($CajaDiario->f_apertura !== $today->format('Y-m-d-')){
+                    return response()->json([
+                        'data'      => null,
+                        'error' => 'Debe cerrar la caja',
+                        'status' => Response::HTTP_BAD_REQUEST
+                    ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
+                }
+            }
 
             $Cliente = \App\Models\V2\Cliente::where('id', $request->input('idCliente'))->where('idEstado',1)->where('idEliminado',0)->get();
             if( $Cliente->isEmpty() ){
@@ -680,6 +720,11 @@ Route::middleware('auth:sanctum')->group(function() {
                 'f_emision' => (new DateTime('now'))->format('Y-m-d H:m:s'),
                 'id_estado' => 1,
                 'id_origen' => \App\Enums\EnumOrigenBoleto::POS->value,
+
+
+                'id_caja_diario' => $idCajaDiario,
+                'id_cronograma_salida' => $idCronogramaSalida,
+                'id_empresa' => $idEmpresa,
             ]);
 
 

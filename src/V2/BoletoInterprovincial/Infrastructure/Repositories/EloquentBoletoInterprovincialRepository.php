@@ -752,7 +752,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         $vehiculo = Vehiculo::findOrFail($cronogramaSalida->id_vehiculo);
         $asientosOcupados = $model
             ->select(DB::raw('COUNT(*) as total'))
-            ->join('cronograma-salida','boleto_interprovincial_cliente_' . $Cliente->first()->codigo .'.id_cronograma_salida','cronograma_salida.id')
+            ->join('cronograma_salida','boleto_interprovincial_cliente_' . $Cliente->first()->codigo .'.id_cronograma_salida','cronograma_salida.id')
             ->where('cronograma_salida.id_vehiculo', $vehiculo->id)
             ->whereDate('boleto_interprovincial_cliente_' . $Cliente->first()->codigo .'.f_partida', $today->format('Y-m-d'))
             ->where('boleto_interprovincial_cliente_' . $Cliente->first()->codigo .'.id_estado', 1)

@@ -13,5 +13,6 @@ Route::namespace('App\Http\Controllers\Api\V2\CronogramaSalida')->middleware('au
     Route::get('cronograma-salida/cronograma/{id}', 'GetCollectionByCronogramaController');
     Route::get('cronograma-salida/ruta/{id}', 'GetCollectionByRutaController');
     Route::get('cronograma-salida/{id}/cliente/{idCliente}/asientos-disponibles', 'GetAsientosDisponiblesController');
+    Route::get('cronograma-salida/vehiculo/{idVehiculo}/ruta/{idRuta}', 'GetListByVehiculoRutaFechaController');
 
 });

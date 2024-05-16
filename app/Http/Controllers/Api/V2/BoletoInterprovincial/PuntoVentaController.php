@@ -88,7 +88,7 @@ class PuntoVentaController extends Controller
 //            dd($pdf->getCanvas( ));
             unset( $pdf );
             $pdf = PDF::loadView('comprobantes.boleta-electronica', compact('boletos', 'configuracion', 'usuario', 'formatter', 'empresa'))
-                ->setPaper(array( 0 , 0 , 226.77 * $page_count + 200 , 226.77 ), 'landscape')
+                ->setPaper(array( 0 , 0 , 226.77 * $page_count + 220 , 226.77 ), 'landscape')
                 ->setOption( ['dpi' => 70, 'isRemoteEnabled' => true, 'isHtml5ParserEnabled' => true] );
 
 

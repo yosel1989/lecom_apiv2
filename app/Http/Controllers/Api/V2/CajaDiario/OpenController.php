@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\V2\CajaDiario;
 
 
 use App\Enums\EnumParametroConfiguracion;
-use App\Enums\EnumPuntoVenta;
 use App\Enums\IdEliminado;
 use App\Enums\IdEstado;
 use App\Enums\IdTipoComprobante;
@@ -69,10 +68,11 @@ class OpenController extends Controller
             $Configuracion = ClienteConfiguracion::where('id_cliente', $request->input('idCliente'))
                 ->where('id_parametro_configuracion', EnumParametroConfiguracion::NumeroComprobantesDiarios->value)->get();
 
-            $this->controller->__invoke($request);
+            $idCajaDiario = $this->controller->__invoke($request);
 
             return response()->json([
                 'data' => [
+                    'idCajaDiario' => $idCajaDiario->value(),
                     'tiposComprobante' => $request->has('idVehiculo') ? $TiposComprobante->map(function($tc, $key) use ($_vehiculo, $request) {
 
                         $serieLetra = '';

@@ -20,6 +20,7 @@ final class CloseUseCase
     }
 
     public function __invoke(
+        string $idCajaDiario,
         string $idCaja,
         string $idRuta,
         string $idCliente,
@@ -28,6 +29,7 @@ final class CloseUseCase
         string $idUsuarioRegistro
     ): void
     {
+        $_idCajaDiario = new Id($idCajaDiario,false,'El id de la caja diaria no tiene el formato correcto');
         $_idCaja = new Id($idCaja,false,'El id de la caja no tiene el formato correcto');
         $_idRuta = new Id($idRuta,false,'El id de la ruta no tiene el formato correcto');
         $_idCliente = new Id($idCliente,true,'El id del cliente no tiene el formato correcto');
@@ -36,6 +38,7 @@ final class CloseUseCase
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
         $this->repository->close(
+            $_idCajaDiario,
             $_idCaja,
             $_idRuta,
             $_idCliente,

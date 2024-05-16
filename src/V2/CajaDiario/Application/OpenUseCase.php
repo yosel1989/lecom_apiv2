@@ -26,7 +26,7 @@ final class OpenUseCase
         float $montoIncial,
         string $fechaApertura,
         string $idUsuarioRegistro
-    ): void
+    ): Id
     {
         $_idCaja = new Id($idCaja,false,'El id de la caja no tiene el formato correcto');
         $_idRuta = new Id($idRuta,false,'El id de la ruta no tiene el formato correcto');
@@ -35,7 +35,7 @@ final class OpenUseCase
         $_fechaApertura = new DateTimeFormat($fechaApertura);
         $_idUsuarioRegistro = new Id($idUsuarioRegistro,false,'El id del usuario no tiene el formato correcto');
 
-        $this->repository->open(
+        return $this->repository->open(
             $_idCaja,
             $_idRuta,
             $_idCliente,

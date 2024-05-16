@@ -38,9 +38,9 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
         NumericFloat $montoInicial,
         DateTimeFormat $fechaApertura,
         Id $idUsuarioRegistro,
-    ): void
+    ): Id
     {
-        $this->eloquentModelCajaDiario->create([
+        $model = $this->eloquentModelCajaDiario->create([
             'id_caja' =>  $idCaja->value(),
             'id_ruta' =>  $idRuta->value(),
             'id_cliente' =>  $idCliente->value(),
@@ -48,9 +48,13 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
             'f_apertura' =>  $fechaApertura->value(),
             'id_usu_registro' =>  $idUsuarioRegistro->value(),
         ]);
+
+
+        return new Id($model->id, false);
     }
 
     public function close(
+        Id $idCajaDiario,
         Id $idCaja,
         Id $idRuta,
         Id $idCliente,
@@ -60,6 +64,7 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
     ): void
     {
         $this->eloquentModelCajaDiario
+            ->where('id',$idCajaDiario->value())
             ->where('id_caja',$idCaja->value())
             ->where('id_ruta',$idRuta->value())
             ->where('id_cliente',$idCliente->value())

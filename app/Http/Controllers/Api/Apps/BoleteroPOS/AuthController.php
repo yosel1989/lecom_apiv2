@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\V2\Caja;
 use App\Models\V2\ClienteConfiguracion;
 use App\Models\V2\Destino;
+use App\Models\V2\Empresa;
 use App\Models\V2\Pos;
 use App\Models\V2\Ruta;
 use App\Models\V2\TipoDocumento;
@@ -79,6 +80,12 @@ class AuthController extends Controller
             $TiposComprobante = \App\Models\V2\TipoComprobante::where('bl_punto_venta', EnumPuntoVenta::Si)
                 ->get();
 
+            $Empresa = Empresa::where('id_cliente', $Ousuario->id_cliente)
+                ->where('predeterminado', true)
+                ->where('id_estado', 1)
+                ->where('id_eliminado',IdEliminado::NoEliminado)
+                ->get();
+
             if( $EquipoPos->isEmpty() ){
                 return response()->json([
                     'data'      => null,
@@ -124,12 +131,21 @@ class AuthController extends Controller
                 ]);
             }
 
+            if( $Empresa->isEmpty() ){
+                return response()->json([
+                    'data'      => null,
+                    'error' => 'Debe registrar la empresa para los comprobantes en el sistema',
+                    'status' => Response::HTTP_NOT_FOUND
+                ]);
+            }
+
 
 
             $_caja = $OCaja->first();
             $_equipopos = $EquipoPos->first();
             $_vehiculo = $Vehiculo->first();
             $_usuario = $Ousuario->first();
+            $_empresa = $Empresa->first();
             $_tiposComprobante = $TiposComprobante;
 
 
@@ -212,6 +228,12 @@ class AuthController extends Controller
                             'nombre' =>  $usuario->cliente->nombre,
                             'numeroDocumento' =>  !$Configuracion->isEmpty() ? (int)$Configuracion->first()->valor : ''
                         ],
+                        'empresa' => is_null($_empresa) ? null : [
+                            'id' => $_empresa->id,
+                            'nombre' => $_empresa->nombre,
+                            'ruc' => $_empresa->ruc,
+                            'direccion' => $_empresa->direccion,
+                         ],
                         'vehiculo' => [
                             'id' => $_vehiculo->id,
                             'codigo' => str_pad($_vehiculo->codigo,3,'0',STR_PAD_LEFT),

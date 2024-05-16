@@ -24,6 +24,8 @@ use Src\V2\CronogramaSalida\Domain\CronogramaSalidaGroupTipoFechaShort;
 use Src\V2\CronogramaSalida\Domain\CronogramaSalidaGroupTipoFechaShortList;
 use Src\V2\CronogramaSalida\Domain\CronogramaSalidaLiquidacionRangoFechaVehiculo;
 use Src\V2\CronogramaSalida\Domain\CronogramaSalidaList;
+use Src\V2\CronogramaSalida\Domain\CronogramaSalidaShort;
+use Src\V2\CronogramaSalida\Domain\CronogramaSalidaShortList;
 
 final class EloquentCronogramaSalidaRepository implements CronogramaSalidaRepositoryContract
 {
@@ -268,6 +270,47 @@ final class EloquentCronogramaSalidaRepository implements CronogramaSalidaReposi
             );
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
+            $OModel->setVehiculo(new Text($model->vehiculo->placa, false, -1));
+
+            $collection->add($OModel);
+        }
+
+        return $collection;
+    }
+
+
+
+    public function listByVehiculoRutaFecha(Id $idVehiculo, Id $idRuta, DateFormat $fecha): CronogramaSalidaShortList
+    {
+
+        $models = $this->eloquent->with(
+            'usuarioRegistro:id,nombres,apellidos',
+            'usuarioModifico:id,nombres,apellidos',
+            'vehiculo:id,placa'
+        )
+            ->select('cronograma_salida.*')
+            ->join('cronograma','cronograma_salida.id_cronograma','=', 'cronograma.id')
+            ->where('cronograma.id_ruta',$idRuta->value())
+            ->where('cronograma_salida.id_vehiculo',$idVehiculo->value())
+            ->where('cronograma_salida.id_estado',1)
+            ->whereDate('cronograma_salida.fecha',$fecha->value())
+            ->orderBy('cronograma_salida.fecha', 'DESC')
+            ->orderBy('cronograma_salida.hora', 'ASC')
+            ->get();
+
+
+        $collection = new CronogramaSalidaShortList();
+
+        foreach ( $models as $model ){
+
+            $OModel = new CronogramaSalidaShort(
+                new Id($model->id , false, 'El id del CronogramaSalida no tiene el formato correcto'),
+                new Id($model->id_vehiculo , false, 'El id del vehiculo no tiene el formato correcto'),
+                new DateFormat($model->fecha, false),
+                new TimeFormat($model->hora, false),
+                new NumericInteger($model->id_estado),
+                new NumericInteger($model->id_eliminado->value)
+            );
             $OModel->setVehiculo(new Text($model->vehiculo->placa, false, -1));
 
             $collection->add($OModel);

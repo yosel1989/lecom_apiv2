@@ -9,6 +9,7 @@ use Src\Core\Domain\ValueObjects\TimeFormat;
 use Src\V2\CronogramaSalida\Domain\CronogramaSalida;
 use Src\V2\CronogramaSalida\Domain\CronogramaSalidaGroupTipoFechaShortList;
 use Src\V2\CronogramaSalida\Domain\CronogramaSalidaList;
+use Src\V2\CronogramaSalida\Domain\CronogramaSalidaShortList;
 
 interface CronogramaSalidaRepositoryContract
 {
@@ -51,6 +52,8 @@ interface CronogramaSalidaRepositoryContract
     public function collectionByCronograma(Id $idCronograma): CronogramaSalidaList;
 
     public function collectionByRuta(Id $idRuta): CronogramaSalidaList;
+
+    public function listByVehiculoRutaFecha(Id $idVehiculo, Id $idRuta, DateFormat $fecha): CronogramaSalidaShortList;
 
     public function asientosDisponibles(Id $idCliente, Id $idCronogramaSalida): NumericInteger;
 

@@ -180,16 +180,20 @@
 {{--            <td></td>--}}
 {{--            <td class="text-end">{{ $boleto->getIdAsiento()->value() ? '' : "**LIBRE**" }}</td>--}}
 {{--        </tr>--}}
-{{--        <tr>--}}
-{{--            <td>F. PARTIDA</td>--}}
-{{--            <td></td>--}}
-{{--            <td class="text-end">{{ $boleto->getFechaPartida()->value() ? $boleto->getFechaPartida()->value() : "**LIBRE**" }}</td>--}}
-{{--        </tr>--}}
-{{--        <tr>--}}
-{{--            <td>H. PARTIDA</td>--}}
-{{--            <td></td>--}}
-{{--            <td class="text-end">{{ $boleto->getHoraPartida()->value() ? $boleto->getHoraPartida()->value : "**LIBRE**" }}</td>--}}
-{{--        </tr>--}}
+        @if($item->boleto->getFechaPartida()->value())
+        <tr>
+            <td>F. PARTIDA</td>
+            <td></td>
+            <td class="text-end">{{ $item->boleto->getFechaPartida()->value() ? $item->boleto->getFechaPartida()->value() : "**LIBRE**" }}</td>
+        </tr>
+        @endif
+        @if($item->boleto->getHoraPartida()->value())
+        <tr>
+            <td>H. PARTIDA</td>
+            <td></td>
+            <td class="text-end">{{ $item->boleto->getHoraPartida()->value() ? $item->boleto->getHoraPartida()->value() : "**LIBRE**" }}</td>
+        </tr>
+        @endif
         <tr>
             <td>CAJA</td>
             <td></td>

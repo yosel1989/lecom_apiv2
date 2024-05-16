@@ -17,9 +17,10 @@ interface CajaDiarioRepositoryContract
         NumericFloat $montoInicial,
         DateTimeFormat $fechaApertura,
         Id $idUsuarioRegistro
-    ): void;
+    ): Id;
 
     public function close(
+        Id $idCajaDiario,
         Id $idCaja,
         Id $idRuta,
         Id $idCliente,

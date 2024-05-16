@@ -19,6 +19,7 @@ final class CloseController
     public function __invoke( Request $request ): void
     {
         $user = Auth::user();
+        $idCajaDiario     = $request->input('idCajaDiario');
         $idCaja     = $request->input('idCaja');
         $idRuta          = $request->input('idRuta');
         $idCliente          = $request->input('idCliente');
@@ -27,6 +28,7 @@ final class CloseController
 
         $useCase = new CloseUseCase( $this->repository );
         $useCase->__invoke(
+            $idCajaDiario,
             $idCaja,
             $idRuta,
             $idCliente,
