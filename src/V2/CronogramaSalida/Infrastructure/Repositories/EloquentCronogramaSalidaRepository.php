@@ -334,6 +334,8 @@ final class EloquentCronogramaSalidaRepository implements CronogramaSalidaReposi
             ->where('boleto_interprovincial_cliente_' . $OCliente->codigo . '.id_vehiculo', $OVehiculo->id)
             ->get();
 
+//        dd($result->first()->vendidos);
+
         return new NumericInteger(($OVehiculo->num_asientos - $result->first()->vendidos) ? $OVehiculo->num_asientos - $result->first()->vendidos : 0);
 
     }
