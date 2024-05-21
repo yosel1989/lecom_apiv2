@@ -205,7 +205,6 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
         Id $idCliente
     ): CajaSede
     {
-        $collection = [];
 
         $Cliente = Cliente::findOrFail($idCliente->value(), ['id','codigo']);
         $Caja = Caja::findOrFail($idCaja->value(), ['id','nombre','id_sede']);
@@ -213,13 +212,14 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
         $result = $this->eloquentModelCajaDiario
             ->select(
                 'caja_diario.*',
-//                DB::raw("
-//                caja_diario.monto_inicial +
-//                COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id), 0) -
-//                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id),0) +
-//                COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id),0)
-//                as saldo")
-                "caja_diario.monto_inicial as saldo"
+                DB::raw("
+                caja_diario.monto_inicial +
+                COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."), 0) -
+                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."),0) +
+                COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."),0) +
+                COALESCE((SELECT SUM(monto) FROM caja_traslado WHERE id_caja_diario_destino = caja_diario.id AND id_estado = 1 AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."),0)
+                as saldo")
+//                "caja_diario.monto_inicial as saldo"
             )
             ->with(
                 'caja:id,nombre',
