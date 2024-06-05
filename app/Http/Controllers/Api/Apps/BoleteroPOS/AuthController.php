@@ -10,7 +10,6 @@ use App\Enums\IdTipoComprobante;
 use App\Models\User;
 use App\Models\V2\Caja;
 use App\Models\V2\ClienteConfiguracion;
-use App\Models\V2\Destino;
 use App\Models\V2\Empresa;
 use App\Models\V2\Pos;
 use App\Models\V2\Ruta;
@@ -19,7 +18,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use MyCLabs\Enum\Enum;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -51,10 +49,10 @@ class AuthController extends Controller
                     'status' => Response::HTTP_BAD_REQUEST
                 ]);
             }
-            if( !$request->has('placa') ){
+            if( !$request->has('idvehiculo') ){
                 return response()->json([
                     'data'      => null,
-                    'error' => 'Debe ingresar la placa',
+                    'error' => 'Debe ingresar el id del vehiculo',
                     'status' => Response::HTTP_BAD_REQUEST
                 ]);
             }
@@ -67,12 +65,20 @@ class AuthController extends Controller
                 ->where('id_eliminado',IdEliminado::NoEliminado)
                 ->get();
 
+
             $Ousuario = User::where('usuario',$request->input('usuario') )
                 ->where('id_estado', IdEstado::Habilitado)
                 ->where('id_eliminado',IdEliminado::NoEliminado)
                 ->get();
+            if( $Ousuario->isEmpty() ){
+                return response()->json([
+                    'data'      => null,
+                    'error' => 'El usuario no se encuentra registrado en el sistema o se encuentra inhabilitado.',
+                    'status' => Response::HTTP_NOT_FOUND
+                ]);
+            }
 
-            $Vehiculo = \App\Models\Administracion\Vehiculo::where('placa',$request->input('placa'))
+            $Vehiculo = \App\Models\Administracion\Vehiculo::where('id',$request->input('idvehiculo'))
                 ->where('id_estado', IdEstado::Habilitado)
                 ->where('id_eliminado',IdEliminado::NoEliminado)
                 ->get();
@@ -80,7 +86,7 @@ class AuthController extends Controller
             $TiposComprobante = \App\Models\V2\TipoComprobante::where('bl_punto_venta', EnumPuntoVenta::Si)
                 ->get();
 
-            $Empresa = Empresa::where('id_cliente', $Ousuario->id_cliente)
+            $Empresa = Empresa::where('id_cliente', $Ousuario->first()->id_cliente)
                 ->where('predeterminado', true)
                 ->where('id_estado', 1)
                 ->where('id_eliminado',IdEliminado::NoEliminado)
@@ -102,18 +108,11 @@ class AuthController extends Controller
             if( $Vehiculo->isEmpty() ){
                 return response()->json([
                     'data'      => null,
-                    'error' => 'El vehiculo con la placa '. $request->input('placa') . ' no se encuentra registrado en el sistema o se encuentra inhabilitado.',
+                    'error' => 'El vehiculo no se encuentra registrado en el sistema o se encuentra inhabilitado.',
                     'status' => Response::HTTP_NOT_FOUND
                 ]);
             }
 
-            if( $Ousuario->isEmpty() ){
-                return response()->json([
-                    'data'      => null,
-                    'error' => 'El usuario no se encuentra registrado en el sistema o se encuentra inhabilitado.',
-                    'status' => Response::HTTP_NOT_FOUND
-                ]);
-            }
 
             if( is_null($OCaja) || $OCaja->isEmpty() ){
                 return response()->json([
