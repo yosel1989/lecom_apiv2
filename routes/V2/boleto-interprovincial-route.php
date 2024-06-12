@@ -292,6 +292,9 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('app/boleto-pos-v2', function(Request $request){
 
 
+
+
+
         $idBoleto = Uuid::uuid4();
         $idComprobanteElectronico = Uuid::uuid4();
 
@@ -372,7 +375,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
                 }
 
-                if($CajaDiario->f_apertura !== $today->format('Y-m-d-')){
+                if((new \DateTime($CajaDiario->f_apertura))->format('Y-m-d') !== $today->format('Y-m-d')){
                     return response()->json([
                         'data'      => null,
                         'error' => 'Debe cerrar la caja',
