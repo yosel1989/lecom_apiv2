@@ -24,6 +24,7 @@ class PersonalListResource extends JsonResource
             'idEstado'       => $this->getIdEstado()->value(),
             'idEliminado'       => $this->getIdEliminado()->value(),
             'tipoPersonal'       => $this->getTipoPersonal()->value(),
+            'numeroDocumento'       => $this->getNumeroDocumento()->value(),
             'foto'       => $this->getFoto()->value() ? asset($this->getFoto()->value()) : null,
 
         ];

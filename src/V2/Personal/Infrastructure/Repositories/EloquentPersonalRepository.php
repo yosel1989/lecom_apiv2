@@ -22,8 +22,6 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
         $this->eloquentModelPersonal = new EloquentModelPersonal;
     }
 
-
-
     public function collectionByCliente(Id $idCliente): array
     {
         $personal = $this->eloquentModelPersonal->with(
@@ -85,7 +83,8 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
                 'id_estado',
                 'id_eliminado',
                 'id_personal_tipo',
-                'foto'
+                'foto',
+                'numero_documento'
             )
             ->where('id_cliente',$idCliente->value())
             ->where('id_estado', 1)
@@ -108,6 +107,7 @@ final class EloquentPersonalRepository implements PersonalRepositoryContract
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
             );
+            $OModel->setNumeroDocumento( new Text( $model->numero_documento,true, -1 ) );
             $OModel->setTipoPersonal( new Text( $model->tipoPersonal?->nombre,false, -1 ) );
             $OModel->setFoto( new Text( $model->foto,true, -1 ) );
 

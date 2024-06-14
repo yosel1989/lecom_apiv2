@@ -98,4 +98,12 @@ class Egreso extends Model
         return $this->hasOne('App\Models\V2\TipoDocumento','id','id_tipo_documento_entidad');
     }
 
+    public function categoria(){
+        return $this->hasOne('App\Models\V2\EgresoCategoria','id','id_egreso_categoria');
+    }
+
+    public function tipo(){
+        return $this->hasOne('App\Models\V2\EgresoTipo','id','id_egreso_tipo');
+    }
+
 }

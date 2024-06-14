@@ -15,17 +15,24 @@ interface EgresoRepositoryContract
 {
     public function create(
         Id $id,
+        NumericInteger $idOrigen,
         Id $idCliente,
-        Id $idSede,
         NumericInteger $idTipoComprobante,
+//        Text $serie,
+//        NumericInteger $numero,
+        Id $idCategoria,
+        Id $idTipo,
+        Text $detalle,
         NumericInteger $idTipoDocumentoEntidad,
         Text $numeroDocumentoEntidad,
         Text $nombreEntidad,
+        Id $idSede,
+        NumericFloat $monto,
         Id $idVehiculo,
         Id $idPersonal,
-        NumericFloat $total,
         Id $idCaja,
         Id $idCajaDiario,
+        DateFormat $fecha,
         Id $idUsuarioRegistro
     ): Egreso;
 
