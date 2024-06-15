@@ -56,7 +56,7 @@ return new class extends Migration
                 'nombre_entidad',
 
                 'id_sede',
-                'monton',
+                'monto',
                 'id_vehiculo',
                 'id_personal',
 

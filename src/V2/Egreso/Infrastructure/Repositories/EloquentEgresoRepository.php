@@ -173,7 +173,6 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
             'id_usu_registro' => $idUsuarioRegistro->value()
         ]);
 
-
         $model = $this->eloquent->with(
             'tipoComprobante:id,nombre',
             'categoria:id,nombre',

@@ -66,7 +66,8 @@ class CreateController extends Controller
             return response()->json([
                 'data' => null,
                 'error' => $e->getMessage(),
-                'status' => ResponseAlias::HTTP_BAD_REQUEST
+                'status' => ResponseAlias::HTTP_BAD_REQUEST,
+                'trace' => $e->getTrace()
             ]);
 
         }catch ( Exception $e ){
@@ -74,7 +75,8 @@ class CreateController extends Controller
             return response()->json([
                 'data' => null,
                 'error' => $e->getMessage(),
-                'status' => $e->getCode()
+                'status' => $e->getCode(),
+                'trace' => $e->getTrace()
             ]);
 
         }
