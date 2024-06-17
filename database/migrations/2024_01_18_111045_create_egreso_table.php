@@ -18,8 +18,9 @@ return new class extends Migration
             $table->integer('id_tipo_comprobante');
             $table->string('serie');
             $table->integer('numero');
-            $table->uuid('id_categoria_ingreso');
-            $table->uuid('id_tipo_ingreso');
+            $table->uuid('id_egreso_categoria');
+            $table->uuid('id_egreso_tipo');
+            $table->integer('id_medio_pago');
             $table->string('detalle', 250)->nullable();
 
             $table->integer('id_tipo_documento_entidad');
@@ -47,8 +48,9 @@ return new class extends Migration
                 'id_tipo_comprobante',
                 'serie',
                 'numero',
-                'id_categoria_ingreso',
-                'id_tipo_ingreso',
+                'id_egreso_categoria',
+                'id_egreso_tipo',
+                'id_medio_pago',
                 'detalle',
 
                 'id_tipo_documento_entidad',

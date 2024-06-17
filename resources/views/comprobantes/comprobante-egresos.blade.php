@@ -223,7 +223,7 @@
         <table style="table-layout: fixed;">
             <tr>
                 <td colspan="2" style="font-size: 10px !important" >Recibi de {{  $egreso->getNombreEntidad()->value() }} con {{  $egreso->getTipoDocumentoEntidad()->value() }} {{  $egreso->getNumeroDocumentoEntidad()->value() }} el monto de
-                    {{  $formatter->toInvoice($egreso->getImporte()->value(), 2, 'SOLES', 'CENTIMOS') }}</td>
+                    {{  $formatter->toInvoice($egreso->getMonto()->value(), 2, 'SOLES', 'CENTIMOS') }}</td>
                 <td>
                     <div class="border overflow-hidden mb-1">
                         <table style="table-layout: fixed;">

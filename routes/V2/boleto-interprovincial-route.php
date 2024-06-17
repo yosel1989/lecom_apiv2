@@ -27,7 +27,7 @@ Route::namespace('App\Http\Controllers\Api\V2\BoletoInterprovincial')->middlewar
     Route::get('cliente/{id}/boleto-interprovincial/reporte-punto-venta/usuario', 'GetReportePuntoVentaByClienteController');
     Route::post('cliente/{id}/boleto-interprovincial/punto-venta', 'PuntoVentaController');
 
-    Route::post('cliente/boleto-interprovincial/reporte/lista-pasajeros', 'GetPasajerosByVehiculoRangoFechaController');
+    Route::post('cliente/boleto-interprovincial/reporte/lista-pasajeros', 'GetPasajerosByCronogramaSalidaController');
 });
 
 //Route::namespace('App\Http\Controllers\Api\V2\BoletoInterprovincial')->group( function (){

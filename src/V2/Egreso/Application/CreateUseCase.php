@@ -37,6 +37,7 @@ final class CreateUseCase
         string $nombreEntidad,
         string $idSede,
         float $monto,
+        int $idMedioPago,
         ?string $idVehiculo,
         ?string $idPersonal,
         string $idCaja,
@@ -60,6 +61,7 @@ final class CreateUseCase
         $_nombreEntidad = new Text($nombreEntidad, false, -1, '');
         $_idSede = new Id($idSede,false,'El id de la sede no tiene el formato correcto');
         $_monto = new NumericFloat($monto);
+        $_idMedioPago = new NumericInteger($idMedioPago);
         $_idVehiculo = new Id($idVehiculo,true,'El id del vehiculo no tiene el formato correcto');
         $_idPersonal = new Id($idPersonal,true,'El id del personal no tiene el formato correcto');
         $_idCaja = new Id($idCaja,false,'El id de la caja no tiene el formato correcto');
@@ -82,6 +84,7 @@ final class CreateUseCase
             $_nombreEntidad,
             $_idSede,
             $_monto,
+            $_idMedioPago,
             $_idVehiculo,
             $_idPersonal,
             $_idCaja,

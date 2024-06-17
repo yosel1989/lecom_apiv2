@@ -9,11 +9,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
 
-class GetPasajerosByVehiculoRangoFechaController extends Controller
+class GetPasajerosByCronogramaSalidaController extends Controller
 {
-    private \Src\V2\BoletoInterprovincial\Infrastructure\GetPasajerosByVehiculoRangoFechaController $controller;
+    private \Src\V2\BoletoInterprovincial\Infrastructure\GetPasajerosByCronogramaSalidaController $controller;
 
-    public function __construct(\Src\V2\BoletoInterprovincial\Infrastructure\GetPasajerosByVehiculoRangoFechaController $controller)
+    public function __construct(\Src\V2\BoletoInterprovincial\Infrastructure\GetPasajerosByCronogramaSalidaController $controller)
     {
         $this->controller = $controller;
     }

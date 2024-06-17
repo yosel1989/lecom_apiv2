@@ -38,6 +38,7 @@ final class CreateController
 //            $serie = $request->input('serie');
 //            $numero = $request->input('numero');
             $idCategoria           = $request->input('idCategoria');
+            $idMedioPago           = $request->input('idMedioPago');
             $idTipo           = $request->input('idTipo');
             $detalle           = $request->input('detalle');
             $idTipoDocumentoEntidad           = $request->input('idTipoDocumentoEntidad');
@@ -67,6 +68,7 @@ final class CreateController
                 $nombreEntidad,
                 $idSede,
                 $monto,
+                $idMedioPago,
                 $idVehiculo,
                 $idPersonal,
                 $idCaja,

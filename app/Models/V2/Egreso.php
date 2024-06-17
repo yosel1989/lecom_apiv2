@@ -30,8 +30,9 @@ class Egreso extends Model
         'id_tipo_comprobante',
         'serie',
         'numero',
-        'id_categoria_ingreso',
-        'id_tipo_ingreso',
+        'id_egreso_categoria',
+        'id_egreso_tipo',
+        'id_medio_pago',
         'detalle',
 
         'id_tipo_documento_entidad',
@@ -109,6 +110,10 @@ class Egreso extends Model
 
     public function tipo(){
         return $this->hasOne('App\Models\V2\EgresoTipo','id','id_egreso_tipo');
+    }
+
+    public function medioPago(){
+        return $this->hasOne('App\Models\V2\MedioPago','id','id_medio_pago');
     }
 
 }

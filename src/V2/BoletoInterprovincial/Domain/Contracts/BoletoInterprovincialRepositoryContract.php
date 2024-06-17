@@ -119,11 +119,9 @@ interface BoletoInterprovincialRepositoryContract
         DateFormat $fecha
     ): array;
 
-    public function pasajerosByVehiculoRangoFecha(
+    public function pasajerosByCronogramaSalida(
         Id $idCliente,
-        Id $idVehiculo,
-        DateTimeFormat $fechaDesde,
-        DateTimeFormat $fechaHasta
+        Id $idCronogramaSalida
     ): array;
 
     public function liquidar(

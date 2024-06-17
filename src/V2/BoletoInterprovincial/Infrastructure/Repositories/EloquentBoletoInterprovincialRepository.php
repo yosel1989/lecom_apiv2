@@ -1373,11 +1373,9 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
         return $collection;
     }
 
-    public function pasajerosByVehiculoRangoFecha(
+    public function pasajerosByCronogramaSalida(
         Id $idCliente,
-        Id $idVehiculo,
-        DateTimeFormat $fechaDesde,
-        DateTimeFormat $fechaHasta
+        Id $idCronogramaSalida
     ): array
     {
         $OCliente = $this->eloquentClientModel->findOrFail($idCliente->value());
@@ -1400,11 +1398,7 @@ final class EloquentBoletoInterprovincialRepository implements BoletoInterprovin
             //->where('boleto_interprovincial_cliente_' . $OCliente->codigo .'.id_estado', 1)
             ->whereNotNull('f_partida')
             ->whereNotNull('h_partida')
-            ->whereDate('f_partida', '>=', $fechaDesde->date())
-            ->whereDate('f_partida', '<=', $fechaHasta->date())
-            ->whereTime('h_partida', '>=', $fechaDesde->time())
-            ->whereTime('h_partida', '<=', $fechaHasta->time())
-            ->where('id_vehiculo','=', $idVehiculo->value())
+            ->where('id_cronograma_salida', '>=', $idCronogramaSalida->value())
             ->orderBy('f_partida','asc')
             ->orderBy('h_partida','asc')
             ->get();

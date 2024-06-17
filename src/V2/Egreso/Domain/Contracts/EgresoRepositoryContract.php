@@ -28,6 +28,7 @@ interface EgresoRepositoryContract
         Text $nombreEntidad,
         Id $idSede,
         NumericFloat $monto,
+        NumericInteger $idMedioPago,
         Id $idVehiculo,
         Id $idPersonal,
         Id $idCaja,
