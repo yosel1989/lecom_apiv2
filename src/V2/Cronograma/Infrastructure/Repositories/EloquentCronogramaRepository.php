@@ -287,17 +287,18 @@ final class EloquentCronogramaRepository implements CronogramaRepositoryContract
         $model = $this->eloquent->with(
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
+            'tipoRuta:id,nombre',
+            'sede:id,nombre',
+            'ruta:id,nombre',
         )->findOrFail($idCronograma->value());
         $OModel = new Cronograma(
             new Id($model->id , false, 'El id del Cronograma no tiene el formato correcto'),
             new Id($model->id_cliente , false, 'El id del cliente no tiene el formato correcto'),
             new Id($model->id_sede , false, 'El id de la sede no tiene el formato correcto'),
-            new Id($model->id_vehiculo , true, 'El id del vehiculo tipo no tiene el formato correcto'),
-            new Id($model->id_personal , true, 'El id del personal tipo no tiene el formato correcto'),
-            new Id($model->id_caja , false, 'El id de la caja  no tiene el formato correcto'),
-            new Id($model->id_caja_diario , false, 'El id de la caja diario tipo no tiene el formato correcto'),
-            new NumericFloat($model->total),
-            new NumericInteger($model->id_estado->value),
+            new NumericInteger($model->id_tipo_ruta),
+            new Id($model->id_ruta , false, 'El id de la ruta no tiene el formato correcto'),
+            new DateFormat($model->fecha, false),
+            new NumericInteger($model->id_estado),
             new NumericInteger($model->id_eliminado->value),
             new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
             new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
@@ -306,6 +307,9 @@ final class EloquentCronogramaRepository implements CronogramaRepositoryContract
         );
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
+        $OModel->setSede(new Text($model->sede->nombre, false, -1));
+        $OModel->setTipoRuta(new Text($model->tipoRuta->nombre, false, -1));
+        $OModel->setRuta(new Text($model->ruta->nombre, false, -1));
 
         return $OModel;
     }
