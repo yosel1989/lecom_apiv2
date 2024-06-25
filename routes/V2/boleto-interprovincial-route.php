@@ -587,11 +587,18 @@ Route::middleware('auth:sanctum')->group(function() {
                     'motivo' => 'Error Boleto',
                     'descripcion' => 'El código del boleto ya fue registrado: ' . $request->input('codigoBoleto'),
                 ]);
+
                 return response()->json([
+                    'data' => null,
+                    'error' => null,
+                    'status' => Response::HTTP_CREATED
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
+
+                /*return response()->json([
                     'data' => null,
                     'error' => 'El código del boleto ya fue registrado',
                     'status' => 1001
-                ]);
+                ]);*/
             }
             /******* Validar que el comprobante  ******************/
             if(\App\Models\V2\ComprobanteElectronico::where('serie',$request->input('serie'))->where('numero',$request->input('numero'))->get()->count()){
@@ -599,6 +606,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'motivo' => 'Error Comprobante',
                     'descripcion' => 'La serie y el número de comprobante ya fueron registrados :' . $request->input('serie') . ' - ' . $request->input('numero'),
                 ]);
+
                 return response()->json([
                     'data' => null,
                     'error' => 'La serie y el número de comprobante ya fueron registrados',
@@ -617,6 +625,8 @@ Route::middleware('auth:sanctum')->group(function() {
                     'motivo' => 'Error Viaje',
                     'descripcion' =>  'El viaje no se encuentra registrado en el sistema: ' . $request->input('idParadero'),
                 ]);
+
+
                 return response()->json([
                     'data' => null,
                     'error' => 'El viaje no se encuentra registrado en el sistema',
@@ -643,10 +653,16 @@ Route::middleware('auth:sanctum')->group(function() {
                     'descripcion' =>  'El codigo del boleto ya fue registrado: ' . $request->input('codigoBoleto'),
                 ]);
 
-                return response()->json([
+                /*return response()->json([
                     'data' => null,
                     'error' => 'El codigo del boleto ya fue registrado',
                     'status' => 1001
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);*/
+
+                return response()->json([
+                    'data' => null,
+                    'error' => null,
+                    'status' => Response::HTTP_CREATED
                 ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
 
@@ -669,10 +685,16 @@ Route::middleware('auth:sanctum')->group(function() {
                     'descripcion' =>  'El comprobante ya fue registrado: ' . $request->input('serieComprobante') . '-' . $request->input('numeroComprobante') . ' al cliente: ' . $_cliente->id,
                 ]);
 
-                return response()->json([
+                /*return response()->json([
                     'data' => null,
                     'error' => 'El comprobante ya fue registrado',
                     'status' => 1002
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);*/
+
+                return response()->json([
+                    'data' => null,
+                    'error' => null,
+                    'status' => Response::HTTP_CREATED
                 ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
 
