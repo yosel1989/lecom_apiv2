@@ -13,17 +13,25 @@ return new class extends Migration
     {
         Schema::create('egreso', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
+            $table->integer('id_origen');
             $table->uuid('id_cliente');
             $table->integer('id_tipo_comprobante');
             $table->string('serie');
             $table->integer('numero');
+            $table->uuid('id_egreso_categoria');
+            $table->uuid('id_egreso_tipo');
+            $table->integer('id_medio_pago');
+            $table->string('detalle', 250)->nullable();
+
             $table->integer('id_tipo_documento_entidad');
             $table->string('numero_documento_entidad',15);
             $table->string('nombre_entidad',100);
+
             $table->uuid('id_sede');
+            $table->decimal('monto',10,2);
             $table->uuid('id_vehiculo')->nullable();
             $table->uuid('id_personal')->nullable();
-            $table->decimal('total',10,2);
+
             $table->tinyInteger('id_estado')->default(1);
             $table->tinyInteger('id_eliminado')->default(0);
             $table->uuid('id_caja');
@@ -35,17 +43,25 @@ return new class extends Migration
 
             $table->index([
                 'id',
+                'id_origen',
                 'id_cliente',
                 'id_tipo_comprobante',
                 'serie',
                 'numero',
+                'id_egreso_categoria',
+                'id_egreso_tipo',
+                'id_medio_pago',
+                'detalle',
+
                 'id_tipo_documento_entidad',
                 'numero_documento_entidad',
                 'nombre_entidad',
+
                 'id_sede',
+                'monto',
                 'id_vehiculo',
                 'id_personal',
-                'total',
+
                 'id_estado',
                 'id_eliminado',
                 'id_caja',

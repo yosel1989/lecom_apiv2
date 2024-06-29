@@ -49,14 +49,10 @@ final class CajaTraslado
      * @param NumericInteger $idTipoComprobante
      * @param Text $serie
      * @param NumericInteger $numero
-     * @param NumericInteger $idTipoDocumentoEntidad
-     * @param Text $numeroDocumentoEntidad
-     * @param Text $nombreEntidad
-     * @param Id $idVehiculo
      * @param Id $idPersonal
-     * @param Id $idCaja
-     * @param Id $idCajaDiario
-     * @param NumericFloat $total
+     * @param Id $idCajaOrigen
+     * @param Id $idCajaDestino
+     * @param NumericFloat $monto
      * @param NumericInteger $idEstado
      * @param NumericInteger $idEliminado
      * @param Id $idUsuarioRegistro

@@ -215,7 +215,7 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
                 DB::raw("
                 caja_diario.monto_inicial +
                 COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."), 0) -
-                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."),0) +
+                COALESCE((SELECT SUM(monto) FROM egreso WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."),0) +
                 COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."),0) +
                 COALESCE((SELECT SUM(monto) FROM caja_traslado WHERE id_caja_diario_destino = caja_diario.id AND id_estado = 1 AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."),0)
                 as saldo")
@@ -295,7 +295,7 @@ final class EloquentCajaDiarioRepository implements CajaDiarioRepositoryContract
                     DB::raw("
                     caja_diario.monto_inicial +
                 COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."), 0) -
-                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."),0) +
+                COALESCE((SELECT SUM(monto) FROM egreso WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."),0) +
                 COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."),0) +
                 COALESCE((SELECT SUM(monto) FROM caja_traslado WHERE id_caja_diario_destino = caja_diario.id AND id_estado = 1 AND id_medio_pago = ". EnuMedioPago::Efectivo->value ."),0)
                 as saldo")

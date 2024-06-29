@@ -27,7 +27,7 @@ Route::namespace('App\Http\Controllers\Api\V2\BoletoInterprovincial')->middlewar
     Route::get('cliente/{id}/boleto-interprovincial/reporte-punto-venta/usuario', 'GetReportePuntoVentaByClienteController');
     Route::post('cliente/{id}/boleto-interprovincial/punto-venta', 'PuntoVentaController');
 
-    Route::post('cliente/boleto-interprovincial/reporte/lista-pasajeros', 'GetPasajerosByVehiculoRangoFechaController');
+    Route::post('cliente/boleto-interprovincial/reporte/lista-pasajeros', 'GetPasajerosByCronogramaSalidaController');
 });
 
 //Route::namespace('App\Http\Controllers\Api\V2\BoletoInterprovincial')->group( function (){
@@ -291,8 +291,8 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::post('app/boleto-pos-v2', function(Request $request){
 
-
         $idBoleto = Uuid::uuid4();
+
         $idComprobanteElectronico = Uuid::uuid4();
 
         $idTipoComprobante = $request->has('idTipoComprobante') ? (int)$request->input('idTipoComprobante') : 0;
@@ -303,7 +303,6 @@ Route::middleware('auth:sanctum')->group(function() {
         $idCajaDiario = $request->has('idCajaDiario') ? $request->input('idCajaDiario') : null;
         $idCronogramaSalida = $request->has('idCronogramaSalida') ? $request->input('idCronogramaSalida') : null;
         $idEmpresa = $request->has('idEmpresa') ? $request->input('idEmpresa') : null;
-
 
         $idRazon = 0;
         $idProductoServicio = 0;
@@ -323,14 +322,11 @@ Route::middleware('auth:sanctum')->group(function() {
                 break;
         }
 
-
-
         try {
 
             if(!\App\Enums\IdTipoBoleto::tryFrom((int)$request->input('idTipoBoleto'))){
                 throw new InvalidArgumentException("Valor incorrecto para el tipo de boleto");
             }
-
 
             $user = Auth::user();
 
@@ -346,7 +342,6 @@ Route::middleware('auth:sanctum')->group(function() {
             $_caja = null;
             /** @var \App\Models\V2\Pos | null $_pos */
             $_pos = null;
-
 
             // validar cronograma salida
             if(!is_null($idCronogramaSalida)){
@@ -372,7 +367,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
                 }
 
-                if($CajaDiario->f_apertura !== $today->format('Y-m-d-')){
+                if((new \DateTime($CajaDiario->f_apertura))->format('Y-m-d') !== $today->format('Y-m-d')){
                     return response()->json([
                         'data'      => null,
                         'error' => 'Debe cerrar la caja',
@@ -413,7 +408,6 @@ Route::middleware('auth:sanctum')->group(function() {
                 ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
             $_vehiculo = $Vehiculo->first();
-
 
             $Ruta = \App\Models\V2\Ruta::where('id', $request->input('idRuta'))
                 ->where('id_estado',1)
@@ -578,17 +572,43 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
 
+            // Si el id es generado por el POS
+            if($request->has('idBoleto')){
+                // validar el formato del id
+                $_idBoleto = new \Src\Core\Domain\ValueObjects\Id($request->input('idBoleto'),false, 'El id del boleto no tiene el formato correcto');
+                $idBoleto = $_idBoleto->value();
+
+                // validar si el boleto ya esta registrado
+                if( $model->where('id', $idBoleto)->count() > 0 ){
+                    return response()->json([
+                        'data' => null,
+                        'error' => null,
+                        'status' => Response::HTTP_CREATED
+                    ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
+                }
+            }
+            //
+
+
+
             /******* Validar que el boleto  ******************/
             if($model->where('codigo',$request->input('codigoBoleto'))->count() > 0){
                 \App\Models\V2\LogBoletoInterprovincial::create([ 'id_cliente' => $request->idCliente,
                     'motivo' => 'Error Boleto',
                     'descripcion' => 'El código del boleto ya fue registrado: ' . $request->input('codigoBoleto'),
                 ]);
+
                 return response()->json([
+                    'data' => null,
+                    'error' => null,
+                    'status' => Response::HTTP_CREATED
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
+
+                /*return response()->json([
                     'data' => null,
                     'error' => 'El código del boleto ya fue registrado',
                     'status' => 1001
-                ]);
+                ]);*/
             }
             /******* Validar que el comprobante  ******************/
             if(\App\Models\V2\ComprobanteElectronico::where('serie',$request->input('serie'))->where('numero',$request->input('numero'))->get()->count()){
@@ -596,6 +616,7 @@ Route::middleware('auth:sanctum')->group(function() {
                     'motivo' => 'Error Comprobante',
                     'descripcion' => 'La serie y el número de comprobante ya fueron registrados :' . $request->input('serie') . ' - ' . $request->input('numero'),
                 ]);
+
                 return response()->json([
                     'data' => null,
                     'error' => 'La serie y el número de comprobante ya fueron registrados',
@@ -614,6 +635,8 @@ Route::middleware('auth:sanctum')->group(function() {
                     'motivo' => 'Error Viaje',
                     'descripcion' =>  'El viaje no se encuentra registrado en el sistema: ' . $request->input('idParadero'),
                 ]);
+
+
                 return response()->json([
                     'data' => null,
                     'error' => 'El viaje no se encuentra registrado en el sistema',
@@ -640,10 +663,16 @@ Route::middleware('auth:sanctum')->group(function() {
                     'descripcion' =>  'El codigo del boleto ya fue registrado: ' . $request->input('codigoBoleto'),
                 ]);
 
-                return response()->json([
+                /*return response()->json([
                     'data' => null,
                     'error' => 'El codigo del boleto ya fue registrado',
                     'status' => 1001
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);*/
+
+                return response()->json([
+                    'data' => null,
+                    'error' => null,
+                    'status' => Response::HTTP_CREATED
                 ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
 
@@ -666,10 +695,16 @@ Route::middleware('auth:sanctum')->group(function() {
                     'descripcion' =>  'El comprobante ya fue registrado: ' . $request->input('serieComprobante') . '-' . $request->input('numeroComprobante') . ' al cliente: ' . $_cliente->id,
                 ]);
 
-                return response()->json([
+                /*return response()->json([
                     'data' => null,
                     'error' => 'El comprobante ya fue registrado',
                     'status' => 1002
+                ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);*/
+
+                return response()->json([
+                    'data' => null,
+                    'error' => null,
+                    'status' => Response::HTTP_CREATED
                 ],200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
             }
 

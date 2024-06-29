@@ -25,17 +25,25 @@ class Egreso extends Model
      */
     protected $fillable = [
         'id',
+        'id_origen',
         'id_cliente',
-        'id_sede',
         'id_tipo_comprobante',
         'serie',
         'numero',
+        'id_egreso_categoria',
+        'id_egreso_tipo',
+        'id_medio_pago',
+        'detalle',
+
         'id_tipo_documento_entidad',
         'numero_documento_entidad',
         'nombre_entidad',
+
+        'id_sede',
+        'monto',
         'id_vehiculo',
         'id_personal',
-        'total',
+
         'id_estado',
         'id_eliminado',
         'id_caja',
@@ -43,9 +51,6 @@ class Egreso extends Model
         'id_usu_registro',
         'id_usu_modifico',
         'f_registro',
-        'f_modifico',
-        'id_tipo_comprobante',
-        'f_modifico',
         'f_modifico',
     ];
 
@@ -55,7 +60,8 @@ class Egreso extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'total' =>  'float',
+        'id_origen' =>  'int',
+        'monto' =>  'float',
         'f_registro' =>  'string',
         'f_modifico' =>  'string',
         'id_estado' => EnumEstadoEgreso::class,
@@ -96,6 +102,18 @@ class Egreso extends Model
 
     public function tipoDocumento(){
         return $this->hasOne('App\Models\V2\TipoDocumento','id','id_tipo_documento_entidad');
+    }
+
+    public function categoria(){
+        return $this->hasOne('App\Models\V2\EgresoCategoria','id','id_egreso_categoria');
+    }
+
+    public function tipo(){
+        return $this->hasOne('App\Models\V2\EgresoTipo','id','id_egreso_tipo');
+    }
+
+    public function medioPago(){
+        return $this->hasOne('App\Models\V2\MedioPago','id','id_medio_pago');
     }
 
 }

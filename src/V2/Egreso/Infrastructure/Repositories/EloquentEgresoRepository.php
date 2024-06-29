@@ -10,6 +10,9 @@ use App\Models\V2\Caja;
 use App\Models\V2\CajaDiario;
 use App\Models\V2\ComprobanteSerie;
 use App\Models\V2\Egreso as EloquentModelEgreso;
+use App\Models\V2\EgresoCategoria;
+use App\Models\V2\EgresoTipo;
+use App\Models\V2\MedioPago;
 use App\Models\V2\Sede;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
@@ -37,21 +40,30 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
 
     public function create(
         Id $id,
+        NumericInteger $idOrigen,
         Id $idCliente,
-        Id $idSede,
         NumericInteger $idTipoComprobante,
+//        Text $serie,
+//        NumericInteger $numero,
+        Id $idCategoria,
+        Id $idTipo,
+        Text $detalle,
         NumericInteger $idTipoDocumentoEntidad,
         Text $numeroDocumentoEntidad,
         Text $nombreEntidad,
+        Id $idSede,
+        NumericFloat $monto,
+        NumericInteger $idMedioPago,
         Id $idVehiculo,
         Id $idPersonal,
-        NumericFloat $total,
         Id $idCaja,
         Id $idCajaDiario,
+        DateFormat $fecha,
         Id $idUsuarioRegistro
     ): Egreso
     {
-        if($total->value() === 0){
+        // validar monto > 0
+        if($monto->value() === 0){
             throw new InvalidArgumentException('El total debe ser mayor a 0');
         }
 
@@ -99,6 +111,25 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
             }
         }
 
+
+        // validar categoria
+        $Categoria = EgresoCategoria::where('id', $idCategoria->value())->where('id_estado', 1)->where('id_eliminado',0)->where('id_cliente',$idCliente->value());
+        if( $Categoria->count() === 0 ){
+            throw new InvalidArgumentException( 'La categoria no se encuentra registrado en el sistema o esta inhabilitado.' );
+        }
+
+        // validar medio pago
+        $MedioPago = MedioPago::where('id', $idMedioPago->value());
+        if( $Categoria->count() === 0 ){
+            throw new InvalidArgumentException( 'El medio de pago no se encuentra registrado en el sistema o esta inhabilitado.' );
+        }
+
+        // validar tipo
+        $Tipo = EgresoTipo::where('id', $idTipo->value())->where('id_estado', 1)->where('id_eliminado',0)->where('id_cliente',$idCliente->value());
+        if( $Tipo->count() === 0 ){
+            throw new InvalidArgumentException( 'El tipo no se encuentra registrado en el sistema o esta inhabilitado.' );
+        }
+
         // Validar cliente
         $Cliente = \App\Models\V2\Cliente::where('id', $idCliente->value())->where('idEstado',1)->where('idEliminado',0);
         if( $Cliente->count() === 0 ){
@@ -129,68 +160,81 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
 
         $this->eloquent->create([
             'id' => $id->value(),
+            'id_origen' => $idOrigen->value(),
             'id_cliente' => $idCliente->value(),
-            'id_sede' => $idSede->value(),
             'id_tipo_comprobante' => $idTipoComprobante->value(),
             'serie' =>  $Serie->first()->nombre,
             'numero' =>  $ultimoNumero->ultimo_numero ? ($ultimoNumero->ultimo_numero + 1) : 1,
+            'id_egreso_categoria' =>  $idCategoria->value(),
+            'id_egreso_tipo' => $idTipo->value(),
+            'detalle' => $detalle->value(),
             'id_tipo_documento_entidad' => $idTipoDocumentoEntidad->value(),
             'numero_documento_entidad' => $numeroDocumentoEntidad->value(),
             'nombre_entidad' => $nombreEntidad->value(),
+            'id_sede' => $idSede->value(),
+            'monto' => $monto->value(),
+            'id_medio_pago' => $MedioPago->first()->id,
             'id_vehiculo' => $idVehiculo->value(),
             'id_personal' => $idPersonal->value(),
-            'total' => $total->value(),
+            'id_estado' => 1,
             'id_caja' => $idCaja->value(),
             'id_caja_diario' => $idCajaDiario->value(),
-            'id_estado' => 1,
             'id_usu_registro' => $idUsuarioRegistro->value()
         ]);
 
-
         $model = $this->eloquent->with(
+            'tipoComprobante:id,nombre',
+            'medioPago:id,nombre',
+            'categoria:id,nombre',
+            'tipo:id,nombre',
+            'tipoDocumento:id,nombre_corto',
+            'sede:id,nombre',
+            'vehiculo:id,placa',
+            'personal:id,nombre,apellido',
+            'estado:id,nombre',
+            'caja:id,nombre',
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
-            'tipoComprobante:id,nombre',
-            'sede:id,nombre',
-            'caja:id,nombre',
-            'tipoDocumento:id,nombre_corto',
-            'personal:id,nombre,apellido',
-            'vehiculo:id,placa',
-            'estado:id,nombre',
         )->findOrFail($id->value());
         $OModel = new Egreso(
             new Id($model->id , false, 'El id del egreso no tiene el formato correcto'),
+            new NumericInteger($model->id_origen),
             new Id($model->id_cliente , false, 'El id del cliente no tiene el formato correcto'),
-            new Id($model->id_sede , false, 'El id de la sede no tiene el formato correcto'),
             new NumericInteger($model->id_tipo_comprobante),
             new Text($model->serie, false, -1, ''),
             new NumericInteger($model->numero),
+            new Id($model->id_egreso_categoria , false, 'El id de la categoria no tiene el formato correcto'),
+            new Id($model->id_egreso_tipo , false, 'El id del ingreso no tiene el formato correcto'),
+            new Text($model->detalle, false, -1, ''),
             new NumericInteger($model->id_tipo_documento_entidad ),
             new Text($model->numero_documento_entidad, false, -1, ''),
             new Text($model->nombre_entidad, false, -1, ''),
+            new Id($model->id_sede , false, 'El id de la sede no tiene el formato correcto'),
+            new NumericFloat($model->monto),
+            new NumericInteger($model->id_medio_pago),
             new Id($model->id_vehiculo , true, 'El id del vehiculo tipo no tiene el formato correcto'),
             new Id($model->id_personal , true, 'El id del personal tipo no tiene el formato correcto'),
-            new Id($model->id_caja , false, 'El id de la caja  no tiene el formato correcto'),
-            new Id($model->id_caja_diario , false, 'El id de la caja diario tipo no tiene el formato correcto'),
-            new NumericFloat($model->total),
             new NumericInteger($model->id_estado->value),
             new NumericInteger($model->id_eliminado->value),
+            new Id($model->id_caja , false, 'El id de la caja  no tiene el formato correcto'),
+            new Id($model->id_caja_diario , false, 'El id de la caja diario tipo no tiene el formato correcto'),
             new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
             new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
             new DateTimeFormat($model->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
             new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
         );
+        $OModel->setTipoComprobante(new Text($model->tipoComprobante->nombre, false, -1));
+        $OModel->setCategoria(new Text($model->categoria->nombre, false, -1));
+        $OModel->setTipo(new Text($model->tipo->nombre, false, -1));
+        $OModel->setTipoDocumentoEntidad(new Text($model->tipoDocumento->nombre_corto, false, -1));
+        $OModel->setSede(new Text($model->sede->nombre, false, -1));
+        $OModel->setVehiculo(new Text($model->vehiculo?->placa, true, -1));
+        $OModel->setPersonal(new Text($model->personal ? ($model->personal->nombre . ' ' . $model->personal->apellido) : null, true, -1));
+        $OModel->setEstado(new Text($model->estado->nombre, false, -1));
+        $OModel->setMedioPago(new Text($model->medioPago->nombre, false, -1));
+        $OModel->setCaja(new Text($model->caja?->nombre, false, -1));
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
-        $OModel->setSede(new Text($model->sede->nombre, false, -1));
-        $OModel->setTipoComprobante(new Text($model->tipoComprobante->nombre, false, -1));
-        $OModel->setTipoDocumentoEntidad(new Text($model->tipoDocumento->nombre_corto, false, -1));
-        $OModel->setCaja(new Text($model->caja?->nombre, false, -1));
-        $OModel->setVehiculo(new Text($model->vehiculo?->placa, true, -1));
-//            $OModel->setIdVehiculo(new Id($model->vehiculo?->id, true));
-        $OModel->setPersonal(new Text($model->personal ? ($model->personal->nombre . ' ' . $model->personal->apellido) : null, true, -1));
-//            $OModel->setIdPersonal(new Id($model->personal?->id, true));
-        $OModel->setEstado(new Text($model->estado->nombre, false, -1));
 
         return $OModel;
 
@@ -206,15 +250,18 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
     public function reporteByCliente(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta, Id $idVehiculo, Id $idPersonal): EgresoList
     {
         $models = $this->eloquent->with(
+            'tipoComprobante:id,nombre',
+            'medioPago:id,nombre',
+            'categoria:id,nombre',
+            'tipo:id,nombre',
+            'tipoDocumento:id,nombre_corto',
+            'sede:id,nombre',
+            'vehiculo:id,placa',
+            'personal:id,nombre,apellido',
+            'estado:id,nombre',
+            'caja:id,nombre',
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
-            'tipoComprobante:id,nombre',
-            'sede:id,nombre',
-            'caja:id,nombre',
-            'tipoDocumento:id,nombre_corto',
-            'personal:id,nombre,apellido',
-            'vehiculo:id,placa',
-            'estado:id,nombre',
         )
 //            ->leftJoin('egreso_detalle', 'egreso.id', '=', 'egreso_detalle.id_egreso')
 //            ->leftjoin('ce_comprobante_electronico',  'egreso.id', '=', 'ce_comprobante_electronico.id_producto')
@@ -240,37 +287,43 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
 
             $OModel = new Egreso(
                 new Id($model->id , false, 'El id del egreso no tiene el formato correcto'),
+                new NumericInteger($model->id_origen),
                 new Id($model->id_cliente , false, 'El id del cliente no tiene el formato correcto'),
-                new Id($model->id_sede , false, 'El id de la sede no tiene el formato correcto'),
                 new NumericInteger($model->id_tipo_comprobante),
                 new Text($model->serie, false, -1, ''),
                 new NumericInteger($model->numero),
+                new Id($model->id_egreso_categoria , false, 'El id de la categoria no tiene el formato correcto'),
+                new Id($model->id_egreso_tipo , false, 'El id del ingreso no tiene el formato correcto'),
+                new Text($model->detalle, false, -1, ''),
                 new NumericInteger($model->id_tipo_documento_entidad ),
                 new Text($model->numero_documento_entidad, false, -1, ''),
                 new Text($model->nombre_entidad, false, -1, ''),
+                new Id($model->id_sede , false, 'El id de la sede no tiene el formato correcto'),
+                new NumericFloat($model->monto),
+                new NumericInteger($model->id_medio_pago),
                 new Id($model->id_vehiculo , true, 'El id del vehiculo tipo no tiene el formato correcto'),
                 new Id($model->id_personal , true, 'El id del personal tipo no tiene el formato correcto'),
-                new Id($model->id_caja , false, 'El id de la caja  no tiene el formato correcto'),
-                new Id($model->id_caja_diario , false, 'El id de la caja diario tipo no tiene el formato correcto'),
-                new NumericFloat($model->total),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
+                new Id($model->id_caja , false, 'El id de la caja  no tiene el formato correcto'),
+                new Id($model->id_caja_diario , false, 'El id de la caja diario tipo no tiene el formato correcto'),
                 new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
                 new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
                 new DateTimeFormat($model->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
                 new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
             );
+            $OModel->setTipoComprobante(new Text($model->tipoComprobante->nombre, false, -1));
+            $OModel->setCategoria(new Text($model->categoria->nombre, false, -1));
+            $OModel->setTipo(new Text($model->tipo->nombre, false, -1));
+            $OModel->setTipoDocumentoEntidad(new Text($model->tipoDocumento->nombre_corto, false, -1));
+            $OModel->setSede(new Text($model->sede->nombre, false, -1));
+            $OModel->setVehiculo(new Text($model->vehiculo?->placa, true, -1));
+            $OModel->setPersonal(new Text($model->personal ? ($model->personal->nombre . ' ' . $model->personal->apellido) : null, true, -1));
+            $OModel->setEstado(new Text($model->estado->nombre, false, -1));
+            $OModel->setMedioPago(new Text($model->medioPago->nombre, false, -1));
+            $OModel->setCaja(new Text($model->caja?->nombre, false, -1));
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
-            $OModel->setSede(new Text($model->sede->nombre, false, -1));
-            $OModel->setTipoComprobante(new Text($model->tipoComprobante->nombre, false, -1));
-            $OModel->setTipoDocumentoEntidad(new Text($model->tipoDocumento->nombre_corto, false, -1));
-            $OModel->setCaja(new Text($model->caja?->nombre, false, -1));
-            $OModel->setVehiculo(new Text($model->vehiculo?->placa, true, -1));
-//            $OModel->setIdVehiculo(new Id($model->vehiculo?->id, true));
-            $OModel->setPersonal(new Text($model->personal ? ($model->personal->nombre . ' ' . $model->personal->apellido) : null, true, -1));
-//            $OModel->setIdPersonal(new Id($model->personal?->id, true));
-            $OModel->setEstado(new Text($model->estado->nombre, false, -1));
 
             $collection->add($OModel);
         }
@@ -281,15 +334,18 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
     public function reporteDespachoByCliente(Id $idCliente, Id $idUsuario, DateFormat $fecha): EgresoList
     {
         $models = $this->eloquent->with(
-            'usuarioRegistro:id,nombres,apellidos',
-            'usuarioModifico:id,nombres,apellidos',
             'tipoComprobante:id,nombre',
-            'sede:id,nombre',
-            'caja:id,nombre',
-            'estado:id,nombre',
+            'categoria:id,nombre',
+            'tipo:id,nombre',
             'tipoDocumento:id,nombre_corto',
+            'sede:id,nombre',
             'vehiculo:id,placa',
             'personal:id,nombre,apellido',
+            'estado:id,nombre',
+            'caja:id,nombre',
+            'medioPago:id,nombre',
+            'usuarioRegistro:id,nombres,apellidos',
+            'usuarioModifico:id,nombres,apellidos',
         )
 //            ->leftjoin('ce_comprobante_electronico',  'egreso.id', '=', 'ce_comprobante_electronico.id_producto')
 //            ->leftjoin('tipo_comprobante',  'ce_comprobante_electronico.id_tipo_comprobante', '=', 'tipo_comprobante.id')
@@ -305,37 +361,43 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
 
             $OModel = new Egreso(
                 new Id($model->id , false, 'El id del egreso no tiene el formato correcto'),
+                new NumericInteger($model->id_origen),
                 new Id($model->id_cliente , false, 'El id del cliente no tiene el formato correcto'),
-                new Id($model->id_sede , false, 'El id de la sede no tiene el formato correcto'),
                 new NumericInteger($model->id_tipo_comprobante),
                 new Text($model->serie, false, -1, ''),
                 new NumericInteger($model->numero),
+                new Id($model->id_egreso_categoria , false, 'El id de la categoria no tiene el formato correcto'),
+                new Id($model->id_egreso_tipo , false, 'El id del ingreso no tiene el formato correcto'),
+                new Text($model->detalle, false, -1, ''),
                 new NumericInteger($model->id_tipo_documento_entidad ),
                 new Text($model->numero_documento_entidad, false, -1, ''),
                 new Text($model->nombre_entidad, false, -1, ''),
+                new Id($model->id_sede , false, 'El id de la sede no tiene el formato correcto'),
+                new NumericFloat($model->monto),
+                new NumericInteger($model->id_medio_pago),
                 new Id($model->id_vehiculo , true, 'El id del vehiculo tipo no tiene el formato correcto'),
                 new Id($model->id_personal , true, 'El id del personal tipo no tiene el formato correcto'),
-                new Id($model->id_caja , false, 'El id de la caja  no tiene el formato correcto'),
-                new Id($model->id_caja_diario , false, 'El id de la caja diario tipo no tiene el formato correcto'),
-                new NumericFloat($model->total),
                 new NumericInteger($model->id_estado->value),
                 new NumericInteger($model->id_eliminado->value),
+                new Id($model->id_caja , false, 'El id de la caja  no tiene el formato correcto'),
+                new Id($model->id_caja_diario , false, 'El id de la caja diario tipo no tiene el formato correcto'),
                 new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
                 new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
                 new DateTimeFormat($model->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
                 new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
             );
+            $OModel->setTipoComprobante(new Text($model->tipoComprobante->nombre, false, -1));
+            $OModel->setCategoria(new Text($model->categoria->nombre, false, -1));
+            $OModel->setTipo(new Text($model->tipo->nombre, false, -1));
+            $OModel->setTipoDocumentoEntidad(new Text($model->tipoDocumento->nombre_corto, false, -1));
+            $OModel->setSede(new Text($model->sede->nombre, false, -1));
+            $OModel->setVehiculo(new Text($model->vehiculo?->placa, true, -1));
+            $OModel->setPersonal(new Text($model->personal ? ($model->personal->nombre . ' ' . $model->personal->apellido) : null, true, -1));
+            $OModel->setEstado(new Text($model->estado->nombre, false, -1));
+            $OModel->setCaja(new Text($model->caja?->nombre, false, -1));
+            $OModel->setMedioPago(new Text($model->medioPago?->nombre, false, -1));
             $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
             $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
-            $OModel->setSede(new Text($model->sede->nombre, false, -1));
-            $OModel->setTipoComprobante(new Text($model->tipoComprobante->nombre, false, -1));
-            $OModel->setTipoDocumentoEntidad(new Text($model->tipoDocumento->nombre_corto, false, -1));
-            $OModel->setCaja(new Text($model->caja?->nombre, false, -1));
-            $OModel->setVehiculo(new Text($model->vehiculo?->placa, true, -1));
-//            $OModel->setIdVehiculo(new Id($model->vehiculo?->id, true));
-            $OModel->setPersonal(new Text($model->personal ? ($model->personal->nombre . ' ' . $model->personal->apellido) : null, true, -1));
-//            $OModel->setIdPersonal(new Id($model->personal?->id, true));
-            $OModel->setEstado(new Text($model->estado->nombre, false, -1));
 
 
             $collection->add($OModel);
@@ -349,25 +411,56 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
     ): Egreso
     {
         $model = $this->eloquent->with(
+            'tipoComprobante:id,nombre',
+            'categoria:id,nombre',
+            'tipo:id,nombre',
+            'tipoDocumento:id,nombre_corto',
+            'sede:id,nombre',
+            'vehiculo:id,placa',
+            'personal:id,nombre,apellido',
+            'estado:id,nombre',
+            'caja:id,nombre',
+            'medioPago:id,nombre',
             'usuarioRegistro:id,nombres,apellidos',
             'usuarioModifico:id,nombres,apellidos',
         )->findOrFail($idEgreso->value());
         $OModel = new Egreso(
             new Id($model->id , false, 'El id del egreso no tiene el formato correcto'),
+            new NumericInteger($model->id_origen),
             new Id($model->id_cliente , false, 'El id del cliente no tiene el formato correcto'),
+            new NumericInteger($model->id_tipo_comprobante),
+            new Text($model->serie, false, -1, ''),
+            new NumericInteger($model->numero),
+            new Id($model->id_egreso_categoria , false, 'El id de la categoria no tiene el formato correcto'),
+            new Id($model->id_egreso_tipo , false, 'El id del ingreso no tiene el formato correcto'),
+            new Text($model->detalle, false, -1, ''),
+            new NumericInteger($model->id_tipo_documento_entidad ),
+            new Text($model->numero_documento_entidad, false, -1, ''),
+            new Text($model->nombre_entidad, false, -1, ''),
             new Id($model->id_sede , false, 'El id de la sede no tiene el formato correcto'),
+            new NumericFloat($model->monto),
+            new NumericInteger($model->id_medio_pago),
             new Id($model->id_vehiculo , true, 'El id del vehiculo tipo no tiene el formato correcto'),
             new Id($model->id_personal , true, 'El id del personal tipo no tiene el formato correcto'),
-            new Id($model->id_caja , false, 'El id de la caja  no tiene el formato correcto'),
-            new Id($model->id_caja_diario , false, 'El id de la caja diario tipo no tiene el formato correcto'),
-            new NumericFloat($model->total),
             new NumericInteger($model->id_estado->value),
             new NumericInteger($model->id_eliminado->value),
+            new Id($model->id_caja , false, 'El id de la caja  no tiene el formato correcto'),
+            new Id($model->id_caja_diario , false, 'El id de la caja diario tipo no tiene el formato correcto'),
             new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
             new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
             new DateTimeFormat($model->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
             new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
         );
+        $OModel->setTipoComprobante(new Text($model->tipoComprobante->nombre, false, -1));
+        $OModel->setCategoria(new Text($model->categoria->nombre, false, -1));
+        $OModel->setTipo(new Text($model->tipo->nombre, false, -1));
+        $OModel->setTipoDocumentoEntidad(new Text($model->tipoDocumento->nombre_corto, false, -1));
+        $OModel->setSede(new Text($model->sede->nombre, false, -1));
+        $OModel->setVehiculo(new Text($model->vehiculo?->placa, true, -1));
+        $OModel->setPersonal(new Text($model->personal ? ($model->personal->nombre . ' ' . $model->personal->apellido) : null, true, -1));
+        $OModel->setEstado(new Text($model->estado->nombre, false, -1));
+        $OModel->setCaja(new Text($model->caja?->nombre, false, -1));
+        $OModel->setMedioPago(new Text($model->medioPago?->nombre, false, -1));
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
 
@@ -380,48 +473,58 @@ final class EloquentEgresoRepository implements EgresoRepositoryContract
     ): Egreso
     {
         $model = $this->eloquent->with(
-            'usuarioRegistro:id,nombres,apellidos',
-            'usuarioModifico:id,nombres,apellidos',
             'tipoComprobante:id,nombre',
-            'sede:id,nombre',
-            'caja:id,nombre',
+            'categoria:id,nombre',
+            'tipo:id,nombre',
             'tipoDocumento:id,nombre_corto',
+            'sede:id,nombre',
             'vehiculo:id,placa',
             'personal:id,nombre,apellido',
+            'estado:id,nombre',
+            'caja:id,nombre',
+            'medioPago:id,nombre',
+            'usuarioRegistro:id,nombres,apellidos',
+            'usuarioModifico:id,nombres,apellidos',
         )->findOrFail($idEgreso->value());
         $OModel = new Egreso(
             new Id($model->id , false, 'El id del egreso no tiene el formato correcto'),
+            new NumericInteger($model->id_origen),
             new Id($model->id_cliente , false, 'El id del cliente no tiene el formato correcto'),
-            new Id($model->id_sede , false, 'El id de la sede no tiene el formato correcto'),
             new NumericInteger($model->id_tipo_comprobante),
             new Text($model->serie, false, -1, ''),
             new NumericInteger($model->numero),
+            new Id($model->id_egreso_categoria , false, 'El id de la categoria no tiene el formato correcto'),
+            new Id($model->id_egreso_tipo , false, 'El id del ingreso no tiene el formato correcto'),
+            new Text($model->detalle, false, -1, ''),
             new NumericInteger($model->id_tipo_documento_entidad ),
             new Text($model->numero_documento_entidad, false, -1, ''),
             new Text($model->nombre_entidad, false, -1, ''),
+            new Id($model->id_sede , false, 'El id de la sede no tiene el formato correcto'),
+            new NumericFloat($model->monto),
+            new NumericInteger($model->id_medio_pago),
             new Id($model->id_vehiculo , true, 'El id del vehiculo tipo no tiene el formato correcto'),
             new Id($model->id_personal , true, 'El id del personal tipo no tiene el formato correcto'),
-            new Id($model->id_caja , false, 'El id de la caja  no tiene el formato correcto'),
-            new Id($model->id_caja_diario , false, 'El id de la caja diario tipo no tiene el formato correcto'),
-            new NumericFloat($model->total),
             new NumericInteger($model->id_estado->value),
             new NumericInteger($model->id_eliminado->value),
+            new Id($model->id_caja , false, 'El id de la caja  no tiene el formato correcto'),
+            new Id($model->id_caja_diario , false, 'El id de la caja diario tipo no tiene el formato correcto'),
             new Id($model->id_usu_registro, true, 'El id del usuario que registro no tiene el formato correcto'),
             new Id($model->id_usu_modifico, true, 'El id del usuario que modifico no tiene el formato correcto'),
             new DateTimeFormat($model->f_registro, false, 'El formato de la fecha de registro no tiene el formato correcto'),
             new DateTimeFormat($model->f_modifico, true, 'El formato de la fecha de modificación no tiene el formato correcto'),
         );
+        $OModel->setTipoComprobante(new Text($model->tipoComprobante->nombre, false, -1));
+        $OModel->setCategoria(new Text($model->categoria->nombre, false, -1));
+        $OModel->setTipo(new Text($model->tipo->nombre, false, -1));
+        $OModel->setTipoDocumentoEntidad(new Text($model->tipoDocumento->nombre_corto, false, -1));
+        $OModel->setSede(new Text($model->sede->nombre, false, -1));
+        $OModel->setVehiculo(new Text($model->vehiculo?->placa, true, -1));
+        $OModel->setPersonal(new Text($model->personal ? ($model->personal->nombre . ' ' . $model->personal->apellido) : null, true, -1));
+        $OModel->setEstado(new Text($model->estado->nombre, false, -1));
+        $OModel->setCaja(new Text($model->caja?->nombre, false, -1));
+        $OModel->setMedioPago(new Text($model->medioPago?->nombre, false, -1));
         $OModel->setUsuarioRegistro(new Text(!is_null($model->usuarioRegistro) ? ( $model->usuarioRegistro->nombres . ' ' . $model->usuarioRegistro->apellidos ) : null, true, -1));
         $OModel->setUsuarioModifico(new Text(!is_null($model->usuarioModifico) ? ( $model->usuarioModifico->nombres . ' ' . $model->usuarioModifico->apellidos ) : null, true, -1));
-        $OModel->setSede(new Text($model->sede->nombre, false, -1));
-        $OModel->setTipoComprobante(new Text($model->tipoComprobante->nombre, false, -1));
-        $OModel->setTipoDocumentoEntidad(new Text($model->tipoDocumento->nombre_corto, false, -1));
-        $OModel->setCaja(new Text($model->caja?->nombre, false, -1));
-        $OModel->setVehiculo(new Text($model->vehiculo?->placa, true, -1));
-//            $OModel->setIdVehiculo(new Id($model->vehiculo?->id, true));
-        $OModel->setPersonal(new Text($model->personal ? ($model->personal->nombre . ' ' . $model->personal->apellido) : null, true, -1));
-//            $OModel->setIdPersonal(new Id($model->personal?->id, true));
-        $OModel->setEstado(new Text($model->estado->nombre, false, -1));
 
         return $OModel;
     }

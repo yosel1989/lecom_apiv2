@@ -8,7 +8,7 @@ use Src\V2\CronogramaSalida\Application\GetListByVehiculoRutaFechaUseCase;
 use Src\V2\CronogramaSalida\Domain\CronogramaSalidaShortList;
 use Src\V2\CronogramaSalida\Infrastructure\Repositories\EloquentCronogramaSalidaRepository;
 
-final class GetListByVehiculoRutaFechaController
+final class GetListModelAController
 {
     private EloquentCronogramaSalidaRepository $repository;
 
@@ -23,9 +23,9 @@ final class GetListByVehiculoRutaFechaController
      */
     public function __invoke( Request $request ): CronogramaSalidaShortList
     {
-        $idVehiculo = $request->idVehiculo;
+        $fecha = $request->fecha;
         $idRuta = $request->idRuta;
-        $fecha = (new \DateTime('now'))->format('Y-m-d');
+        $idVehiculo = $request->idVehiculo;
         $useCase = new GetListByVehiculoRutaFechaUseCase($this->repository);
         return $useCase->__invoke($idVehiculo, $idRuta, $fecha);
     }

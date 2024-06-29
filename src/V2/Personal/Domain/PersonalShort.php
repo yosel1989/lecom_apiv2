@@ -18,6 +18,7 @@ final class PersonalShort
     private Id $idSede;
 
     // secondary
+    private Text $numeroDocumento;
     private Text $tipoPersonal;
     private Text $foto;
 
@@ -192,6 +193,22 @@ final class PersonalShort
     public function setFoto(Text $foto): void
     {
         $this->foto = $foto;
+    }
+
+    /**
+     * @return Text
+     */
+    public function getNumeroDocumento(): Text
+    {
+        return $this->numeroDocumento;
+    }
+
+    /**
+     * @param Text $numeroDocumento
+     */
+    public function setNumeroDocumento(Text $numeroDocumento): void
+    {
+        $this->numeroDocumento = $numeroDocumento;
     }
 
 

@@ -55,6 +55,8 @@ interface CronogramaSalidaRepositoryContract
 
     public function listByVehiculoRutaFecha(Id $idVehiculo, Id $idRuta, DateFormat $fecha): CronogramaSalidaShortList;
 
+    public function listByModelA(Id $idVehiculo, Id $idRuta, DateFormat $fecha): CronogramaSalidaShortList;
+
     public function asientosDisponibles(Id $idCliente, Id $idCronogramaSalida): NumericInteger;
 
     public function reporteByClienteGroupTipoFecha(Id $idCliente, DateFormat $fechaDesde, DateFormat $fechaHasta): CronogramaSalidaGroupTipoFechaShortList;

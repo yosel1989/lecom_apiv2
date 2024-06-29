@@ -19,9 +19,11 @@ return new class extends Migration
             $table->integer('numero');
             $table->uuid('id_tipo_ingreso');
             $table->string('detalle', 250)->nullable();
+
             $table->integer('id_tipo_documento_entidad');
             $table->string('numero_documento_entidad',15);
             $table->string('nombre_entidad',100);
+
             $table->uuid('id_sede');
             $table->decimal('importe',10,2);
             $table->tinyInteger('id_estado')->default(1);

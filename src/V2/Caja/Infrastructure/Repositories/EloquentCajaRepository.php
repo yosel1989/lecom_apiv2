@@ -219,7 +219,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
                 $saldo = CajaDiario::select(
                     DB::raw("
                 COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id), 0) -
-                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id),0) +
+                COALESCE((SELECT SUM(monto) FROM egreso WHERE id_caja_diario = caja_diario.id),0) +
                 COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id),0)
                 as saldo")
                 )->where('id', $OModel->getIdCajaDiario()->value())->get()->first()->saldo;
@@ -292,7 +292,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
                 $saldo = CajaDiario::select(
                     DB::raw("
                 COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id), 0) -
-                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id),0) +
+                COALESCE((SELECT SUM(monto) FROM egreso WHERE id_caja_diario = caja_diario.id),0) +
                 COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id),0)
                 as saldo")
                 )->where('id', $OModel->getIdCajaDiario()->value())->get()->first()->saldo;
@@ -364,7 +364,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
                 $saldo = CajaDiario::select(
                     DB::raw("
                 COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id), 0) -
-                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id),0) +
+                COALESCE((SELECT SUM(monto) FROM egreso WHERE id_caja_diario = caja_diario.id),0) +
                 COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id),0)
                 as saldo")
                 )->where('id', $OModel->getIdCajaDiario()->value())->get()->first()->saldo;
@@ -548,7 +548,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             $saldo = CajaDiario::select(
                 DB::raw("
                 COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id), 0) -
-                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id),0) +
+                COALESCE((SELECT SUM(monto) FROM egreso WHERE id_caja_diario = caja_diario.id),0) +
                 COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id),0)
                 as saldo")
             )->where('id', $OModel->getIdCajaDiario()->value())->get()->first()->saldo;
@@ -601,7 +601,7 @@ final class EloquentCajaRepository implements CajaRepositoryContract
             $saldo = CajaDiario::select(
                 DB::raw("
                 COALESCE((SELECT SUM(importe) FROM ingreso WHERE id_caja_diario = caja_diario.id), 0) -
-                COALESCE((SELECT SUM(egreso_detalle.importe) FROM egreso INNER JOIN egreso_detalle on egreso.id = egreso_detalle.id_egreso WHERE id_caja_diario = caja_diario.id),0) +
+                COALESCE((SELECT SUM(monto) FROM egreso WHERE id_caja_diario = caja_diario.id),0) +
                 COALESCE((SELECT SUM(precio) FROM boleto_interprovincial_cliente_".$Cliente->codigo." WHERE id_caja_diario = caja_diario.id),0)
                 as saldo")
             )->where('id', $OModel->getIdCajaDiario()->value())->get()->first()->saldo;
