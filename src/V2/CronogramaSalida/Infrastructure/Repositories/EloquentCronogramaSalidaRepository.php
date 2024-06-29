@@ -49,7 +49,11 @@ final class EloquentCronogramaSalidaRepository implements CronogramaSalidaReposi
     ): void
     {
         // Validar que no se repita
-        $CronogramaSalida = $this->eloquent->where('id_cliente', $idCliente->value())->whereDate('fecha', $fecha->value())->whereTime('hora', $hora->value())->where('id_cronograma', $idCronograma->value())->where('id_estado', 1);
+        $CronogramaSalida = $this->eloquent->where('id_cliente', $idCliente->value())
+            ->whereDate('fecha', $fecha->value())
+            ->whereTime('hora', $hora->value())
+            ->where('id_cronograma', $idCronograma->value())
+            ->where('id_estado', 1);
         if( $CronogramaSalida->count() > 0 ){
             throw new InvalidArgumentException( 'La salida ya se encuentra registrada en el sistema.' );
         }
