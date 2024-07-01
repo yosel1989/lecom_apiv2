@@ -11,8 +11,10 @@ use Src\Core\Domain\ValueObjects\DateTimeFormat;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
 use Src\V2\RutaSede\Domain\Contracts\RutaSedeRepositoryContract;
 use Src\V2\RutaSede\Domain\RutaSede;
+use Src\V2\Sede\Domain\SedeShort;
 
 final class EloquentRutaSedeRepository implements RutaSedeRepositoryContract
 {
@@ -27,26 +29,30 @@ final class EloquentRutaSedeRepository implements RutaSedeRepositoryContract
     public function collectionByClienteRuta(Id $idCliente, Id $idRuta): array
     {
         $models = Sede::select(
-                            DB::raw("(SELECT id FROM ruta_sede WHERE id_sede = sede.id LIMIT 1) as id"),
+                            'id',
                             'id_cliente',
-                            DB::raw("(SELECT id_ruta FROM ruta_sede WHERE id_sede = sede.id LIMIT 1) as id_ruta"),
-                            'id_sede',
-                            'nombre'
-                        )->where('id_cliente', $idCliente)
+                            DB::raw(" CASE WHEN (SELECT COUNT(*) FROM ruta_sede WHERE id_sede = sede.id and id_ruta = '{$idRuta->value()}') > 0 THEN true ELSE false END as selected"),
+                            'codigo',
+                            'nombre',
+                            'id_estado',
+                            'id_eliminado'
+                        )->where('id_cliente', $idCliente->value())
+                        ->where('id_estado', 1)
                         ->get();
 
         $collection = array();
 
         foreach ( $models as $model ){
 
-            $OModel = new RutaSede(
+            $OModel = new SedeShort(
                 new Id($model->id , false, 'El id del perfil no tiene el formato correcto'),
-                new Id($model->id_cliente , false, 'El id del cliente no tiene el formato correcto'),
-                new Id($model->id_ruta , false, 'El id de la ruta no tiene el formato correcto'),
-                new Id($model->id_sede , false, 'El id de la sede no tiene el formato correcto'),
+                new Text($model->nombre , false, -1, ''),
+                new Text($model->codigo , false, -1, ''),
+                new NumericInteger($model->id_estado->value ),
+                new NumericInteger($model->id_eliminado->value ),
             );
 
-            $OModel->setSede(new Text($model->nombre, false, -1, ''));
+            $OModel->setSelected(new ValueBoolean($model->selected));
 
             $collection[] = $OModel;
         }

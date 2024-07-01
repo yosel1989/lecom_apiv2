@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Api\V2\RutaSede;
+namespace App\Http\Controllers\Api\V2\Ruta;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V2\RutaSede\RutaSedeResource;
+use App\Http\Resources\V2\Ruta\RutaListResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InvalidArgumentException;
 
-class GetCollectionByClientePerfilController extends Controller
+class GetListToSedeTipoController extends Controller
 {
-    private \Src\V2\RutaSede\Infrastructure\GetCollectionByClientePerfilController $controller;
+    private \Src\V2\Ruta\Infrastructure\GetListToSedeTipoController $controller;
 
-    public function __construct(\Src\V2\RutaSede\Infrastructure\GetCollectionByClientePerfilController $controller)
+    public function __construct(\Src\V2\Ruta\Infrastructure\GetListToSedeTipoController $controller)
     {
         $this->controller = $controller;
     }
@@ -23,9 +23,9 @@ class GetCollectionByClientePerfilController extends Controller
     {
         try {
 
-            //return response()->json(RutaSede::all());
+            //return response()->json(Ruta::all());
 
-            $collection = RutaSedeResource::collection($this->controller->__invoke($request));
+            $collection = RutaListResource::collection($this->controller->__invoke($request));
             return response()->json([
                 'data' => $collection,
                 'error' =>  null,

@@ -149,6 +149,48 @@ final class EloquentRutaRepository implements RutaRepositoryContract
 
 
     /**
+     * @param Id $idCliente
+     * @param Id $idSede
+     * @param NumericInteger $idTipo
+     * @return array
+     */
+    public function listToSedeTipo(Id $idCliente, Id $idSede, NumericInteger $idTipo): array
+    {
+        $models = $this->eloquentModelRuta->select(
+            'rutas.id',
+            'rutas.nombre',
+            'rutas.id_tipo',
+            'rutas.id_sede',
+            'rutas.id_estado',
+            'rutas.id_eliminado'
+        )->join('ruta_sede','rutas.id','=','ruta_sede.id_ruta')
+            ->where('rutas.id_cliente',$idCliente->value())
+            ->where('rutas.id_tipo', $idTipo->value())
+            ->where('ruta_sede.id_sede', $idSede->value())
+            ->where('rutas.id_estado', 1)
+            ->get();
+
+        $arrVehicles = array();
+
+        foreach ( $models as $model ){
+
+            $OModel = new RutaShort(
+                new Id($model->id , false, 'El id del Ruta no tiene el formato correcto'),
+                new Text($model->nombre, false, 100, 'El nombre de la Ruta excede los 100 caracteres'),
+                new NumericInteger($model->id_tipo->value),
+                new Id($model->id_sede, true, 'El id de la sede no tiene el formato correcto'),
+                new NumericInteger($model->id_estado->value),
+                new NumericInteger($model->id_eliminado->value),
+            );
+
+            $arrVehicles[] = $OModel;
+        }
+
+        return $arrVehicles;
+    }
+
+
+    /**
      * @param NumericInteger $idTipoRuta
      * @param Id $idCliente
      * @return array

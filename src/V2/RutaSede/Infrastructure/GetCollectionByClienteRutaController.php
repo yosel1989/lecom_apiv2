@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Src\V2\RutaSede\Application\GetCollectionByClienteRutaUseCase;
 use Src\V2\RutaSede\Infrastructure\Repositories\EloquentRutaSedeRepository;
 
-final class GetCollectionByClientePerfilController
+final class GetCollectionByClienteRutaController
 {
     private EloquentRutaSedeRepository $repository;
 

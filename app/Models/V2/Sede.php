@@ -36,6 +36,9 @@ class Sede extends Model
         'id_usu_modifico',
         'f_registro',
         'f_modifico',
+
+
+        'selected'
     ];
 
     /**
@@ -44,6 +47,7 @@ class Sede extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'selected' =>  'bool',
         'f_registro' =>  'string',
         'f_modifico' =>  'string',
         'id_estado' => IdEstado::class,

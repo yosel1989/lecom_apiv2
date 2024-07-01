@@ -6,6 +6,7 @@ namespace Src\V2\Sede\Domain;
 use Src\Core\Domain\ValueObjects\Id;
 use Src\Core\Domain\ValueObjects\NumericInteger;
 use Src\Core\Domain\ValueObjects\Text;
+use Src\Core\Domain\ValueObjects\ValueBoolean;
 
 final class SedeShort
 {
@@ -14,6 +15,8 @@ final class SedeShort
     private NumericInteger $idEstado;
     private NumericInteger $idEliminado;
     private Text $codigo;
+
+    private ValueBoolean $selected;
 
     /**
      * @param Id $id
@@ -115,6 +118,22 @@ final class SedeShort
     public function setCodigo(Text $codigo): void
     {
         $this->codigo = $codigo;
+    }
+
+    /**
+     * @return ValueBoolean
+     */
+    public function getSelected(): ValueBoolean
+    {
+        return $this->selected;
+    }
+
+    /**
+     * @param ValueBoolean $selected
+     */
+    public function setSelected(ValueBoolean $selected): void
+    {
+        $this->selected = $selected;
     }
 
 

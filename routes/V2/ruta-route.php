@@ -6,6 +6,7 @@ Route::namespace('App\Http\Controllers\Api\V2\Ruta')->middleware('auth:sanctum')
     Route::get('cliente/{id}/ruta', 'GetCollectionByClienteController');
     Route::get('cliente/{id}/ruta/listado', 'GetListByClienteController');
     Route::get('cliente/{id}/{idSede}/{idTipo}/ruta/listado', 'GetListByClienteSedeTipoController');
+    Route::get('ruta/sede/{idSede}/{idCliente}/{idTipo}', 'GetListToSedeTipoController');
     Route::get('cliente/{id}/ruta/listado/tipo/{idTipoRuta}', 'GetListByTipoController');
     Route::post('cliente/{id}/ruta', 'CreateController');
     Route::post('ruta/{id}/cambiar-estado', 'ChangeStateController');
